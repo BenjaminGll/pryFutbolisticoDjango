@@ -6,7 +6,7 @@ _Este proyecto es un entregable del curso de Ingenieria y Calidad de Sotfware, l
 
 Clona el repositorio con -> git clone https://github.com/ZCuak/DjangoTrabajo.git 
 
-Instala -> pip install virtualenv 
-Crea un ambiente virtual -> virtualenv .venv 
-Activa el ambiente virtual -> .venv\Scripts\activate 
-Installa las librerias necesarias, están ubicadas en requeriments.txt -> pip install requeriments.txt 
+1. Instala -> pip install virtualenv   
+2. Crea un ambiente virtual -> virtualenv .venv   
+3. Activa el ambiente virtual -> .venv\Scripts\activate   
+4. Installa las librerias necesarias, están ubicadas en requeriments.txt -> pip install requeriments.txt   

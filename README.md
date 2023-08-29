@@ -9,4 +9,4 @@ _Este proyecto es un entregable del curso de Ingenieria y Calidad de Sotfware, l
 3. Instala -> pip install virtualenv   
 4. Crea un ambiente virtual -> virtualenv .venv   
 5. Activa el ambiente virtual -> .venv\Scripts\activate   
-6. Installa las librerias necesarias, están ubicadas en requeriments.txt -> pip install requeriments.txt   
+6. Installa las librerias necesarias, están ubicadas en requeriments.txt -> pip install -r "requeriments.txt"    

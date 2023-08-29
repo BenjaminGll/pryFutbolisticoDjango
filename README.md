@@ -4,7 +4,7 @@ _Este proyecto es un entregable del curso de Ingenieria y Calidad de Sotfware, l
 
 ## Comenzando 🚀
 
-1. Clona el repositorio con -> git clone https://github.com/ZCuak/DjangoTrabajo.git   
+1. Clona el repositorio con -> git clone https://github.com/ZCuak/SoftwareFutbol2.0.git
 2. Instala -> pip install virtualenv   
 3. Crea un ambiente virtual -> virtualenv .venv   
 4. Activa el ambiente virtual -> .venv\Scripts\activate   

@@ -13,3 +13,10 @@ _Este proyecto es un entregable del curso de Ingenieria y Calidad de Sotfware, l
 7. Crea un ambiente virtual -> virtualenv .venv   
 8. Activa el ambiente virtual -> .venv\Scripts\activate   
 9. Installa las librerias necesarias, están ubicadas en requirements.txt -> pip install -r "requirements.txt"    
+
+## Uso
+
+1. git checkout nombre_de_su_rama # así cambian a su rama, por si acaso
+2. git add . # para añadir los cambios
+3. git commit -m "lo que quieran comentar" # para confirmar los cambios
+4. git push -u origin nombre_de_su_rama # para enviar los cambios a su rama en el repo

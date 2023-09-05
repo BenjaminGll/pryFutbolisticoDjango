@@ -10,6 +10,5 @@ _Este proyecto es un entregable del curso de Ingenieria y Calidad de Sotfware, l
 4. Crea tu rama -> git branch nombre_de_su_rama
 5. Cambia a tu rama -> git checkout nombre_de_su_rama
 6. Instala -> py -3 -m venv .venv   
-7. Crea un ambiente virtual -> virtualenv .venv   
 8. Activa el ambiente virtual -> .venv\Scripts\activate   
 9. Installa las librerias necesarias, están ubicadas en requirements.txt -> pip install -r "requirements.txt"    

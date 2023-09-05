@@ -4,9 +4,10 @@ _Este proyecto es un entregable del curso de Ingenieria y Calidad de Sotfware, l
 
 ## Comenzando 🚀
 
-1. Clona el repositorio con -> git clone https://github.com/ZCuak/SoftwareFutbol2.0.git
-2. Abre el repositorio clonado con visual Studio Code
-3. Instala -> pip install virtualenv   
-4. Crea un ambiente virtual -> virtualenv .venv   
-5. Activa el ambiente virtual -> .venv\Scripts\activate   
-6. Installa las librerias necesarias, están ubicadas en requirements.txt -> pip install -r "requirements.txt"    
+1. Crea una carpeta para guardar el proyecto
+2. Clona el repositorio con el comando -> git clone https://github.com/ZCuak/SoftwareFutbol2.0.git
+3. Abre la carpeta clonada en visual studio code
+4. Instala -> pip install virtualenv   
+5. Crea un ambiente virtual -> virtualenv .venv   
+6. Activa el ambiente virtual -> .venv\Scripts\activate   
+7. Installa las librerias necesarias, están ubicadas en requirements.txt -> pip install -r "requirements.txt"    

@@ -61,7 +61,6 @@ MIDDLEWARE = [
 ]
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'project.urls'
 
@@ -147,6 +146,8 @@ STATIC_URL = '/static/'
 MEDIA_URL='/images/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS=[BASE_DIR / "static",]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # STATIC_ROOT='/home/virupqhv/calidad.virusgaming.gg/static'
 #  STATIC_ROOT = BASE_DIR / 'static'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

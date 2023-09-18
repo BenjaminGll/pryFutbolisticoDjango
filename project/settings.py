@@ -142,7 +142,8 @@ STATIC_URL = '/static/'
 
 MEDIA_URL='/images/'
 STATICFILES_DIRS=[BASE_DIR / "static",]
-STATIC_ROOT='/home/virupqhv/calidad.virusgaming.gg/static'
+# STATIC_ROOT='/home/virupqhv/calidad.virusgaming.gg/static'
+STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_ROOT= BASE_DIR / 'static/images'
 
 # Default primary key field type

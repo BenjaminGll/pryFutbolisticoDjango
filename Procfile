@@ -1,0 +1,1 @@
+web: python manage.py migrate && gunicorn SoftwareFutbol2.0.wsgi

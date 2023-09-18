@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-!2gb-$ns@@#8m5)^ij!uzm1hgm)+$3acxb36pc64rx(p^201ly
 DEBUG = True
 
 # ALLOWED_HOSTS = ['127.0.0.1','localhost']
-ALLOWED_HOSTS = ['pryfutbolisticodjango-production.up.railway.app']
+ALLOWED_HOSTS = ['pryfutbolisticodjango-production.up.railway.app','127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://pryfutbolisticodjango-production.up.railway.app']
 
 # Application definition
@@ -141,9 +141,9 @@ import os
 STATIC_URL = '/static/'
 
 MEDIA_URL='/images/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS=[BASE_DIR / "static",]
- #STATIC_ROOT='/home/virupqhv/calidad.virusgaming.gg/static'
+# STATIC_ROOT='/home/virupqhv/calidad.virusgaming.gg/static'
 #  STATIC_ROOT = BASE_DIR / 'static'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATIC_ROOT = BASE_DIR / '/static'

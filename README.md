@@ -5,7 +5,7 @@ _Este proyecto es un entregable del curso de Ingenieria y Calidad de Sotfware, l
 ## Comenzando 🚀
 
 1. Crea una carpeta para guardar el proyecto
-2. Clona el repositorio con el comando -> git clone https://github.com/ZCuak/SoftwareFutbol2.0.git
+2. Clona el repositorio con el comando -> git clone https://github.com/BenjaminGll/pryFutbolisticoDjango.git
 3. Abre la carpeta clonada en visual studio code
 4. Crea tu rama -> git branch nombre_de_su_rama
 5. Cambia a tu rama -> git checkout nombre_de_su_rama

@@ -33,7 +33,7 @@ class encuentroAdmin(admin.ModelAdmin):
 #     search_fields=['equipo_id','encuentro_id']
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display=['evento_id','descripcion','estado']
+    list_display=['evento_id','logo_evento','nombre','descripcion','estado']
     ordering=['evento_id']
     search_fields = ['descripcion']
 

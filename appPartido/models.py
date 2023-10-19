@@ -142,6 +142,8 @@ class encuentro(models.Model):
     
 class evento(models.Model):
     evento_id=models.BigAutoField(primary_key=True)
+    logo_evento=models.ImageField(null=True,blank=True,upload_to='evento/logo/',default='Tipo_evento/logo/logo_default.png')
+    nombre=models.CharField(max_length=50,null=True)
     descripcion=models.CharField(max_length=30)
     estado=models.BooleanField()
 
@@ -153,7 +155,7 @@ class evento(models.Model):
         return self.descripcion
 
     class Meta:
-        verbose_name_plural='evento'
+        verbose_name_plural='Tipo_evento'
 
 class evento_persona(models.Model):
     CHOICE_TIPO_SUCESO= [

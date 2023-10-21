@@ -58,12 +58,11 @@ class sede(models.Model):
         ('ST','SUSPENDIDO TEMPORALMENTE')
     ]
     sede_id=models.BigAutoField(primary_key=True)
-    nombre=models.CharField(max_length=255)
-    alias=models.CharField(max_length=100)
+    nombre=models.CharField(max_length=50)
+    alias=models.CharField(max_length=50)
     capacidad=models.IntegerField()
     fecha_inauguracion=models.DateField()
     ciudad_id=models.ForeignKey(ciudad, on_delete=models.CASCADE,db_column='ciudad_id')
-    imagen=models.ImageField(null=True, blank=True, upload_to='sede/')
     # CHOICE_ESTADO_SEDE| SD= SUSPENDIDO TEMPORALMENTE, DI= DISPONIBLE , EM = EN MANTENIMIENTO, ND = NO DISPONIBLE, ST = SUSPENDIDO TEMPORALMENTE
     estado=models.CharField(max_length=2,default='DI',choices=CHOICE_ESTADO_SEDE)
 

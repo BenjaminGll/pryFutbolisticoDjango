@@ -4,7 +4,7 @@ from appArbitro.models import arbitro,terna_arbitral,detalle_terna
 from appContrato.models import contrato, persona, tipo_persona
 from appEquipo.models import equipo, alineacion_equipo,alineacion
 from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla
-from appPartido.models import encuentro,evento_persona,sede,evento
+from appPartido.models import encuentro,evento_persona,sede,tipo_evento
 from appCompeticion.models import deporte
 from user.models import User
 from django.db.models import Count

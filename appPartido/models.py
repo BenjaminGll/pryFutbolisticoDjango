@@ -140,16 +140,16 @@ class encuentro(models.Model):
 #     class Meta:
 #         verbose_name_plural='detalle_encuentro'
     
-class evento(models.Model):
+class tipo_evento(models.Model):
     evento_id=models.BigAutoField(primary_key=True)
-    logo_evento=models.ImageField(null=True,blank=True,upload_to='evento/logo/',default='Tipo_evento/logo/logo_default.png')
+    logo_evento=models.ImageField(null=True,blank=True,upload_to='tipo_evento/logo/',default='Tipo_evento/logo/logo_default.png')
     nombre=models.CharField(max_length=50,null=True)
-    descripcion=models.CharField(max_length=30)
+    descripcion=models.CharField(max_length=225)
     estado=models.BooleanField()
 
     def save(self, force_insert=False, force_update=False):
         self.descripcion = self.descripcion.upper()
-        super(evento, self).save(force_insert, force_update)
+        super(tipo_evento, self).save(force_insert, force_update)
 
     def __str__(self):
         return self.descripcion
@@ -165,7 +165,7 @@ class evento_persona(models.Model):
 
     encuentro_evento_id=models.BigAutoField(primary_key=True)
     encuentro_id=models.ForeignKey(encuentro,on_delete=models.CASCADE,db_column='encuentro_id')
-    evento_id=models.ForeignKey(evento,on_delete=models.CASCADE,db_column='evento_id')
+    evento_id=models.ForeignKey(tipo_evento,on_delete=models.CASCADE,db_column='evento_id')
     persona_id=models.ForeignKey("appContrato.persona",on_delete=models.CASCADE,db_column='persona_id')
     suceso=models.CharField(max_length=5,default='ABC')
     # CHOICE_TIPO_SUCESO | E = ENTRADA , S = SALIDA

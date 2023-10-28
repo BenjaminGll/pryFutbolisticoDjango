@@ -7,12 +7,23 @@
   <div class="container">
     <h1>TV en Vivo - Partido de Fútbol</h1>
     
+    <!-- Aquí puedes colocar el reproductor de video en vivo para el partido de fútbol -->
     <div class="video-container">
-      <!-- Aquí puedes agregar el reproductor de video en vivo del partido de fútbol. Puedes utilizar HTML5 video, un reproductor de video de terceros, o cualquier otra tecnología que prefieras. -->
-      <video controls width="640" height="360">
-        <source src="URL_DEL_VIDEO_EN_VIVO" type="video/mp4">
-        Tu navegador no soporta la reproducción de videos en vivo.
-      </video>
+      <!-- Inserta aquí el reproductor de video o el iframe de transmisión en vivo -->
+      <video src="https://drive.google.com/uc?export=download&id=1lfJThCimwUB8dUTW7O2mBh4b4m2ZqGCw" width="800" height="450" controls="controls">
+        <button class="play-pause" title="Play/Pause"></button>
+        <input class="volume" type="range" min="0" max="1" step="0.01" value="1">
+        <button class="fullscreen" title="Fullscreen"></button>
+    </video>
+        </div>
+
+    <!-- Información adicional sobre el partido -->
+    <div class="info-partido">
+      <h2>Información del Partido</h2>
+      <p><strong>Fecha del Partido:</strong> 01 de Enero de 2023</p>
+      <p><strong>Hora de Inicio:</strong> 20:00 horas</p>
+      <p><strong>Equipos:</strong> Equipo A vs. Equipo B</p>
+      <p><strong>Estadio:</strong> Estadio Nombre del Estadio</p>
     </div>
   </div>
 {% endblock %}

@@ -339,6 +339,12 @@ def contextoContacto(request):
     }
     
     return render(request, 'contact.html', data)
+def contextoTVvivo(request):
+    data={
+
+    }
+    
+    return render(request, 'tv.html', data)
 
 def contextoTv(request,id):
     jugar_encuentro=encuentro.objects.get(encuentro_id=id)

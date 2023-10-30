@@ -77,48 +77,78 @@ class sede(models.Model):
     class Meta:
         verbose_name_plural='sede'
 
-
-class encuentro(models.Model):
+##NUEVO
+class descripcion_encuentro(models.Model):
     CHOICE_RESULTADO = [
         ('G', 'GANADO'),
         ('E', 'EMPATADO'),
         ('P', 'PERDIDO'),
     ]
 
+    descripcion_encuentro_id = models.BigAutoField(primary_key=True)
+    tipo_equipo = models.CharField(max_length=10, blank=True, null=True)
+    goles = models.CharField(max_length=4)
+    goles_ronda_penales = models.CharField(max_length=4)
+    resultado = models.CharField(max_length=1, choices=CHOICE_RESULTADO)
+    formacion = models.ForeignKey('formacion', on_delete=models.CASCADE, db_column='formacion_id', related_name='descripcion_encuentros', blank=True, null=True)
+    equipo = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id', related_name='descripcion_encuentros', blank=True, null=True)
+    encuentro = models.ForeignKey('encuentro', on_delete=models.CASCADE, db_column='encuentro_id', related_name='descripcion_encuentros', blank=True, null=True)
+
+    def save(self, force_insert=False, force_update=False):
+        super(descripcion_encuentro, self).save(force_insert, force_update)
+
+    class Meta:
+        verbose_name_plural = 'descripcion_encuentro'
+
+
+class encuentro(models.Model):
+    # CHOICE_RESULTADO = [
+    #     ('G', 'GANADO'),
+    #     ('E', 'EMPATADO'),
+    #     ('P', 'PERDIDO'),
+    # ]
+
     encuentro_id=models.BigAutoField(primary_key=True)
-    fase=models.ForeignKey("appCompeticion.fase", on_delete=models.CASCADE,db_column='fase',related_name='fase')
-    grupo=models.ForeignKey("appCompeticion.grupo", on_delete=models.CASCADE,db_column='grupo',related_name='grupo')
-    alineacion_local=models.ForeignKey("appEquipo.alineacion",on_delete=models.CASCADE,db_column='alineacion_local',related_name='alineacion_local',blank=True,null=True)
-    alineacion_visita=models.ForeignKey("appEquipo.alineacion",on_delete=models.CASCADE,db_column='alineacion_visita',related_name='alineacion_visita',blank=True,null=True)
-    equipo_local=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_local',related_name='equipo_local')
-    equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
-    formacion_local=models.ForeignKey('formacion',on_delete=models.CASCADE,db_column='formacion_local',related_name='formacion_local',blank=True,null=True)
-    formacion_visita=models.ForeignKey('formacion',on_delete=models.CASCADE,db_column='formacion_visita',related_name='formacion_visita',blank=True,null=True)
-    # CHOICE FIELD | G = GANADO , E = EMPATADO , P = PERDIDO
-    resultado_local=models.CharField(max_length=1,choices=CHOICE_RESULTADO)
-    resultado_visita=models.CharField(max_length=1,choices=CHOICE_RESULTADO)
-    resultado_goles_local=models.IntegerField() #2
-    resultado_goles_visita=models.IntegerField() #0
     competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')
     sede_id=models.ForeignKey(sede,on_delete=models.CASCADE,db_column='sede_id',blank=True,null=True)
-    terna_arbitral_id=models.ForeignKey("appArbitro.terna_arbitral", on_delete=models.CASCADE,db_column='terna_arbitral_id')
+    fase=models.ForeignKey("appCompeticion.fase", on_delete=models.CASCADE,db_column='fase',related_name='fase')
+    grupo=models.ForeignKey("appCompeticion.grupo", on_delete=models.CASCADE,db_column='grupo',related_name='grupo')
+    equipo_local=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_local',related_name='equipo_local')
+    equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
     fecha=models.DateTimeField(blank=True,null=True)
-    humedad=models.CharField(max_length=4)
     clima=models.CharField(max_length=4)
     estado_jugado=models.BooleanField()
 
     def save(self, force_insert=False, force_update=False):
-        self.humedad = self.humedad.upper()
+        
         self.clima = self.clima.upper()
-        self.resultado_local = self.resultado_local.upper()
-        self.resultado_visita = self.resultado_visita.upper()
         super(encuentro, self).save(force_insert, force_update)
 
+        # Crear registros en descripcion_encuentro
+        descripcion_local = descripcion_encuentro(
+            encuentro=self,
+            equipo=self.equipo_local,
+            # Agrega los demás campos necesarios para descripcion_encuentro
+            tipo_equipo = 'Local'
+        )
+        descripcion_local.save()
+
+        descripcion_visita = descripcion_encuentro(
+            encuentro=self,
+            equipo=self.equipo_visita,
+            tipo_equipo = 'Visita'
+            # Agrega los demás campos necesarios para descripcion_encuentro
+        )
+        descripcion_visita.save()
+
     def __str__(self):
-        return str(self.equipo_local) + " vs " +str(self.equipo_visita)
-    
+        
+        return str(self.equipo_local) + " vs " + str(self.equipo_visita)
+
     class Meta:
-        verbose_name_plural='encuentro'
+        verbose_name_plural = 'encuentro'
+
+## FIN
 
 # class detalle_encuentro(models.Model):
 #     CHOICE_TIPO_EQUIPO= [

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import contextoTv,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoListaJugadoresPorAsistencias, contextoJugador, contextoCompetencias,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,contextoListaJugadoresPorAmarillas,contextoListaJugadoresPorRojas
+from project.views import contextoTVvivo, contextoTv,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoListaJugadoresPorAsistencias, contextoJugador, contextoCompetencias,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,contextoListaJugadoresPorAmarillas,contextoListaJugadoresPorRojas
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path('competencias/<str:nombre_deporte>', contextoCompetencias),
     path('competencias/futbol/<str:nombre_competicion>', contextoCompetenciasFutbol),
     path('contacto', contextoContacto),
+    path('contacto', contextoTVvivo),
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
     path('competencias/<str:nombre_competicion>/lista_jugadores_goles',contextoListaJugadoresPorGoles),

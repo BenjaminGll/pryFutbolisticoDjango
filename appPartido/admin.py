@@ -40,7 +40,7 @@ class encuentroAdmin(admin.ModelAdmin):
 #     search_fields=['equipo_id','encuentro_id']
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display=['evento_id','logo_evento','nombre','descripcion','estado']
+    list_display=['evento_id','descripcion','estado']
     ordering=['evento_id']
     search_fields = ['descripcion']
 
@@ -58,5 +58,5 @@ admin.site.register(sede,sedeAdmin)
 admin.site.register(descripcion_encuentro,descripcionEncuentroAdmin)
 admin.site.register(encuentro,encuentroAdmin)
 # admin.site.register(detalle_encuentro,detalleEncuentroAdmin)
-admin.site.register(tipo_evento,eventoAdmin)
+admin.site.register(evento,eventoAdmin)
 admin.site.register(evento_persona,evento_personaAdmin)

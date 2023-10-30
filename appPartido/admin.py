@@ -22,17 +22,10 @@ class sedeAdmin(admin.ModelAdmin):
     ordering=['sede_id']
     search_fields = ['nombre']
 
-##
-class descripcionEncuentroAdmin(admin.ModelAdmin):
-    list_display=['descripcion_encuentro_id','goles','goles_ronda_penales','resultado','formacion','equipo','encuentro']
-    ordering=['descripcion_encuentro_id']
-    search_fields = ['equipo__nombre', 'encuentro__encuentro_id']
-
 class encuentroAdmin(admin.ModelAdmin):
-    list_display=['encuentro_id','competicion_id','sede_id','fase','grupo','fecha','clima','estado_jugado']
+    list_display=['encuentro_id','fase','grupo','alineacion_local','alineacion_visita','equipo_local','equipo_visita','formacion_local','formacion_visita','resultado_local','resultado_visita','resultado_goles_local','resultado_goles_visita','competicion_id','sede_id','terna_arbitral_id','fecha','humedad','clima','estado_jugado']
     ordering=['encuentro_id']
-    search_fields = ['sede_id__nombre','competicion_id__nombre']
-
+    search_fields = ['equipo_local_id','equipo_visitante_id']
 
 # class detalleEncuentroAdmin(admin.ModelAdmin):
 #     list_display=['detalle_encuentro_id','encuentro_id','equipo_id','formacion_id','tipo_equipo','resultado']
@@ -55,7 +48,6 @@ admin.site.register(formacion,formacionAdmin)
 admin.site.register(estado,estadoAdmin)
 admin.site.register(ciudad,ciudadAdmin)
 admin.site.register(sede,sedeAdmin)
-admin.site.register(descripcion_encuentro,descripcionEncuentroAdmin)
 admin.site.register(encuentro,encuentroAdmin)
 # admin.site.register(detalle_encuentro,detalleEncuentroAdmin)
 admin.site.register(evento,eventoAdmin)

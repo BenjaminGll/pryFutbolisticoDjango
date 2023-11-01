@@ -51,6 +51,25 @@ class deporte(models.Model):
     class Meta: 
         verbose_name_plural='deporte'
 
+class patrocinador (models.Model):
+    patrocinador_id=models.BigAutoField(primary_key=True)
+    nombre_patrocinador=models.CharField(max_length=50)
+    nombre_abreviado=models.CharField(max_length=10)
+    descripcion=models.TextField()
+    estado=models.BooleanField()
+    logo_1=models.ImageField(blank=True,upload_to='patrocinador/logo_1/',default='patrocinador/logo_1/logo_default.png')
+    logo_2=models.ImageField(blank=True,upload_to='patrocinador/logo_2/',default='patrocinador/logo_2/logo_default.png')
+
+    def save(self, force_insert=False, force_update=False):
+        self.nombre_patrocinador = self.nombre_patrocinador.upper()
+        self.nombre_abreviado = self.nombre_abreviado.upper()
+        super(patrocinador, self).save(force_insert, force_update)
+
+    def _str_(self):
+         return str(self.patrocinador_id)
+        
+    class Meta: 
+        verbose_name_plural='patrocinador'
 
 class competicion(models.Model):
     competicion_id=models.BigAutoField(primary_key=True)
@@ -72,6 +91,16 @@ class competicion(models.Model):
     
     class Meta:
         verbose_name_plural='competicion'
+
+class detalle_patrocinador(models.Model):
+    patrocinador_id=models.ForeignKey(patrocinador,on_delete=models.CASCADE, db_column='patrocinador_id')
+    competicion_id=models.ForeignKey(competicion,on_delete=models.CASCADE, db_column='competicion_id')
+    
+    def _str_(self):
+         return str(self.patrocinador_id,self.competicion_id)
+    
+    class Meta:
+        verbose_name_plural='detalle_patrocinador'
 
 class grupo(models.Model):
     grupo_id=models.BigAutoField(primary_key=True)
@@ -134,3 +163,31 @@ class tabla(models.Model):
     
     class Meta: 
         verbose_name_plural='tabla'
+class organizacion(models.Model):
+       
+    CHOICE_TIPO = [
+        ('F', 'FEDERACIÓN NACIONAL'),
+        ('I', 'FEDERACIÓN INTERNACIONAL'),
+        ('C', 'CONFEDERACIÓN'),
+        ('L', 'LIGA'),
+        
+    ]
+    organizacion_id=models.BigAutoField(primary_key=True)
+    nombre_oficial=models.CharField(max_length=30)
+    siglas=models.CharField(max_length=3,default='')
+    descripcion=models.CharField(max_length=50)
+    tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
+    estado=models.BooleanField()
+    logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')
+    
+    def save(self, force_insert=False, force_update=False):
+        self.nombre_oficial= self.nombre_oficial.upper()
+        self.siglas= self.siglas.upper()
+        self.descripcion= self.descripcion.upper()
+        super(organizacion, self).save(force_insert, force_update)
+
+    def __str__(self):
+        return str(self.nombre_oficial)
+
+    class Meta:
+        verbose_name_plural='organizaciones'

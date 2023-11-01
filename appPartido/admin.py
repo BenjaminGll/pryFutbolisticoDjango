@@ -18,7 +18,7 @@ class estadoAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
 
 class sedeAdmin(admin.ModelAdmin):
-    list_display=['sede_id','nombre','alias','capacidad','fecha_inauguracion','ciudad_id','estado']
+    list_display=['sede_id','nombre','alias','capacidad','fecha_inauguracion','ciudad_id', 'imagen','estado']
     ordering=['sede_id']
     search_fields = ['nombre']
 

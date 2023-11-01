@@ -8847,7 +8847,7 @@ html.mm-opening .mm-slideout {
 }
 
 body {
-  background: white;
+  background: #f8f8f8;
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   font-size: 0.875rem;

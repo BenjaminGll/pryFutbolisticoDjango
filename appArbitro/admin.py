@@ -3,15 +3,15 @@ from appArbitro.models import *
 
 # Register your models here.
 
-class arbitroAdmin(admin.ModelAdmin):
-    list_display=['arbitro_id','nombre','apellido','tipo_arbitro','pais_id','estado']
+class tipoArbitroAdmin(admin.ModelAdmin):
+    list_display=['arbitro_id','nombre_terna','estado']
     ordering=['arbitro_id']
-    search_fields = ['nombre','apellido']
+    search_fields = ['nombre_terna']
 
-class tipoTernaAdmin(admin.ModelAdmin):
-    list_display=['tipo_terna_id','descripcion','siglas']
-    ordering=['tipo_terna_id']
-    search_fields = ['descripcion','siglas']
+class detalleTernaAdmin(admin.ModelAdmin):
+    list_display=['detalle_terna_id','tipo_arbitro_id','encuentro_id', 'persona_id']
+    ordering=['detalle_terna_id']
+    search_fields = ['tipo_arbitro_id']
 
 class ternaArbitralAdmin(admin.ModelAdmin):
     list_display=['terna_arbitral_id','nombre_terna','estado']
@@ -23,7 +23,5 @@ class detalleTernaArbitralAdmin(admin.ModelAdmin):
     ordering=['detalle_terna_id']
     search_fields = ['terna_arbitral_id','arbitro_id']
 
-admin.site.register(arbitro,arbitroAdmin)
-admin.site.register(tipo_terna,tipoTernaAdmin)
-admin.site.register(terna_arbitral,ternaArbitralAdmin)
-admin.site.register(detalle_terna,detalleTernaArbitralAdmin)
+admin.site.register(tipo_arbitro,tipoArbitroAdmin)
+admin.site.register(detalle_terna,detalleTernaAdmin)

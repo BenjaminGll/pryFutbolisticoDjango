@@ -163,3 +163,31 @@ class tabla(models.Model):
     
     class Meta: 
         verbose_name_plural='tabla'
+class organizacion(models.Model):
+       
+    CHOICE_TIPO = [
+        ('F', 'FEDERACIÓN NACIONAL'),
+        ('I', 'FEDERACIÓN INTERNACIONAL'),
+        ('C', 'CONFEDERACIÓN'),
+        ('L', 'LIGA'),
+        
+    ]
+    organizacion_id=models.BigAutoField(primary_key=True)
+    nombre_oficial=models.CharField(max_length=30)
+    siglas=models.CharField(max_length=3,default='')
+    descripcion=models.CharField(max_length=50)
+    tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
+    estado=models.BooleanField()
+    logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')
+    
+    def save(self, force_insert=False, force_update=False):
+        self.nombre_oficial= self.nombre_oficial.upper()
+        self.siglas= self.siglas.upper()
+        self.descripcion= self.descripcion.upper()
+        super(organizacion, self).save(force_insert, force_update)
+
+    def __str__(self):
+        return str(self.nombre_oficial)
+
+    class Meta:
+        verbose_name_plural='organizaciones'

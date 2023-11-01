@@ -42,6 +42,11 @@ class tablaAdmin(admin.ModelAdmin):
     list_display=['tabla_id','competicion_id','equipo_id','ganado','perdido','empatado','goles_favor','goles_contra','tarjetas_amarillas','tarjetas_rojas','puntos']
     ordering=['tabla_id']
     earch_fields = ['competicion_id','equipo_id']
+    
+class organizacionAdmin(admin.ModelAdmin):
+    list_display=['organizacion_id','nombre_oficial','siglas','descripcion','estado','tipo','logo']
+    ordering=['organizacion_id']
+    earch_fields = ['nombre_oficial']
 
 class patrocinadorAdmin(admin.ModelAdmin):
     list_display=['patrocinador_id','nombre_patrocinador','nombre_abreviado','descripcion','estado','logo_1','logo_2']
@@ -59,5 +64,6 @@ admin.site.register(grupo,grupoAdmin)
 admin.site.register(fase,faseAdmin)
 admin.site.register(detalle_grupo,detalle_grupoAdmin)
 admin.site.register(tabla,tablaAdmin)
+admin.site.register(organizacion,organizacionAdmin)
 admin.site.register(patrocinador,patrocinadorAdmin)
 admin.site.register(detalle_patrocinador,detalle_patrocinadorAdmin)

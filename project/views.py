@@ -21,6 +21,18 @@ def contextoNav():
 
     return render ('nav.html', data)
 
+##
+def mostrarEvento(request):
+    
+    eventos = evento_persona.objects.all()
+    
+    data ={
+        'eventos' : eventos
+    }
+
+    return render (request,'moduloTV/evento.html', data)
+##
+
 def contadoresAdmin(request):
     arbitros = arbitro.objects.count()
     entrenadores = persona.objects.filter(tipo_persona_id=2).count()

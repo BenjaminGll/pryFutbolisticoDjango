@@ -2,9 +2,9 @@ from calendar import c
 from django.shortcuts import render
 from appArbitro.models import arbitro,terna_arbitral,detalle_terna
 from appContrato.models import contrato, persona, tipo_persona
-from appEquipo.models import equipo, alineacionEquipo
+from appEquipo.models import equipo, alineacion
 from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla
-from appPartido.models import encuentro,eventoPersona,sede,tipo_evento
+from appPartido.models import encuentro,evento,sede,tipo_evento
 from appCompeticion.models import deporte
 from user.models import User
 from django.db.models import Count
@@ -24,7 +24,7 @@ def contextoNav():
 ##
 def mostrarEvento(request):
     
-    eventos = eventoPersona.objects.all()
+    eventos = evento.objects.all()
     
     data ={
         'eventos' : eventos
@@ -214,7 +214,7 @@ def contextoListaJugadoresPorGoles(request,nombre_competicion):
     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
 
-    resulta = eventoPersona.objects.filter(evento_id=9).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
+    resulta = evento.objects.filter(evento_id=9).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
 
     lista = [[]]
 

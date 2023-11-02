@@ -189,11 +189,11 @@ class tipo_evento(models.Model):
     class Meta:
         verbose_name_plural='tipo_evento'
 
-class eventoPersona(models.Model):
+class evento(models.Model):
     evento_id = models.BigAutoField(primary_key=True)
    
-    alineacion1_id = models.ForeignKey("appEquipo.alineacionEquipo", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1')
-    alineacion2_id = models.ForeignKey("appEquipo.alineacionEquipo", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2')
+    alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1')
+    alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2')
 
     tiempo_reglamentario = models.TimeField(null=True)
     tiempo_extra = models.TimeField(null=True)
@@ -205,7 +205,7 @@ class eventoPersona(models.Model):
 
     def save(self, force_insert=False, force_update=False):
         self.motivo = self.motivo.upper()
-        super(eventoPersona, self).save(force_insert, force_update)
+        super(evento, self).save(force_insert, force_update)
 
     def _str_(self):
         return str(self.evento_id)

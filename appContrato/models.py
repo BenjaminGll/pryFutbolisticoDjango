@@ -58,34 +58,32 @@ class persona(models.Model):
         verbose_name_plural='persona'
 
 class contrato(models.Model):
-
     CHOICE_TIPO_CONTRATO = [
-        ('P','PRÉSTAMO'),
-        ('C','COMPRA'),
-        ('L','LIBRE'),
-        ('R','RENOVACIÓN'),
-        ('S','SELECCIÓN'),
+        ('P', 'PRÉSTAMO'),
+        ('C', 'COMPRA'),
+        ('L', 'LIBRE'),
+        ('R', 'RENOVACIÓN'),
+        ('S', 'SELECCIÓN'),
     ]
 
-    contrato_id=models.BigAutoField(primary_key=True)
-    fecha_inicio=models.DateField(blank=True,null=True)
-    fecha_fin=models.DateField(blank=True,null=True)
-    valor=models.FloatField(blank=True,null=True) 
-    # CHOICE_TIPO_CONTRATO | P = Prestamo , C = Compra , L = Libre , S = Seleccion , Renovacion
-    tipo_contrato=models.CharField(max_length=1, choices=CHOICE_TIPO_CONTRATO, default='C')
-    persona_id=models.ForeignKey(persona,on_delete=models.CASCADE, db_column='persona_id')
-    ultimo_club=models.ForeignKey('appEquipo.equipo',on_delete=models.CASCADE,db_column='ultimo_club',related_name='ultimo_club',null=True,blank=True)
-    nuevo_club=models.ForeignKey('appEquipo.equipo',on_delete=models.CASCADE,db_column='nuevo_club',related_name='nuevo_club',null=True,blank=True)
-    dorsal=models.IntegerField(blank=True, null=True)
-    posicion_jugador=models.CharField(max_length=30, blank= True, null=True)
-    estado=models.BooleanField()
-
+    contrato_id = models.BigAutoField(primary_key=True)
+    tipo_persona = models.ForeignKey('tipo_persona', on_delete=models.CASCADE, related_name='contratos_tipo_persona',default=1)
+    persona = models.ForeignKey('persona', on_delete=models.CASCADE, related_name='contratos_persona', default=1)
+    fecha_inicio = models.DateField(blank=True, null=True)
+    fecha_fin = models.DateField(blank=True, null=True)
+    tipo_contrato = models.CharField(max_length=1, choices=CHOICE_TIPO_CONTRATO, default='C')
+    valor = models.FloatField(blank=True, null=True)
+    ultimo_club = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='ultimo_club', related_name='ultimo_club', null=True, blank=True)
+    nuevo_club = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='nuevo_club', related_name='nuevo_club', null=True, blank=True)
+    dorsal = models.IntegerField(blank=True, null=True)
+    posicion_jugador = models.CharField(max_length=30, blank=True, null=True)
+    estado = models.BooleanField()
     def save(self, force_insert=False, force_update=False):
         self.posicion_jugador = self.posicion_jugador
         super(contrato, self).save(force_insert, force_update)
-        
-    def __str__(self):
-        return str(self.persona_id)
+
+    def _str_(self):
+        return str(self.contrato_id)
 
     class Meta:
-        verbose_name_plural='contrato'
+        verbose_name_plural = 'contrato'

@@ -2,9 +2,9 @@ from calendar import c
 from django.shortcuts import render
 from appArbitro.models import arbitro,terna_arbitral,detalle_terna
 from appContrato.models import contrato, persona, tipo_persona
-from appEquipo.models import equipo, alineacion_equipo,alineacion
+from appEquipo.models import equipo, alineacion
 from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla
-from appPartido.models import encuentro,evento_persona,sede,evento
+from appPartido.models import encuentro,evento,sede,tipo_evento
 from appCompeticion.models import deporte
 from user.models import User
 from django.db.models import Count
@@ -20,6 +20,18 @@ def contextoNav():
     }
 
     return render ('nav.html', data)
+
+##
+def mostrarEvento(request):
+    
+    eventos = evento.objects.all()
+    
+    data ={
+        'eventos' : eventos
+    }
+
+    return render (request,'moduloTV/evento.html', data)
+##
 
 def contadoresAdmin(request):
     arbitros = arbitro.objects.count()
@@ -202,7 +214,7 @@ def contextoListaJugadoresPorGoles(request,nombre_competicion):
     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
 
-    resulta = evento_persona.objects.filter(evento_id=9).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
+    resulta = evento.objects.filter(evento_id=9).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
 
     lista = [[]]
 
@@ -220,72 +232,72 @@ def contextoListaJugadoresPorGoles(request,nombre_competicion):
     }
     return render(request, 'lista_jugadores_goles.html', data)
 
-def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
-    competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
-    encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
+# def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
+#     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
+#     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
 
-    resulta = evento_persona.objects.filter(evento_id=1).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count') 
+#     resulta = evento_persona.objects.filter(evento_id=1).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count') 
 
-    lista = [[]]
+#     lista = [[]]
 
-    i = 0
-    for r in resulta:
-        li = persona.objects.get(persona_id = r.get('persona_id'))
-        lista[i].append(li)
-        lista[i].append(r.get('count'))
-        if i < len(resulta)-1:
-            lista.append([])
-        i = i + 1
+#     i = 0
+#     for r in resulta:
+#         li = persona.objects.get(persona_id = r.get('persona_id'))
+#         lista[i].append(li)
+#         lista[i].append(r.get('count'))
+#         if i < len(resulta)-1:
+#             lista.append([])
+#         i = i + 1
 
-    data={
-        'jugadores_amarillas': lista
-    }
+#     data={
+#         'jugadores_amarillas': lista
+#     }
 
-    return render(request, 'lista_jugadores_amarillas.html', data)
+#     return render(request, 'lista_jugadores_amarillas.html', data)
 
-def contextoListaJugadoresPorRojas(request,nombre_competicion):
-    competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
-    encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
+# def contextoListaJugadoresPorRojas(request,nombre_competicion):
+#     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
+#     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
 
-    resulta = evento_persona.objects.filter(evento_id=2).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
+#     resulta = evento_persona.objects.filter(evento_id=2).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
     
-    lista = [[]]
+#     lista = [[]]
 
-    i = 0
-    for r in resulta:
-        li = persona.objects.get(persona_id = r.get('persona_id'))
-        lista[i].append(li)
-        lista[i].append(r.get('count'))
-        if i < len(resulta)-1:
-            lista.append([])
-        i = i + 1
+#     i = 0
+#     for r in resulta:
+#         li = persona.objects.get(persona_id = r.get('persona_id'))
+#         lista[i].append(li)
+#         lista[i].append(r.get('count'))
+#         if i < len(resulta)-1:
+#             lista.append([])
+#         i = i + 1
 
-    data={
-        'jugadores_rojas': lista
-    }
-    return render(request, 'lista_jugadores_rojas.html', data)
+#     data={
+#         'jugadores_rojas': lista
+#     }
+#     return render(request, 'lista_jugadores_rojas.html', data)
 
-def contextoListaJugadoresPorAsistencias(request,nombre_competicion):
-    competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
-    encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
+# def contextoListaJugadoresPorAsistencias(request,nombre_competicion):
+#     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
+#     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
 
-    resulta = evento_persona.objects.filter(evento_id=19).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')  
+#     resulta = evento_persona.objects.filter(evento_id=19).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')  
     
-    lista = [[]]
+#     lista = [[]]
 
-    i = 0
-    for r in resulta:
-        li = persona.objects.get(persona_id = r.get('persona_id'))
-        lista[i].append(li)
-        lista[i].append(r.get('count'))
-        if i < len(resulta)-1:
-            lista.append([])
-        i = i + 1
+#     i = 0
+#     for r in resulta:
+#         li = persona.objects.get(persona_id = r.get('persona_id'))
+#         lista[i].append(li)
+#         lista[i].append(r.get('count'))
+#         if i < len(resulta)-1:
+#             lista.append([])
+#         i = i + 1
 
-    data={
-        'jugadores_asistencias': lista
-    }
-    return render(request, 'lista_jugadores_asistencias.html', data)
+#     data={
+#         'jugadores_asistencias': lista
+#     }
+#     return render(request, 'lista_jugadores_asistencias.html', data)
 
 
 def contextoTablaPosiciones(request,nombre_competicion):
@@ -346,47 +358,47 @@ def contextoTVvivo(request):
     
     return render(request, 'tv.html', data)
 
-def contextoTv(request,id):
-    jugar_encuentro=encuentro.objects.get(encuentro_id=id)
-    equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
-    equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
-    estadio=sede.objects.get(nombre=jugar_encuentro.sede_id)
-    encuentro_goles=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=9)
-    encuentro_tarjetasA=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=1)
-    encuentro_tarjetasR=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=2)
+# def contextoTv(request,id):
+#     jugar_encuentro=encuentro.objects.get(encuentro_id=id)
+#     equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
+#     equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
+#     estadio=sede.objects.get(nombre=jugar_encuentro.sede_id)
+#     encuentro_goles=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=9)
+#     encuentro_tarjetasA=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=1)
+#     encuentro_tarjetasR=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=2)
     
-    terna_encuentro=terna_arbitral.objects.get(terna_arbitral_id=jugar_encuentro.terna_arbitral_id_id)    
-    detalle_terna_encuentro=detalle_terna.objects.filter(terna_arbitral_id=terna_encuentro.terna_arbitral_id).values('arbitro_id')
-    arbitros=arbitro.objects.filter(arbitro_id__in=detalle_terna_encuentro)
+#     terna_encuentro=terna_arbitral.objects.get(terna_arbitral_id=jugar_encuentro.terna_arbitral_id_id)    
+#     detalle_terna_encuentro=detalle_terna.objects.filter(terna_arbitral_id=terna_encuentro.terna_arbitral_id).values('arbitro_id')
+#     arbitros=arbitro.objects.filter(arbitro_id__in=detalle_terna_encuentro)
 
 
-    alineacion_encuentro_a=encuentro.objects.filter(encuentro_id=id).values('alineacion_local')
-    alineacion_a=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_a, estado=True).values('alineacion_id')
-    detalle_alineacion_a=alineacion_equipo.objects.filter(alineacion_id__in=alineacion_a,equipo_id=equipo_a.equipo_id).values('contrato_id')
-    contrato_alineacion_a=contrato.objects.filter(contrato_id__in=detalle_alineacion_a).values('persona_id')
-    personas_alineacion_a=persona.objects.filter(persona_id__in=contrato_alineacion_a)
+#     alineacion_encuentro_a=encuentro.objects.filter(encuentro_id=id).values('alineacion_local')
+#     alineacion_a=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_a, estado=True).values('alineacion_id')
+#     detalle_alineacion_a=alineacion_equipo.objects.filter(alineacion_id__in=alineacion_a,equipo_id=equipo_a.equipo_id).values('contrato_id')
+#     contrato_alineacion_a=contrato.objects.filter(contrato_id__in=detalle_alineacion_a).values('persona_id')
+#     personas_alineacion_a=persona.objects.filter(persona_id__in=contrato_alineacion_a)
 
-    alineacion_encuentro_b=encuentro.objects.filter(encuentro_id=id).values('alineacion_visita')
-    alineacion_b=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_b, estado=True).values('alineacion_id')    
-    detalle_alineacion_b=alineacion_equipo.objects.filter(alineacion_id__in=alineacion_b,equipo_id=equipo_b.equipo_id).values('contrato_id')
-    contrato_alineacion_b=contrato.objects.filter(contrato_id__in=detalle_alineacion_b).values('persona_id')
-    personas_alineacion_b=persona.objects.filter(persona_id__in=contrato_alineacion_b)
+#     alineacion_encuentro_b=encuentro.objects.filter(encuentro_id=id).values('alineacion_visita')
+#     alineacion_b=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_b, estado=True).values('alineacion_id')    
+#     detalle_alineacion_b=alineacion_equipo.objects.filter(alineacion_id__in=alineacion_b,equipo_id=equipo_b.equipo_id).values('contrato_id')
+#     contrato_alineacion_b=contrato.objects.filter(contrato_id__in=detalle_alineacion_b).values('persona_id')
+#     personas_alineacion_b=persona.objects.filter(persona_id__in=contrato_alineacion_b)
     
 
-    data={
-        'jugar_encuentro':jugar_encuentro,
-        'equipo_a':equipo_a,
-        'equipo_b':equipo_b,
-        'estadio':estadio,
-        'encuentro_goles':encuentro_goles,
-        'encuentro_tarjetasA': encuentro_tarjetasA,
-        'encuentro_tarjetasR': encuentro_tarjetasR,
-        'arbitros':arbitros,
-        'personas_alineacion_a':personas_alineacion_a,
-        'personas_alineacion_b':personas_alineacion_b,
-    }
+#     data={
+#         'jugar_encuentro':jugar_encuentro,
+#         'equipo_a':equipo_a,
+#         'equipo_b':equipo_b,
+#         'estadio':estadio,
+#         'encuentro_goles':encuentro_goles,
+#         'encuentro_tarjetasA': encuentro_tarjetasA,
+#         'encuentro_tarjetasR': encuentro_tarjetasR,
+#         'arbitros':arbitros,
+#         'personas_alineacion_a':personas_alineacion_a,
+#         'personas_alineacion_b':personas_alineacion_b,
+#     }
     
-    return render(request, 'single-result.html', data)
+#     return render(request, 'single-result.html', data)
     
 def index(request):
     data={

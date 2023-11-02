@@ -14,13 +14,13 @@
                 <div class="col-md-3 mb-2">
                     <h5>Tipo suceso: {{ e.tipo_suceso }}</h5>
                     <h5>Observación: {{ e.observacion }}</h5>
+                    <h5>Tiempo: {{ e.tiempo }}</h5>
                 </div>
                 <div class="col-md-2 mb-2">
-                    <label for="tiempo">Tiempo</label>
                     <input type="time" class="form-control" id="tiempo" name="tiempo">
                 </div>
                 <div class="col-md-2 mb-2">
-                    <h5>Tiempo: {{ e.tiempo }}</h5>
+                    
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="mostrar" name="mostrar">
                         <label class="form-check-label" for="mostrar">Mostrar/Ocultar</label>
@@ -34,3 +34,7 @@
     </div>
     {% endfor %}
 {% endblock %}
+
+<!--  -->
+        
+<!--  -->

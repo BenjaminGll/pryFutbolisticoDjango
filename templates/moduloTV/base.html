@@ -1,56 +1,54 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Modulo TV</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="{% static 'assets/css/baseEvento.css' %}" rel="stylesheet" media="screen">
 
-    
-    
 </head>
+
 <body>
 
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-4 col-lg-4 d-none d-md-block bg-light sidebar">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            Generales
-                        </a>
-                        <ul class="nav flex-column ml-3">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Cronómetro</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Marcador</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Jugador</a>
-                            </li>
-                            <!-- Puedes agregar más opciones aquí -->
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Antes</a>
-                    </li>
-                    <!-- Puedes agregar más opciones aquí en el futuro -->
-                </ul>
-            </div>
-        </nav>
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar bg-sidebar">
+        <div class="position-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        Generales
+                    </a>
+                    <ul class="nav flex-column ml-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Cronómetro</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Marcador</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Jugador</a>
+                        </li>
+                        <!-- Puedes agregar más opciones aquí -->
+                    </ul>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link active" href="#">Antes</a>
+                </li>
+                <!-- Puedes agregar más opciones aquí en el futuro -->
+            </ul>
+        </div>
+    </nav>
 
-        <main class="col-md-8 ms-sm-auto col-lg-8 px-md-4">
-            <div class="container">
-                {% block content %}{% endblock %}
-            </div>
-        </main>
-    </div>
-</div>
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
+
 </html>

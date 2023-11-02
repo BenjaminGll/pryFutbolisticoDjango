@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db import models
+from django.forms import TextInput, ModelForm
 from appEquipo.models import *
 
 # Register your models here.
@@ -8,9 +10,23 @@ class categoriaEquipo(admin.ModelAdmin):
     ordering=['categoria_id']
     search_fields=['noxmbre']
 
+class equipoForm(ModelForm):
+    class Meta:
+        model = equipo
+        exclude = ('deporte_id',)
+        widgets = {
+            'vestimenta_principal_color_principal': TextInput(attrs={'type': 'color'}),
+            'vestimenta_principal_color_secundario': TextInput(attrs={'type': 'color'}),
+            'vestimenta_alterna_color_principal': TextInput(attrs={'type': 'color'}),
+            'vestimenta_alterna_color_secundario': TextInput(attrs={'type': 'color'}),
+        }
+
 class equipoAdmin(admin.ModelAdmin):
-    list_display=['equipo_id','logo','vestimenta_principal','vestimenta_alterna','portada','presidente','nombre','siglas','categoria_equipo','tipo_equipo_id','sede_id','deporte_id']
-    ordering=['equipo_id']
+    form = equipoForm
+    list_display = ['equipo_id', 'nombre', 'presidente', 'logo', 'vestimenta_principal_color_principal','vestimenta_principal_color_secundario',
+                    'vestimenta_alterna_color_principal','vestimenta_alterna_color_secundario', 'portada', 'siglas',
+                    'categoria_equipo', 'tipo_equipo_id', 'sede_id']
+    ordering = ['equipo_id']
     search_fields = ['nombre']
 
 class tipoEquipoAdmin(admin.ModelAdmin):

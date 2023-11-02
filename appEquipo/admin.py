@@ -8,7 +8,7 @@ from appEquipo.models import *
 class categoriaEquipo(admin.ModelAdmin):
     list_display=['categoria_id','nombre']
     ordering=['categoria_id']
-    search_fields=['noxmbre']
+    search_fields=['nombre']
 
 class equipoForm(ModelForm):
     class Meta:

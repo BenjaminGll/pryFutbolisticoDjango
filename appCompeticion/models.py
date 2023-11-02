@@ -4,22 +4,31 @@ from django import forms
 
 # Create your models here.
 
+PAIS_CHOICES = (
+    ('SUSPENDIDO', 'Suspendido'),
+    ('PROBACION', 'Probación'),
+    ('NO_AFILIADO', 'No Afiliado'),
+    ('SANCIONADO', 'Sancionado'),
+    ('EN_INVESTIGACION', 'En Investigación'),
+    ('MIEMBRO', 'Miembro'),
+)
+
 class pais(models.Model):
-    pais_id=models.BigAutoField(primary_key=True)
-    logo_bandera=models.ImageField(blank=True,null=True,upload_to='bandera/',default='bandera/bandera_default.png')
-    nombre=models.CharField(max_length=30)
-    sigla=models.CharField(max_length=3,default='')
-
-    def save(self, force_insert=False, force_update=False):
+    pais_id = models.BigAutoField(primary_key=True)
+    nombre = models.CharField(max_length=30)
+    sigla = models.CharField(max_length=3, default='')
+    logo_bandera = models.ImageField(blank=True, null=True, upload_to='bandera/', default='bandera/bandera_default.png')
+    estado = models.CharField(max_length=20, choices=PAIS_CHOICES, default='MIEMBRO')
+    def save(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
-        self.sigla= self.sigla.upper()
-        super(pais, self).save(force_insert, force_update)
+        self.sigla = self.sigla.upper()
+        super(pais, self).save(*args, **kwargs)
 
-    def __str__(self):
+    def _str_(self):
         return str(self.nombre)
 
     class Meta:
-        verbose_name_plural='pais'
+        verbose_name_plural = 'paises'
 
 class tipo_competicion(models.Model):
     tipo_competicion_id=models.BigAutoField(primary_key=True)

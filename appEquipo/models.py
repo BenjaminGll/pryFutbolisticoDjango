@@ -112,3 +112,24 @@ class alineacionEquipo(models.Model):
 
     class Meta:
         verbose_name_plural='alineacionEquipo'
+
+class encuentro_persona(models.Model):
+    encuentro_id = models.AutoField(primary_key=True)
+    equipo_id = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
+    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
+    pases = models.IntegerField()
+    asistencias = models.IntegerField()
+    kmrecorridos = models.IntegerField()
+    pasestotales = models.IntegerField()
+    pases_acertados = models.IntegerField()
+    pases_errados = models.IntegerField()
+    minutosjugando = models.IntegerField()
+    expulsado = models.IntegerField()
+    sustituidos = models.IntegerField()
+    amonestado = models.BooleanField()
+
+    def _str_(self):
+        return str(self.encuentro_id)
+
+    class Meta:
+        verbose_name_plural = 'encuentro_persona'

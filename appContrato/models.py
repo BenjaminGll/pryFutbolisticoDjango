@@ -87,3 +87,32 @@ class contrato(models.Model):
 
     class Meta:
         verbose_name_plural = 'contrato'
+        
+
+class tipo_arbitro(models.Model):
+
+    tipo_arbitro_id = models.BigAutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    estado = models.BooleanField()
+
+    def save(self, force_insert=False, force_update=False):
+        self.nombre = self.nombre.upper()
+        super(tipo_arbitro, self).save(force_insert, force_update)
+
+    def _str_(self):
+        return str(self.nombre)
+    
+    class Meta:
+        verbose_name_plural='tipo_arbitro'
+        
+class detalle_terna(models.Model):
+    detalle_terna_id=models.BigAutoField(primary_key=True)
+    persona_id=models.ForeignKey(persona,on_delete=models.CASCADE,db_column='persona_id')
+    tipo_arbitro_id=models.ForeignKey(tipo_arbitro,on_delete=models.CASCADE,db_column='tipo_arbitro_id')
+    encuentro_id=models.ForeignKey('appPartido.encuentro' ,on_delete=models.CASCADE,db_column='encuentro_id')
+
+    def _str_(self):
+        return str(self.detalle_terna_id)        
+
+    class Meta:
+        verbose_name_plural='detalle_terna'

@@ -55,6 +55,7 @@ class EncuentroPersonaAdmin(admin.ModelAdmin):
      search_fields = ['equipo_id']
 
 
+
 admin.site.register(categoria_equipo,categoriaEquipo)
 admin.site.register(tipo_equipo,tipoEquipoAdmin)
 admin.site.register(equipo,equipoAdmin)

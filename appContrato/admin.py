@@ -17,6 +17,19 @@ class contratoAdmin(admin.ModelAdmin):
     ordering = ['contrato_id']
     search_fields = ['equipo_id', 'persona_id']
 
+class tipoArbitroAdmin(admin.ModelAdmin):
+    list_display=['tipo_arbitro_id','nombre','estado']
+    ordering=['tipo_arbitro_id']
+    search_fields = ['nombre']
+
+class detalleTernaArbitralAdmin(admin.ModelAdmin):
+    list_display=['detalle_terna_id','persona_id','tipo_arbitro_id','encuentro_id']
+    ordering=['detalle_terna_id']
+    search_fields = ['detalle_terna_id']
+
+
 admin.site.register(tipo_persona,tipo_personaAdmin)
 admin.site.register(persona,personaAdmin)
 admin.site.register(contrato,contratoAdmin)
+admin.site.register(tipo_arbitro,tipoArbitroAdmin)
+admin.site.register(detalle_terna,detalleTernaArbitralAdmin)

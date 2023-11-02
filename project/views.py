@@ -1,7 +1,6 @@
 from calendar import c
 from django.shortcuts import render
-from appArbitro.models import arbitro,terna_arbitral,detalle_terna
-from appContrato.models import contrato, persona, tipo_persona
+from appContrato.models import *
 from appEquipo.models import equipo, alineacion
 from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla_posicion
 from appPartido.models import encuentro,evento,sede,tipo_evento
@@ -34,7 +33,7 @@ def mostrarEvento(request):
 ##
 
 def contadoresAdmin(request):
-    arbitros = arbitro.objects.count()
+    arbitros = persona.objects.filter(tipo_persona_id=3).count()
     entrenadores = persona.objects.filter(tipo_persona_id=2).count()
     jugadores = persona.objects.filter(tipo_persona_id=1).count()
     equipos = equipo.objects.count()

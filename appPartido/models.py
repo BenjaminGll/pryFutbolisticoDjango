@@ -188,30 +188,26 @@ class tipo_evento(models.Model):
     class Meta:
         verbose_name_plural='tipo_evento'
 
-class evento_persona(models.Model):
-    CHOICE_TIPO_SUCESO= [
-        ('E','ENTRADA'),
-        ('S','SALIDA'),
-    ]
+class eventoPersona(models.Model):
+    evento_id = models.BigAutoField(primary_key=True)
+   
+    alineacion1_id = models.ForeignKey("appEquipo.alineacionEquipo", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1')
+    alineacion2_id = models.ForeignKey("appEquipo.alineacionEquipo", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2')
 
-    encuentro_evento_id=models.BigAutoField(primary_key=True)
-    encuentro_id=models.ForeignKey(encuentro,on_delete=models.CASCADE,db_column='encuentro_id')
-    tipo_evento_id=models.ForeignKey(tipo_evento,on_delete=models.CASCADE,db_column='tipo_evento_id')
-    persona_id=models.ForeignKey("appContrato.persona",on_delete=models.CASCADE,db_column='persona_id')
-    suceso=models.CharField(max_length=5,default='ABC')
-    # CHOICE_TIPO_SUCESO | E = ENTRADA , S = SALIDA
-    tipo_suceso=models.CharField(max_length=1,choices=CHOICE_TIPO_SUCESO,blank=True,null=True)   
-    tiempo=models.IntegerField()
-    observacion=models.CharField(max_length=50,blank=True,null=True)
+    tiempo_reglamentario = models.TimeField(null=True)
+    tiempo_extra = models.TimeField(null=True)
+    motivo = models.CharField(max_length=50, blank=True, null=True)
+    cantidad = models.IntegerField(blank=True, null=True)
+
+    tipo_evento_id = models.ForeignKey(tipo_evento, on_delete=models.CASCADE, db_column='tipo_evento_id', null=True)
+    encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
 
     def save(self, force_insert=False, force_update=False):
-        self.suceso = self.suceso.upper()
-        self.observacion = self.observacion.upper()
-        super(evento_persona, self).save(force_insert, force_update)
+        self.motivo = self.motivo.upper()
+        super(eventoPersona, self).save(force_insert, force_update)
 
-    def __str__(self):
-        return str(self.encuentro_evento_id)
+    def _str_(self):
+        return str(self.evento_id)
 
     class Meta:
-        verbose_name_plural='evento_persona'
-
+        verbose_name_plural = 'evento'

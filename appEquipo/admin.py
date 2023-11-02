@@ -23,19 +23,19 @@ class posicionJugadorAdmin(admin.ModelAdmin):
     ordering=['posicion_jugador_id']
     search_fields = ['descripcion']
 
-class alineacionAdmin(admin.ModelAdmin):
-    list_display=['alineacion_id','fecha_juego','descripcion','estado']
-    ordering=['alineacion_id']
-    search_fields=['descripcion']
+# class alineacionAdmin(admin.ModelAdmin):
+#     list_display=['alineacion_id','fecha_juego','descripcion','estado']
+#     ordering=['alineacion_id']
+#     search_fields=['descripcion']
 
 class AlineacionEquipoAdmin(admin.ModelAdmin):
-    list_display=['alineacion_equipo_id','equipo_id','dorsal','posicion_jugador_id','capitan','estado','contrato_id']
-    ordering=['alineacion_equipo_id']
-    search_fields = ['equipo_id']
+    list_display=['alineacion_id','dorsal','posicion_jugador_id','capitan','estado','contrato_id','descripcion_encuentro_id']
+    ordering=['alineacion_id']
+    search_fields = ['descripcion_encuentro_id']
 
-admin.site.register(alineacion,alineacionAdmin)
+
 admin.site.register(categoria_equipo,categoriaEquipo)
 admin.site.register(tipo_equipo,tipoEquipoAdmin)
 admin.site.register(equipo,equipoAdmin)
 admin.site.register(posicion_jugador,posicionJugadorAdmin)
-admin.site.register(alineacion_equipo,AlineacionEquipoAdmin)
+admin.site.register(alineacionEquipo,AlineacionEquipoAdmin)

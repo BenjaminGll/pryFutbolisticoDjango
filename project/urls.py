@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import contextoTVvivo, contextoTv,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoListaJugadoresPorAsistencias, contextoJugador, contextoCompetencias,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,contextoListaJugadoresPorAmarillas,contextoListaJugadoresPorRojas,mostrarEvento
+from project.views import contextoTVvivo,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador, contextoCompetencias,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -33,12 +33,12 @@ urlpatterns = [
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
     path('competencias/<str:nombre_competicion>/lista_jugadores_goles',contextoListaJugadoresPorGoles),
-    path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
-    path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
-    path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
+    # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
+    # path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
+    # path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
     path('tabla-posiciones/<str:nombre_competicion>', contextoTablaPosiciones),
     path('futbol/sedes',contextoSedes),
-    path('futbol/tv/<int:id>',contextoTv),
+    # path('futbol/tv/<int:id>',contextoTv),
     path('__debug__/', include('debug_toolbar.urls')),
     path('', index),
 ]

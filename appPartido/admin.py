@@ -44,10 +44,10 @@ class tipo_eventoAdmin(admin.ModelAdmin):
     ordering=['tipo_evento_id']
     search_fields = ['nombre','tipo_evento_id']
 
-class evento_personaAdmin(admin.ModelAdmin):
-    list_display=['encuentro_evento_id','encuentro_id','tipo_evento_id','persona_id','suceso','tipo_suceso','tiempo','observacion'] 
-    ordering=['encuentro_evento_id']
-    search_fields = ['encuentro_id','persona_id']
+class eventoAdmin(admin.ModelAdmin):
+    list_display=['evento_id','alineacion1_id','alineacion2_id','tiempo_reglamentario','tiempo_extra','motivo','cantidad','tipo_evento_id','encuentro_id'] 
+    ordering=['evento_id']
+    search_fields = ['encuentro_id','alineacion1_id','alineacion2_id']
 
 
 
@@ -59,4 +59,4 @@ admin.site.register(descripcion_encuentro,descripcionEncuentroAdmin)
 admin.site.register(encuentro,encuentroAdmin)
 # admin.site.register(detalle_encuentro,detalleEncuentroAdmin)
 admin.site.register(tipo_evento,tipo_eventoAdmin)
-admin.site.register(evento_persona,evento_personaAdmin)
+admin.site.register(eventoPersona,eventoAdmin)

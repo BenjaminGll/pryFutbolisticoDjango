@@ -78,48 +78,79 @@ class sede(models.Model):
     class Meta:
         verbose_name_plural='sede'
 
-
-class encuentro(models.Model):
+##NUEVO
+class descripcion_encuentro(models.Model):
     CHOICE_RESULTADO = [
         ('G', 'GANADO'),
         ('E', 'EMPATADO'),
         ('P', 'PERDIDO'),
     ]
 
-    encuentro_id=models.BigAutoField(primary_key=True)
-    fase=models.ForeignKey("appCompeticion.fase", on_delete=models.CASCADE,db_column='fase',related_name='fase')
-    grupo=models.ForeignKey("appCompeticion.grupo", on_delete=models.CASCADE,db_column='grupo',related_name='grupo')
-    alineacion_local=models.ForeignKey("appEquipo.alineacion",on_delete=models.CASCADE,db_column='alineacion_local',related_name='alineacion_local',blank=True,null=True)
-    alineacion_visita=models.ForeignKey("appEquipo.alineacion",on_delete=models.CASCADE,db_column='alineacion_visita',related_name='alineacion_visita',blank=True,null=True)
-    equipo_local=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_local',related_name='equipo_local')
-    equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
-    formacion_local=models.ForeignKey('formacion',on_delete=models.CASCADE,db_column='formacion_local',related_name='formacion_local',blank=True,null=True)
-    formacion_visita=models.ForeignKey('formacion',on_delete=models.CASCADE,db_column='formacion_visita',related_name='formacion_visita',blank=True,null=True)
-    # CHOICE FIELD | G = GANADO , E = EMPATADO , P = PERDIDO
-    resultado_local=models.CharField(max_length=1,choices=CHOICE_RESULTADO)
-    resultado_visita=models.CharField(max_length=1,choices=CHOICE_RESULTADO)
-    resultado_goles_local=models.IntegerField() #2
-    resultado_goles_visita=models.IntegerField() #0
-    competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')
-    sede_id=models.ForeignKey(sede,on_delete=models.CASCADE,db_column='sede_id',blank=True,null=True)
-    terna_arbitral_id=models.ForeignKey("appArbitro.terna_arbitral", on_delete=models.CASCADE,db_column='terna_arbitral_id')
-    fecha=models.DateTimeField(blank=True,null=True)
-    humedad=models.CharField(max_length=4)
-    clima=models.CharField(max_length=4)
-    estado_jugado=models.BooleanField()
+    descripcion_encuentro_id = models.BigAutoField(primary_key=True)
+    tipo_equipo = models.CharField(max_length=10, blank=True, null=True)
+    goles = models.CharField(max_length=4)
+    goles_ronda_penales = models.CharField(max_length=4)
+    resultado = models.CharField(max_length=1, choices=CHOICE_RESULTADO)
+    formacion = models.ForeignKey('formacion', on_delete=models.CASCADE, db_column='formacion_id', related_name='descripcion_encuentros', blank=True, null=True)
+    equipo = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id', related_name='descripcion_encuentros', blank=True, null=True)
+    encuentro = models.ForeignKey('encuentro', on_delete=models.CASCADE, db_column='encuentro_id', related_name='descripcion_encuentros', blank=True, null=True)
 
     def save(self, force_insert=False, force_update=False):
-        self.humedad = self.humedad.upper()
+        super(descripcion_encuentro, self).save(force_insert, force_update)
+
+    class Meta:
+        verbose_name_plural = 'descripcion_encuentro'
+
+
+class encuentro(models.Model):
+    CHOICE_ESTADO = [
+         ('J', 'JUGADO'),
+         ('N', 'NO JUGADO'),
+         ('E', 'EN JUEGO'),
+         ('S', 'SUSPENDIDO'),
+     ]
+
+    encuentro_id=models.BigAutoField(primary_key=True)
+    competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')
+    sede_id=models.ForeignKey(sede,on_delete=models.CASCADE,db_column='sede_id',blank=True,null=True)
+    fase=models.ForeignKey("appCompeticion.fase", on_delete=models.CASCADE,db_column='fase',related_name='fase')
+    grupo=models.ForeignKey("appCompeticion.grupo", on_delete=models.CASCADE,db_column='grupo',related_name='grupo')
+    equipo_local=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_local',related_name='equipo_local')
+    equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
+    fecha=models.DateTimeField(blank=True,null=True)
+    clima=models.CharField(max_length=4)
+    estado_jugado=models.CharField(max_length=2,default='DI',choices=CHOICE_ESTADO)
+
+    def save(self, force_insert=False, force_update=False):
+        
         self.clima = self.clima.upper()
-        self.resultado_local = self.resultado_local.upper()
-        self.resultado_visita = self.resultado_visita.upper()
         super(encuentro, self).save(force_insert, force_update)
 
+        # Crear registros en descripcion_encuentro
+        descripcion_local = descripcion_encuentro(
+            encuentro=self,
+            equipo=self.equipo_local,
+            # Agrega los demás campos necesarios para descripcion_encuentro
+            tipo_equipo = 'Local'
+        )
+        descripcion_local.save()
+
+        descripcion_visita = descripcion_encuentro(
+            encuentro=self,
+            equipo=self.equipo_visita,
+            tipo_equipo = 'Visita'
+            # Agrega los demás campos necesarios para descripcion_encuentro
+        )
+        descripcion_visita.save()
+
     def __str__(self):
-        return str(self.equipo_local) + " vs " +str(self.equipo_visita)
-    
+        
+        return str(self.equipo_local) + " vs " + str(self.equipo_visita)
+
     class Meta:
-        verbose_name_plural='encuentro'
+        verbose_name_plural = 'encuentro'
+
+## FIN
 
 # class detalle_encuentro(models.Model):
 #     CHOICE_TIPO_EQUIPO= [
@@ -141,45 +172,43 @@ class encuentro(models.Model):
 #     class Meta:
 #         verbose_name_plural='detalle_encuentro'
     
-class evento(models.Model):
-    evento_id=models.BigAutoField(primary_key=True)
-    descripcion=models.CharField(max_length=30)
+class tipo_evento(models.Model):
+    tipo_evento_id=models.BigAutoField(primary_key=True)
+    nombre=models.CharField(max_length=30)
+    descripcion=models.CharField(max_length=300)
     estado=models.BooleanField()
-
+    logo_tipo_evento=models.ImageField(blank=True,null=True,upload_to='jugador/',default='jugador/logo_default.png')
     def save(self, force_insert=False, force_update=False):
+        self.nombre = self.nombre.upper()
         self.descripcion = self.descripcion.upper()
-        super(evento, self).save(force_insert, force_update)
+        super(tipo_evento, self).save(force_insert, force_update)
 
     def __str__(self):
         return self.descripcion
 
     class Meta:
-        verbose_name_plural='evento'
+        verbose_name_plural='tipo_evento'
 
-class evento_persona(models.Model):
-    CHOICE_TIPO_SUCESO= [
-        ('E','ENTRADA'),
-        ('S','SALIDA'),
-    ]
+class evento(models.Model):
+    evento_id = models.BigAutoField(primary_key=True)
+   
+    alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1')
+    alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2')
 
-    encuentro_evento_id=models.BigAutoField(primary_key=True)
-    encuentro_id=models.ForeignKey(encuentro,on_delete=models.CASCADE,db_column='encuentro_id')
-    evento_id=models.ForeignKey(evento,on_delete=models.CASCADE,db_column='evento_id')
-    persona_id=models.ForeignKey("appContrato.persona",on_delete=models.CASCADE,db_column='persona_id')
-    suceso=models.CharField(max_length=5,default='ABC')
-    # CHOICE_TIPO_SUCESO | E = ENTRADA , S = SALIDA
-    tipo_suceso=models.CharField(max_length=1,choices=CHOICE_TIPO_SUCESO,blank=True,null=True)   
-    tiempo=models.IntegerField()
-    observacion=models.CharField(max_length=50,blank=True,null=True)
+    tiempo_reglamentario = models.TimeField(null=True)
+    tiempo_extra = models.TimeField(null=True)
+    motivo = models.CharField(max_length=50, blank=True, null=True)
+    cantidad = models.IntegerField(blank=True, null=True)
+
+    tipo_evento_id = models.ForeignKey(tipo_evento, on_delete=models.CASCADE, db_column='tipo_evento_id', null=True)
+    encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
 
     def save(self, force_insert=False, force_update=False):
-        self.suceso = self.suceso.upper()
-        self.observacion = self.observacion.upper()
-        super(evento_persona, self).save(force_insert, force_update)
+        self.motivo = self.motivo.upper()
+        super(evento, self).save(force_insert, force_update)
 
-    def __str__(self):
-        return str(self.encuentro_evento_id)
+    def _str_(self):
+        return str(self.evento_id)
 
     class Meta:
-        verbose_name_plural='evento_persona'
-
+        verbose_name_plural = 'evento'

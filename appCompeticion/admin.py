@@ -13,9 +13,9 @@ class competicionAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
 
 class paisAdmin(admin.ModelAdmin):
-    list_display=['pais_id','logo_bandera','nombre','sigla']
-    ordering=['pais_id']
-    search_fields = ['nombre']
+    list_display = ['pais_id', 'logo_bandera','nombre','sigla', 'estado']
+    ordering = ['pais_id']
+    search_fields = ['logo_bandera','nombre','sigla','estado']
 
 class deporteAdmin(admin.ModelAdmin):
     list_display=['deporte_id','nombre','estado']

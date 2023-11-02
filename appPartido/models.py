@@ -103,11 +103,12 @@ class descripcion_encuentro(models.Model):
 
 
 class encuentro(models.Model):
-    # CHOICE_RESULTADO = [
-    #     ('G', 'GANADO'),
-    #     ('E', 'EMPATADO'),
-    #     ('P', 'PERDIDO'),
-    # ]
+    CHOICE_RESULTADO = [
+         ('J', 'JUGADO'),
+         ('N', 'NO JUGADO'),
+         ('E', 'EN JUEGO'),
+         ('S', 'SUSPENDIDO'),
+     ]
 
     encuentro_id=models.BigAutoField(primary_key=True)
     competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')

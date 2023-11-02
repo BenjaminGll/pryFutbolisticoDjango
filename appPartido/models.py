@@ -103,7 +103,7 @@ class descripcion_encuentro(models.Model):
 
 
 class encuentro(models.Model):
-    CHOICE_RESULTADO = [
+    CHOICE_ESTADO = [
          ('J', 'JUGADO'),
          ('N', 'NO JUGADO'),
          ('E', 'EN JUEGO'),
@@ -119,7 +119,7 @@ class encuentro(models.Model):
     equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
     fecha=models.DateTimeField(blank=True,null=True)
     clima=models.CharField(max_length=4)
-    estado_jugado=models.BooleanField()
+    estado_jugado=models.CharField(max_length=2,default='DI',choices=CHOICE_ESTADO)
 
     def save(self, force_insert=False, force_update=False):
         

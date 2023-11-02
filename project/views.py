@@ -3,7 +3,7 @@ from django.shortcuts import render
 from appArbitro.models import arbitro,terna_arbitral,detalle_terna
 from appContrato.models import contrato, persona, tipo_persona
 from appEquipo.models import equipo, alineacion
-from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla
+from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla_posicion
 from appPartido.models import encuentro,evento,sede,tipo_evento
 from appCompeticion.models import deporte
 from user.models import User
@@ -310,7 +310,7 @@ def contextoTablaPosiciones(request,nombre_competicion):
     
     nombre_grupos = grupo.objects.filter(grupo_id__in=listar_grupos_fase_grupos)
     
-    lista_tabla =  tabla.objects.filter(competicion_id = competencia_seleccionada.competicion_id, equipo_id__in=listar_equipos_fase_grupos).values('equipo_id','ganado','empatado','perdido','goles_favor','goles_contra','puntos').order_by('-puntos') 
+    lista_tabla =  tabla_posicion.objects.filter(competicion_id = competencia_seleccionada.competicion_id, equipo_id__in=listar_equipos_fase_grupos).values('equipo_id','ganado','empatado','perdido','goles_favor','goles_contra','puntos').order_by('-puntos') 
     
     listaEquipos = [[]]
 

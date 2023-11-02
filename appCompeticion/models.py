@@ -113,7 +113,6 @@ class detalle_patrocinador(models.Model):
 
 class grupo(models.Model):
     grupo_id=models.BigAutoField(primary_key=True)
-    slug=models.SlugField(blank=True,null=True)
     nombre=models.CharField(max_length=30)
     
     def save(self, force_insert=False, force_update=False):
@@ -154,7 +153,7 @@ class detalle_grupo(models.Model):
     class Meta: 
         verbose_name_plural='detalle_grupo'
 
-class tabla(models.Model):
+class tabla_posicion(models.Model):
     tabla_id=models.BigAutoField(primary_key=True)
     competicion_id=models.ForeignKey(competicion,on_delete=models.CASCADE, db_column='competicion_id')
     equipo_id=models.ForeignKey("appEquipo.equipo",on_delete=models.CASCADE, db_column='equipo_id')
@@ -171,7 +170,7 @@ class tabla(models.Model):
         return str(self.tabla_id)
     
     class Meta: 
-        verbose_name_plural='tabla'
+        verbose_name_plural='tabla_posicion'
 class organizacion(models.Model):
        
     CHOICE_TIPO = [

@@ -50,8 +50,8 @@ class AlineacionEquipoAdmin(admin.ModelAdmin):
     search_fields = ['descripcion_encuentro_id']
 
 class EncuentroPersonaAdmin(admin.ModelAdmin):
-     list_display = ['encuentro_id', 'equipo_id', 'contrato_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado']
-     ordering = ['encuentro_id']
+     list_display = ['encuentro_persona_id','encuentro_id', 'equipo_id', 'contrato_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado']
+     ordering = ['encuentro_persona_id']
      search_fields = ['equipo_id']
 
 

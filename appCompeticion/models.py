@@ -24,7 +24,7 @@ class pais(models.Model):
         self.sigla = self.sigla.upper()
         super(pais, self).save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return str(self.nombre)
 
     class Meta:
@@ -55,7 +55,7 @@ class deporte(models.Model):
         super(deporte, self).save(force_insert, force_update)
 
     def __str__(self):
-         return str(self.deporte_id)
+         return str(self.nombre)
         
     class Meta: 
         verbose_name_plural='deporte'

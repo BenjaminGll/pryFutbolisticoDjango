@@ -99,7 +99,7 @@ class tipo_arbitro(models.Model):
         self.nombre = self.nombre.upper()
         super(tipo_arbitro, self).save(force_insert, force_update)
 
-    def _str_(self):
+    def __str__(self):
         return str(self.nombre)
     
     class Meta:

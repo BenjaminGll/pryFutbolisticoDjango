@@ -3,14 +3,53 @@
 {% block title %} Lista de sedes por organización {% endblock %}
 {% block content %}
 
-
 <section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
+    <div class="container">
+        <div class="row">
+            <!-- Combobox para filtrar por tipo de organización -->
+            <div class="col-md-12">
+                <form method="get" action="{% url 'sedes/filtrar' %}">
+                    <div class="form-group">
+                        <label for="tipoOrganizacion">Tipo de Organización:</label>
+                        <select name="tipoOrganizacion" id="tipoOrganizacion" class="form-control">
+                            {% for organizacion in tipos_organizacion %}
+                            <option value="{{ organizacion.id }}">{{ organizacion.nombre_oficial }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </form>
+            </div>
 
-        <div class="container">
-            <div class="row">
-                <h1>Hola</h1>
+            <!-- Tabla de sedes -->
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Sede</th>
+                            <th>Alias</th>
+                            <th>Capacidad</th>
+                            <th>Fecha Inauguración</th>
+                            <th>Ciudad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sede in sedes %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ sede.nombre }}</td>
+                            <td>{{ sede.alias }}</td>
+                            <td>{{ sede.capacidad }}</td>
+                            <td>{{ sede.fecha_inauguracion }}</td>
+                            <td>{{ sede.ciudad }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 </section>
 
 {% endblock %}

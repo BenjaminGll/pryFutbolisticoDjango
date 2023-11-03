@@ -37,7 +37,7 @@ urlpatterns = [
     # path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
     path('tabla-posiciones/<str:nombre_competicion>', contextoTablaPosiciones),
-    path('reporte/sedes',contextoSedes),
+    path('reporte/sedes',contextoSedes, name='sedes/filtrar'),
     # path('futbol/tv/<int:id>',contextoTv),
     path('__debug__/', include('debug_toolbar.urls')),
     path('', index),

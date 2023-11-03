@@ -140,15 +140,16 @@ def obtener_sedes_por_organizacion(organizacion_id):
     sedes = sede.objects.filter(id__in=sedes_ids)
     return sedes
 
-""" def contextoSedes(request):
+def contextoSedes(request):
     # Suponiendo que tienes una lista de tipos de organización que quieres mostrar en el combobox
     tipos_organizacion = organizacion.objects.all()
-    sedes = obtener_sedes_por_organizacion(tu_organizacion_id)  # Asegúrate de tener el ID correcto aquí
+    organizacion_id = request.GET.get('tipoOrganizacion')
+    sedes = obtener_sedes_por_organizacion(organizacion_id) if organizacion_id else sede.objects.all()
 
-    return render(request, 'nombre_de_tu_template.html', {
+    return render(request, 'ReporteSedeOrganizacion.html', {
         'tipos_organizacion': tipos_organizacion,
         'sedes': sedes,
-    }) """
+    })
 
 def contextoEquipo(request, nombre_equipo):
     equipos = equipo.objects.get(nombre=nombre_equipo.upper())

@@ -24,7 +24,12 @@ def contextoNav():
 def mostrarEvento(request):
     
     eventos = evento.objects.all()
+    # evento_filtrado = evento.objects.filter(evento_id=eventos.evento_id).first()
     
+    # data_filtrada ={
+    #     'evento' : evento_filtrado
+    # }
+
     data ={
         'eventos' : eventos
     }

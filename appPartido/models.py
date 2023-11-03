@@ -98,6 +98,8 @@ class descripcion_encuentro(models.Model):
     def save(self, force_insert=False, force_update=False):
         super(descripcion_encuentro, self).save(force_insert, force_update)
 
+    def __str__(self):
+        return f"Equipo: {self.equipo},Formacion: {self.formacion}"
     class Meta:
         verbose_name_plural = 'descripcion_encuentro'
 

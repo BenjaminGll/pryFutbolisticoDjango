@@ -108,16 +108,20 @@ class alineacion(models.Model):
     posicion_jugador_id=models.ForeignKey(posicion_jugador,on_delete=models.CASCADE,db_column='posicion_jugador_id',null=True)
     capitan=models.BooleanField(null=True)
     estado=models.BooleanField(null=True)
-    contrato_id=models.ForeignKey("appContrato.contrato",on_delete=models.CASCADE,db_column='contrato_id',null=True)
-    descripcion_encuentro_id=models.ForeignKey("appPartido.descripcion_encuentro",on_delete=models.CASCADE,db_column='descripcion_encuentro_id',null=True)
+    contrato_id=models.ForeignKey('appContrato.contrato',on_delete=models.CASCADE,db_column='contrato_id', null=True)
+    descripcion_encuentro_id=models.ForeignKey('appPartido.descripcion_encuentro',on_delete=models.CASCADE,db_column='descripcion_encuentro_id')
+    
     def __str__(self):
-        return str(self.fecha_juego) + "-" + self.descripcion
+        return str(self.contrato_id)
 
     class Meta:
         verbose_name_plural='alineacion'
 
+
+
 class encuentro_persona(models.Model):
-    encuentro_id = models.AutoField(primary_key=True)
+    encuentro_persona_id = models.BigAutoField(primary_key=True)
+    encuentro_id = models.ForeignKey('appPartido.encuentro', on_delete=models.CASCADE, db_column='encuentro_id')
     equipo_id = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
     contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
     pases = models.IntegerField()
@@ -131,8 +135,12 @@ class encuentro_persona(models.Model):
     sustituidos = models.IntegerField()
     amonestado = models.BooleanField()
 
-    def _str_(self):
-        return str(self.encuentro_id)
+    def __str__(self):
+        return str(self.encuentro_persona_id)
 
     class Meta:
         verbose_name_plural = 'encuentro_persona'
+
+       
+
+

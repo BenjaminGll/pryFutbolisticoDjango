@@ -23,7 +23,7 @@ class deporteAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
 
 class grupoAdmin(admin.ModelAdmin):
-    list_display=['grupo_id','slug','nombre']
+    list_display=['grupo_id','nombre']
     ordering=['grupo_id']
     search_fields = ['nombre']
 
@@ -63,7 +63,7 @@ admin.site.register(deporte,deporteAdmin)
 admin.site.register(grupo,grupoAdmin)
 admin.site.register(fase,faseAdmin)
 admin.site.register(detalle_grupo,detalle_grupoAdmin)
-admin.site.register(tabla,tablaAdmin)
+admin.site.register(tabla_posicion,tablaAdmin)
 admin.site.register(organizacion,organizacionAdmin)
 admin.site.register(patrocinador,patrocinadorAdmin)
 admin.site.register(detalle_patrocinador,detalle_patrocinadorAdmin)

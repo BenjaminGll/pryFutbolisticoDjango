@@ -68,7 +68,7 @@ class contrato(models.Model):
 
     contrato_id = models.BigAutoField(primary_key=True)
     tipo_persona = models.ForeignKey('tipo_persona', on_delete=models.CASCADE, related_name='contratos_tipo_persona',default=1)
-    persona = models.ForeignKey('persona', on_delete=models.CASCADE, related_name='contratos_persona', default=1)
+    persona = models.ForeignKey('persona', on_delete=models.CASCADE, db_column='persona_id',related_name='contratos_persona', default=1)
     fecha_inicio = models.DateField(blank=True, null=True)
     fecha_fin = models.DateField(blank=True, null=True)
     tipo_contrato = models.CharField(max_length=1, choices=CHOICE_TIPO_CONTRATO, default='C')
@@ -82,8 +82,37 @@ class contrato(models.Model):
         self.posicion_jugador = self.posicion_jugador
         super(contrato, self).save(force_insert, force_update)
 
-    def _str_(self):
-        return str(self.contrato_id)
+    def __str__(self):
+        return str(self.persona)
 
     class Meta:
         verbose_name_plural = 'contrato'
+        
+
+class tipo_arbitro(models.Model):
+
+    tipo_arbitro_id = models.BigAutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    estado = models.BooleanField()
+
+    def save(self, force_insert=False, force_update=False):
+        self.nombre = self.nombre.upper()
+        super(tipo_arbitro, self).save(force_insert, force_update)
+
+    def _str_(self):
+        return str(self.nombre)
+    
+    class Meta:
+        verbose_name_plural='tipo_arbitro'
+        
+class detalle_terna(models.Model):
+    detalle_terna_id=models.BigAutoField(primary_key=True)
+    persona_id=models.ForeignKey(persona,on_delete=models.CASCADE,db_column='persona_id')
+    tipo_arbitro_id=models.ForeignKey(tipo_arbitro,on_delete=models.CASCADE,db_column='tipo_arbitro_id')
+    encuentro_id=models.ForeignKey('appPartido.encuentro' ,on_delete=models.CASCADE,db_column='encuentro_id')
+
+    def _str_(self):
+        return str(self.detalle_terna_id)        
+
+    class Meta:
+        verbose_name_plural='detalle_terna'

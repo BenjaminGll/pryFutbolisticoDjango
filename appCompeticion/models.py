@@ -56,7 +56,7 @@ class deporte(models.Model):
         super(deporte, self).save(force_insert, force_update)
 
     def __str__(self):
-         return str(self.deporte_id)
+         return str(self.nombre)
         
     class Meta: 
         verbose_name_plural='deporte'
@@ -106,7 +106,7 @@ class detalle_patrocinador(models.Model):
     patrocinador_id=models.ForeignKey(patrocinador,on_delete=models.CASCADE, db_column='patrocinador_id')
     competicion_id=models.ForeignKey(competicion,on_delete=models.CASCADE, db_column='competicion_id')
     
-    def _str_(self):
+    def __str__(self):
          return str(self.patrocinador_id,self.competicion_id)
     
     class Meta:

@@ -99,7 +99,7 @@ class tipo_arbitro(models.Model):
         self.nombre = self.nombre.upper()
         super(tipo_arbitro, self).save(force_insert, force_update)
 
-    def _str_(self):
+    def __str__(self):
         return str(self.nombre)
     
     class Meta:
@@ -111,7 +111,7 @@ class detalle_terna(models.Model):
     tipo_arbitro_id=models.ForeignKey(tipo_arbitro,on_delete=models.CASCADE,db_column='tipo_arbitro_id')
     encuentro_id=models.ForeignKey('appPartido.encuentro' ,on_delete=models.CASCADE,db_column='encuentro_id')
 
-    def _str_(self):
+    def __str__(self):
         return str(self.detalle_terna_id)        
 
     class Meta:

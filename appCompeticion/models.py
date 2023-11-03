@@ -24,7 +24,7 @@ class pais(models.Model):
         self.sigla = self.sigla.upper()
         super(pais, self).save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return str(self.nombre)
 
     class Meta:
@@ -74,7 +74,7 @@ class patrocinador (models.Model):
         self.nombre_abreviado = self.nombre_abreviado.upper()
         super(patrocinador, self).save(force_insert, force_update)
 
-    def _str_(self):
+    def __str__(self):
          return str(self.patrocinador_id)
         
     class Meta: 
@@ -105,7 +105,7 @@ class detalle_patrocinador(models.Model):
     patrocinador_id=models.ForeignKey(patrocinador,on_delete=models.CASCADE, db_column='patrocinador_id')
     competicion_id=models.ForeignKey(competicion,on_delete=models.CASCADE, db_column='competicion_id')
     
-    def _str_(self):
+    def __str__(self):
          return str(self.patrocinador_id,self.competicion_id)
     
     class Meta:

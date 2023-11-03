@@ -209,7 +209,7 @@ class evento(models.Model):
         self.motivo = self.motivo.upper()
         super(evento, self).save(force_insert, force_update)
 
-    def _str_(self):
+    def __str__(self):
         return str(self.evento_id)
 
     class Meta:

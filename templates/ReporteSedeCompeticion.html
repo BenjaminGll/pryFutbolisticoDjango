@@ -10,17 +10,16 @@
             <div class="col-md-12">
                 <form method="get" action="{% url 'sedes/filtrar' %}">
                     <div class="form-group">
-                        <label for="tipoOrganizacion">Tipo de Organización:</label>
-                        <select name="tipoOrganizacion" id="tipoOrganizacion" class="form-control">
-                            {% for organizacion in tipos_organizacion %}
-                            <option value="{{ organizacion.id }}">{{ organizacion.nombre_oficial }}</option>
+                        <label for="competicionId">Competición:</label>
+                        <select name="competicionId" id="competicionSelect" class="form-control">
+                            {% for competicion in competiciones %}
+                            <option value="{{ competicion.competicion_id }}">{{ competicion.nombre }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                    <input type="submit" value="Filtrar" class="btn btn-primary">
                 </form>
             </div>
-
             <!-- Tabla de sedes -->
             <div class="col-md-12">
                 <table class="table table-striped">
@@ -29,8 +28,6 @@
                             <th>N°</th>
                             <th>Sede</th>
                             <th>Alias</th>
-                            <th>Capacidad</th>
-                            <th>Fecha Inauguración</th>
                             <th>Ciudad</th>
                         </tr>
                     </thead>
@@ -38,11 +35,9 @@
                         {% for sede in sedes %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ sede.nombre }}</td>
-                            <td>{{ sede.alias }}</td>
-                            <td>{{ sede.capacidad }}</td>
-                            <td>{{ sede.fecha_inauguracion }}</td>
-                            <td>{{ sede.ciudad_id.nombre }}</td>
+                            <td><a href="{% url 'detalle_sede' sede.sede_id %}">{{ sede.nombre }}</a></td>
+                            <td>{{ sede.alias }}</a></td>
+                            <td>{{ sede.ciudad_id.nombre }}</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

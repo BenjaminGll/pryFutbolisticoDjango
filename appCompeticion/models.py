@@ -19,12 +19,13 @@ class pais(models.Model):
     sigla = models.CharField(max_length=3, default='')
     logo_bandera = models.ImageField(blank=True, null=True, upload_to='bandera/', default='bandera/bandera_default.png')
     estado = models.CharField(max_length=20, choices=PAIS_CHOICES, default='MIEMBRO')
+
     def save(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
         self.sigla = self.sigla.upper()
         super(pais, self).save(*args, **kwargs)
 
-    def _str_(self):
+    def __str__(self):
         return str(self.nombre)
 
     class Meta:
@@ -55,7 +56,7 @@ class deporte(models.Model):
         super(deporte, self).save(force_insert, force_update)
 
     def __str__(self):
-         return str(self.deporte_id)
+         return str(self.nombre)
         
     class Meta: 
         verbose_name_plural='deporte'
@@ -74,7 +75,7 @@ class patrocinador (models.Model):
         self.nombre_abreviado = self.nombre_abreviado.upper()
         super(patrocinador, self).save(force_insert, force_update)
 
-    def _str_(self):
+    def __str__(self):
          return str(self.patrocinador_id)
         
     class Meta: 
@@ -105,7 +106,7 @@ class detalle_patrocinador(models.Model):
     patrocinador_id=models.ForeignKey(patrocinador,on_delete=models.CASCADE, db_column='patrocinador_id')
     competicion_id=models.ForeignKey(competicion,on_delete=models.CASCADE, db_column='competicion_id')
     
-    def _str_(self):
+    def __str__(self):
          return str(self.patrocinador_id,self.competicion_id)
     
     class Meta:

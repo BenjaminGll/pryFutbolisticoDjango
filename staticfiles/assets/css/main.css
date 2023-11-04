@@ -7700,7 +7700,7 @@ a.text-dark:focus, a.text-dark:hover {
 /*** arrows (for all except IE7) **/
 .sf-arrows .sf-with-ul {
   padding-right: 1.5em;
-  *padding-right: 1em; /* no CSS arrows for IE7 (lack pseudo-elements) */
+  padding-right: 1em; /* no CSS arrows for IE7 (lack pseudo-elements) */
 }
 
 /* styling for both css and generated arrows */

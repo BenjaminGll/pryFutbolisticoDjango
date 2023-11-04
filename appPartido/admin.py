@@ -29,7 +29,7 @@ class descripcionEncuentroAdmin(admin.ModelAdmin):
     search_fields = ['equipo__nombre', 'encuentro__encuentro_id']
 
 class encuentroAdmin(admin.ModelAdmin):
-    list_display=['encuentro_id','competicion_id','sede_id','fase','grupo','fecha','clima','estado_jugado']
+    list_display=['encuentro_id','competicion_id','equipo_local','equipo_visita','sede_id','fase','grupo','fecha','clima','estado_jugado']
     ordering=['encuentro_id']
     search_fields = ['sede_id__nombre','competicion_id__nombre']
 

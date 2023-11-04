@@ -85,12 +85,14 @@
                                                 <span class="goals">
                                                     <b>{{  ej.resultado_goles_local}}</b> - <b>{{  ej.resultado_goles_visita}}</b>
                                                 </span>
-b
+
                                                 <a href="single-team.html" style="margin-top:0px; width: 40%">
                                                     <img src="{{ej.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="">
                                                     {{  ej.equipo_visita.nombre}}
                                                 </a>
                                             </div>
+                                            <a class="encuentro-link" href="/tvVivo">▶ Ver</a>
+
                                         </li> 
                                         {% endfor %}                                   
                                     </ul>
@@ -99,4 +101,19 @@ b
                         </div>
                     </div>
                 </div>
+                <style>   
+                 .encuentro-link {
+                    background-color: #0056b3;
+                    color: #fff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 10px 20px;
+                    text-decoration: none;
+                    transition: background-color 0.2s;
+                }
+            
+                .encuentro-link:hover {
+                    background-color:   #09ff00;;
+                    color: #fff;
+                }</style>
 {% endblock %}

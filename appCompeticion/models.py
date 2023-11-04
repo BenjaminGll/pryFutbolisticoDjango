@@ -31,21 +31,6 @@ class pais(models.Model):
     class Meta:
         verbose_name_plural = 'paises'
 
-class tipo_competicion(models.Model):
-    tipo_competicion_id=models.BigAutoField(primary_key=True)
-    nombre=models.CharField(max_length=30)
-    estado=models.BooleanField()
-    
-    def save(self, force_insert=False, force_update=False):
-        self.nombre = self.nombre.upper()
-        super(tipo_competicion, self).save(force_insert, force_update)
-
-    def __str__(self):
-         return str(self.nombre)
-
-    class Meta:
-        verbose_name_plural='tipo_competicion'
-
 class deporte(models.Model):
     deporte_id=models.BigAutoField(primary_key=True)
     nombre=models.CharField(max_length=30)
@@ -81,12 +66,41 @@ class patrocinador (models.Model):
     class Meta: 
         verbose_name_plural='patrocinador'
 
+class organizacion(models.Model):
+       
+    CHOICE_TIPO = [
+        ('F', 'FEDERACIÓN NACIONAL'),
+        ('I', 'FEDERACIÓN INTERNACIONAL'),
+        ('C', 'CONFEDERACIÓN'),
+        ('L', 'LIGA'),
+        
+    ]
+    organizacion_id=models.BigAutoField(primary_key=True)
+    nombre_oficial=models.CharField(max_length=30)
+    siglas=models.CharField(max_length=3,default='')
+    descripcion=models.CharField(max_length=50)
+    tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
+    estado=models.BooleanField()
+    logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')
+    
+    def save(self, force_insert=False, force_update=False):
+        self.nombre_oficial= self.nombre_oficial.upper()
+        self.siglas= self.siglas.upper()
+        self.descripcion= self.descripcion.upper()
+        super(organizacion, self).save(force_insert, force_update)
+
+    def __str__(self):
+        return str(self.nombre_oficial)
+
+    class Meta:
+        verbose_name_plural='organizaciones'
+
 class competicion(models.Model):
     competicion_id=models.BigAutoField(primary_key=True)
     logo_competicion=models.ImageField(null=True,blank=True,upload_to='competicion/logo/',default='competicion/logo/logo_default.png')
     nombre=models.CharField(max_length=50)
     pais_id=models.ForeignKey(pais,on_delete=models.CASCADE, db_column='pais_id')
-    tipo_competicion_id=models.ForeignKey(tipo_competicion,on_delete=models.CASCADE, db_column='tipo_competicion_id')
+    organizacion_id = models.ForeignKey(organizacion, on_delete=models.CASCADE, db_column='organizacion_id')
     deporte_id=models.ForeignKey(deporte,on_delete=models.CASCADE, db_column='deporte_id')
     estado=models.BooleanField()
     fecha_inicio=models.DateField(blank=True,null=True,default='1990-12-12')
@@ -172,31 +186,3 @@ class tabla_posicion(models.Model):
     
     class Meta: 
         verbose_name_plural='tabla_posicion'
-class organizacion(models.Model):
-       
-    CHOICE_TIPO = [
-        ('F', 'FEDERACIÓN NACIONAL'),
-        ('I', 'FEDERACIÓN INTERNACIONAL'),
-        ('C', 'CONFEDERACIÓN'),
-        ('L', 'LIGA'),
-        
-    ]
-    organizacion_id=models.BigAutoField(primary_key=True)
-    nombre_oficial=models.CharField(max_length=30)
-    siglas=models.CharField(max_length=3,default='')
-    descripcion=models.CharField(max_length=50)
-    tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
-    estado=models.BooleanField()
-    logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')
-    
-    def save(self, force_insert=False, force_update=False):
-        self.nombre_oficial= self.nombre_oficial.upper()
-        self.siglas= self.siglas.upper()
-        self.descripcion= self.descripcion.upper()
-        super(organizacion, self).save(force_insert, force_update)
-
-    def __str__(self):
-        return str(self.nombre_oficial)
-
-    class Meta:
-        verbose_name_plural='organizaciones'

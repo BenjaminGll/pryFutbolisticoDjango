@@ -137,7 +137,7 @@ def obtener_sedes_por_organizacion(organizacion_id):
     competiciones = competicion.objects.filter(organizacion_id=organizacion_id)
     encuentros = encuentro.objects.filter(competicion_id__in=competiciones).distinct('sede_id')
     sedes_ids = encuentros.values_list('sede_id', flat=True)
-    sedes = sede.objects.filter(id__in=sedes_ids)
+    sedes = sede.objects.filter(id__in=sedes_ids).select_related('ciudad_id')
     return sedes
 
 def contextoSedes(request):

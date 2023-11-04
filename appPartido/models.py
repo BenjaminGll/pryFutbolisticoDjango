@@ -2,6 +2,7 @@ from email.policy import default
 from random import choices
 from django.db import models
 from django import forms
+from appEquipo.models import alineacion
 
 # Create your models here.
 class formacion(models.Model):
@@ -193,6 +194,9 @@ class tipo_evento(models.Model):
 
 class evento(models.Model):
     evento_id = models.BigAutoField(primary_key=True)
+    tipo_evento_id = models.ForeignKey(tipo_evento, on_delete=models.CASCADE, db_column='tipo_evento_id', null=True)
+
+    encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
    
     alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1')
     alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2')
@@ -202,8 +206,8 @@ class evento(models.Model):
     motivo = models.CharField(max_length=50, blank=True, null=True)
     cantidad = models.IntegerField(blank=True, null=True)
 
-    tipo_evento_id = models.ForeignKey(tipo_evento, on_delete=models.CASCADE, db_column='tipo_evento_id', null=True)
-    encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
+    
+
 
     def save(self, force_insert=False, force_update=False):
         self.motivo = self.motivo.upper()

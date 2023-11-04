@@ -486,17 +486,25 @@ def mostrarEvento(request):
 
 
 def guardar_eventos_temporales(eventos):
-    # Limpiar el archivo temporal existente
     default_storage.delete('eventos_temporales.json')
     
-    # Guardar los eventos en el archivo temporal
     banners = []
 
     for evento in eventos:
-        banner = {
-            'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario}</div>'
-        }
-        banners.append(banner)
+        if evento.tipo_evento_id.descripcion == 'HIMNO NACIONAL':
+            banner = {
+                'html': f'<div class="banner-container"> {evento.tipo_evento_id} DEL {evento.alineacion1_id.descripcion_encuentro_id.equipo}</div>'
+            }
+            banners.append(banner)
+        else:
+            banner = {
+                'html': f'<div class="banner-container">{evento.tipo_evento_id}</div>'
+            }
+            banners.append(banner)
+
+    
+
+
 
     contenido = json.dumps({'banners': banners})
 

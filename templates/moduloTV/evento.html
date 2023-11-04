@@ -1,12 +1,12 @@
 {% extends 'moduloTV/base.html' %}
-
 {% block content %}
 <h1>Eventos</h1>
 <hr>
 {% for e in eventos %}
 <div class="card mb-4">
     <div class="card-body">
-        <form class="form-inline">
+        <form class="form-inline" method="post" action="{% url 'mostrar_evento' %}" id="eventoForm">
+            {% csrf_token %}
             <div class="col-md-3 mb-2 text-center">
                 <label for="evento"></label>
                 <a href="#" data-toggle="modal" data-target="#verDetallesModal{{ e.evento_id }}">

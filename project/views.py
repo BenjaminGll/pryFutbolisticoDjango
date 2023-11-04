@@ -8,7 +8,11 @@ from appCompeticion.models import deporte
 from user.models import User
 from django.db.models import Count
 from itertools import chain
+from django.http import JsonResponse
 
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import json
 
 def contextoNav():
     
@@ -21,20 +25,42 @@ def contextoNav():
     return render ('nav.html', data)
 
 ##
-def mostrarEvento(request):
+# def mostrarEvento(request):
     
-    eventos = evento.objects.all()
-    # evento_filtrado = evento.objects.filter(evento_id=eventos.evento_id).first()
+#     eventos = evento.objects.all()
+#     # evento_filtrado = evento.objects.filter(evento_id=eventos.evento_id).first()
     
-    # data_filtrada ={
-    #     'evento' : evento_filtrado
-    # }
+#     # data_filtrada ={
+#     #     'evento' : evento_filtrado
+#     # }
 
-    data ={
-        'eventos' : eventos
-    }
+#     data ={
+#         'eventos' : eventos
+#     }
 
-    return render (request,'moduloTV/evento.html', data)
+#     return render (request,'moduloTV/evento.html', data)
+##
+# def mostrarEvento(request):
+#     if request.method == 'POST':
+#         eventos_seleccionados = request.POST.getlist('idEvento')
+#         eventos = evento.objects.filter(evento_id__in=eventos_seleccionados)
+#         #return JsonResponse({'eventos': list(eventos.values())})
+#         # return render(request, 'tv.html', JsonResponse({'eventos': list(eventos.values())}))
+#         obtener_eventos_ajax(eventos)    # Si el método no es POST, simplemente renderiza la página de eventos
+    
+#     eventos = evento.objects.all()
+#     return render(request, 'moduloTV/evento.html', {'eventos': eventos})
+
+# def obtener_eventos_ajax(eventos):
+#     banners = []
+#     #if eventos:
+#     for evento in eventos:
+#             banner = f'''<div class="banner-container">
+#                 Tiempo: {evento.tiempo_reglamentario}
+#                 </div>'''
+#             banners.append(banner)
+#     return JsonResponse({'banners': banners})
+    
 ##
 
 def contadoresAdmin(request):
@@ -355,6 +381,7 @@ def contextoContacto(request):
     }
     
     return render(request, 'contact.html', data)
+
 def contextoTVvivo(request):
     data={
 
@@ -409,3 +436,46 @@ def index(request):
         
     }
     return render(request, 'index.html', data)
+
+
+def mostrarEvento(request):
+    eventos = evento.objects.all()
+    
+    if request.method == 'POST':
+        eventos_seleccionados = request.POST.getlist('idEvento')
+        eventos = evento.objects.filter(evento_id__in=eventos_seleccionados)
+        guardar_eventos_temporales(eventos)
+    
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos})
+
+
+def guardar_eventos_temporales(eventos):
+    # Limpiar el archivo temporal existente
+    default_storage.delete('eventos_temporales.json')
+    
+    # Guardar los eventos en el archivo temporal
+    banners = []
+
+    for evento in eventos:
+        banner = {
+            'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario}</div>'
+        }
+        banners.append(banner)
+
+    contenido = json.dumps({'banners': banners})
+
+    default_storage.save('eventos_temporales.json', ContentFile(contenido))
+
+
+
+def obtener_eventos_ajax(request):
+    eventos_temporales = []
+
+    try:
+        with default_storage.open('eventos_temporales.json', 'r') as archivo_json:
+            eventos_dict = json.load(archivo_json)
+            eventos_temporales = eventos_dict['banners']
+    except FileNotFoundError:
+        pass
+
+    return JsonResponse({'banners': eventos_temporales})

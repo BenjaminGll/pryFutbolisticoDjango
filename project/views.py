@@ -2,7 +2,7 @@ from calendar import c
 from django.shortcuts import render
 from appContrato.models import *
 from appEquipo.models import equipo, alineacion
-from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla_posicion
+from appCompeticion.models import competicion,deporte,detalle_grupo,fase,grupo,tabla_posicion
 from appPartido.models import encuentro,evento,sede,tipo_evento
 from appCompeticion.models import deporte
 from user.models import User
@@ -79,23 +79,22 @@ def contadoresAdmin(request):
     return render(request, 'admin/index.html', data)
 
 
-def contextoCompetencias(request, nombre_deporte):
+# def contextoCompetencias(request, nombre_deporte):
 
-    deportes = deporte.objects.get(nombre=nombre_deporte.upper() ,estado=True)
+#     deportes = deporte.objects.get(nombre=nombre_deporte.upper() ,estado=True)
     
-    nombre_seleccion = tipo_competicion.objects.get(nombre='SELECCION')
-    competencia_seleccion = competicion.objects.filter(deporte_id=deportes.deporte_id,tipo_competicion_id=nombre_seleccion, estado=True)
 
-    nombre_club = tipo_competicion.objects.get(nombre='CLUB')
-    competencia_club = competicion.objects.filter(deporte_id=deportes.deporte_id,tipo_competicion_id=nombre_club, estado=True)
+#     competencia_seleccion = competicion.objects.filter(deporte_id=deportes.deporte_id,tipo_competicion_id=nombre_seleccion, estado=True)
 
-    data= {
-        'deporte' : deportes,
-        'competencia_seleccion' : competencia_seleccion,
-        'competencia_club' : competencia_club
-    }
+#     competencia_club = competicion.objects.filter(deporte_id=deportes.deporte_id,tipo_competicion_id=nombre_club, estado=True)
 
-    return render(request, 'competencias.html', data)
+#     data= {
+#         'deporte' : deportes,
+#         'competencia_seleccion' : competencia_seleccion,
+#         'competencia_club' : competencia_club
+#     }
+
+    # return render(request, 'competencias.html', data)
 
 
 def contextoCompetenciasFutbol(request, nombre_competicion):
@@ -381,10 +380,13 @@ def contextoContacto(request):
     }
     
     return render(request, 'contact.html', data)
+
+
 def contextoTVvivo(request, id):
     jugar_encuentro=encuentro.objects.get(encuentro_id=id)
     equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
     equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
+    
     estadio=sede.objects.get(nombre=jugar_encuentro.sede_id)
     data={
         'jugar_encuentro':jugar_encuentro,

@@ -2,13 +2,9 @@ from django.contrib import admin
 from appCompeticion.models import *
 
 # Register your models here.
-class tipo_competicionAdmin(admin.ModelAdmin):
-    list_display=['tipo_competicion_id','nombre','estado']
-    ordering=['tipo_competicion_id']
-    search_fields = ['nombre']
 
 class competicionAdmin(admin.ModelAdmin):
-    list_display=['competicion_id','logo_competicion','deporte_id','nombre','pais_id','tipo_competicion_id']
+    list_display=['competicion_id','logo_competicion','deporte_id','nombre','pais_id']
     ordering=['competicion_id']
     search_fields = ['nombre']
 
@@ -56,7 +52,6 @@ class patrocinadorAdmin(admin.ModelAdmin):
 class detalle_patrocinadorAdmin(admin.ModelAdmin):
     list_display=['patrocinador_id','competicion_id']
 
-admin.site.register(tipo_competicion,tipo_competicionAdmin)
 admin.site.register(competicion,competicionAdmin)
 admin.site.register(pais,paisAdmin)
 admin.site.register(deporte,deporteAdmin)

@@ -472,6 +472,8 @@ def index(request):
     return render(request, 'index.html', data)
 
 
+
+
 def mostrarEvento(request):
     eventos = evento.objects.all()
     
@@ -479,7 +481,7 @@ def mostrarEvento(request):
         eventos_seleccionados = request.POST.getlist('idEvento')
         eventos = evento.objects.filter(evento_id__in=eventos_seleccionados)
         guardar_eventos_temporales(eventos)
-    
+    eventos = evento.objects.all()
     return render(request, 'moduloTV/evento.html', {'eventos': eventos})
 
 
@@ -513,3 +515,11 @@ def obtener_eventos_ajax(request):
         pass
 
     return JsonResponse({'banners': eventos_temporales})
+
+def limpiar_eventos_temporales(request):
+    try:
+        # Intenta eliminar el archivo temporal 'eventos_temporales.json'
+        default_storage.delete('eventos_temporales.json')
+        return JsonResponse({'message': 'Archivo temporal eliminado correctamente'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

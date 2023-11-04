@@ -145,15 +145,6 @@ def contextoJugador(request, alias):
 
     return render(request, 'jugador.html', data)
 
-def contextoEncuentros(request,nombre_competicion):
-    competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper())   
-    encuentros_por_jugar = encuentro.objects.filter(competicion_id=competencia_seleccionada,estado_jugado=False)    
-    encuentros_jugados = encuentro.objects.filter(competicion_id=competencia_seleccionada,estado_jugado=True)
-    data={
-        'encuentros_jugados' : encuentros_jugados,
-        'encuentros_por_jugar': encuentros_por_jugar
-    }
-    return render(request,'encuentros_jugados.html',data)
 
 def contextoSedes(request):
     # competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper())   
@@ -374,6 +365,15 @@ def contextoTablaPosiciones(request,nombre_competicion):
         'listar_grupos_fase_grupos': nombre_grupos
     }    
     return render(request, 'tabla-fase.html', data)
+def contextoEncuentros(request,nombre_competicion):
+    competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper())   
+    encuentros_por_jugar = encuentro.objects.filter(competicion_id=competencia_seleccionada,estado_jugado=False)    
+    encuentros_jugados = encuentro.objects.filter(competicion_id=competencia_seleccionada,estado_jugado=True)
+    data={
+        'encuentros_jugados' : encuentros_jugados,
+        'encuentros_por_jugar': encuentros_por_jugar
+    }
+    return render(request,'encuentros_jugados.html',data)
 
 def contextoContacto(request):
     data={
@@ -381,55 +381,75 @@ def contextoContacto(request):
     }
     
     return render(request, 'contact.html', data)
+<<<<<<< HEAD
 
 def contextoTVvivo(request):
+=======
+def contextoTVvivo(request, id):
+    jugar_encuentro=encuentro.objects.get(encuentro_id=id)
+    equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
+    equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
+    estadio=sede.objects.get(nombre=jugar_encuentro.sede_id)
+>>>>>>> f4a6fd479282092fbbc1531359050eaaa70eec12
     data={
-
+        'jugar_encuentro':jugar_encuentro,
+        'equipo_a':equipo_a,
+        'equipo_b':equipo_b,
+        'estadio':estadio,
     }
     
-    return render(request, 'tv.html', data)
+    return render(request, 'tvVivo.html', data)
 
-# def contextoTv(request,id):
-#     jugar_encuentro=encuentro.objects.get(encuentro_id=id)
-#     equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
-#     equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
-#     estadio=sede.objects.get(nombre=jugar_encuentro.sede_id)
-#     encuentro_goles=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=9)
-#     encuentro_tarjetasA=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=1)
-#     encuentro_tarjetasR=evento_persona.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=2)
+def contextoTVhome(request):
+    encuentros = encuentro.objects.filter(estado_jugado=False)    
+    data={
+          'encuentros': encuentros
+    }
     
-#     terna_encuentro=terna_arbitral.objects.get(terna_arbitral_id=jugar_encuentro.terna_arbitral_id_id)    
-#     detalle_terna_encuentro=detalle_terna.objects.filter(terna_arbitral_id=terna_encuentro.terna_arbitral_id).values('arbitro_id')
-#     arbitros=arbitro.objects.filter(arbitro_id__in=detalle_terna_encuentro)
+    return render(request, 'tvHome.html', data)
 
 
-#     alineacion_encuentro_a=encuentro.objects.filter(encuentro_id=id).values('alineacion_local')
-#     alineacion_a=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_a, estado=True).values('alineacion_id')
-#     detalle_alineacion_a=alineacion_equipo.objects.filter(alineacion_id__in=alineacion_a,equipo_id=equipo_a.equipo_id).values('contrato_id')
-#     contrato_alineacion_a=contrato.objects.filter(contrato_id__in=detalle_alineacion_a).values('persona_id')
-#     personas_alineacion_a=persona.objects.filter(persona_id__in=contrato_alineacion_a)
+def contextoTv(request,id):
+    jugar_encuentro=encuentro.objects.get(encuentro_id=id)
+    equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
+    equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
+    estadio=sede.objects.get(nombre=jugar_encuentro.sede_id)
+    encuentro_goles=evento.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=9)
+    encuentro_tarjetasA=evento.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=1)
+    encuentro_tarjetasR=evento.objects.filter(encuentro_id=jugar_encuentro.encuentro_id,evento_id=2)
+    
+    terna_encuentro=detalle_terna.objects.get(terna_arbitral_id=jugar_encuentro.terna_arbitral_id_id)    
+    detalle_terna_encuentro=detalle_terna.objects.filter(terna_arbitral_id=terna_encuentro.terna_arbitral_id).values('arbitro_id')
+    arbitros=persona.objects.filter(arbitro_id__in=detalle_terna_encuentro)
 
-#     alineacion_encuentro_b=encuentro.objects.filter(encuentro_id=id).values('alineacion_visita')
-#     alineacion_b=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_b, estado=True).values('alineacion_id')    
-#     detalle_alineacion_b=alineacion_equipo.objects.filter(alineacion_id__in=alineacion_b,equipo_id=equipo_b.equipo_id).values('contrato_id')
-#     contrato_alineacion_b=contrato.objects.filter(contrato_id__in=detalle_alineacion_b).values('persona_id')
-#     personas_alineacion_b=persona.objects.filter(persona_id__in=contrato_alineacion_b)
+
+    alineacion_encuentro_a=encuentro.objects.filter(encuentro_id=id).values('alineacion_local')
+    alineacion_a=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_a, estado=True).values('alineacion_id')
+    detalle_alineacion_a=alineacion.objects.filter(alineacion_id__in=alineacion_a,equipo_id=equipo_a.equipo_id).values('contrato_id')
+    contrato_alineacion_a=contrato.objects.filter(contrato_id__in=detalle_alineacion_a).values('persona_id')
+    personas_alineacion_a=persona.objects.filter(persona_id__in=contrato_alineacion_a)
+
+    alineacion_encuentro_b=encuentro.objects.filter(encuentro_id=id).values('alineacion_visita')
+    alineacion_b=alineacion.objects.filter(alineacion_id__in=alineacion_encuentro_b, estado=True).values('alineacion_id')    
+    detalle_alineacion_b=alineacion.objects.filter(alineacion_id__in=alineacion_b,equipo_id=equipo_b.equipo_id).values('contrato_id')
+    contrato_alineacion_b=contrato.objects.filter(contrato_id__in=detalle_alineacion_b).values('persona_id')
+    personas_alineacion_b=persona.objects.filter(persona_id__in=contrato_alineacion_b)
     
 
-#     data={
-#         'jugar_encuentro':jugar_encuentro,
-#         'equipo_a':equipo_a,
-#         'equipo_b':equipo_b,
-#         'estadio':estadio,
-#         'encuentro_goles':encuentro_goles,
-#         'encuentro_tarjetasA': encuentro_tarjetasA,
-#         'encuentro_tarjetasR': encuentro_tarjetasR,
-#         'arbitros':arbitros,
-#         'personas_alineacion_a':personas_alineacion_a,
-#         'personas_alineacion_b':personas_alineacion_b,
-#     }
+    data={
+        'jugar_encuentro':jugar_encuentro,
+        'equipo_a':equipo_a,
+        'equipo_b':equipo_b,
+        'estadio':estadio,
+        'encuentro_goles':encuentro_goles,
+        'encuentro_tarjetasA': encuentro_tarjetasA,
+        'encuentro_tarjetasR': encuentro_tarjetasR,
+        'arbitros':arbitros,
+        'personas_alineacion_a':personas_alineacion_a,
+        'personas_alineacion_b':personas_alineacion_b,
+    }
     
-#     return render(request, 'single-result.html', data)
+    return render(request, 'single-result.html', data)
     
 def index(request):
     data={

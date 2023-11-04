@@ -28,7 +28,7 @@ urlpatterns = [
     # path('competencias/<str:nombre_deporte>', contextoCompetencias),
     path('competencias/futbol/<str:nombre_competicion>', contextoCompetenciasFutbol),
     path('contacto', contextoContacto),
-    path('tvVivo/', contextoTVvivo),
+    path('tvVivo/<int:id>', contextoTVvivo),
     path('tvHome/', contextoTVhome),
     path('datostv', obtener_eventos_ajax),
     path('Admintv/', mostrarEvento, name='mostrar_evento'),
@@ -42,7 +42,6 @@ urlpatterns = [
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),
-    path("futbol/tv/<int:id>", contextoTv),
     path("__debug__/", include("debug_toolbar.urls")),
     path("", index),
 ]

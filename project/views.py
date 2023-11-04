@@ -398,10 +398,6 @@ def contextoContacto(request):
     }
     
     return render(request, 'contact.html', data)
-
-
-
-
 def contextoTVvivo(request, id):
     jugar_encuentro=encuentro.objects.get(encuentro_id=id)
     equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)

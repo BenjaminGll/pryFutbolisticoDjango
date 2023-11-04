@@ -195,6 +195,8 @@
           const nuevosBanners = data.banners;
 
           if (nuevosBanners.length > 0) {
+            // Limpia los banners anteriores
+            bannersContainer.innerHTML = '';
 
             nuevosBanners.forEach(banner => {
               const bannerElement = document.createElement('div');
@@ -227,7 +229,7 @@
       .catch(error => console.error(error));
   }
 
-
+  // obtenerBanners();
   setInterval(obtenerBanners, 3000); // Ejecutar cada 3 segundos (ajusta el tiempo según tus necesidades)
 </script>
 

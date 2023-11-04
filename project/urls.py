@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import contextoTVvivo,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador, contextoCompetencias,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento, obtener_eventos_ajax
+from project.views import obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,10 +25,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('jugador/<str:alias>', contextoJugador), 
     path('equipo/<str:nombre_equipo>', contextoEquipo),
-    path('competencias/<str:nombre_deporte>', contextoCompetencias),
+    # path('competencias/<str:nombre_deporte>', contextoCompetencias),
     path('competencias/futbol/<str:nombre_competicion>', contextoCompetenciasFutbol),
     path('contacto', contextoContacto),
-    path('tv', contextoTVvivo),
+    path('tvVivo/<int:id>', contextoTVvivo),
+    path('tvHome/', contextoTVhome),
     path('datostv', obtener_eventos_ajax),
     path('Admintv/', mostrarEvento, name='mostrar_evento'),
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
@@ -41,7 +42,6 @@ urlpatterns = [
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),
-    path("futbol/tv/<int:id>", contextoTv),
     path("__debug__/", include("debug_toolbar.urls")),
     path("", index),
 ]

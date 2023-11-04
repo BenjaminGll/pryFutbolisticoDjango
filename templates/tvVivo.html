@@ -79,14 +79,14 @@
         <span id="cronometro">00:00
       </div>
       <div class="banner-marcadores">
-        <span>MCI </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> BAY</span>
+        <span>{{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}}</span>
       </div>
       <div class="info-partido">
         <h2>Información del Partido</h2>
-        <p><strong>Fecha del Partido:</strong> 11 de Abril de 2023</p>
-        <p><strong>Hora de Inicio:</strong> 20:00 horas</p>
-        <p><strong>Equipos:</strong> Man. City vs. Bayern Munich</p>
-        <p><strong>Estadio:</strong> Estadio Ciudad de Mánchester</p>
+        <p><strong>Fecha del Partido:</strong> {{jugar_encuentro.fecha}}</p>
+        <!-- <p><strong>Hora de Inicio:</strong> 20:00 horas</p> -->
+        <p><strong>Equipos:</strong> {{equipo_a.nombre}} vs. {{equipo_b.nombre}}</p>
+        <p><strong>Estadio:</strong> {{estadio.nombre}}</p>
       </div>
     </div>
     <br>

@@ -29,7 +29,7 @@ urlpatterns = [
     path('competencias/futbol/<str:nombre_competicion>', contextoCompetenciasFutbol),
     path('contacto', contextoContacto),
     path('tvHome', contextoTVhome),
-    path('tvVivo', contextoTVvivo),
+    path('tvVivo/<int:id>', contextoTVvivo),
     path('Admintv/', mostrarEvento, name='mostrar_evento'),
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),

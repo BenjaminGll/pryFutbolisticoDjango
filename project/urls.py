@@ -14,48 +14,78 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
-<<<<<<< HEAD
-from project.views import contextoTVvivo,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador, contextoCompetencias,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento, obtener_eventos_ajax
-=======
-from project.views import contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador, contextoCompetencias,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento
->>>>>>> f4a6fd479282092fbbc1531359050eaaa70eec12
+from django.urls import path, include
+
+from project.views import (
+    contextoTVvivo,
+    contextoSedes,
+    contextoTablaPosiciones,
+    contextoEncuentros,
+    contadoresAdmin,
+    contextoJugador,
+    contextoCompetencias,
+    contextoEquipo,
+    contextoCompetenciasFutbol,
+    contextoContacto,
+    contextoFixtureCompetencia,
+    index,
+    contextoListaJugadoresPorGoles,
+    mostrarEvento,
+    obtener_eventos_ajax,
+)
+
+from project.views import (
+    contextoTv,
+    contextoTVvivo,
+    contextoTVhome,
+    contextoSedes,
+    contextoTablaPosiciones,
+    contextoEncuentros,
+    contadoresAdmin,
+    contextoJugador,
+    contextoCompetencias,
+    contextoEquipo,
+    contextoCompetenciasFutbol,
+    contextoContacto,
+    contextoFixtureCompetencia,
+    index,
+    contextoListaJugadoresPorGoles,
+    mostrarEvento,
+)
+
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('admin/', contadoresAdmin), 
-    path('admin/', admin.site.urls),
-    path('jugador/<str:alias>', contextoJugador), 
-    path('equipo/<str:nombre_equipo>', contextoEquipo),
-    path('competencias/<str:nombre_deporte>', contextoCompetencias),
-    path('competencias/futbol/<str:nombre_competicion>', contextoCompetenciasFutbol),
-    path('contacto', contextoContacto),
-<<<<<<< HEAD
-    path('tv', contextoTVvivo),
-    path('datostv', obtener_eventos_ajax),
-=======
-    path('tvHome', contextoTVhome),
-    path('tvVivo/<int:id>', contextoTVvivo),
->>>>>>> f4a6fd479282092fbbc1531359050eaaa70eec12
-    path('Admintv/', mostrarEvento, name='mostrar_evento'),
-    path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
-    path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
-    path('competencias/<str:nombre_competicion>/lista_jugadores_goles',contextoListaJugadoresPorGoles),
+    path("admin/", contadoresAdmin),
+    path("admin/", admin.site.urls),
+    path("jugador/<str:alias>", contextoJugador),
+    path("equipo/<str:nombre_equipo>", contextoEquipo),
+    path("competencias/<str:nombre_deporte>", contextoCompetencias),
+    path("competencias/futbol/<str:nombre_competicion>", contextoCompetenciasFutbol),
+    path("contacto", contextoContacto),
+    path("tv", contextoTVvivo),
+    path("datostv", obtener_eventos_ajax),
+    path("tvHome", contextoTVhome),
+    path("tvVivo/<int:id>", contextoTVvivo),
+    path("Admintv/", mostrarEvento, name="mostrar_evento"),
+    path("competencias/<str:nombre_competicion>/fixture", contextoFixtureCompetencia),
+    path("competencias/<str:nombre_competicion>/encuentros", contextoEncuentros),
+    path(
+        "competencias/<str:nombre_competicion>/lista_jugadores_goles",
+        contextoListaJugadoresPorGoles,
+    ),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
-    path('tabla-posiciones/<str:nombre_competicion>', contextoTablaPosiciones),
-<<<<<<< HEAD
-    path('reporte/sedes',contextoSedes, name='sedes/filtrar'),
+    path("tabla-posiciones/<str:nombre_competicion>", contextoTablaPosiciones),
+    path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     # path('futbol/tv/<int:id>',contextoTv),
-=======
-    path('futbol/sedes',contextoSedes),
-    path('futbol/tv/<int:id>',contextoTv),
->>>>>>> main
-    path('__debug__/', include('debug_toolbar.urls')),
-    path('', index),
+    path("futbol/sedes", contextoSedes),
+    path("futbol/tv/<int:id>", contextoTv),
+    path("__debug__/", include("debug_toolbar.urls")),
+    path("", index),
 ]
 
 if settings.DEBUG:

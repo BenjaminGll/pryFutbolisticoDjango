@@ -42,7 +42,7 @@ urlpatterns = [
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),
-    path("futbol/tv/<int:id>", contextoTv),
+    # path("futbol/tv/<int:id>", contextoTv),
     path("__debug__/", include("debug_toolbar.urls")),
     path("", index),
 ]

@@ -4,7 +4,7 @@ from appContrato.models import *
 from appEquipo.models import equipo, alineacion
 from appCompeticion.models import competicion,deporte,detalle_grupo,fase,grupo,tabla_posicion
 from appPartido.models import encuentro,evento,sede,tipo_evento
-from appCompeticion.models import deporte
+from appCompeticion.models import deporte, organizacion
 from user.models import User
 from django.db.models import Count
 from itertools import chain
@@ -145,15 +145,32 @@ def contextoJugador(request, alias):
     return render(request, 'jugador.html', data)
 
 
-def contextoSedes(request):
+""" def contextoSedes(request):
     # competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper())   
     # encuentros = encuentro.objects.all().filter(competicion_id=competencia_seleccionada)   
     sedes_competencia=sede.objects.filter(estado='DI')
     data={
         'sedes_competencia': sedes_competencia
     }
-    return render(request,'sedes.html',data)
+    return render(request,'sedes.html',data) """
 
+def obtener_sedes_por_organizacion(organizacion_id):
+    competiciones = competicion.objects.filter(organizacion_id=organizacion_id)
+    encuentros = encuentro.objects.filter(competicion_id__in=competiciones).distinct('sede_id')
+    sedes_ids = encuentros.values_list('sede_id', flat=True)
+    sedes = sede.objects.filter(id__in=sedes_ids).select_related('ciudad_id')
+    return sedes
+
+def contextoSedes(request):
+    # Suponiendo que tienes una lista de tipos de organización que quieres mostrar en el combobox
+    tipos_organizacion = organizacion.objects.all()
+    organizacion_id = request.GET.get('tipoOrganizacion')
+    sedes = obtener_sedes_por_organizacion(organizacion_id) if organizacion_id else sede.objects.all()
+
+    return render(request, 'ReporteSedeOrganizacion.html', {
+        'tipos_organizacion': tipos_organizacion,
+        'sedes': sedes,
+    })
 
 def contextoEquipo(request, nombre_equipo):
     equipos = equipo.objects.get(nombre=nombre_equipo.upper())

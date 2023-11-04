@@ -2,7 +2,7 @@ from calendar import c
 from django.shortcuts import render
 from appContrato.models import *
 from appEquipo.models import equipo, alineacion
-from appCompeticion.models import competicion,deporte,tipo_competicion,detalle_grupo,fase,grupo,tabla_posicion
+from appCompeticion.models import competicion,deporte,detalle_grupo,fase,grupo,tabla_posicion
 from appPartido.models import encuentro,evento,sede,tipo_evento
 from appCompeticion.models import deporte, organizacion
 from user.models import User
@@ -79,7 +79,7 @@ def contadoresAdmin(request):
     return render(request, 'admin/index.html', data)
 
 
-def contextoCompetencias(request, nombre_deporte):
+""" def contextoCompetencias(request, nombre_deporte):
 
     deportes = deporte.objects.get(nombre=nombre_deporte.upper() ,estado=True)
     
@@ -95,7 +95,7 @@ def contextoCompetencias(request, nombre_deporte):
         'competencia_club' : competencia_club
     }
 
-    return render(request, 'competencias.html', data)
+    return render(request, 'competencias.html', data) """
 
 
 def contextoCompetenciasFutbol(request, nombre_competicion):

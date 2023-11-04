@@ -100,7 +100,7 @@ class competicion(models.Model):
     logo_competicion=models.ImageField(null=True,blank=True,upload_to='competicion/logo/',default='competicion/logo/logo_default.png')
     nombre=models.CharField(max_length=50)
     pais_id=models.ForeignKey(pais,on_delete=models.CASCADE, db_column='pais_id')
-    organizacion_id = models.ForeignKey(organizacion, on_delete=models.CASCADE, db_column='organizacion_id')
+    organizacion_id = models.ForeignKey(organizacion, on_delete=models.CASCADE, db_column='organizacion_id',default='1')
     deporte_id=models.ForeignKey(deporte,on_delete=models.CASCADE, db_column='deporte_id')
     estado=models.BooleanField()
     fecha_inicio=models.DateField(blank=True,null=True,default='1990-12-12')

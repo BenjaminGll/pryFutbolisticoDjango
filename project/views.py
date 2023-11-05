@@ -9,6 +9,7 @@ from appCompeticion.models import (
     fase,
     grupo,
     tabla_posicion,
+    organizacion,
 )
 from appPartido.models import encuentro, evento, sede, tipo_evento
 from appCompeticion.models import deporte, organizacion, detalle_grupo,fase
@@ -207,6 +208,32 @@ def detalle_sede(request, sede_id):
     sede_instance = get_object_or_404(sede, pk=sede_id)  # Cambia sede_id a pk
     # Aquí puedes agregar más contexto si es necesario
     return render(request, 'detalle_sede.html', {'sede': sede_instance})
+
+def contextoOrganizaciones(request):
+    tipos_organizacion = obtener_tipos_organizacion()
+    tipo_seleccionado = request.GET.get("tipo")
+
+    if tipo_seleccionado:
+        # Filtra las organizaciones por el tipo seleccionado
+        organizaciones = organizacion.objects.filter(tipo=tipo_seleccionado)
+    else:
+        # Si no se selecciona un tipo, muestra todas las organizaciones
+        organizaciones = organizacion.objects.all()
+
+    return render(
+        request,
+        "ReporteTipoOrganizacion.html",
+        {
+            "tipos_organizacion": tipos_organizacion,
+            "tipo_seleccionado": tipo_seleccionado,
+            "organizaciones": organizaciones,
+        }
+    )
+
+def obtener_tipos_organizacion():
+    tipos = organizacion.CHOICE_TIPO
+    return tipos
+
 
 def lista_equipos_por_competicion_y_fase(request):
     competiciones = competicion.objects.all()

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import detalle_sede, obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento,lista_equipos_por_competicion_y_fase
+from project.views import detalle_sede, obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoOrganizaciones,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento,lista_equipos_por_competicion_y_fase
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -40,6 +40,7 @@ urlpatterns = [
     # path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
     path("tabla-posiciones/<str:nombre_competicion>", contextoTablaPosiciones),
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
+    path("reporte/organizaciones", contextoOrganizaciones, name="filtrar/organizaciones"),
     path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
     # path('futbol/tv/<int:id>',contextoTv),

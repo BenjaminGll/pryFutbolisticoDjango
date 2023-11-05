@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import detalle_sede, obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles, contextoListaJugadoresPorAsistencias, mostrarEvento,lista_equipos_por_competicion_y_fase
+from project.views import detalle_sede, contextoOrganizaciones, obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles, contextoListaJugadoresPorAsistencias, mostrarEvento,lista_equipos_por_competicion_y_fase
 from django.conf import settings
 from django.conf.urls.static import static
 

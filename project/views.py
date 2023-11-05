@@ -9,7 +9,8 @@ from user.models import User
 from django.db.models import Count
 from itertools import chain
 from django.http import JsonResponse
-
+from django.templatetags.static import static
+from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import json
@@ -493,9 +494,20 @@ def guardar_eventos_temporales(eventos):
     banners = []
 
     for evento in eventos:
-        banner = {
-            'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario}</div>'
-        }
+        
+        if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR':
+            print(evento.alineacion1_id.descripcion_encuentro_id.equipo.logo)
+            banner = {
+                'html': f'<div class="banner-container">{evento.motivo}: <br><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion1_id} </span><img src="{static("img/entrada.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion2_id} </span><img src="{static("img/salida.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
+            }
+        elif evento.tipo_evento_id.nombre == 'TARJETA ROJA':
+            banner = {
+                'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
+            }
+        else:    
+            banner = {
+                'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario} </div>'
+            }
         banners.append(banner)
 
     contenido = json.dumps({'banners': banners})
@@ -523,3 +535,39 @@ def limpiar_eventos_temporales(request):
         return JsonResponse({'message': 'Archivo temporal eliminado correctamente'})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+       
+def contextotablaorganizacion(request):
+    
+    competiciones = competicion.objects.all()
+
+    data ={
+        'competiciones' : competiciones
+    }
+
+    return render (request,'organizacion.html', data)
+
+
+
+def apicompetenciasequipo(request,nombre_competicion):
+    try:
+        # Busca la competición por nombre
+        competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper(), estado=True)
+
+        # Obtiene las posiciones de tabla para la competición seleccionada
+        posiciones = tabla_posicion.objects.filter(competicion_id=competencia_seleccionada)
+
+        # Extrae los equipos relacionados con las posiciones de tabla
+        equipos_de_la_competicion = [posicion.equipo_id for posicion in posiciones]
+
+        # Construye una lista de diccionarios con los detalles de los equipos
+        equipos_data = [{'nombre': equipo.nombre, 'logo': equipo.logo.url, 'siglas':  equipo.siglas} for equipo in equipos_de_la_competicion]
+
+        data =  {'equipos': equipos_data}
+
+    except FileNotFoundError:
+        data = {'error': 'Error al mostrar la data de Competiciones'}
+
+    return JsonResponse(data)
+

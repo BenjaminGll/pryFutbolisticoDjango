@@ -1,4 +1,6 @@
 from calendar import c
+from unittest import case
+from django.forms import CharField
 from django.shortcuts import get_object_or_404, render
 from appContrato.models import *
 from appEquipo.models import equipo, alineacion
@@ -9,11 +11,12 @@ from appCompeticion.models import (
     fase,
     grupo,
     tabla_posicion,
+    pais
 )
 from appPartido.models import encuentro, evento, sede, tipo_evento
 from appCompeticion.models import deporte, organizacion, detalle_grupo,fase
 from user.models import User
-from django.db.models import Count
+from django.db.models import Count, Case, When, IntegerField, Value, F
 from itertools import chain
 from django.http import JsonResponse
 
@@ -227,6 +230,40 @@ def lista_equipos_por_competicion_y_fase(request):
         'competiciones': competiciones,
         'fases': fases,
         'equipos': equipos,
+        'competicion_seleccionada': competicion_seleccionada,
+    })
+def lista_goleadores(request):
+    competicion_id = request.GET.get('competicion', None)
+    goleadores_list = []
+    competiciones = competicion.objects.all()
+
+    if competicion_id:
+        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
+        goleadores = (evento.objects
+                      .filter(tipo_evento_id__nombre='GOL', encuentro_id__competicion_id=competicion_id)
+                      .annotate(jugador_id=Case(
+                          When(alineacion1_id__isnull=False, then=F('alineacion1_id__contrato_id__persona_id')),
+                          default=Value(None, output_field=IntegerField())
+                      ))
+                      .values('jugador_id')
+                      .annotate(total_goles=Count('tipo_evento_id'))
+                      .order_by('-total_goles'))
+
+        for goleador in goleadores:
+            jugador_id = goleador['jugador_id']
+            total_goles = goleador['total_goles']
+            jugador = persona.objects.get(persona_id=jugador_id)
+
+            goleadores_list.append({
+                'alias': jugador.alias,
+                'goles': total_goles,
+                'equipo_logo': None,
+                'pais_bandera': None
+            })
+
+    return render(request, 'lista_jugadores_goles.html', {
+        'goleadores': goleadores_list,
+        'competiciones': competiciones,
         'competicion_seleccionada': competicion_seleccionada,
     })
 

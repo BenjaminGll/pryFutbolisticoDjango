@@ -473,17 +473,37 @@ def index(request):
 
 
 
-
 def mostrarEvento(request):
-    eventos = evento.objects.all()
+    encuentros = encuentro.objects.filter(estado_jugado='E')
+    encuentro_idd = None
+    if request.method == 'GET':
+        encuentro_idd = request.GET.get('encuentro')  # Cambia 'GET' a 'POST'
+         # Imprime el valor de encuentro_idd para verificarlo
+        print(f"Valor de encuentro_idd: {encuentro_idd}")
+        eventos = evento.objects.filter(encuentro_id=encuentro_idd,estado_evento=True) 
     
     if request.method == 'POST':
+       
         eventos_seleccionados = request.POST.getlist('idEvento')
         eventos = evento.objects.filter(evento_id__in=eventos_seleccionados)
         guardar_eventos_temporales(eventos)
-    eventos = evento.objects.all()
-    return render(request, 'moduloTV/evento.html', {'eventos': eventos})
+        for evento_seleccionado in eventos:
+            print(f"Eventos seleccionado: {evento_seleccionado}")
+            evento_seleccionado.estado_evento = False
+            evento_seleccionado.save()
+        eventos = evento.objects.filter(encuentro_id=encuentro_idd,estado_evento=True)
+        
 
+    # Imprime el resultado de eventos para verificarlo
+    print(f"Eventos filtrados: {eventos}")
+
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'encuentros': encuentros})
+
+
+
+def eventosActualizar(idEncuentro):
+
+    return
 
 def guardar_eventos_temporales(eventos):
     default_storage.delete('eventos_temporales.json')
@@ -496,6 +516,43 @@ def guardar_eventos_temporales(eventos):
                 'html': f'<div class="banner-container"> {evento.tipo_evento_id} DEL {evento.alineacion1_id.descripcion_encuentro_id.equipo}</div>'
             }
             banners.append(banner)
+
+
+        # elif evento.tipo_evento_id.descripcion == 'ALINEACION DE EQUIPO':
+        #     jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id)
+        #     banner = {
+
+        #             'html': f'''
+        #                 <div class="row">
+        #                     <div class="col-md-3">
+        #                         <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
+        #                             {evento.alineacion1_id.descripcion_encuentro_id.equipo.alias}
+        #                         </div>
+        #                         <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="{evento.alineacion1_id.descripcion_encuentro_id.equipo.alias}" style="max-width: 100%; height: auto;">
+        #                         <div class="formation-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
+        #                             {evento.alineacion1_id.descripcion_encuentro_id.formacion}
+        #                         </div>
+        #                     </div>
+        #                     <div class="col-md-9">
+        #                         <div class="title-box" style="background-color: black; color: white; padding: 10px; text-align: center; transform: rotate(-90deg);">
+        #                             Titulares
+        #                         </div>
+        #                         <div class="alignments-info">
+        #                             <!-- Aquí colocas la información de cada jugador -->
+        #                                 {% for jugador in jugadores_ali %}
+        #                                      {{ jugador.contrato_id.alias }}
+        #                                      {{ jugador.posicion_jugador_id.descripcion }}
+
+        #                                 {% endfor %}
+
+        #                         </div>
+        #                     </div>
+        #                 </div>
+        #             '''
+                
+        #             }
+        #     banners.append(banner)
+        
         else:
             banner = {
                 'html': f'<div class="banner-container">{evento.tipo_evento_id}</div>'
@@ -509,6 +566,8 @@ def guardar_eventos_temporales(eventos):
     contenido = json.dumps({'banners': banners})
 
     default_storage.save('eventos_temporales.json', ContentFile(contenido))
+
+
 
 
 

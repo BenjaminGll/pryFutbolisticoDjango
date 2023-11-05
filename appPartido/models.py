@@ -86,12 +86,16 @@ class descripcion_encuentro(models.Model):
         ('E', 'EMPATADO'),
         ('P', 'PERDIDO'),
     ]
+    CHOICE_EQUIPO = [
+        ('L', 'LOCAL'),
+        ('V', 'VISITA')
+    ]
 
     descripcion_encuentro_id = models.BigAutoField(primary_key=True)
-    tipo_equipo = models.CharField(max_length=10, blank=True, null=True)
+    tipo_equipo = models.CharField(max_length=10, choices=CHOICE_EQUIPO, null=True)
     goles = models.CharField(max_length=4)
     goles_ronda_penales = models.CharField(max_length=4)
-    resultado = models.CharField(max_length=1, choices=CHOICE_RESULTADO)
+    resultado = models.CharField(max_length=2, choices=CHOICE_RESULTADO,null=True)
     formacion = models.ForeignKey('formacion', on_delete=models.CASCADE, db_column='formacion_id', related_name='descripcion_encuentros', blank=True, null=True)
     equipo = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id', related_name='descripcion_encuentros', blank=True, null=True)
     encuentro = models.ForeignKey('encuentro', on_delete=models.CASCADE, db_column='encuentro_id', related_name='descripcion_encuentros', blank=True, null=True)
@@ -122,7 +126,7 @@ class encuentro(models.Model):
     equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
     fecha=models.DateTimeField(blank=True,null=True)
     clima=models.CharField(max_length=4)
-    estado_jugado=models.CharField(max_length=2,default='DI',choices=CHOICE_ESTADO)
+    estado_jugado=models.CharField(max_length=10,default='N',choices=CHOICE_ESTADO, null=True)
 
     def save(self, force_insert=False, force_update=False):
         
@@ -205,7 +209,7 @@ class evento(models.Model):
     tiempo_extra = models.TimeField(null=True)
     motivo = models.CharField(max_length=50, blank=True, null=True)
     cantidad = models.IntegerField(blank=True, null=True)
-
+    estado_evento = models.BooleanField(null=True)
     
 
 

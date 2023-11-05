@@ -19,19 +19,6 @@ class formacion(models.Model):
     class Meta:
         verbose_name_plural='formacion'
 
-class estado(models.Model):
-    estado_id=models.BigAutoField(primary_key=True)
-    nombre=models.CharField(max_length=30)
-
-    def save(self, force_insert=False, force_update=False):
-        self.nombre = self.nombre.upper()
-        super(estado, self).save(force_insert, force_update)
-
-    def __str__(self):
-        return self.nombre
-    
-    class Meta:
-        verbose_name_plural='estado'
 
 class ciudad(models.Model):
     ciudad_id=models.BigAutoField(primary_key=True)

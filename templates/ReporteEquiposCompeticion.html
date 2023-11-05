@@ -12,6 +12,10 @@
         width: 100%;
         table-layout: fixed; /* Asegura que todas las celdas tengan el mismo ancho */
     }
+    .tabla-equipos th.logo-column,
+    .tabla-equipos td.logo-column {
+        width: 25%; /* Ancho de la columna del logo */
+    }
     .tabla-equipos th,
     .tabla-equipos td {
         text-align: center;
@@ -27,7 +31,7 @@
 </style>
 {% endblock %}
 
-{% block title %} Lista de equipos por competicion y fase {% endblock %}
+{% block title %} Lista de equipos por competición y fase {% endblock %}
 {% block content %}
 
 <section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
@@ -67,14 +71,14 @@
         <table class="tabla-equipos">
             <thead>
                 <tr>
-                    <th>Logo</th>
+                    <th class="logo-column">Logo</th>
                     <th>Equipo</th>
                 </tr>
             </thead>
             <tbody>
                 {% for equipo in equipos %}
                     <tr>
-                        <td><img class="equipo-logo" src="{{ equipo.logo.url }}" alt="Logo de {{ equipo.nombre }}" /></td>
+                        <td class="logo-column"><img class="equipo-logo" src="{{ equipo.logo.url }}" alt="Logo de {{ equipo.nombre }}" /></td>
                         <td>{{ equipo.nombre }}</td>
                     </tr>
                 {% endfor %}

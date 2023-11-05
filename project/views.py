@@ -1,7 +1,7 @@
 from calendar import c
 from django.shortcuts import get_object_or_404, render
 from appContrato.models import *
-from appEquipo.models import equipo, alineacion
+from appEquipo.models import equipo, alineacion, encuentro_persona
 from appCompeticion.models import (
     competicion,
     deporte,
@@ -397,27 +397,33 @@ def contextoListaJugadoresPorGoles(request, nombre_competicion):
 #     }
 #     return render(request, 'lista_jugadores_rojas.html', data)
 
-# def contextoListaJugadoresPorAsistencias(request,nombre_competicion):
-#     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
-#     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
+def contextoListaJugadoresPorAsistencias(request, nombre_competicion):
+    competencia_seleccionada = competicion.objects.get(nombre = nombre_competicion.upper()) #FIFA WORLD CUP
+    encuentros_competencias = encuentro.objects.filter(competicion_id = competencia_seleccionada.competicion_id)
+    
+    resulta = (
+        evento.objects.filter(tipo_evento_id=19)
+        .filter(encuentro_id__in=encuentros_competencias)
+        .values('alineacion1_id').
+        annotate(count=Count('tipo_evento_id')).
+        order_by('-count')
+    )
 
-#     resulta = evento_persona.objects.filter(evento_id=19).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
+    lista = [[]]
 
-#     lista = [[]]
+    i = 0
+    for r in resulta:
+        li = persona.objects.get(persona_id = r.get('persona_id'))
+        lista[i].append(li)
+        lista[i].append(r.get('count'))
+        if i < len(resulta)-1:
+            lista.append([])
+        i = i + 1
 
-#     i = 0
-#     for r in resulta:
-#         li = persona.objects.get(persona_id = r.get('persona_id'))
-#         lista[i].append(li)
-#         lista[i].append(r.get('count'))
-#         if i < len(resulta)-1:
-#             lista.append([])
-#         i = i + 1
-
-#     data={
-#         'jugadores_asistencias': lista
-#     }
-#     return render(request, 'lista_jugadores_asistencias.html', data)
+    data={
+        'jugadores_asistencias': lista
+    }
+    return render(request, 'lista_jugadores_asistencias.html', data)
 
 
 def contextoTablaPosiciones(request, nombre_competicion):

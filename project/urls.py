@@ -40,6 +40,7 @@ urlpatterns = [
     path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias', contextoListaJugadoresPorAsistencias),
     path("tabla-posiciones/<str:nombre_competicion>", contextoTablaPosiciones),
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
+    path("reporte/organizaciones", contextoOrganizaciones, name="filtrar/organizaciones"),
     path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
     # path('futbol/tv/<int:id>',contextoTv),

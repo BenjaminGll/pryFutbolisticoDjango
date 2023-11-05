@@ -99,6 +99,7 @@ class organizacion(models.Model):
 
 class competicion(models.Model):
     competicion_id=models.BigAutoField(primary_key=True)
+    organizacion_id=models.ForeignKey(organizacion,on_delete=models.CASCADE, db_column='organizacion_id', null=True)
     logo_competicion=models.ImageField(null=True,blank=True,upload_to='competicion/logo/',default='competicion/logo/logo_default.png')
     nombre=models.CharField(max_length=50)
     pais_id=models.ForeignKey(pais,on_delete=models.CASCADE, db_column='pais_id')

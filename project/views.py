@@ -9,7 +9,6 @@ from appCompeticion.models import (
     fase,
     grupo,
     tabla_posicion,
-    organizacion,
 )
 from appPartido.models import encuentro, evento, sede, tipo_evento
 from appCompeticion.models import deporte, organizacion, detalle_grupo,fase
@@ -17,7 +16,8 @@ from user.models import User
 from django.db.models import Count
 from itertools import chain
 from django.http import JsonResponse
-
+from django.templatetags.static import static
+from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import json
@@ -208,32 +208,6 @@ def detalle_sede(request, sede_id):
     sede_instance = get_object_or_404(sede, pk=sede_id)  # Cambia sede_id a pk
     # Aquí puedes agregar más contexto si es necesario
     return render(request, 'detalle_sede.html', {'sede': sede_instance})
-
-def contextoOrganizaciones(request):
-    tipos_organizacion = obtener_tipos_organizacion()
-    tipo_seleccionado = request.GET.get("tipo")
-
-    if tipo_seleccionado:
-        # Filtra las organizaciones por el tipo seleccionado
-        organizaciones = organizacion.objects.filter(tipo=tipo_seleccionado)
-    else:
-        # Si no se selecciona un tipo, muestra todas las organizaciones
-        organizaciones = organizacion.objects.all()
-
-    return render(
-        request,
-        "ReporteTipoOrganizacion.html",
-        {
-            "tipos_organizacion": tipos_organizacion,
-            "tipo_seleccionado": tipo_seleccionado,
-            "organizaciones": organizaciones,
-        }
-    )
-
-def obtener_tipos_organizacion():
-    tipos = organizacion.CHOICE_TIPO
-    return tipos
-
 
 def lista_equipos_por_competicion_y_fase(request):
     competiciones = competicion.objects.all()
@@ -638,6 +612,7 @@ def index(request):
     return render(request, "index.html", data)
 
 
+
 def mostrarEvento(request):
     eventos = evento.objects.all()
 
@@ -648,6 +623,16 @@ def mostrarEvento(request):
 
     return render(request, "moduloTV/evento.html", {"eventos": eventos})
 
+    # Imprime el resultado de eventos para verificarlo
+    print(f"Eventos filtrados: {eventos}")
+
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'encuentros': encuentros})
+
+
+
+def eventosActualizar(idEncuentro):
+
+    return
 
 def guardar_eventos_temporales(eventos):
     # Limpiar el archivo temporal existente
@@ -665,6 +650,8 @@ def guardar_eventos_temporales(eventos):
     contenido = json.dumps({"banners": banners})
 
     default_storage.save("eventos_temporales.json", ContentFile(contenido))
+
+
 
 
 def obtener_eventos_ajax(request):

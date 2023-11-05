@@ -11,7 +11,7 @@ from appCompeticion.models import (
     tabla_posicion,
 )
 from appPartido.models import encuentro, evento, sede, tipo_evento
-from appCompeticion.models import deporte, organizacion
+from appCompeticion.models import deporte, organizacion, detalle_grupo,fase
 from user.models import User
 from django.db.models import Count
 from itertools import chain
@@ -188,7 +188,6 @@ def obtener_sedes_por_competicion(competicion_id):
 def contextoSedes(request):
     competiciones = competicion.objects.all()
     competicion_id = request.GET.get("competicionId")
-    print("El id es:" + competicion_id)
     sedes = (
         obtener_sedes_por_competicion(competicion_id)
         if competicion_id
@@ -205,10 +204,31 @@ def contextoSedes(request):
     )
 
 def detalle_sede(request, sede_id):
-    sede = get_object_or_404(sede, sede_id=sede_id)
+    sede_instance = get_object_or_404(sede, pk=sede_id)  # Cambia sede_id a pk
     # Aquí puedes agregar más contexto si es necesario
-    return render(request, 'detalle_sede.html', {'sede': sede})
+    return render(request, 'detalle_sede.html', {'sede': sede_instance})
 
+def lista_equipos_por_competicion_y_fase(request):
+    competiciones = competicion.objects.all()
+    fases = fase.objects.all()
+    equipos = []
+    competicion_seleccionada = None
+
+    competicion_id = request.GET.get('competicion')
+    fase_id = request.GET.get('fase')
+
+    if competicion_id:
+        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
+        if fase_id:
+            detalle_grupos = detalle_grupo.objects.filter(competicion_id=competicion_id, fase_id=fase_id)
+            equipos = [detalle.equipo_id for detalle in detalle_grupos]
+
+    return render(request, 'ReporteEquiposCompeticion.html', {
+        'competiciones': competiciones,
+        'fases': fases,
+        'equipos': equipos,
+        'competicion_seleccionada': competicion_seleccionada,
+    })
 
 def contextoEquipo(request, nombre_equipo):
     equipos = equipo.objects.get(nombre=nombre_equipo.upper())

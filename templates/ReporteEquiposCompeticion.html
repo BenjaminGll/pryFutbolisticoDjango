@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %} Lista de equipos por competicion y fase {% endblock %}
+{% block content %}
+
+<section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
+    <div class="container">
+        <h2>Equipos por Competición y Fase</h2>
+        
+        <!-- Mostrar el logo de la competición seleccionada -->
+        {% if competicion_seleccionada %}
+            <img src="{{ competicion_seleccionada.logo_competicion.url }}" alt="Logo de la Competición" />
+        {% endif %}
+        
+        <!-- Formulario de filtros -->
+        <form method="get">
+            <div class="form-group">
+                <label for="competicion">Competición:</label>
+                <select name="competicion" id="competicion" class="form-control" onchange="this.form.submit()">
+                    <option value="">--- Selecciona Competición ---</option>
+                    {% for competicion in competiciones %}
+                        <option value="{{ competicion.competicion_id }}" {% if competicion.competicion_id|stringformat:"s" == request.GET.competicion %}selected{% endif %}>{{ competicion.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="fase">Fase:</label>
+                <select name="fase" id="fase" class="form-control" onchange="this.form.submit()">
+                    <option value="">--- Selecciona Fase ---</option>
+                    {% for fase in fases %}
+                        <option value="{{ fase.fase_id }}" {% if fase.fase_id|stringformat:"s" == request.GET.fase %}selected{% endif %}>{{ fase.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+        
+        <!-- Lista de equipos -->
+        <div class="equipos">
+            {% for equipo in equipos %}
+                <div class="equipo">
+                    <img src="{{ equipo.logo.url }}" alt="Bandera de {{ equipo.nombre }}" />
+                    <span>{{ equipo.nombre }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

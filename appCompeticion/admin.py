@@ -4,7 +4,7 @@ from appCompeticion.models import *
 # Register your models here.
 
 class competicionAdmin(admin.ModelAdmin):
-    list_display=['competicion_id','logo_competicion','deporte_id','nombre','pais_id']
+    list_display=['competicion_id','organizacion_id','logo_competicion','deporte_id','nombre','pais_id']
     ordering=['competicion_id']
     search_fields = ['nombre']
 

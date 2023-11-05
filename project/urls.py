@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+<<<<<<< HEAD
 from project.views import detalle_sede, obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoGrupos,contextoSedes,contextoOrganizaciones,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento,lista_equipos_por_competicion_y_fase
+=======
+from project.views import detalle_sede, contextoOrganizaciones, obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles, contextoListaJugadoresPorAsistencias, mostrarEvento,lista_equipos_por_competicion_y_fase
+>>>>>>> fdd92f872641022afd4efd743e14b4287860149a
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -37,7 +41,7 @@ urlpatterns = [
     path('competencias/<str:nombre_competicion>/lista_jugadores_goles',contextoListaJugadoresPorGoles),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
-    # path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
+    path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias', contextoListaJugadoresPorAsistencias),
     path("tabla-posiciones/<str:nombre_competicion>", contextoTablaPosiciones),
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     path("reporte/organizaciones", contextoOrganizaciones, name="filtrar/organizaciones"),

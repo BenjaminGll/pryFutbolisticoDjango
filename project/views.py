@@ -9,7 +9,8 @@ from user.models import User
 from django.db.models import Count
 from itertools import chain
 from django.http import JsonResponse
-
+from django.templatetags.static import static
+from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import json
@@ -415,7 +416,8 @@ def contextoTVvivo(request, id):
     return render(request, 'tvVivo.html', data)
 
 def contextoTVhome(request):
-    encuentros = encuentro.objects.filter(estado_jugado=False)    
+    encuentros = encuentro.objects.filter(estado_jugado='false')  
+    
     data={
           'encuentros': encuentros
     }
@@ -473,17 +475,37 @@ def index(request):
 
 
 
-
 def mostrarEvento(request):
-    eventos = evento.objects.all()
+    encuentros = encuentro.objects.filter(estado_jugado='E')
+    encuentro_idd = None
+    if request.method == 'GET':
+        encuentro_idd = request.GET.get('encuentro')  # Cambia 'GET' a 'POST'
+         # Imprime el valor de encuentro_idd para verificarlo
+        print(f"Valor de encuentro_idd: {encuentro_idd}")
+        eventos = evento.objects.filter(encuentro_id=encuentro_idd,estado_evento=True) 
     
     if request.method == 'POST':
+       
         eventos_seleccionados = request.POST.getlist('idEvento')
         eventos = evento.objects.filter(evento_id__in=eventos_seleccionados)
         guardar_eventos_temporales(eventos)
-    eventos = evento.objects.all()
-    return render(request, 'moduloTV/evento.html', {'eventos': eventos})
+        for evento_seleccionado in eventos:
+            print(f"Eventos seleccionado: {evento_seleccionado}")
+            evento_seleccionado.estado_evento = False
+            evento_seleccionado.save()
+        eventos = evento.objects.filter(encuentro_id=encuentro_idd,estado_evento=True)
+        
 
+    # Imprime el resultado de eventos para verificarlo
+    print(f"Eventos filtrados: {eventos}")
+
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'encuentros': encuentros})
+
+
+
+def eventosActualizar(idEncuentro):
+
+    return
 
 def guardar_eventos_temporales(eventos):
     default_storage.delete('eventos_temporales.json')
@@ -491,16 +513,62 @@ def guardar_eventos_temporales(eventos):
     banners = []
 
     for evento in eventos:
-        if evento.tipo_evento_id.descripcion == 'HIMNO NACIONAL':
+        if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR':
+            print(evento.alineacion1_id.descripcion_encuentro_id.equipo.logo)
             banner = {
-                'html': f'<div class="banner-container"> {evento.tipo_evento_id} DEL {evento.alineacion1_id.descripcion_encuentro_id.equipo}</div>'
+                'html': f'<div class="banner-container">{evento.motivo}: <br><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion1_id} </span><img src="{static("img/entrada.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion2_id} </span><img src="{static("img/salida.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-            banners.append(banner)
-        else:
+        elif evento.tipo_evento_id.nombre == 'TARJETA ROJA':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento_id}</div>'
+                'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-            banners.append(banner)
+        elif evento.tipo_evento_id.descripcion == 'HIMNO NACIONAL':
+            banner = {
+            'html': f'<div class="banner-container"> {evento.tipo_evento_id} DEL {evento.alineacion1_id.descripcion_encuentro_id.equipo}</div>'
+            }
+            ##
+        elif evento.tipo_evento_id.descripcion == 'ALINEACION':
+             jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id)
+             banner = {
+
+                     'html': f'''
+                         <div class="row">
+                             <div class="col-md-3">
+                                 <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
+                                     {evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}
+                                 </div>
+                                 <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="{evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}" style="max-width: 100%; height: auto;">
+                                 <div class="formation-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
+                                     {evento.alineacion1_id.descripcion_encuentro_id.formacion}
+                                 </div>
+                             </div>
+                             <div class="col-md-9">
+                                 <div class="title-box" style="background-color: black; color: white; padding: 10px; text-align: center; transform: rotate(-90deg);">
+                                     Titulares
+                                 </div>
+                                 <div class="alignments-info">
+                                     <!-- Aquí colocas la información de cada jugador -->
+                                        
+                                              {{ evento.alineacion1_id.contrato_id.alias }}
+                                              {{ evento.alineacion1_id.posicion_jugador_id.descripcion }}
+
+                                        
+
+                                 </div>
+                             </div>
+                         </div>
+                     '''
+                
+                     }
+             banners.append(banner)
+            ###
+        else:    
+            banner = {
+                'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario} </div>'
+            }
+        banners.append(banner)
+
+
 
     
 
@@ -509,6 +577,8 @@ def guardar_eventos_temporales(eventos):
     contenido = json.dumps({'banners': banners})
 
     default_storage.save('eventos_temporales.json', ContentFile(contenido))
+
+
 
 
 
@@ -531,3 +601,39 @@ def limpiar_eventos_temporales(request):
         return JsonResponse({'message': 'Archivo temporal eliminado correctamente'})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+       
+def contextotablaorganizacion(request):
+    
+    competiciones = competicion.objects.all()
+
+    data ={
+        'competiciones' : competiciones
+    }
+
+    return render (request,'organizacion.html', data)
+
+
+
+def apicompetenciasequipo(request,nombre_competicion):
+    try:
+        # Busca la competición por nombre
+        competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper(), estado=True)
+
+        # Obtiene las posiciones de tabla para la competición seleccionada
+        posiciones = tabla_posicion.objects.filter(competicion_id=competencia_seleccionada)
+
+        # Extrae los equipos relacionados con las posiciones de tabla
+        equipos_de_la_competicion = [posicion.equipo_id for posicion in posiciones]
+
+        # Construye una lista de diccionarios con los detalles de los equipos
+        equipos_data = [{'nombre': equipo.nombre, 'logo': equipo.logo.url, 'siglas':  equipo.siglas} for equipo in equipos_de_la_competicion]
+
+        data =  {'equipos': equipos_data}
+
+    except FileNotFoundError:
+        data = {'error': 'Error al mostrar la data de Competiciones'}
+
+    return JsonResponse(data)
+

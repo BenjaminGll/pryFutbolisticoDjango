@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import limpiar_eventos_temporales,obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento
+from project.views import limpiar_eventos_temporales,obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento,contextotablaorganizacion,apicompetenciasequipo
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -39,6 +39,8 @@ urlpatterns = [
     # path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
     path("tabla-posiciones/<str:nombre_competicion>", contextoTablaPosiciones),
+    path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
+    path("reporte/Organizacion", contextotablaorganizacion),
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),

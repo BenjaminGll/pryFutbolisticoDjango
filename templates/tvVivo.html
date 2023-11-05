@@ -14,9 +14,9 @@
     background-color: rgba(0, 0, 0, 0.7);
     color: white;
     text-align: center;
-    height: 50px;
+   
     width: 500px;
-    font-size: 30px;
+    font-size: 20px;
     border-radius: 5px;
     z-index: 1;
   }
@@ -91,6 +91,7 @@
       <div class="banner-cronometro">
         <span id="cronometro">00:00
       </div>
+      
       <div class="banner-marcadores">
         <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%">
       </div>
@@ -104,7 +105,7 @@
       <div id="banners-container" class="banners-container" style="display: none;">
         <!-- Contenido del banner -->
         <p></p>
-    
+
       </div>
     </div>
     <br>  
@@ -230,7 +231,7 @@
   }
 
   // obtenerBanners();
-  setInterval(obtenerBanners, 3000); // Ejecutar cada segundos (ajusta el tiempo según tus necesidades)
+  setInterval(obtenerBanners, 3000); 
 </script>
 
 <!--  -->

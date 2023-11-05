@@ -211,7 +211,6 @@ def detalle_sede(request, sede_id):
     # Aquí puedes agregar más contexto si es necesario
     return render(request, 'detalle_sede.html', {'sede': sede_instance})
 
-<<<<<<< HEAD
 def contextoOrganizaciones(request):
     tipos_organizacion = obtener_tipos_organizacion()
     tipo_seleccionado = request.GET.get("tipo")
@@ -272,8 +271,6 @@ def contextoGrupos(request):
         },
     )
 
-=======
->>>>>>> fdd92f872641022afd4efd743e14b4287860149a
 def lista_equipos_por_competicion_y_fase(request):
     competiciones = competicion.objects.all()
     fases = fase.objects.all()

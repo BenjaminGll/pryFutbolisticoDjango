@@ -1,5 +1,32 @@
 {% extends 'base.html' %}
 {% load i18n static %}
+
+{% block head %}
+<style>
+    .equipo-logo {
+        width: 50px; /* Ajusta este tamaño como prefieras */
+        height: 50px; /* Mantiene los logos cuadrados */
+        object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin perder su aspecto */
+    }
+    .tabla-equipos {
+        width: 100%;
+        table-layout: fixed; /* Asegura que todas las celdas tengan el mismo ancho */
+    }
+    .tabla-equipos th,
+    .tabla-equipos td {
+        text-align: center;
+        vertical-align: middle;
+    }
+    .tabla-equipos th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+    .tabla-equipos td {
+        padding: 8px; /* Espacio alrededor del contenido de las celdas */
+    }
+</style>
+{% endblock %}
+
 {% block title %} Lista de equipos por competicion y fase {% endblock %}
 {% block content %}
 
@@ -7,12 +34,13 @@
     <div class="container">
         <h2>Equipos por Competición y Fase</h2>
         
-        <!-- Mostrar el logo de la competición seleccionada -->
         {% if competicion_seleccionada %}
-            <img src="{{ competicion_seleccionada.logo_competicion.url }}" alt="Logo de la Competición" />
+            <div class="text-center">
+                <img src="{{ competicion_seleccionada.logo_competicion.url }}" alt="Logo de la Competición" style="max-width: 200px; margin-bottom: 20px;" />
+            </div>
         {% endif %}
         
-        <!-- Formulario de filtros -->
+        <!-- Filtros para seleccionar competición y fase -->
         <form method="get">
             <div class="form-group">
                 <label for="competicion">Competición:</label>
@@ -35,15 +63,23 @@
             </div>
         </form>
         
-        <!-- Lista de equipos -->
-        <div class="equipos">
-            {% for equipo in equipos %}
-                <div class="equipo">
-                    <img src="{{ equipo.logo.url }}" alt="Bandera de {{ equipo.nombre }}" />
-                    <span>{{ equipo.nombre }}</span>
-                </div>
-            {% endfor %}
-        </div>
+        <!-- Tabla de equipos con logos -->
+        <table class="tabla-equipos">
+            <thead>
+                <tr>
+                    <th>Logo</th>
+                    <th>Equipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipo in equipos %}
+                    <tr>
+                        <td><img class="equipo-logo" src="{{ equipo.logo.url }}" alt="Logo de {{ equipo.nombre }}" /></td>
+                        <td>{{ equipo.nombre }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </section>
 

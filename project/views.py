@@ -185,7 +185,6 @@ def obtener_sedes_por_competicion(competicion_id):
     sedes = sede.objects.filter(sede_id__in=sedes_ids).select_related("ciudad_id")
     return sedes
 
-
 def contextoSedes(request):
     competiciones = competicion.objects.all()
     competicion_id = request.GET.get("competicionId")
@@ -234,6 +233,40 @@ def obtener_tipos_organizacion():
     tipos = organizacion.CHOICE_TIPO
     return tipos
 
+def obtener_grupos_por_competicion(competicion_id):
+    detalles_grupos = detalle_grupo.objects.filter(competicion_id=competicion_id)
+    
+    # Obtén los valores de las foráneas (grupo_id, fase_id y equipo_id)
+    grupo_ids = detalles_grupos.values_list("grupo_id", flat=True)
+    fase_ids = detalles_grupos.values_list("fase_id", flat=True)
+    equipo_ids = detalles_grupos.values_list("equipo_id", flat=True)
+    
+    # Utiliza los valores para obtener los objetos de grupo, fase y equipo
+    grupos = grupo.objects.filter(grupo_id__in=grupo_ids)
+    fases = fase.objects.filter(fase_id__in=fase_ids)
+    equipos = equipo.objects.filter(equipo_id__in=equipo_ids)
+    
+    return grupos, fases, equipos
+
+def contextoGrupos(request):
+    # Obtener todas las competiciones
+    competiciones = competicion.objects.all()
+    competicion_id = request.GET.get("competicion_id")
+    
+    # Verificar si competicion_id es un número válido
+    if competicion_id and competicion_id.isdigit():
+        detalles_grupo = obtener_grupos_por_competicion(int(competicion_id))
+    else:
+        detalles_grupo = []
+
+    return render(
+        request,
+        "Reportegrupos.html",  # Reemplaza con la plantilla que estás utilizando
+        {
+            "competiciones": competiciones,
+            "detalles_grupo": detalles_grupo,
+        },
+    )
 
 def lista_equipos_por_competicion_y_fase(request):
     competiciones = competicion.objects.all()

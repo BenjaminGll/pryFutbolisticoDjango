@@ -487,28 +487,19 @@ def mostrarEvento(request):
 
 
 def guardar_eventos_temporales(eventos):
-    # Limpiar el archivo temporal existente
     default_storage.delete('eventos_temporales.json')
     
-    # Guardar los eventos en el archivo temporal
     banners = []
 
     for evento in eventos:
-        
-        if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR':
-            print(evento.alineacion1_id.descripcion_encuentro_id.equipo.logo)
-            banner = {
-                'html': f'<div class="banner-container">{evento.motivo}: <br><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion1_id} </span><img src="{static("img/entrada.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion2_id} </span><img src="{static("img/salida.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
-            }
-        elif evento.tipo_evento_id.nombre == 'TARJETA ROJA':
-            banner = {
-                'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
-            }
-        else:    
-            banner = {
-                'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario} </div>'
-            }
+        banner = {
+            'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario}</div>'
+        }
         banners.append(banner)
+
+    
+
+
 
     contenido = json.dumps({'banners': banners})
 

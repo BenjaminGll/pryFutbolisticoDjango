@@ -3,7 +3,7 @@ from unittest import case
 from django.forms import CharField
 from django.shortcuts import get_object_or_404, render
 from appContrato.models import *
-from appEquipo.models import equipo, alineacion
+from appEquipo.models import equipo, alineacion, encuentro_persona
 from appCompeticion.models import (
     competicion,
     deporte,
@@ -19,7 +19,8 @@ from user.models import User
 from django.db.models import Count, Case, When, IntegerField, Value, F
 from itertools import chain
 from django.http import JsonResponse
-
+from django.templatetags.static import static
+from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import json
@@ -187,7 +188,6 @@ def obtener_sedes_por_competicion(competicion_id):
     sedes = sede.objects.filter(sede_id__in=sedes_ids).select_related("ciudad_id")
     return sedes
 
-
 def contextoSedes(request):
     competiciones = competicion.objects.all()
     competicion_id = request.GET.get("competicionId")
@@ -211,6 +211,69 @@ def detalle_sede(request, sede_id):
     # Aquí puedes agregar más contexto si es necesario
     return render(request, 'detalle_sede.html', {'sede': sede_instance})
 
+<<<<<<< HEAD
+def contextoOrganizaciones(request):
+    tipos_organizacion = obtener_tipos_organizacion()
+    tipo_seleccionado = request.GET.get("tipo")
+
+    if tipo_seleccionado:
+        # Filtra las organizaciones por el tipo seleccionado
+        organizaciones = organizacion.objects.filter(tipo=tipo_seleccionado)
+    else:
+        # Si no se selecciona un tipo, muestra todas las organizaciones
+        organizaciones = organizacion.objects.all()
+
+    return render(
+        request,
+        "ReporteTipoOrganizacion.html",
+        {
+            "tipos_organizacion": tipos_organizacion,
+            "tipo_seleccionado": tipo_seleccionado,
+            "organizaciones": organizaciones,
+        }
+    )
+
+def obtener_tipos_organizacion():
+    tipos = organizacion.CHOICE_TIPO
+    return tipos
+
+def obtener_grupos_por_competicion(competicion_id):
+    detalles_grupos = detalle_grupo.objects.filter(competicion_id=competicion_id)
+    
+    # Obtén los valores de las foráneas (grupo_id, fase_id y equipo_id)
+    grupo_ids = detalles_grupos.values_list("grupo_id", flat=True)
+    fase_ids = detalles_grupos.values_list("fase_id", flat=True)
+    equipo_ids = detalles_grupos.values_list("equipo_id", flat=True)
+    
+    # Utiliza los valores para obtener los objetos de grupo, fase y equipo
+    grupos = grupo.objects.filter(grupo_id__in=grupo_ids)
+    fases = fase.objects.filter(fase_id__in=fase_ids)
+    equipos = equipo.objects.filter(equipo_id__in=equipo_ids)
+    
+    return grupos, fases, equipos
+
+def contextoGrupos(request):
+    # Obtener todas las competiciones
+    competiciones = competicion.objects.all()
+    competicion_id = request.GET.get("competicion_id")
+    
+    # Verificar si competicion_id es un número válido
+    if competicion_id and competicion_id.isdigit():
+        detalles_grupo = obtener_grupos_por_competicion(int(competicion_id))
+    else:
+        detalles_grupo = []
+
+    return render(
+        request,
+        "Reportegrupos.html",  # Reemplaza con la plantilla que estás utilizando
+        {
+            "competiciones": competiciones,
+            "detalles_grupo": detalles_grupo,
+        },
+    )
+
+=======
+>>>>>>> fdd92f872641022afd4efd743e14b4287860149a
 def lista_equipos_por_competicion_y_fase(request):
     competiciones = competicion.objects.all()
     fases = fase.objects.all()
@@ -434,27 +497,33 @@ def contextoListaJugadoresPorGoles(request, nombre_competicion):
 #     }
 #     return render(request, 'lista_jugadores_rojas.html', data)
 
-# def contextoListaJugadoresPorAsistencias(request,nombre_competicion):
-#     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
-#     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
+def contextoListaJugadoresPorAsistencias(request, nombre_competicion):
+    competencia_seleccionada = competicion.objects.get(nombre = nombre_competicion.upper()) #FIFA WORLD CUP
+    encuentros_competencias = encuentro.objects.filter(competicion_id = competencia_seleccionada.competicion_id)
+    
+    resulta = (
+        evento.objects.filter(tipo_evento_id=19)
+        .filter(encuentro_id__in=encuentros_competencias)
+        .values('alineacion1_id').
+        annotate(count=Count('tipo_evento_id')).
+        order_by('-count')
+    )
 
-#     resulta = evento_persona.objects.filter(evento_id=19).filter(encuentro_id__in=encuentros_competencias).values('persona_id').annotate(count=Count('encuentro_evento_id')).order_by('-count')
+    lista = [[]]
 
-#     lista = [[]]
+    i = 0
+    for r in resulta:
+        li = persona.objects.get(persona_id = r.get('persona_id'))
+        lista[i].append(li)
+        lista[i].append(r.get('count'))
+        if i < len(resulta)-1:
+            lista.append([])
+        i = i + 1
 
-#     i = 0
-#     for r in resulta:
-#         li = persona.objects.get(persona_id = r.get('persona_id'))
-#         lista[i].append(li)
-#         lista[i].append(r.get('count'))
-#         if i < len(resulta)-1:
-#             lista.append([])
-#         i = i + 1
-
-#     data={
-#         'jugadores_asistencias': lista
-#     }
-#     return render(request, 'lista_jugadores_asistencias.html', data)
+    data={
+        'jugadores_asistencias': lista
+    }
+    return render(request, 'lista_jugadores_asistencias.html', data)
 
 
 def contextoTablaPosiciones(request, nombre_competicion):
@@ -642,6 +711,7 @@ def index(request):
     return render(request, "index.html", data)
 
 
+
 def mostrarEvento(request):
     eventos = evento.objects.all()
 
@@ -652,6 +722,16 @@ def mostrarEvento(request):
 
     return render(request, "moduloTV/evento.html", {"eventos": eventos})
 
+    # Imprime el resultado de eventos para verificarlo
+    print(f"Eventos filtrados: {eventos}")
+
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'encuentros': encuentros})
+
+
+
+def eventosActualizar(idEncuentro):
+
+    return
 
 def guardar_eventos_temporales(eventos):
     # Limpiar el archivo temporal existente
@@ -669,6 +749,8 @@ def guardar_eventos_temporales(eventos):
     contenido = json.dumps({"banners": banners})
 
     default_storage.save("eventos_temporales.json", ContentFile(contenido))
+
+
 
 
 def obtener_eventos_ajax(request):

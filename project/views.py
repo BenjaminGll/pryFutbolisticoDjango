@@ -323,7 +323,16 @@ def obtener_encuentro_persona_id(encuentro_id, contrato_id):
         return encuentro_persona_obj.encuentro_persona_id
     except encuentro_persona.DoesNotExist:
         return None
-    
+def obtener_equipo_id(encuentro_id, contrato_id):
+    try:
+        encuentro_persona_obj = encuentro_persona.objects.get(
+            encuentro_id=encuentro_id, contrato_id=contrato_id
+        )
+        equipo_id = encuentro_persona_obj.equipo_id
+    except encuentro_persona.DoesNotExist:
+        equipo_id = None
+    return equipo_id
+
 def lista_goleadores(request):
     competicion_id = request.GET.get('competicion', None)
     goleadores_list = []

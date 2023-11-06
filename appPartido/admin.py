@@ -12,10 +12,6 @@ class ciudadAdmin(admin.ModelAdmin):
     ordering=['ciudad_id']
     search_fields = ['nombre']
 
-class estadoAdmin(admin.ModelAdmin):
-    list_display=['estado_id','nombre']
-    ordering=['estado_id']
-    search_fields = ['nombre']
 
 class sedeAdmin(admin.ModelAdmin):
     list_display=['sede_id','nombre','alias','capacidad','fecha_inauguracion','ciudad_id', 'imagen','estado']
@@ -45,14 +41,13 @@ class tipo_eventoAdmin(admin.ModelAdmin):
     search_fields = ['nombre','tipo_evento_id']
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display=['evento_id','tipo_evento_id','encuentro_id','alineacion1_id','alineacion2_id','tiempo_reglamentario','tiempo_extra','motivo','cantidad'] 
+    list_display=['evento_id','tipo_evento_id','encuentro_id','alineacion1_id','alineacion2_id','tiempo_reglamentario','tiempo_extra','motivo','cantidad','estado_evento'] 
     ordering=['evento_id']
     search_fields = ['encuentro_id','alineacion1_id','alineacion2_id']
 
 
 
 admin.site.register(formacion,formacionAdmin)
-admin.site.register(estado,estadoAdmin)
 admin.site.register(ciudad,ciudadAdmin)
 admin.site.register(sede,sedeAdmin)
 admin.site.register(descripcion_encuentro,descripcionEncuentroAdmin)

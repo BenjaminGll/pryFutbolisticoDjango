@@ -390,19 +390,6 @@ def lista_goleadores(request):
         'competicion_seleccionada': competicion_seleccionada,
     })
 
-
-def obtener_equipo_id(encuentro_id, contrato_id):
-    try:
-        encuentro_persona_obj = encuentro_persona.objects.get(
-            encuentro_id=encuentro_id, contrato_id=contrato_id
-        )
-        equipo_id = encuentro_persona_obj.equipo_id
-    except encuentro_persona.DoesNotExist:
-        equipo_id = None
-    return equipo_id
-
-
-
 def contextoEquipo(request, nombre_equipo):
     equipos = equipo.objects.get(nombre=nombre_equipo.upper())
     tipo_persona_entrenador = tipo_persona.objects.get(descripcion="ENTRENADOR")
@@ -580,11 +567,11 @@ def contextoListaJugadoresPorAsistencias(request, nombre_competicion):
     )
 
     resulta = (
-        evento.objects.filter(tipo_evento_id=19)
+        evento.objects.filter(evento_id=19)
         .filter(encuentro_id__in=encuentros_competencias)
-        .values("alineacion1_id")
-        .annotate(count=Count("tipo_evento_id"))
-        .order_by("-count")
+        .values('alineacion1_id').
+        annotate(count=Count('tipo_evento_id')).
+        order_by('-count')
     )
 
     lista = [[]]
@@ -598,8 +585,10 @@ def contextoListaJugadoresPorAsistencias(request, nombre_competicion):
             lista.append([])
         i = i + 1
 
-    data = {"jugadores_asistencias": lista}
-    return render(request, "lista_jugadores_asistencias.html", data)
+    data={
+        'jugadores_asistencias': lista
+    }
+    return render(request, 'lista_jugadores_asistencias.html', data)
 
 
 def contextoTablaPosiciones(request, nombre_competicion):

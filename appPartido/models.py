@@ -101,7 +101,7 @@ class encuentro(models.Model):
          ('J', 'JUGADO'),
          ('N', 'NO JUGADO'),
          ('E', 'EN JUEGO'),
-         ('S', 'SUSPENDIDO'),
+         ('S', 'SUSPENDIDO'), 
      ]
 
     encuentro_id=models.BigAutoField(primary_key=True)
@@ -113,7 +113,7 @@ class encuentro(models.Model):
     equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
     fecha=models.DateTimeField(blank=True,null=True)
     clima=models.CharField(max_length=4)
-    estado_jugado=models.CharField(max_length=10,default='N',choices=CHOICE_ESTADO, null=True)
+    estado_jugado = models.CharField(max_length=1, default='N', choices=CHOICE_ESTADO, null=True, db_column='estado_jugado')
 
     def save(self, force_insert=False, force_update=False):
         

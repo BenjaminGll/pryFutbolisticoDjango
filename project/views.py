@@ -528,39 +528,57 @@ def guardar_eventos_temporales(eventos):
             }
             ##
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':
-             jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id)
+            #  jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id)
+             jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id.descripcion_encuentro_id)
+             jugadores_info = []
+
+             for jugador in jugadores_ali:
+                    jugadores_info.append({
+                        'alias': jugador.contrato_id.persona.alias,
+                        'posicion': jugador.posicion_jugador_id.descripcion,
+                        'dorsal': jugador.dorsal
+                    })
+             jugadores_html = ''
+             for jugador_info in jugadores_info:
+                    jugadores_html += f"{jugador_info['dorsal']}.  {jugador_info['alias']} ( {jugador_info['posicion']}) <br>"
+
              banner = {
 
-                     'html': f'''
-                         <div class="row">
-                             <div class="col-md-3">
-                                 <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
-                                     {evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}
-                                 </div>
-                                 <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="{evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}" style="max-width: 100%; height: auto;">
-                                 <div class="formation-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
-                                     {evento.alineacion1_id.descripcion_encuentro_id.formacion}
-                                 </div>
-                             </div>
-                             <div class="col-md-9">
-                                 <div class="title-box" style="background-color: black; color: white; padding: 10px; text-align: center; transform: rotate(-90deg);">
-                                     Titulares
-                                 </div>
-                                 <div class="alignments-info">
-                                     <!-- Aquí colocas la información de cada jugador -->
-                                        
-                                              {{ evento.alineacion1_id.contrato_id.alias }}
-                                              {{ evento.alineacion1_id.posicion_jugador_id.descripcion }}
+                        'html': f'''
+                                <div class="banner-container">
+                                    <div class="row">
 
-                                        
+                                        <div class="col-md-3">
+                                            <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
+                                                {evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}
+                                            </div>
+                                            <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo.url}"
+                                                alt="{evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}"
+                                                style="max-width: 100%; height: auto;">
+                                            <div class="formation-box"
+                                                style="background-color: black; color: white; padding: 10px; text-align: center;">
+                                                {evento.alineacion1_id.descripcion_encuentro_id.formacion}
+                                            </div>
+                                        </div>
 
-                                 </div>
-                             </div>
-                         </div>
-                     '''
-                
-                     }
-             banners.append(banner)
+                                        <div class="col-md-9" style="position: relative; display: flex; align-items: center;">
+                                            <div class="title-box"
+                                                style="background-color: black; color: white; padding: 10px; text-align: center; transform: rotate(-90deg);align-items: left;">
+                                                Titulares
+                                            </div>
+                                            <div class="alignments-info" style="text-align: center;">
+                                                <!-- Aquí colocas la información de cada jugador -->
+                                                <!-- Aquí iria el bucle de jugadores_ali -->
+                                                {jugadores_html}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                        '''
+                    
+                        }
+        
             ###
         else:    
             banner = {

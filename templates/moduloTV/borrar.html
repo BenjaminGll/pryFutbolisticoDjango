@@ -1,0 +1,31 @@
+<div class="banner-container">
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
+                {evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}
+            </div>
+            <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo.url}"
+                alt="{evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}"
+                style="max-width: 100%; height: auto;">
+            <div class="formation-box"
+                style="background-color: black; color: white; padding: 10px; text-align: center;">
+                {evento.alineacion1_id.descripcion_encuentro_id.formacion}
+            </div>
+        </div>
+
+        <div class="col-md-9" style="position: relative; display: flex; align-items: center;">
+            <div class="title-box"
+                style="background-color: black; color: white; padding: 10px; text-align: center; transform: rotate(-90deg);">
+                Titulares
+            </div>
+            <div class="alignments-info">
+                <!-- Aquí colocas la información de cada jugador -->
+                <!-- Aquí iria el bucle de jugadores_ali -->
+                {jugadores_html}
+            </div>
+        </div>
+
+
+    </div>
+</div>

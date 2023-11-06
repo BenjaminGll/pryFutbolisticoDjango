@@ -39,8 +39,8 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ goleador.alias }}</td>
                     <td>{{ goleador.goles }}</td>
-                    <td><img src="{{ goleador.equipo_logo }}" alt="Logo del Equipo" style="height:50px;"></td>
-                    <td><img src="{{ goleador.pais_bandera }}" alt="Bandera" style="height:30px;"></td>
+                    <td><img src="{{ goleador.equipo_logo.url }}" alt="Logo del Equipo" style="height:50px;"></td>
+                    <td><img src="{{ goleador.logo_bandera.url }}" alt="Bandera" style="height:30px;"></td>
                 </tr>
                 {% empty %}
                 <tr>

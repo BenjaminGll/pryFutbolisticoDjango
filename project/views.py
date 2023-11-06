@@ -292,13 +292,27 @@ def lista_equipos_por_competicion_y_fase(request):
         'equipos': equipos,
         'competicion_seleccionada': competicion_seleccionada,
     })
+
+def obtener_bandera_url(nombre_pais):
+    try:
+        # Busca el país por nombre (o como desees buscarlo)
+        pais_obj = pais.objects.get(nombre__iexact=nombre_pais)
+        # Obtén la URL de la bandera del país
+        bandera_url = pais_obj.logo_bandera.url
+    except pais.DoesNotExist:
+        # En caso de que el país no exista en la base de datos
+        bandera_url = None  # Otra opción podría ser proporcionar una URL predeterminada
+    return bandera_url
+
 def lista_goleadores(request):
     competicion_id = request.GET.get('competicion', None)
     goleadores_list = []
     competiciones = competicion.objects.all()
+    competicion_seleccionada = None
 
     if competicion_id:
         competicion_seleccionada = competicion.objects.get(pk=competicion_id)
+
         goleadores = (evento.objects
                       .filter(tipo_evento_id__nombre='GOL', encuentro_id__competicion_id=competicion_id)
                       .annotate(jugador_id=Case(
@@ -313,12 +327,14 @@ def lista_goleadores(request):
             jugador_id = goleador['jugador_id']
             total_goles = goleador['total_goles']
             jugador = persona.objects.get(persona_id=jugador_id)
+            # Obtén la URL de la bandera del país del jugador
+            pais_bandera_url = obtener_bandera_url(jugador.pais.nombre)
 
             goleadores_list.append({
                 'alias': jugador.alias,
                 'goles': total_goles,
-                'equipo_logo': None,
-                'pais_bandera': None
+                'equipo_logo': None,  # Puedes obtener la URL del logo del equipo si es necesario
+                'pais_bandera': pais_bandera_url  # URL de la bandera del país
             })
 
     return render(request, 'lista_jugadores_goles.html', {

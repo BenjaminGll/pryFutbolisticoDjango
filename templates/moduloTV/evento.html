@@ -2,23 +2,6 @@
 {% block content %}
 <h1>Eventos</h1>
 <hr>
-<div class="col-12 mb-4 d-flex align-items-center justify-content-between">
-    <h5 class="mb-0 col-md-3">Seleccione un encuentro: </h5>
-    
-    <form method="GET" action="{% url 'mostrar_evento' %}">
-        {% csrf_token %}
-        <select class="form-control col-md-9" id="encuentro" name="encuentro" onchange="this.form.submit()">
-            <option value="">Seleccionar...</option> <!-- Opción en blanco -->
-            {% for encuentro in encuentros %}
-                <option value="{{ encuentro.encuentro_id }}">{{ encuentro }}</option>
-            {% endfor %}
-        </select>
-    </form>
-</div>
-
-
-
-
 {% for e in eventos %}
 <div class="card mb-4">
     <div class="card-body">
@@ -35,7 +18,7 @@
                 <h5>Tipo suceso: {{ e.tipo_evento_id }}</h5>
                 <h5>Tiempo reglamentario: {{ e.tiempo_reglamentario }}</h5>
                 <h5>Tiempo extra: {{ e.tiempo_extra }}</h5>
-
+                
             </div>
             <div class="col-md-2 mb-2">
                 <input type="time" class="form-control" id="tiempo" name="tiempo">
@@ -55,8 +38,7 @@
 
 <!-- Modal para ver detalles -->
 <!-- Modal para ver detalles -->
-<div class="modal fade" id="verDetallesModal{{ e.evento_id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="verDetallesModal{{ e.evento_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -67,31 +49,40 @@
             </div>
             <div class="modal-body">
                 {% if e.tipo_evento_id %}
-                <h5>Tipo suceso: {{ e.tipo_evento_id }}</h5>
+                    <h5>Tipo suceso: {{ e.tipo_evento_id }}</h5>
                 {% endif %}
                 {% if e.tiempo_reglamentario %}
-                <h5>Tiempo reglamentario: {{ e.tiempo_reglamentario }}</h5>
+                    <h5>Tiempo reglamentario: {{ e.tiempo_reglamentario }}</h5>
                 {% endif %}
                 {% if e.tiempo_extra %}
-                <h5>Tiempo extra: {{ e.tiempo_extra }}</h5>
+                    <h5>Tiempo extra: {{ e.tiempo_extra }}</h5>
                 {% endif %}
                 {% if e.motivo %}
-                <h5>Motivo: {{ e.motivo }}</h5>
+                    <h5>Motivo: {{ e.motivo }}</h5>
                 {% endif %}
                 {% if e.cantidad %}
-                <h5>Cantidad: {{ e.cantidad }}</h5>
+                    <h5>Cantidad: {{ e.cantidad }}</h5>
                 {% endif %}
+<<<<<<< HEAD
                 {% if e.alineacion_id1 %}
                 <h5>Jugador emisor: {{ e.alineacion_id1.contrato_id.persona.alias }}</h5>
                 {% endif %}
                 {% if e.alineacion_id2 %}
                 <h5>Jugador receptor: {{ e.alineacion_id2.contrato_id.persona.alias }}</h5>
+=======
+       
+                {% if e.alineacion_id1 %}
+                    <h5>Jugador emisor: {{ e.alineacion_id1 }}</h5>
+                {% endif %}
+                {% if e.alineacion_id2 %}
+                    <h5>Jugador receptor: {{ e.alineacion_id2 }}</h5>
+>>>>>>> 2a6670ef926827d563d9775d301bd860e0831614
                 {% endif %}
                 {% if e.encuentro_id %}
-                <h5>Encuentro: {{ e.encuentro_id }}</h5>
+                    <h5>Encuentro: {{ e.encuentro_id }}</h5>
                 {% endif %}
 
-
+        
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -99,7 +90,7 @@
         </div>
     </div>
 </div>
-
+<!--  -->
 
 {% endfor %}
 {% endblock %}

@@ -20,7 +20,6 @@ class formacion(models.Model):
         verbose_name_plural = "formacion"
 
 
-<<<<<<< HEAD
 class estado(models.Model):
     estado_id = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
@@ -35,8 +34,6 @@ class estado(models.Model):
     class Meta:
         verbose_name_plural = "estado"
 
-=======
->>>>>>> dc89511506b93fa6dee2e92110b29816e819704d
 
 class ciudad(models.Model):
     ciudad_id = models.BigAutoField(primary_key=True)

@@ -81,12 +81,11 @@
                 {% if e.cantidad %}
                 <h5>Cantidad: {{ e.cantidad }}</h5>
                 {% endif %}
-
                 {% if e.alineacion_id1 %}
-                <h5>Jugador emisor: {{ e.alineacion_id1 }}</h5>
+                <h5>Jugador emisor: {{ e.alineacion_id1.contrato_id.persona.alias }}</h5>
                 {% endif %}
                 {% if e.alineacion_id2 %}
-                <h5>Jugador receptor: {{ e.alineacion_id2 }}</h5>
+                <h5>Jugador receptor: {{ e.alineacion_id2.contrato_id.persona.alias }}</h5>
                 {% endif %}
                 {% if e.encuentro_id %}
                 <h5>Encuentro: {{ e.encuentro_id }}</h5>

@@ -328,7 +328,7 @@ def lista_goleadores(request):
             total_goles = goleador['total_goles']
             jugador = persona.objects.get(persona_id=jugador_id)
             # Obtén la URL de la bandera del país del jugador
-            pais_bandera_url = obtener_bandera_url(jugador.pais.nombre)
+            pais_bandera_url = obtener_bandera_url(jugador.ciudad_id.pais_id.nombre)
 
             goleadores_list.append({
                 'alias': jugador.alias,
@@ -339,6 +339,45 @@ def lista_goleadores(request):
 
     return render(request, 'lista_jugadores_goles.html', {
         'goleadores': goleadores_list,
+        'competiciones': competiciones,
+        'competicion_seleccionada': competicion_seleccionada,
+    })
+
+def lista_asistidores(request):
+    competicion_id = request.GET.get('competicion', None)
+    asistidores_list = []
+    competiciones = competicion.objects.all()
+    competicion_seleccionada = None
+
+    if competicion_id:
+        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
+
+        asistidores = (evento.objects
+                      .filter(tipo_evento_id__nombre='ASISTENCIA', encuentro_id__competicion_id=competicion_id)
+                      .annotate(jugador_id=Case(
+                          When(alineacion1_id__isnull=False, then=F('alineacion1_id__contrato_id__persona_id')),
+                          default=Value(None, output_field=IntegerField())
+                      ))
+                      .values('jugador_id')
+                      .annotate(total_asistencias=Count('tipo_evento_id'))
+                      .order_by('-total_asistencias'))
+
+        for asistidor in asistidores:
+            jugador_id = asistidor['jugador_id']
+            total_asistencias = asistidor['total_asistencias']
+            jugador = persona.objects.get(persona_id=jugador_id)
+            # Obtén la URL de la bandera del país del jugador
+            pais_bandera_url = obtener_bandera_url(jugador.ciudad_id.pais_id.nombre)
+
+            asistidores_list.append({
+                'alias': jugador.alias,
+                'asistencias': total_asistencias,
+                'equipo_logo': None,  # Puedes obtener la URL del logo del equipo si es necesario
+                'pais_bandera': pais_bandera_url  # URL de la bandera del país
+            })
+
+    return render(request, 'lista_jugadores_asistencias.html', {
+        'asistidores': asistidores_list,
         'competiciones': competiciones,
         'competicion_seleccionada': competicion_seleccionada,
     })
@@ -511,32 +550,34 @@ def contextoListaJugadoresPorGoles(request, nombre_competicion):
 #     return render(request, 'lista_jugadores_rojas.html', data)
 
 def contextoListaJugadoresPorAsistencias(request, nombre_competicion):
-    competencia_seleccionada = competicion.objects.get(nombre = nombre_competicion.upper()) #FIFA WORLD CUP
-    encuentros_competencias = encuentro.objects.filter(competicion_id = competencia_seleccionada.competicion_id)
-    
+    competencia_seleccionada = competicion.objects.get(
+        nombre=nombre_competicion.upper()
+    )  # FIFA WORLD CUP
+    encuentros_competencias = encuentro.objects.filter(
+        competicion_id=competencia_seleccionada.competicion_id
+    )
+
     resulta = (
-        evento.objects.filter(tipo_evento_id=19)
+        evento.objects.filter(evento_id=19)
         .filter(encuentro_id__in=encuentros_competencias)
-        .values('alineacion1_id').
-        annotate(count=Count('tipo_evento_id')).
-        order_by('-count')
+        .values("persona_id")
+        .annotate(count=Count("encuentro_evento_id"))
+        .order_by("-count")
     )
 
     lista = [[]]
 
     i = 0
     for r in resulta:
-        li = persona.objects.get(persona_id = r.get('persona_id'))
+        li = persona.objects.get(persona_id=r.get("persona_id"))
         lista[i].append(li)
-        lista[i].append(r.get('count'))
-        if i < len(resulta)-1:
+        lista[i].append(r.get("count"))
+        if i < len(resulta) - 1:
             lista.append([])
         i = i + 1
 
-    data={
-        'jugadores_asistencias': lista
-    }
-    return render(request, 'lista_jugadores_asistencias.html', data)
+    data = {"jugador_asistencias": lista}
+    return render(request, "lista_jugadores_asistencias.html", data)
 
 
 def contextoTablaPosiciones(request, nombre_competicion):

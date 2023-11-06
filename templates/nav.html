@@ -57,10 +57,10 @@
                 <a href="#">Reporte de Jugadores</a>
                 <ul class="sub-current">
                     <li>
-                        <a href="/competencias/fifa world cup 2022/lista_jugadores_goles">Reporte de goleadores</a>
+                      <a href="{% url 'lista_goleadores' %}">Reporte de goleadores</a>
                     </li>
                     <li>
-                        <a href="/competencias/fifa world cup 2022/lista_jugadores_asistencias">Reporte de asistidores</a>
+                        <a href="{% url 'lista_asistidores' %}">Reporte de asistidores</a>
                     </li>
                     <li>
                         <a href="/competencias/fifa world cup 2022/lista_jugadores_amarillas">Reporte de jugadores con tarjetas amarillas</a>
@@ -75,19 +75,25 @@
                 <a href="">Reporte Sedes</a>
                 <ul class="sub-current">
                     <!-- Las opciones para Reporte Sedes irían aquí -->
-                    <li><a href="/reporte/sedes">Sede 1</a></li>
+                    <li><a href="/reporte/sedes">Sedes por competicion</a></li>
                 </ul>
             </li>
             <li class="current">
               <a href="#">Reporte Equipo</a>
               <ul class="sub-current">
-                  <li><a href="">Equipo</a></li>
+                  <li><a href="{% url 'lista_equipos' %}">Equipos por competicion y fase</a></li>
               </ul>
           </li>
           <li class="current">
-            <a href="#">Reporte Organizacion</a>
+            <a href="#">Reporte Grupos</a>
             <ul class="sub-current">
-                <li><a href="/reporte/Organizacion">Organizacion</a></li>
+                <li><a href="/reporte/grupos">Grupos</a></li>
+            </ul>
+        </li>
+          <li class="current">
+            <a href="#">Reporte Organizaciones</a>
+            <ul class="sub-current">
+                <li><a href="/reporte/organizaciones">Tipo Organización</a></li>
             </ul>
         </li>
         </ul>

@@ -41,7 +41,7 @@ class tipo_eventoAdmin(admin.ModelAdmin):
     search_fields = ['nombre','tipo_evento_id']
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display=['evento_id','alineacion1_id','alineacion2_id','tiempo_reglamentario','tiempo_extra','motivo','cantidad','tipo_evento_id','encuentro_id'] 
+    list_display=['evento_id','tipo_evento_id','encuentro_id','alineacion1_id','alineacion2_id','tiempo_reglamentario','tiempo_extra','motivo','cantidad','estado_evento'] 
     ordering=['evento_id']
     search_fields = ['encuentro_id','alineacion1_id','alineacion2_id']
 

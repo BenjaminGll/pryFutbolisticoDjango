@@ -15,8 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import detalle_sede, lista_goleadores, obtener_eventos_ajax,contextoTVvivo,contextoTVhome,contextoGrupos,contextoSedes,contextoOrganizaciones,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento,lista_equipos_por_competicion_y_fase
-from project.views import detalle_sede, contextoOrganizaciones, obtener_eventos_ajax,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles, contextoListaJugadoresPorAsistencias, mostrarEvento,lista_equipos_por_competicion_y_fase
+from project.views import limpiar_eventos_temporales,obtener_eventos_ajax,contextoTv,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,contextoListaJugadoresPorGoles,mostrarEvento,contextotablaorganizacion,apicompetenciasequipo
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -29,29 +28,28 @@ urlpatterns = [
     # path('competencias/<str:nombre_deporte>', contextoCompetencias),
     path('competencias/futbol/<str:nombre_competicion>', contextoCompetenciasFutbol),
     path('contacto', contextoContacto),
-    path('tvVivo/', contextoTVvivo),
+    path('tvVivo/<int:id>', contextoTVvivo),
     path('tvHome/', contextoTVhome),
-    path('datostv', obtener_eventos_ajax),
+    path('datostv/', obtener_eventos_ajax),
     path('Admintv/', mostrarEvento, name='mostrar_evento'),
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
     path('competencias/<str:nombre_competicion>/lista_jugadores_goles',contextoListaJugadoresPorGoles),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
-    path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias', contextoListaJugadoresPorAsistencias),
+    # path('competencias/<str:nombre_competicion>/lista_jugadores_asistencias',contextoListaJugadoresPorAsistencias),
     path("tabla-posiciones/<str:nombre_competicion>", contextoTablaPosiciones),
+    path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
+    path("reporte/Organizacion", contextotablaorganizacion),
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
-    path("reporte/organizaciones", contextoOrganizaciones, name="filtrar/organizaciones"),
-    path("reporte/grupos", contextoGrupos, name="filtrar/grupos"),
-    path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
-    path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
-    path('reporte/goleadores', lista_goleadores, name='lista_goleadores'),
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),
-    # path("futbol/tv/<int:id>", contextoTv),
     path("__debug__/", include("debug_toolbar.urls")),
     path("", index),
+    path('limpiar-eventos-temporales/', limpiar_eventos_temporales, name='limpiar_eventos_temporales'),
 ]
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

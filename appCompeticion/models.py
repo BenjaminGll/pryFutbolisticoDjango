@@ -75,13 +75,12 @@ class organizacion(models.Model):
         ('I', 'FEDERACIÓN INTERNACIONAL'),
         ('C', 'CONFEDERACIÓN'),
         ('L', 'LIGA'),
-        ('A', 'ASOCIACIÓN'),
         
     ]
     organizacion_id=models.BigAutoField(primary_key=True)
-    nombre_oficial=models.CharField(max_length=100)
-    siglas=models.CharField(max_length=10,default='')
-    descripcion=models.CharField(max_length=100)
+    nombre_oficial=models.CharField(max_length=30)
+    siglas=models.CharField(max_length=3,default='')
+    descripcion=models.CharField(max_length=50)
     tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
     estado=models.BooleanField()
     logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')

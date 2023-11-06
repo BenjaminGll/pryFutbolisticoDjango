@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n static %}
-{% block title %} Encuentros Jugados {% endblock %}
+{% block title %} Encuentros Por Jugar {% endblock %}
 {% block content %}
 <div class="section-title" style="background:url(/static/img/portada_encuentro.webp)">
     <div class="container">
@@ -35,14 +35,14 @@
                         </div>
                         <div class="goals-result" style="align-items: center">
                             <a href="single-team.html" style="margin-top:0px; width: 40%">
-                                <img src="{{ej.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="">
+                                <img src="{{ej.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""  loading="lazy">
                                 {{ ej.equipo_local.nombre }}
                             </a>
                             <span class="goals">
                                 <b>{{ ej.resultado_goles_local }}</b> - <b>{{ ej.resultado_goles_visita }}</b>
                             </span>
                             <a href="single-team.html" style="margin-top:0px; width: 40%">
-                                <img src="{{ej.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="">
+                                <img src="{{ej.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy"> 
                                 {{ ej.equipo_visita.nombre }}
                             </a>
                         </div>

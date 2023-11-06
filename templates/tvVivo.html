@@ -1,25 +1,22 @@
 {% extends 'base.html' %}
 {% load i18n static %}
-
-<!--  -->
-{% block title %} TV en Vivo - Partido de Fútbol {% endblock %}
-
+{% block title %} TV en Vivo - Partido de Fútbol  {% endblock %}
 {% block content %}
 <style>
   .video-container {
     position: relative;
   }
 
-  .banner-himno {
+  .banners-container {
     position: absolute;
     top: 330px;
-    right: 615px;
+    right: 620px;
     background-color: rgba(0, 0, 0, 0.7);
     color: white;
     text-align: center;
-    height: 50px;
+   
     width: 500px;
-    font-size: 30px;
+    font-size: 20px;
     border-radius: 5px;
     z-index: 1;
   }
@@ -31,7 +28,7 @@
     background-color: rgb(0, 0, 0);
     color: white;
     text-align: center;
-    height: 28px;
+    height: 30px;
     width: 100px;
     font-size: 17px;
     border-radius: 5px;
@@ -45,7 +42,7 @@
     background-color: rgb(0, 0, 0);
     color: white;
     text-align: center;
-    height: 28px;
+    height: 30px;
     width: 180px;
     font-size: 17px;
     border-radius: 5px;
@@ -53,7 +50,7 @@
   }
 
 
-  .banners-container {
+  /* .banners-container {
     position: absolute;
     top: 14px;
     right: 975px;
@@ -65,7 +62,7 @@
     font-size: 17px;
     border-radius: 5px;
     z-index: 1;
-  }
+  } */
 
   .info-partido {
     position: absolute;
@@ -90,14 +87,13 @@
     <video src="https://drive.google.com/uc?export=download&id=1lfJThCimwUB8dUTW7O2mBh4b4m2ZqGCw" width="800"
       height="450" controls="false" disablePictureInPicture controlsList="nodownload" id="myVideo">
     </video>
-    <!-- <div class="banner-himno">
-        HIMNO NACIONAL DEL (EQUIPO)
-      </div> -->
+
       <div class="banner-cronometro">
         <span id="cronometro">00:00
       </div>
+      
       <div class="banner-marcadores">
-        <span>{{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}}</span>
+        <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%">
       </div>
       <div class="info-partido">
         <h2>Información del Partido</h2>
@@ -106,8 +102,13 @@
         <p><strong>Equipos:</strong> {{equipo_a.nombre}} vs. {{equipo_b.nombre}}</p>
         <p><strong>Estadio:</strong> {{estadio.nombre}}</p>
       </div>
+      <div id="banners-container" class="banners-container" style="display: none;">
+        <!-- Contenido del banner -->
+        <p></p>
+
+      </div>
     </div>
-    <br>
+    <br>  
     <br>
     <br>
     <br>
@@ -118,16 +119,14 @@
     <!-- Comprueba si el evento debe mostrar un banner -->
     <!-- {% if e.mostrar_banner %} -->
     <!-- Aquí coloca el código HTML para el banner basado en el evento e -->
-    <div id="banners-container" class="banners-container">
-      <!-- Contenido del banner -->
-      <p></p>
-
-    </div>
+  
     <!-- {% endif %} -->
     <!-- {% endfor %} -->
 
+    
   </div>
-  <div id="banners-container" class="banners-container">
+
+
 
 <script>
   var video = document.querySelector('video');
@@ -182,42 +181,59 @@
     video.controls = true;
   });
 </script>
-<!--  -->
-<!--  -->
+
 <script>
-  console.log("Fuera del  bucle")
+  console.log("Fuera del bucle");
+  // ...
+
   function obtenerBanners() {
-    console.log("Ingreso al bucle")
+
     fetch('/datostv')
       .then(response => response.json())
       .then(data => {
-        console.log('Respuesta de la ruta /datostv:', data); // Log de la respuesta del servidor
-
         const bannersContainer = document.getElementById('banners-container');
         if (bannersContainer) {
-          bannersContainer.innerHTML = ''; // Limpiar los banners anteriores
-          data.banners.forEach(banner => {
-            const bannerElement = document.createElement('div');
-            bannerElement.classList.add('banner-container'); // Corregido aquí
-            bannerElement.innerHTML = banner.html; // Obtener el HTML del banner del objeto JSON
-            bannersContainer.appendChild(bannerElement);
+          const nuevosBanners = data.banners;
 
-            console.log('HTML del banner:', banner.html); // Log del HTM  L del banner
-          });
+          if (nuevosBanners.length > 0) {
+            // Limpia los banners anteriores
+            bannersContainer.innerHTML = '';
+
+            nuevosBanners.forEach(banner => {
+              const bannerElement = document.createElement('div');
+              bannerElement.classList.add('banner-container'); // Corregido aquí
+              bannerElement.innerHTML = banner.html; // Obtener el HTML del banner del objeto JSON
+              bannersContainer.appendChild(bannerElement);
+
+              console.log('HTML del banner:', banner.html); // Log del HTML del banner
+            });
+
+            // Muestra banners-container
+            bannersContainer.style.display = 'block';
+
+            // Oculta banners-container después de 10 segundos
+            setTimeout(() => {
+              bannersContainer.style.display = 'none';
+              // Limpia el archivo temporal 'eventos_temporales.json'
+              fetch('/limpiar-eventos-temporales')
+                .then(response => response.json())
+                .then(data => {
+                  console.log('Archivo temporal limpiado:', data);
+                })
+                .catch(error => console.error(error));
+            }, 10000);
+          }
         } else {
           console.error('Elemento con ID "banners-container" no encontrado.');
         }
-
       })
       .catch(error => console.error(error));
   }
 
   // obtenerBanners();
-  setInterval(obtenerBanners, 5000); // Ejecutar cada 5 segundos (ajusta el tiempo según tus necesidades)
-
-
-
+  setInterval(obtenerBanners, 3000); 
 </script>
+
 <!--  -->
 
 

@@ -10,18 +10,18 @@
             <div class="col-md-12">
                 <form method="get" action="{% url 'filtrar/grupos' %}">
                     <div class="form-group">
-                    <label for="competicion_id">Competición:</label>
-                    <select name="competicion_id" id="competicion_id" class="form-control">
-                        <option value="">Todos</option>
-                        {% for competicion in competiciones %}
-                        <option value="{{ competicion.competicion_id }}">{{ competicion.nombre }}</option>
-                        {% endfor %}
-                    </select>
+                        <label for="competicion_id">Competición:</label>
+                        <select name="competicion_id" id="competicion_id" class="form-control">
+                            <option value="">Todos</option>
+                            {% for competicion in competiciones %}
+                            <option value="{{ competicion.competicion_id }}">{{ competicion.nombre }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <input type="submit" value="Filtrar" class="btn btn-primary">
-                </form>   
+                </form>
             </div>
-            <!-- Tabla de sedes -->
+            <!-- Tabla de grupos -->
             <div class="col-md-12">
                 <table class="table table-striped">
                     <thead>
@@ -44,6 +44,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 </section>

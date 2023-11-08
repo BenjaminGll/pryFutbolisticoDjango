@@ -416,7 +416,7 @@ def contextoTVvivo(request, id):
     return render(request, 'tvVivo.html', data)
 
 def contextoTVhome(request):
-    encuentros = encuentro.objects.filter(estado_jugado='false')  
+    encuentros = encuentro.objects.filter(estado_jugado='E')  
     
     data={
           'encuentros': encuentros

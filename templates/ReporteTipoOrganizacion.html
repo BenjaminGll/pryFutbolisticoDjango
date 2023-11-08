@@ -6,6 +6,9 @@
 <section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
     <div class="container">
         <div class="row">
+            <div class="col-md-8">
+                <h1>Reporte de Organizaciones por Tipo de Organización</h1>
+            </div>
             <!-- Combobox para filtrar por tipo de organización -->
             <div class="col-md-12">
                 <form method="get" action="{% url 'filtrar/organizaciones' %}">
@@ -31,6 +34,7 @@
                             <th>Siglas</th>
                             <th>Descripción</th>
                             <th>Logo</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,6 +45,11 @@
                             <td>{{ organizacion.siglas }}</td>
                             <td>{{ organizacion.descripcion }}</td>
                             <td><img class="organizacion-logo" src="{{ organizacion.logo.url }}" alt="Logo de {{ organizacion.nombre_oficial }}"  width="100"/></td>
+                            <td>
+                                <a href="#" data-toggle="modal" data-target="#myModal" data-api-url="">
+                                    <i class="fa fa-eye fa-2x" style="position: static;"></i>
+                                </a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

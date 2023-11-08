@@ -13,9 +13,9 @@ class personaAdmin(admin.ModelAdmin):
     search_fields = ['nombre','apellido','alias']
 
 class contratoAdmin(admin.ModelAdmin):
-    list_display=['contrato_id', 'fecha_inicio', 'fecha_fin', 'valor', 'tipo_contrato','persona_id','ultimo_club','nuevo_club','posicion_jugador','dorsal','estado']
+    list_display=['contrato_id', 'tipo_persona','persona','tipo_contrato','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
     ordering = ['contrato_id']
-    search_fields = ['equipo_id', 'persona_id']
+    search_fields = ['tipo_persona','persona','tipo_contrato']
 
 class tipoArbitroAdmin(admin.ModelAdmin):
     list_display=['tipo_arbitro_id','nombre','estado']

@@ -8,14 +8,18 @@ class tipo_personaAdmin(admin.ModelAdmin):
     search_fields = ['descripcion']
 
 class personaAdmin(admin.ModelAdmin):
-    list_display=['persona_id', 'nombre', 'apellido', 'alias', 'sexo', 'fecha_nacimiento','ciudad_id','estatura','peso','estado','tipo_persona_id','foto']
+    list_display=['persona_id', 'nombre', 'apellido', 'alias', 'sexo', 'fecha_nacimiento','ciudad_id','estatura','peso','tipo_persona_id','estado','foto']
     ordering = ['persona_id']
     search_fields = ['nombre','apellido','alias']
+    list_per_page=5
+    list_filter=['tipo_persona_id']
 
 class contratoAdmin(admin.ModelAdmin):
     list_display=['contrato_id', 'tipo_persona','persona','tipo_contrato','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
-    ordering = ['contrato_id']
-    search_fields = ['tipo_persona','persona','tipo_contrato']
+    ordering = ['persona']
+    search_fields = ['contrato_id','tipo_persona','persona','tipo_contrato']
+    
+    
 
 class tipoArbitroAdmin(admin.ModelAdmin):
     list_display=['tipo_arbitro_id','nombre','estado']
@@ -24,8 +28,10 @@ class tipoArbitroAdmin(admin.ModelAdmin):
 
 class detalleTernaArbitralAdmin(admin.ModelAdmin):
     list_display=['detalle_terna_id','persona_id','tipo_arbitro_id','encuentro_id']
-    ordering=['detalle_terna_id']
-    search_fields = ['detalle_terna_id']
+    ordering=['encuentro_id']
+    search_fields = ['persona_id','tipo_arbitro_id','encuentro_id']
+    list_per_page=5
+    list_filter=['tipo_arbitro_id']
 
 
 admin.site.register(tipo_persona,tipo_personaAdmin)

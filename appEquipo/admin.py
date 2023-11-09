@@ -26,8 +26,9 @@ class equipoAdmin(admin.ModelAdmin):
     list_display = ['equipo_id', 'nombre', 'presidente', 'logo', 'vestimenta_principal_color_principal','vestimenta_principal_color_secundario',
                     'vestimenta_alterna_color_principal','vestimenta_alterna_color_secundario', 'portada', 'siglas',
                     'categoria_equipo', 'tipo_equipo_id', 'sede_id']
-    ordering = ['equipo_id']
+    ordering = ['nombre']
     search_fields = ['nombre']
+    list_per_page=5
 
 class tipoEquipoAdmin(admin.ModelAdmin):
     list_display=['tipo_equipo_id','descripcion']
@@ -36,8 +37,9 @@ class tipoEquipoAdmin(admin.ModelAdmin):
 
 class posicionJugadorAdmin(admin.ModelAdmin):
     list_display=['posicion_jugador_id','descripcion']
-    ordering=['posicion_jugador_id']
+    ordering=['descripcion']
     search_fields = ['descripcion']
+    list_per_page=5
 
 # class alineacionAdmin(admin.ModelAdmin):
 #     list_display=['alineacion_id','fecha_juego','descripcion','estado']
@@ -45,8 +47,8 @@ class posicionJugadorAdmin(admin.ModelAdmin):
 #     search_fields=['descripcion']
 
 class AlineacionEquipoAdmin(admin.ModelAdmin):
-    list_display=['alineacion_id','dorsal','posicion_jugador_id','capitan','estado','contrato_id','descripcion_encuentro_id']
-    ordering=['alineacion_id']
+    list_display=['alineacion_id','dorsal','posicion_jugador_id','contrato_id','capitan','estado','descripcion_encuentro_id']
+    ordering=['posicion_jugador_id']
     search_fields = ['descripcion_encuentro_id']
 
 class EncuentroPersonaAdmin(admin.ModelAdmin):

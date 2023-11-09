@@ -118,7 +118,7 @@ class detalle_terna(models.Model):
     encuentro_id=models.ForeignKey('appPartido.encuentro' ,on_delete=models.CASCADE,db_column='encuentro_id')
 
     def __str__(self):
-        return str(self.detalle_terna_id)        
+        return str(self.encuentro_id)        
 
     class Meta:
         verbose_name_plural='detalle_terna'

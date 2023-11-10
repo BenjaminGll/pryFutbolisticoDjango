@@ -32,6 +32,8 @@ CSRF_TRUSTED_ORIGINS = ['https://pryfutbolisticodjango-production.up.railway.app
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
+    'colorfield',
     'admin_volt.apps.AdminVoltConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,7 +48,9 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'user',
 ]
-
+X_FRAME_OPTIONS  =  "MISMOORIGIN" 
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS  =  [ "seguridad.W019" ]
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',

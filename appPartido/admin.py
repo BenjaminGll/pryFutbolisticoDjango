@@ -1,6 +1,6 @@
 from django.contrib import admin
 from appPartido.models import *
-# Register your models here.
+
 
 class formacionAdmin(admin.ModelAdmin):
     list_display=['descripcion']
@@ -48,11 +48,12 @@ class tipo_eventoAdmin(admin.ModelAdmin):
     list_per_page=5
     
 
+
 class eventoAdmin(admin.ModelAdmin):
-    list_display=['tipo_evento_id','encuentro_id','alineacion1_id','alineacion2_id','tiempo_reglamentario','tiempo_extra','motivo','cantidad','estado_evento'] 
-    ordering=['tipo_evento_id']
-    search_fields = ['encuentro_id','alineacion1_id','alineacion2_id']
-    list_per_page=5
+    list_display = ['tipo_evento_id', 'encuentro_id', 'estado_evento']
+    ordering = ['tipo_evento_id']
+    search_fields = ['encuentro_id', 'alineacion1_id', 'alineacion2_id']
+    list_filter = ['encuentro_id']  # Agrega el filtro de encuentro_id como combobox
 
 
 

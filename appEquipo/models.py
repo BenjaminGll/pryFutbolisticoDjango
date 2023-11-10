@@ -132,9 +132,9 @@ class encuentro_persona(models.Model):
     expulsado = models.IntegerField()
     sustituidos = models.IntegerField()
     amonestado = models.BooleanField(null=True)
-    encuentro = models.ForeignKey('appPartido.encuentro', on_delete=models.CASCADE, db_column='encuentro_id')  # Corrected column name
-    equipo = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
-    contrato = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
+    encuentro_id = models.ForeignKey('appPartido.encuentro', on_delete=models.CASCADE, db_column='encuentro_id')  # Corrected column name
+    equipo_id = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
+    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
 
     def _str_(self):
         return str(self.encuentro)

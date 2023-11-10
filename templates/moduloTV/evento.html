@@ -8,7 +8,7 @@
     <form method="GET" action="{% url 'mostrar_evento' %}">
         {% csrf_token %}
         <select class="form-control col-md-9" id="encuentro" name="encuentro" onchange="this.form.submit()">
-            <option value="">Seleccionar...</option> <!-- Opción en blanco -->
+            <option value="">Seleccionar...</option> 
             {% for encuentro in encuentros %}
                 <option value="{{ encuentro.encuentro_id }}">{{ encuentro }}</option>
             {% endfor %}
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="col-md-2 mb-2">
-                <button type="submit" class="btn btn-primary">Enviar</button>
+                <button type="submit" class="btn btn-primary" >Enviar</button>
             </div>
         </form>
     </div>
@@ -102,4 +102,23 @@
 
 
 {% endfor %}
+
+<script>
+    // Obtén el elemento select
+    var selectEncuentro = document.getElementById('encuentro');
+
+    // Guarda el valor seleccionado antes de enviar el formulario
+    selectEncuentro.addEventListener('change', function () {
+        sessionStorage.setItem('selectedEncuentro', this.value);
+    });
+
+    // Restaura el valor seleccionado al cargar la página
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectedEncuentro = sessionStorage.getItem('selectedEncuentro');
+        if (selectedEncuentro) {
+            selectEncuentro.value = selectedEncuentro;
+        }
+    });
+</script>
+
 {% endblock %}

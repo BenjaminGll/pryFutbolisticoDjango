@@ -392,32 +392,6 @@ def contextoEquipo(request, nombre_equipo):
 
     return render(request, "equipo.html", data)
 
-    # alineacion_equipo_final = []
-
-    # for j in jugadores:
-    #     alineacionequipo = alineacion_equipo.objects.filter(contrato_id=j.contrato_id)
-    #     for ae in alineacionequipo:
-    #         if(ae.estado == True or ae.estado == False):
-    #             alineacion_equipo_final.append(ae)
-    encuentro_local_jugar = []
-    encuentros_local = encuentro.objects.filter(equipo_local=equipos.equipo_id,estado_jugado=False)
-    for ejl in encuentros_local:
-        encuentro_local_jugar.append(ejl)
-
-    encuentro_visita_jugar = []
-    encuentros_visita = encuentro.objects.filter(equipo_visita=equipos.equipo_id,estado_jugado=False)
-    for ejv in encuentros_visita:
-        encuentro_visita_jugar.append(ejv)
-
-    data = {
-        'equipo' : equipos,
-        'entrenador': entrenadoractual,
-        'jugadores_equipo': jugadores_equipo,
-        'encuentro_local_jugar':encuentro_local_jugar,
-        'encuentro_visita_jugar':encuentro_visita_jugar
-    }
-
-    return render(request, 'equipo.html', data)
 
 def contextoFixtureCompetencia(request, nombre_competicion):
     
@@ -825,13 +799,12 @@ def mostrarEvento(request):
         guardar_eventos_temporales(eventos)
         for evento_seleccionado in eventos:
             print(f"Eventos seleccionado: {evento_seleccionado}")
-            evento_seleccionado.estado_evento = False
+            # evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
         eventos = evento.objects.filter(encuentro_id=encuentro_idd,estado_evento=True)
         
 
-    # Imprime el resultado de eventos para verificarlo
-    print(f"Eventos filtrados: {eventos}")
+
 
     return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'encuentros': encuentros})
 

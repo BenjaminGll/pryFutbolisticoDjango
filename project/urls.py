@@ -54,7 +54,7 @@ urlpatterns = [
     #Esta si se puede eliminar
     path('reporte/organizacion', contextotablaorganizacion, name='lista_organizacion'),
     #
-    path('reporte/organizacion/<int:orga_id>', contextotablaorganizacionindi, name='lista_organizacion_indi'),
+    # path('reporte/organizacion/<int:orga_id>', contextotablaorganizacionindi, name='lista_organizacion_indi'),
     path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
 
 

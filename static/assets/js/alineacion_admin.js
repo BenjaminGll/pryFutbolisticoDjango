@@ -31,6 +31,6 @@
         $("#id_descripcion_encuentro_id").change(actualizarContratos);
 
         // Llamar a la función al cargar la página para inicializar los encuentros
-        actualizarEncuentros();
+        actualizarContratos();
     });
 })(django.jQuery);

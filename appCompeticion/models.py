@@ -127,7 +127,7 @@ class detalle_patrocinador(models.Model):
          return str(self.competicion_id)
     
     class Meta:
-        verbose_name_plural='detalle_patrocinador'
+        verbose_name_plural='Patrocinador_Competicion'
 
 class grupo(models.Model):
     grupo_id=models.BigAutoField(primary_key=True)
@@ -158,7 +158,7 @@ class fase(models.Model):
         verbose_name_plural='fase'
 
 
-class detalle_grupo(models.Model):
+class grupo_competicion(models.Model):
     detalle_grupo_id=models.BigAutoField(primary_key=True)
     equipo_id=models.ForeignKey("appEquipo.equipo",on_delete=models.CASCADE, db_column='equipo_id')
     fase_id=models.ForeignKey(fase,on_delete=models.CASCADE, db_column='fase_id')
@@ -169,7 +169,7 @@ class detalle_grupo(models.Model):
         return str(self.fase_id)
     
     class Meta: 
-        verbose_name_plural='detalle_grupo'
+        verbose_name_plural='Grupo_competicion'
 
 class tabla_posicion(models.Model):
     tabla_id=models.BigAutoField(primary_key=True)

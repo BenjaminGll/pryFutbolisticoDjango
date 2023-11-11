@@ -33,7 +33,7 @@ class faseAdmin(admin.ModelAdmin):
     list_per_page =4
     
 
-class detalle_grupoAdmin(admin.ModelAdmin):
+class grupo_competicionAdmin(admin.ModelAdmin):
     list_display=['competicion_id','fase_id','grupo_id','equipo_id']
     search_fields = ['equipo_id','grupo_id','competicion_id']
     ordering =['competicion_id']
@@ -67,7 +67,7 @@ admin.site.register(pais,paisAdmin)
 admin.site.register(deporte,deporteAdmin)
 admin.site.register(grupo,grupoAdmin)
 admin.site.register(fase,faseAdmin)
-admin.site.register(detalle_grupo,detalle_grupoAdmin)
+admin.site.register(grupo_competicion,grupo_competicionAdmin)
 admin.site.register(tabla_posicion,tablaAdmin)
 admin.site.register(organizacion,organizacionAdmin)
 admin.site.register(patrocinador,patrocinadorAdmin)

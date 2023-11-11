@@ -121,4 +121,4 @@ class detalle_terna(models.Model):
         return str(self.encuentro_id)        
 
     class Meta:
-        verbose_name_plural='detalle_terna'
+        verbose_name_plural='terna_arbitral'

@@ -38,12 +38,12 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='detalle_grupo',
+            name='Grupo_competicion',
             fields=[
                 ('detalle_grupo_id', models.BigAutoField(primary_key=True, serialize=False)),
             ],
             options={
-                'verbose_name_plural': 'detalle_grupo',
+                'verbose_name_plural': 'Grupo_competicion',
             },
         ),
         migrations.CreateModel(

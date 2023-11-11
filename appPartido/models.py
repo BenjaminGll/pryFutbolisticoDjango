@@ -67,7 +67,7 @@ class sede(models.Model):
         verbose_name_plural='sede'
 
 ##NUEVO
-class descripcion_encuentro(models.Model):
+class   descripcion_encuentro(models.Model):
     CHOICE_RESULTADO = [
         ('G', 'GANADO'),
         ('E', 'EMPATADO'),
@@ -103,7 +103,7 @@ class encuentro(models.Model):
          ('E', 'EN JUEGO'),
          ('S', 'SUSPENDIDO'),
      ]
-    
+
     encuentro_id=models.BigAutoField(primary_key=True)
     competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')
     sede_id=models.ForeignKey(sede,on_delete=models.CASCADE,db_column='sede_id',blank=True,null=True)
@@ -186,6 +186,7 @@ class tipo_evento(models.Model):
 class evento(models.Model):
     evento_id = models.BigAutoField(primary_key=True)
     tipo_evento_id = models.ForeignKey(tipo_evento, on_delete=models.CASCADE, db_column='tipo_evento_id', null=True)
+    competicion_id = models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE, db_column='competicion_id', null=True)
 
     encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
    

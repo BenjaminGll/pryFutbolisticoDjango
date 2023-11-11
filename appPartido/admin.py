@@ -49,11 +49,15 @@ class tipo_eventoAdmin(admin.ModelAdmin):
     
 
 
+
 class eventoAdmin(admin.ModelAdmin):
-    list_display = ['tipo_evento_id', 'encuentro_id', 'estado_evento']
+    list_display = ['competicion_id', 'tipo_evento_id', 'encuentro_id', 'estado_evento']
     ordering = ['tipo_evento_id']
-    search_fields = ['encuentro_id', 'alineacion1_id', 'alineacion2_id']
-    list_filter = ['encuentro_id']  # Agrega el filtro de encuentro_id como combobox
+    search_fields = ['encuentro_id__equipo_local__nombre', 'encuentro_id__equipo_visita__nombre']
+    list_filter = ['competicion_id']
+
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js')
 
 
 

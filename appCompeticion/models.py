@@ -158,7 +158,7 @@ class fase(models.Model):
         verbose_name_plural='fase'
 
 
-class grupo_competicion(models.Model):
+class detalle_grupo(models.Model):
     detalle_grupo_id=models.BigAutoField(primary_key=True)
     equipo_id=models.ForeignKey("appEquipo.equipo",on_delete=models.CASCADE, db_column='equipo_id')
     fase_id=models.ForeignKey(fase,on_delete=models.CASCADE, db_column='fase_id')

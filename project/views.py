@@ -106,13 +106,13 @@ def contextoCompetenciasFutbol(request, nombre_competicion):
     )
     fase_seleccionada = fase.objects.get(nombre="FASE DE GRUPOS")
 
-    grupos = grupo_competicion.objects.filter(
+    grupos = detalle_grupo.objects.filter(
         competicion_id=competencia_seleccionada.competicion_id,
         fase_id=fase_seleccionada.fase_id,
     ).order_by("grupo_id")
 
     filtro_grupos = (
-        grupo_competicion.objects.filter(
+        detalle_grupo.objects.filter(
             competicion_id=competencia_seleccionada.competicion_id,
             fase_id=fase_seleccionada.fase_id,
         )
@@ -237,7 +237,7 @@ def obtener_tipos_organizacion():
 
 
 def obtener_grupos_por_competicion(competicion_id):
-    detalles_grupos = grupo_competicion.objects.filter(competicion_id=competicion_id)
+    detalles_grupos = detalle_grupo.objects.filter(competicion_id=competicion_id)
 
     # Obtén los valores de las foráneas (grupo_id, fase_id y equipo_id)
     grupo_ids = detalles_grupos.values_list("grupo_id", flat=True)
@@ -284,7 +284,7 @@ def lista_equipos_por_competicion_y_fase(request):
     if competicion_id:
         competicion_seleccionada = competicion.objects.get(pk=competicion_id)
         if fase_id:
-            detalle_grupos = grupo_competicion.objects.filter(
+            detalle_grupos = detalle_grupo.objects.filter(
                 competicion_id=competicion_id, fase_id=fase_id
             )
             equipos = [detalle.equipo_id for detalle in detalle_grupos]
@@ -619,12 +619,12 @@ def contextoTablaPosiciones(request, nombre_competicion):
     )
 
     fase_grupos = fase.objects.get(nombre="FASE DE GRUPOS")
-    listar_equipos_fase_grupos = grupo_competicion.objects.filter(
+    listar_equipos_fase_grupos = detalle_grupo.objects.filter(
         fase_id=fase_grupos.fase_id
     ).values("equipo_id")
 
     listar_grupos_fase_grupos = (
-        grupo_competicion.objects.filter(fase_id=fase_grupos.fase_id)
+        detalle_grupo.objects.filter(fase_id=fase_grupos.fase_id)
         .values_list("grupo_id", flat=True)
         .distinct()
         .order_by("grupo_id")

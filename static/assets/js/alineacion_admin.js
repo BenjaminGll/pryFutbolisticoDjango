@@ -13,7 +13,7 @@
      
             $.ajax({
                 url: "/appEquipo/get_contratos/",
-                data: { descripcionId: descripcionId },
+                data: { descripcion_encuentro_id: descripcionId }, // Cambia la clave aquí
                 dataType: 'json',
                 success: function (data) {
            

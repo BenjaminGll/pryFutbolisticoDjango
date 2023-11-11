@@ -6,13 +6,14 @@ from appContrato.models import *
 
 class ObteneraJugadoresView(View):
     def get(self, request, *args, **kwargs):
-        de_id = request.GET.get('descripcion_encuentro_id')
+        de_id = request.GET.get('descripcionId')
         descripcion_encuentros = descripcion_encuentro.objects.get(descripcion_encuentro_id=de_id)
         equipos = equipo.objects.get(equipo_id=descripcion_encuentros.equipo)
         contratos = contrato.objects.get(ultimo_club=equipos.equipo_id)
-        
-        data = {contratos.persona: str(contrato) for contrato in contratos}
+    
+        data = {str(contrato.pk): str(contrato.persona) for contrato in contratos}
         return JsonResponse(data)
+
 
 
 

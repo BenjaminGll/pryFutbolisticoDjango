@@ -51,7 +51,9 @@ class AlineacionEquipoAdmin(admin.ModelAdmin):
     list_display=['posicion_jugador_id','dorsal','contrato_id','capitan','estado','descripcion_encuentro_id']
     ordering=['posicion_jugador_id']
     search_fields = ['descripcion_encuentro_id']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js')
+    
 class EncuentroPersonaAdmin(admin.ModelAdmin):
      list_display = ['encuentro_persona_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado','contrato_id','encuentro_id', 'equipo_id']
      ordering = ['encuentro_persona_id']

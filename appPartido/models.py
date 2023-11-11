@@ -67,7 +67,7 @@ class sede(models.Model):
         verbose_name_plural='sede'
 
 ##NUEVO
-class   descripcion_encuentro(models.Model):
+class descripcion_encuentro(models.Model):
     CHOICE_RESULTADO = [
         ('G', 'GANADO'),
         ('E', 'EMPATADO'),

@@ -23,7 +23,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', contadoresAdmin), 
     path('admin/', admin.site.urls),
-    path('appPartido/', include('appPartido.urls')),  # Ajusta esto con el nombre de tu aplicación
+    path('appPartido/', include('appPartido.urls')),
+    path('appEquipo/', include('appEquipo.urls')),# Ajusta esto con el nombre de tu aplicación
     path('jugador/<str:alias>', contextoJugador), 
     path('equipo/<str:nombre_equipo>', contextoEquipo),
     # path('competencias/<str:nombre_deporte>', contextoCompetencias),

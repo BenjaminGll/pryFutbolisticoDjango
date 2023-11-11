@@ -11,7 +11,7 @@ class personaAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'apellido', 'alias', 'sexo', 'fecha_nacimiento', 'ciudad_id', 'estatura', 'peso', 'tipo_persona_id', 'estado', 'foto']
     ordering = ['nombre']
     search_fields = ['nombre', 'apellido', 'alias']
-    list_per_page = 5
+    list_per_page = 11
     list_filter = ['tipo_persona_id', 'contratos_persona__nuevo_club']  # Agrega 'contratos_persona__nuevo_club' a list_filter
 
 

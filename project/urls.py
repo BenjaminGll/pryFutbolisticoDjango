@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', contadoresAdmin), 
     path('admin/', admin.site.urls),
+    path('appPartido/', include('appPartido.urls')),  # Ajusta esto con el nombre de tu aplicación
     path('jugador/<str:alias>', contextoJugador), 
     path('equipo/<str:nombre_equipo>', contextoEquipo),
     # path('competencias/<str:nombre_deporte>', contextoCompetencias),
@@ -31,7 +32,11 @@ urlpatterns = [
     path('tvVivo/<int:id>', contextoTVvivo),
     path('tvHome/', contextoTVhome),
     path('datostv', obtener_eventos_ajax),
-    path('Admintv/', mostrarEvento, name='mostrar_evento'),
+    path('admintv/<int:idEncuentro>/',mostrarEvento , name='mostrar_evento'),
+    path('admintv/encuentros', mostrarEncuentrosEvento, name='mostrar_encuentro_evento'),
+    path('limpiar-eventos-temporales/', limpiar_eventos_temporales, name='limpiar_eventos_temporales'),
+
+
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
@@ -44,6 +49,14 @@ urlpatterns = [
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
     path('reporte/goleadores', lista_goleadores, name='lista_goleadores'),
     path('reporte/asistidores', lista_asistidores, name='lista_asistidores'),
+    
+    #Esta si se puede eliminar
+    path('reporte/organizacion', contextotablaorganizacion, name='lista_organizacion'),
+    #
+    path('reporte/organizacion/<int:orga_id>', contextotablaorganizacionindi, name='lista_organizacion_indi'),
+    path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
+
+
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),
     # path("futbol/tv/<int:id>", contextoTv),

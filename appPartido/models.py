@@ -67,7 +67,7 @@ class sede(models.Model):
         verbose_name_plural='sede'
 
 ##NUEVO
-class descripcion_encuentro(models.Model):
+class   descripcion_encuentro(models.Model):
     CHOICE_RESULTADO = [
         ('G', 'GANADO'),
         ('E', 'EMPATADO'),
@@ -91,7 +91,7 @@ class descripcion_encuentro(models.Model):
         super(descripcion_encuentro, self).save(force_insert, force_update)
 
     def __str__(self):
-        return f"Equipo: {self.equipo},Formacion: {self.formacion}"
+        return str(self.equipo)
     class Meta:
         verbose_name_plural = 'descripcion_encuentro'
 
@@ -186,6 +186,7 @@ class tipo_evento(models.Model):
 class evento(models.Model):
     evento_id = models.BigAutoField(primary_key=True)
     tipo_evento_id = models.ForeignKey(tipo_evento, on_delete=models.CASCADE, db_column='tipo_evento_id', null=True)
+    competicion_id = models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE, db_column='competicion_id', null=True)
 
     encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
    

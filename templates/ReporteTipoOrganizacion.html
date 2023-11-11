@@ -46,17 +46,24 @@
                             <td>{{ organizacion.descripcion }}</td>
                             <td><img class="organizacion-logo" src="{{ organizacion.logo.url }}" alt="Logo de {{ organizacion.nombre_oficial }}"  width="100"/></td>
                             <td>
-                                <a href="#" data-toggle="modal" data-target="#myModal" data-api-url="">
+                                <a href="organizacion/{{ organizacion.organizacion_id }}">
                                     <i class="fa fa-eye fa-2x" style="position: static;"></i>
                                 </a>
                             </td>
                         </tr>
+
                         {% endfor %}
                     </tbody>
+                   
                 </table>
             </div>
         </div>
     </div>
+   
+
 </section>
+
+
+
 
 {% endblock %}

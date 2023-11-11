@@ -3,29 +3,35 @@ from appContrato.models import *
 
 # Register your models here.
 class tipo_personaAdmin(admin.ModelAdmin):
-    list_display = ['tipo_persona_id', 'descripcion', 'estado']
-    ordering = ['tipo_persona_id']
+    list_display = ['descripcion', 'estado']
+    ordering = ['descripcion']
     search_fields = ['descripcion']
 
 class personaAdmin(admin.ModelAdmin):
-    list_display=['persona_id', 'nombre', 'apellido', 'alias', 'sexo', 'fecha_nacimiento','ciudad_id','estatura','peso','estado','tipo_persona_id','foto']
-    ordering = ['persona_id']
+    list_display=['nombre', 'apellido', 'alias', 'sexo', 'fecha_nacimiento','ciudad_id','estatura','peso','tipo_persona_id','estado','foto']
+    ordering = ['nombre']
     search_fields = ['nombre','apellido','alias']
+    list_per_page=5
+    list_filter=['tipo_persona_id']
 
 class contratoAdmin(admin.ModelAdmin):
-    list_display=['contrato_id', 'fecha_inicio', 'fecha_fin', 'valor', 'tipo_contrato','persona_id','ultimo_club','nuevo_club','posicion_jugador','dorsal','estado']
-    ordering = ['contrato_id']
-    search_fields = ['equipo_id', 'persona_id']
+    list_display=['tipo_contrato','persona','tipo_persona','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
+    ordering = ['persona']
+    search_fields = ['contrato_id','tipo_persona','persona','tipo_contrato']
+    list_filter=['tipo_contrato']
+    
 
 class tipoArbitroAdmin(admin.ModelAdmin):
-    list_display=['tipo_arbitro_id','nombre','estado']
-    ordering=['tipo_arbitro_id']
+    list_display=['nombre','estado']
+    ordering=['nombre']
     search_fields = ['nombre']
 
 class detalleTernaArbitralAdmin(admin.ModelAdmin):
-    list_display=['detalle_terna_id','persona_id','tipo_arbitro_id','encuentro_id']
-    ordering=['detalle_terna_id']
-    search_fields = ['detalle_terna_id']
+    list_display=['tipo_arbitro_id', 'persona_id','encuentro_id']
+    ordering=['encuentro_id']
+    search_fields = ['persona_id','tipo_arbitro_id','encuentro_id']
+    list_per_page=5
+    list_filter=['tipo_arbitro_id']
 
 
 admin.site.register(tipo_persona,tipo_personaAdmin)

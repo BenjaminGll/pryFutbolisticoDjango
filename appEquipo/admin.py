@@ -6,8 +6,8 @@ from appEquipo.models import *
 # Register your models here.
 
 class categoriaEquipo(admin.ModelAdmin):
-    list_display=['categoria_id','nombre']
-    ordering=['categoria_id']
+    list_display=['nombre']
+    ordering=['nombre']
     search_fields=['nombre']
 
 class equipoForm(ModelForm):
@@ -23,21 +23,24 @@ class equipoForm(ModelForm):
 
 class equipoAdmin(admin.ModelAdmin):
     form = equipoForm
-    list_display = ['equipo_id', 'nombre', 'presidente', 'logo', 'vestimenta_principal_color_principal','vestimenta_principal_color_secundario',
+    list_display = ['nombre', 'presidente', 'logo', 'vestimenta_principal_color_principal','vestimenta_principal_color_secundario',
                     'vestimenta_alterna_color_principal','vestimenta_alterna_color_secundario', 'portada', 'siglas',
                     'categoria_equipo', 'tipo_equipo_id', 'sede_id']
-    ordering = ['equipo_id']
+    ordering = ['nombre']
     search_fields = ['nombre']
+    list_per_page=5
+    list_filter=['categoria_equipo','tipo_equipo_id']
 
 class tipoEquipoAdmin(admin.ModelAdmin):
-    list_display=['tipo_equipo_id','descripcion']
+    list_display=['descripcion']
     ordering=['tipo_equipo_id']
     search_fields = ['descripcion']
 
 class posicionJugadorAdmin(admin.ModelAdmin):
-    list_display=['posicion_jugador_id','descripcion']
-    ordering=['posicion_jugador_id']
+    list_display=['descripcion']
+    ordering=['descripcion']
     search_fields = ['descripcion']
+    list_per_page=5
 
 # class alineacionAdmin(admin.ModelAdmin):
 #     list_display=['alineacion_id','fecha_juego','descripcion','estado']
@@ -45,12 +48,12 @@ class posicionJugadorAdmin(admin.ModelAdmin):
 #     search_fields=['descripcion']
 
 class AlineacionEquipoAdmin(admin.ModelAdmin):
-    list_display=['alineacion_id','dorsal','posicion_jugador_id','capitan','estado','contrato_id','descripcion_encuentro_id']
-    ordering=['alineacion_id']
+    list_display=['posicion_jugador_id','dorsal','contrato_id','capitan','estado','descripcion_encuentro_id']
+    ordering=['posicion_jugador_id']
     search_fields = ['descripcion_encuentro_id']
 
 class EncuentroPersonaAdmin(admin.ModelAdmin):
-     list_display = ['encuentro_persona_id','encuentro_id', 'equipo_id', 'contrato_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado']
+     list_display = ['encuentro_persona_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado','contrato_id','encuentro_id', 'equipo_id']
      ordering = ['encuentro_persona_id']
      search_fields = ['equipo_id']
 

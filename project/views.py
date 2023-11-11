@@ -392,32 +392,6 @@ def contextoEquipo(request, nombre_equipo):
 
     return render(request, "equipo.html", data)
 
-    # alineacion_equipo_final = []
-
-    # for j in jugadores:
-    #     alineacionequipo = alineacion_equipo.objects.filter(contrato_id=j.contrato_id)
-    #     for ae in alineacionequipo:
-    #         if(ae.estado == True or ae.estado == False):
-    #             alineacion_equipo_final.append(ae)
-    encuentro_local_jugar = []
-    encuentros_local = encuentro.objects.filter(equipo_local=equipos.equipo_id,estado_jugado=False)
-    for ejl in encuentros_local:
-        encuentro_local_jugar.append(ejl)
-
-    encuentro_visita_jugar = []
-    encuentros_visita = encuentro.objects.filter(equipo_visita=equipos.equipo_id,estado_jugado=False)
-    for ejv in encuentros_visita:
-        encuentro_visita_jugar.append(ejv)
-
-    data = {
-        'equipo' : equipos,
-        'entrenador': entrenadoractual,
-        'jugadores_equipo': jugadores_equipo,
-        'encuentro_local_jugar':encuentro_local_jugar,
-        'encuentro_visita_jugar':encuentro_visita_jugar
-    }
-
-    return render(request, 'equipo.html', data)
 
 def contextoFixtureCompetencia(request, nombre_competicion):
     
@@ -506,6 +480,72 @@ def lista_goleadores(request):
 
     return render(request, 'lista_jugadores_goles.html', {
         'goleadores': goleadores_list,
+        'competiciones': competiciones,
+        'competicion_seleccionada': competicion_seleccionada,
+    })
+
+def lista_asistidores(request):
+    competicion_id = request.GET.get('competicion', None)
+    asistidores_list = []
+    competiciones = competicion.objects.all()
+    competicion_seleccionada = None
+
+    if competicion_id:
+        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
+
+        eventos_asistencia = evento.objects.filter(
+            tipo_evento_id = 19, encuentro_id__competicion_id=competicion_id
+        )
+
+        for evento_asistencia in eventos_asistencia:
+            jugador_id = evento_asistencia.alineacion1_id.contrato_id.persona_id
+            jugador = persona.objects.get(persona_id=jugador_id)
+            ciudad_id = jugador.ciudad_id
+            pais_id = ciudad_id.pais_id
+
+            # Obtener el equipo_id del modelo encuentro_persona
+            encuentro_id = evento_asistencia.encuentro_id.encuentro_id
+            contrato_id = evento_asistencia.alineacion1_id.contrato_id.contrato_id
+            equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
+
+            total_asistencias = evento.objects.filter(
+            tipo_evento_id= 19, alineacion1_id__contrato_id__persona_id=jugador_id
+            ).count()
+
+            # Obtener el alias, ciudad y país del jugador
+            alias = jugador.alias
+            ciudad = ciudad_id.nombre
+            pais = pais_id.nombre
+
+            # Obtener el logo del equipo al que pertenece el jugador
+            equipo_logo = obtener_logo_equipo(equipo_id)
+
+             # Obtener el alineacion1_id y persona_id
+            alineacion1_id = evento_asistencia.alineacion1_id.alineacion_id
+            persona_id = evento_asistencia.alineacion1_id.contrato_id.persona_id
+
+            # Obtener el ID del modelo encuentro_persona
+            encuentro_persona_id = obtener_encuentro_persona_id(encuentro_id, contrato_id)
+
+            print(f"Evento ID: {evento_asistencia.evento_id}")
+            print(f"Jugador ID: {jugador_id}")
+            print(f"Alineacion1 ID: {alineacion1_id}")
+            print(f"Persona ID: {persona_id}")
+            print(f"Encuentro ID: {encuentro_id}")
+            print(f"Contrato ID: {contrato_id}")
+            print(f"Equipo ID: {equipo_id}")
+            print(f"Encuentro_Persona ID: {encuentro_persona_id}")
+
+            asistidores_list.append({
+                'alias': alias,
+                'ciudad': ciudad,
+                'logo_bandera': pais,
+                'equipo_logo': equipo_logo,
+                'asistencias': total_asistencias,
+            })
+
+    return render(request, 'lista_jugadores_asistencias.html', {
+        'asistidores': asistidores_list,
         'competiciones': competiciones,
         'competicion_seleccionada': competicion_seleccionada,
     })
@@ -776,7 +816,7 @@ def mostrarEvento(request,idEncuentro):
         guardar_eventos_temporales(eventos)
         for evento_seleccionado in eventos:
             print(f"Eventos seleccionado: {evento_seleccionado}")
-            evento_seleccionado.estado_evento = False
+            # evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
             
         eventos = evento.objects.filter(encuentro_id=idEncuentro,estado_evento=True)

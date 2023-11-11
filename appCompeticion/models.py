@@ -63,7 +63,7 @@ class patrocinador (models.Model):
         super(patrocinador, self).save(force_insert, force_update)
 
     def __str__(self):
-         return str(self.patrocinador_id)
+         return str(self.nombre_patrocinador)
         
     class Meta: 
         verbose_name_plural='patrocinador'
@@ -75,12 +75,13 @@ class organizacion(models.Model):
         ('I', 'FEDERACIÓN INTERNACIONAL'),
         ('C', 'CONFEDERACIÓN'),
         ('L', 'LIGA'),
+        ('L', 'ASOCIACIÓN'),
         
     ]
     organizacion_id=models.BigAutoField(primary_key=True)
-    nombre_oficial=models.CharField(max_length=30)
-    siglas=models.CharField(max_length=3,default='')
-    descripcion=models.CharField(max_length=50)
+    nombre_oficial=models.CharField(max_length=200)
+    siglas=models.CharField(max_length=10,default='')
+    descripcion=models.CharField(max_length=200)
     tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
     estado=models.BooleanField()
     logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')
@@ -123,7 +124,7 @@ class detalle_patrocinador(models.Model):
     competicion_id=models.ForeignKey(competicion,on_delete=models.CASCADE, db_column='competicion_id')
     
     def __str__(self):
-         return str(self.patrocinador_id,self.competicion_id)
+         return str(self.competicion_id)
     
     class Meta:
         verbose_name_plural='detalle_patrocinador'
@@ -165,7 +166,7 @@ class detalle_grupo(models.Model):
     competicion_id=models.ForeignKey(competicion,on_delete=models.CASCADE, db_column='competicion_id')
 
     def __str__(self):
-        return str(self.detalle_grupo_id)
+        return str(self.fase_id)
     
     class Meta: 
         verbose_name_plural='detalle_grupo'
@@ -184,7 +185,7 @@ class tabla_posicion(models.Model):
     puntos=models.IntegerField()
 
     def __str__(self):
-        return str(self.tabla_id)
+        return str(self.competicion_id)
     
     class Meta: 
         verbose_name_plural='tabla_posicion'

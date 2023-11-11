@@ -67,17 +67,22 @@ class contrato(models.Model):
             ('S', 'SELECCIÓN'),
         ]
 
+        CHOICE_POSICION_CONTRATO = [
+            ('DEL', 'DELANTERO'),
+            ('CEN', 'CENTROCAMPISTA'),
+            ('DEF', 'DEFENSA'),
+            ('POR', 'PORTERO'),
+        ]
         contrato_id = models.BigAutoField(primary_key=True)
         tipo_persona = models.ForeignKey('tipo_persona', on_delete=models.CASCADE, related_name='contratos_tipo_persona',default=1)
         persona = models.ForeignKey('persona', on_delete=models.CASCADE, db_column='persona_id',related_name='contratos_persona', default=1)
+        tipo_contrato = models.CharField(max_length=1, choices=CHOICE_TIPO_CONTRATO, default='C')
         fecha_inicio = models.DateField(blank=True, null=True)
         fecha_fin = models.DateField(blank=True, null=True)
-        tipo_contrato = models.CharField(max_length=1, choices=CHOICE_TIPO_CONTRATO, default='C')
         valor = models.FloatField(blank=True, null=True)
-        ultimo_club = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='ultimo_club', related_name='ultimo_club', null=True, blank=True)
         nuevo_club = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='nuevo_club', related_name='nuevo_club', null=True, blank=True)
         dorsal = models.IntegerField(blank=True, null=True)
-        posicion_jugador = models.CharField(max_length=30, blank=True, null=True)
+        posicion_jugador =models.CharField(max_length=3, choices=CHOICE_POSICION_CONTRATO, default='DEL')
         estado = models.BooleanField()
         def save(self, force_insert=False, force_update=False):
             self.posicion_jugador = self.posicion_jugador
@@ -113,7 +118,7 @@ class detalle_terna(models.Model):
     encuentro_id=models.ForeignKey('appPartido.encuentro' ,on_delete=models.CASCADE,db_column='encuentro_id')
 
     def __str__(self):
-        return str(self.detalle_terna_id)        
+        return str(self.encuentro_id)        
 
     class Meta:
         verbose_name_plural='detalle_terna'

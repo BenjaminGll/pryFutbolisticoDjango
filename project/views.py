@@ -943,7 +943,7 @@ def limpiar_eventos_temporales(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-       
+#Esto se podria eliminar       
 def contextotablaorganizacion(request):
     
     competiciones = competicion.objects.all()
@@ -953,8 +953,17 @@ def contextotablaorganizacion(request):
     }
 
     return render (request,'organizacion.html', data)
+#
 
 
+def contextotablaorganizacionindi(request, orga_id):
+    print(orga_id)
+    competiciones = competicion.objects.filter(organizacion_id=orga_id)
+    data ={
+        'competiciones' : competiciones
+    }
+
+    return render (request,'organizacion.html', data)
 
 def apicompetenciasequipo(request,nombre_competicion):
     try:

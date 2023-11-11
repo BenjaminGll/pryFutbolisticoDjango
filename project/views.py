@@ -3,18 +3,9 @@ from unittest import case
 from django.forms import CharField
 from django.shortcuts import get_object_or_404, render,redirect
 from appContrato.models import *
-from appEquipo.models import equipo, alineacion, encuentro_persona
-from appCompeticion.models import (
-    competicion,
-    deporte,
-    detalle_grupo,
-    fase,
-    grupo,
-    tabla_posicion,
-    pais,
-)
-from appPartido.models import encuentro, evento, sede, tipo_evento
-from appCompeticion.models import deporte, organizacion, detalle_grupo, fase
+from appEquipo.models import *
+from appPartido.models import *
+from appCompeticion.models import *
 from user.models import User
 from django.db.models import Count, Case, When, IntegerField, Value, F
 from itertools import chain
@@ -318,10 +309,12 @@ def obtener_equipo_id(encuentro_id, contrato_id):
         encuentro_persona_obj = encuentro_persona.objects.get(
             encuentro_id=encuentro_id, contrato_id=contrato_id
         )
-        equipo_id = encuentro_persona_obj.equipo_id
+        # Obtiene el ID del equipo directamente
+        equipo_id = encuentro_persona_obj.equipo_id_id
     except encuentro_persona.DoesNotExist:
         equipo_id = None
     return equipo_id
+
 
 def obtener_logo_equipo(equipo_id):
     try:
@@ -454,6 +447,7 @@ def lista_goleadores(request):
             # Obtener el logo del equipo al que pertenece el jugador
             equipo_logo = obtener_logo_equipo(equipo_id)
 
+
              # Obtener el alineacion1_id y persona_id
             alineacion1_id = evento_gol.alineacion1_id.alineacion_id
             persona_id = evento_gol.alineacion1_id.contrato_id.persona_id
@@ -469,6 +463,7 @@ def lista_goleadores(request):
             print(f"Contrato ID: {contrato_id}")
             print(f"Equipo ID: {equipo_id}")
             print(f"Encuentro_Persona ID: {encuentro_persona_id}")
+            print(f"Equipo logo: {equipo_logo}")
 
             goleadores_list.append({
                 'alias': alias,

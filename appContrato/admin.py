@@ -18,7 +18,7 @@ class contratoAdmin(admin.ModelAdmin):
     list_display=['tipo_contrato','persona','tipo_persona','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
     ordering = ['persona']
     search_fields = ['contrato_id','tipo_persona','persona','tipo_contrato']
-    list_filter=['tipo_contrato']
+    list_filter=['tipo_contrato', 'nuevo_club']
     
 
 class tipoArbitroAdmin(admin.ModelAdmin):

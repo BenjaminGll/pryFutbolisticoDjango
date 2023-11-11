@@ -103,7 +103,7 @@ class encuentro(models.Model):
          ('E', 'EN JUEGO'),
          ('S', 'SUSPENDIDO'),
      ]
-
+    
     encuentro_id=models.BigAutoField(primary_key=True)
     competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')
     sede_id=models.ForeignKey(sede,on_delete=models.CASCADE,db_column='sede_id',blank=True,null=True)

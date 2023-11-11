@@ -1,7 +1,7 @@
 from calendar import c
 from unittest import case
 from django.forms import CharField
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render,redirect
 from appContrato.models import *
 from appEquipo.models import equipo, alineacion, encuentro_persona
 from appCompeticion.models import (
@@ -742,16 +742,33 @@ def index(request):
 
 
 
+def mostrarEncuentrosEvento(request):
+    competiciones = competicion.objects.all
+    encuentros = encuentro.objects.filter(estado_jugado=' ')
+    fases = fase.objects.all
+    grupos = grupo.objects.all
+    idEncuentro =None
 
-def mostrarEvento(request):
-    encuentros = encuentro.objects.filter(estado_jugado='E')
-    encuentro_idd = None
-    if request.method == 'GET':
-        encuentro_idd = request.GET.get('encuentro')  # Cambia 'GET' a 'POST'
-         # Imprime el valor de encuentro_idd para verificarlo
-        print(f"Valor de encuentro_idd: {encuentro_idd}")
-        eventos = evento.objects.filter(encuentro_id=encuentro_idd,estado_evento=True) 
-    
+    idCompeticion = request.GET.get('competicion') 
+    idFase = request.GET.get('fase') 
+    idGrupo = request.GET.get('grupo') 
+    print(idCompeticion,idFase,idGrupo)
+    if idCompeticion and idFase and idGrupo:
+
+        if request.method == 'GET':
+
+            encuentros = encuentro.objects.filter(estado_jugado='E',competicion_id=idCompeticion,fase_id=idFase,grupo_id=idGrupo)
+
+    if request.method == 'POST':
+        idEncuentro = request.POST.get('idEncuentro')
+        print("El encuentro id es: ",idEncuentro)
+        return redirect('mostrar_evento', idEncuentro=idEncuentro)         
+            
+    return render(request, 'moduloTV/listaEncuentros.html', {'competiciones':competiciones,'grupos':grupos,'fases':fases,'encuentros': encuentros,'idEncuentro':idEncuentro})
+
+def mostrarEvento(request,idEncuentro):
+    eventos = evento.objects.filter(encuentro_id=idEncuentro,estado_evento=True)
+
     if request.method == 'POST':
        
         eventos_seleccionados = request.POST.getlist('idEvento')
@@ -761,19 +778,16 @@ def mostrarEvento(request):
             print(f"Eventos seleccionado: {evento_seleccionado}")
             evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
-        eventos = evento.objects.filter(encuentro_id=encuentro_idd,estado_evento=True)
+            
+        eventos = evento.objects.filter(encuentro_id=idEncuentro,estado_evento=True)
+
         
 
-    # Imprime el resultado de eventos para verificarlo
-    print(f"Eventos filtrados: {eventos}")
-
-    return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'encuentros': encuentros})
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos})
 
 
 
-def eventosActualizar(idEncuentro):
 
-    return
 
 def guardar_eventos_temporales(eventos):
     default_storage.delete('eventos_temporales.json')

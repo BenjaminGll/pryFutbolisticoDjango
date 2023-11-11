@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from project.views import detalle_sede, lista_goleadores, obtener_eventos_ajax,contextoTVvivo,contextoTVhome,contextoGrupos,contextoSedes,contextoOrganizaciones,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,mostrarEvento,lista_equipos_por_competicion_y_fase
-from project.views import detalle_sede, contextoOrganizaciones, obtener_eventos_ajax,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index, mostrarEvento,lista_equipos_por_competicion_y_fase
+from project.views import detalle_sede, lista_goleadores, obtener_eventos_ajax,contextoTVvivo,contextoTVhome,contextoGrupos,contextoSedes,contextoOrganizaciones,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index,mostrarEvento,lista_equipos_por_competicion_y_fase,mostrarEncuentrosEvento
+# from project.views import detalle_sede, contextoOrganizaciones, obtener_eventos_ajax,contextoTVvivo,contextoTVhome,contextoSedes,contextoTablaPosiciones, contextoEncuentros,contadoresAdmin, contextoJugador,contextoEquipo,contextoCompetenciasFutbol,contextoContacto,contextoFixtureCompetencia,index, mostrarEvento,lista_equipos_por_competicion_y_fase
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,7 +31,8 @@ urlpatterns = [
     path('tvVivo/', contextoTVvivo),
     path('tvHome/', contextoTVhome),
     path('datostv', obtener_eventos_ajax),
-    path('Admintv/', mostrarEvento, name='mostrar_evento'),
+    path('admintv/<int:idEncuentro>/',mostrarEvento , name='mostrar_evento'),
+    path('admintv/encuentros', mostrarEncuentrosEvento, name='mostrar_encuentro_evento'),
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),

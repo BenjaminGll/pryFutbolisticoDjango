@@ -2,52 +2,67 @@
 {% block content %}
 <h1>Eventos</h1>
 <hr>
-<div class="col-12 mb-4 d-flex align-items-center justify-content-between">
-    <h5 class="mb-0 col-md-3">Seleccione un encuentro: </h5>
-    
-    <form method="GET" action="{% url 'mostrar_evento' %}">
-        {% csrf_token %}
-        <select class="form-control col-md-9" id="encuentro" name="encuentro" onchange="this.form.submit()">
-            <option value="">Seleccionar...</option> <!-- Opción en blanco -->
-            {% for encuentro in encuentros %}
-                <option value="{{ encuentro.encuentro_id }}">{{ encuentro }}</option>
-            {% endfor %}
-        </select>
-    </form>
+
+<!--  -->
+<div class="form-inline mb-4 table">
+    <div class="col-md-3 mb-2 text-center">
+        <h5>Tipo suceso</h5>
+    </div>
+    <div class="col-md-4 mb-2 text-center">
+        <h5>Motivo</h5>
+    </div>
+    <div class="col-md-2 mb-2 ">
+        
+
+        <h5>Tiempo</h5>
+
+
+    </div>
+    <div class="col-md-2 mb-2 ">
+        <h5>Duración</h5>
+    </div>
+
+    <div class="col-md-1 mb-2">
+        <h5></h5>
+    </div>
 </div>
-
-
+<!--  -->
 
 
 {% for e in eventos %}
 <div class="card mb-4">
     <div class="card-body">
-        <form class="form-inline" method="post" action="{% url 'mostrar_evento' %}" id="eventoForm">
+
+        <form class="form-inline"
+            action="{% if e.encuentro_id and e.encuentro_id.id %}{% url 'mostrar_evento' e.encuentro_id.id %}{% endif %}"
+            method="post" id="eventoForm">
+
+
+
             {% csrf_token %}
             <div class="col-md-3 mb-2 text-center">
-                <label for="evento"></label>
+                <!-- <label for="evento"></label>
                 <a href="#" data-toggle="modal" data-target="#verDetallesModal{{ e.evento_id }}">
                     <i class="fa fa-eye fa-2x"></i>
-                </a>
+                </a> -->
+                <h5> {{ e.tipo_evento_id }}</h5>
             </div>
-            <div class="col-md-3 mb-2">
+            <div class="col-md-4 mb-2">
+                <h5> {{ e.motivo }}</h5>
+            </div>
+            <div class="col-md-2 mb-2">
                 <input type="hidden" name="idEvento" value="{{ e.evento_id }}">
-                <h5>Tipo suceso: {{ e.tipo_evento_id }}</h5>
-                <h5>Tiempo reglamentario: {{ e.tiempo_reglamentario }}</h5>
-                <h5>Tiempo extra: {{ e.tiempo_extra }}</h5>
+
+                <h5> {{ e.tiempo_reglamentario }}</h5>
+
 
             </div>
             <div class="col-md-2 mb-2">
                 <input type="time" class="form-control" id="tiempo" name="tiempo">
             </div>
-            <div class="col-md-2 mb-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="mostrar" name="mostrar">
-                    <label class="form-check-label" for="mostrar">Mostrar/Ocultar</label>
-                </div>
-            </div>
-            <div class="col-md-2 mb-2">
-                <button type="submit" class="btn btn-primary">Enviar</button>
+
+            <div class="col-md-1 mb-2">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> </button>
             </div>
         </form>
     </div>
@@ -55,7 +70,7 @@
 
 <!-- Modal para ver detalles -->
 <!-- Modal para ver detalles -->
-<div class="modal fade" id="verDetallesModal{{ e.evento_id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+<!-- <div class="modal fade" id="verDetallesModal{{ e.evento_id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -98,8 +113,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 {% endfor %}
+
+
 {% endblock %}

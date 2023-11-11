@@ -91,7 +91,7 @@ class   descripcion_encuentro(models.Model):
         super(descripcion_encuentro, self).save(force_insert, force_update)
 
     def __str__(self):
-        return self.equipo
+        return str(self.equipo)
     class Meta:
         verbose_name_plural = 'descripcion_encuentro'
 

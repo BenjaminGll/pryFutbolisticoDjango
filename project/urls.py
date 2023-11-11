@@ -50,6 +50,14 @@ urlpatterns = [
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
     path('reporte/goleadores', lista_goleadores, name='lista_goleadores'),
     path('reporte/asistidores', lista_asistidores, name='lista_asistidores'),
+    
+    #Esta si se puede eliminar
+    path('reporte/organizacion', contextotablaorganizacion, name='lista_organizacion'),
+    #
+    path('reporte/organizacion/<int:orga_id>', contextotablaorganizacionindi, name='lista_organizacion_indi'),
+    path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
+
+
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),
     # path("futbol/tv/<int:id>", contextoTv),

@@ -51,7 +51,12 @@
                 <select name="competicion" id="competicion" class="form-control" onchange="this.form.submit()">
                     <option value="">--- Selecciona Competición ---</option>
                     {% for competicion in competiciones %}
-                        <option value="{{ competicion.competicion_id }}" {% if competicion.competicion_id|stringformat:"s" == request.GET.competicion %}selected{% endif %}>{{ competicion.nombre }}</option>
+                        <option value="{{ competicion.min_id }}"
+                            {% if competicion.min_id|stringformat:"s" == request.GET.competicion %}
+                                selected
+                            {% endif %}>
+                            {{ competicion.nombre }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>

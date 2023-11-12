@@ -761,7 +761,6 @@ def guardar_eventos_temporales(eventos):
 
     for evento in eventos:
         if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR':
-            print(evento.alineacion1_id.descripcion_encuentro_id.equipo.logo)
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion1_id} </span><img src="{static("img/entrada.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion2_id} </span><img src="{static("img/salida.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
@@ -769,11 +768,15 @@ def guardar_eventos_temporales(eventos):
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-        elif evento.tipo_evento_id.descripcion == 'HIMNO NACIONAL':
+        elif evento.tipo_evento_id.descripcion == 'HIMNO LOCAL':
             banner = {
-            'html': f'<div class="banner-container"> {evento.tipo_evento_id} DEL {evento.alineacion1_id.descripcion_encuentro_id.equipo}</div>'
+            'html': f'<div class="banner-container"> {evento.tipo_evento_id} DE {evento.alineacion1_id.descripcion_encuentro_id.equipo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-            ##
+        elif evento.tipo_evento_id.descripcion == 'HIMNO VISITA':
+            banner = {
+            'html': f'<div class="banner-container"> {evento.tipo_evento_id} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo}: <br> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            }
+          
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':
             #  jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id)
              jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id.descripcion_encuentro_id)

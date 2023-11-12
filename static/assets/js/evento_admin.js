@@ -28,15 +28,13 @@
         function actualizarAlineaciones() {
             var encuentroId =  $("#id_encuentro_id").val();
            
-            // Si no hay competición seleccionada, ocultar los encuentros
-            if (!competicionId) {
+            if (!encuentroId) {
                 $("#id_alineacion1_id option").remove();
                 $("#id_alineacion2_id option").remove();
                 return;
             }
 
                 
-                // Obtener detalles de alineaciones para el encuentro seleccionado
                 $.ajax({
                     url: "/appPartido/get_alineaciones/",
                     data: { encuentro_id: encuentroId },
@@ -62,7 +60,6 @@
         // Vincular la función al cambio en el campo de competición
         $("#id_encuentro_id").change(actualizarAlineaciones);
 
-        // Llamar a la función al cargar la página para inicializar los encuentros
-        actualizarAlineaciones();
+
     });
 })(django.jQuery);

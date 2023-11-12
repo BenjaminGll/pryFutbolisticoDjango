@@ -14,21 +14,24 @@ class ObtenerEncuentrosView(View):
 class ObtenerAlineacionesView(View):
     def get(self, request, *args, **kwargs):
         encuentro_id = request.GET.get('encuentro_id')
-        encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
-        descripcionEncuentroLocal_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_local)
-        descripcionEncuentroVisita_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_visita)
-        alineacionLocal_obj = alineacion.objects.get(descripcion_encuentro_id=descripcionEncuentroLocal_obj.descripcion_encuentro_id)
-        alineacionVisita_obj = alineacion.objects.get(descripcion_encuentro_id=descripcionEncuentroVisita_obj.descripcion_encuentro_id)
-        contratoLocal_obj = contrato.objects.get(contrato_id=alineacionLocal_obj.contrato_id)
-        contratoVisita_obj = contrato.objects.get(contrato_id=alineacionVisita_obj.contrato_id)
-        personaLocal_obj = persona.objects.get(persona_id=contratoLocal_obj.persona)
-        personaVisita_obj = persona.objects.get(persona_id=contratoVisita_obj.persona)
+        try:
+            encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+            descripcionEncuentroLocal_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_local)
+            descripcionEncuentroVisita_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_visita)
 
+            alineacionLocal_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroLocal_obj.descripcion_encuentro_id)
+            alineacionVisita_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroVisita_obj.descripcion_encuentro_id)
 
+            data = {
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato.persona)} for alineacion in alineacionLocal_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato.persona)} for alineacion in alineacionVisita_objs],
+            }
 
-        data = {
-            'alineacion_local': [str(p) for p in personaLocal_obj],
-            'alineacion_visita': [str(p) for p in personaVisita_obj],
-        }
-        return JsonResponse(data)
-
+            return JsonResponse(data)
+        except encuentro.DoesNotExist:
+            return JsonResponse({"error": "No se encontró el encuentro dado."}, status=404)
+        except alineacion.DoesNotExist:
+            return JsonResponse({"error": "No se encontró la alineación para el encuentro dado."}, status=404)
+        except Exception as e:
+            print(f"Excepción no manejada: {str(e)}")
+            return JsonResponse({"error": "Error interno del servidor."}, status=500)

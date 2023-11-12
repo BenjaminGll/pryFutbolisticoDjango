@@ -8,14 +8,15 @@
         <div class="row">
             <!-- Combobox para filtrar por tipo de organización -->
             <div class="col-md-12">
+                <h2>Reporte Sedes por competición</h2>
                 <form method="get" action="{% url 'sedes/filtrar' %}">
                     <div class="form-group">
                         <label for="competicionId">Competición:</label>
                         <select name="competicionId" id="competicionSelect" class="form-control">
                             <option value=""></option> <!-- Opción por defecto vacía -->
                             {% for competicion in competiciones %}
-                                <option value="{{ competicion.competicion_id }}"
-                                    {% if competicion.competicion_id == competicion_seleccionada %}
+                                <option value="{{ competicion.min_id }}"
+                                    {% if competicion.min_id|stringformat:"s" == request.GET.competicionId %}
                                         selected
                                     {% endif %}>
                                     {{ competicion.nombre }}
@@ -23,7 +24,6 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <!-- Elimina el botón "Filtrar" -->
                 </form>
             </div>
             <!-- Agrega un elemento <h2> para mostrar el nombre de la competición seleccionada -->

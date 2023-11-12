@@ -11,17 +11,13 @@ class ObteneraJugadoresView(View):
 
         try:
             descripcion_encuentro_obj = descripcion_encuentro.objects.get(descripcion_encuentro_id=de_id)
-            equipos = equipo.objects.filter(equipo_id=descripcion_encuentro_obj.equipo)
-            contratos = contrato.objects.filter(ultimo_club=equipos.equipo_id)
+            equipos = equipo.objects.get(nombre=descripcion_encuentro_obj.equipo)
+
+            contratos = contrato.objects.filter(nuevo_club=equipos.equipo_id)
         
             data = {contrato.contrato_id: str(contrato) for contrato in contratos}
             return JsonResponse(data)
         
-        except ObjectDoesNotExist:
-            return JsonResponse({"error": "El objeto no existe."}, status=404)
-        
-        except MultipleObjectsReturned:
-            return JsonResponse({"error": "Múltiples objetos encontrados. Revisa tus datos."}, status=500)
-        
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+            print(f"Excepción no manejada: {str(e)}")
+            return JsonResponse({"error": "Error interno del servidor."}, status=500)

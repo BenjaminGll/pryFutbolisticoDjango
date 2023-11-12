@@ -51,6 +51,7 @@ class AlineacionEquipoAdmin(admin.ModelAdmin):
     list_display=['posicion_jugador_id','dorsal','contrato_id','capitan','estado','descripcion_encuentro_id']
     ordering=['posicion_jugador_id']
     search_fields = ['descripcion_encuentro_id']
+    list_filter = ['descripcion_encuentro_id__equipo'] 
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js')
     

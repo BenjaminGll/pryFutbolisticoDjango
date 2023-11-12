@@ -9,7 +9,7 @@ from appPartido.models import *
 from appCompeticion.models import *
 
 from user.models import User
-from django.db.models import Count, Case, When, IntegerField, Value, F
+from django.db.models import *
 from itertools import chain
 from django.http import JsonResponse
 from django.templatetags.static import static
@@ -186,7 +186,7 @@ def obtener_sedes_por_organizacion(organizacion_id):
     return sedes
 
 def contextoSedes(request):
-    competiciones = competicion.objects.all()
+    competiciones = competicion.objects.values('nombre').annotate(min_id=Min('competicion_id')).order_by('nombre')
     competicion_id = request.GET.get("competicionId")
     sedes = (
         obtener_sedes_por_competicion(competicion_id)
@@ -273,7 +273,7 @@ def contextoGrupos(request):
 
 
 def lista_equipos_por_competicion_y_fase(request):
-    competiciones = competicion.objects.all()
+    competiciones = competicion.objects.values('nombre').annotate(min_id=Min('competicion_id')).order_by('nombre')
     fases = fase.objects.all()
     equipos = []
     competicion_seleccionada = None
@@ -413,138 +413,66 @@ def contextoFixtureCompetencia(request, nombre_competicion):
     }
 
     return render(request, 'fixtures.html', data)
-def lista_goleadores(request):
+
+def reporte_jugadores(request):
     competicion_id = request.GET.get('competicion', None)
-    goleadores_list = []
+    estadistica_tipo = request.GET.get('estadistica', 'goleadores')
+    print(f"Competicion ID: {competicion_id}")
+    print(f"estadistica ID: {estadistica_tipo}")
+    jugadores_list = []
     competiciones = competicion.objects.all()
     competicion_seleccionada = None
 
+    tipo_evento_map = {
+        'goleadores': 9,
+        'asistidores': 19,
+        'amarillas': 1,
+        'rojas': 2,
+    }
+    tipo_evento_id = tipo_evento_map.get(estadistica_tipo, 9)
+    print(f"Tipo evento ID: {tipo_evento_id}")
+    
     if competicion_id:
         competicion_seleccionada = competicion.objects.get(pk=competicion_id)
 
-        eventos_gol = evento.objects.filter(
-            tipo_evento_id=9, encuentro_id__competicion_id=competicion_id
+        # Agrupar eventos por jugador y contarlos
+        eventos_agrupados = evento.objects.filter(
+            tipo_evento_id=tipo_evento_id, 
+            encuentro_id__competicion_id=competicion_id
+        ).values(
+        'alineacion1_id__contrato_id__persona_id'
+        ).annotate(
+            total=Count('evento_id')
         )
 
-        for evento_gol in eventos_gol:
-            jugador_id = evento_gol.alineacion1_id.contrato_id.persona_id
-            jugador = persona.objects.get(persona_id=jugador_id)
-            ciudad_id = jugador.ciudad_id
-            pais_id = ciudad_id.pais_id
-
-            # Obtener el equipo_id del modelo encuentro_persona
-            encuentro_id = evento_gol.encuentro_id.encuentro_id
-            contrato_id = evento_gol.alineacion1_id.contrato_id.contrato_id
-            equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-
-            total_goles = evento.objects.filter(
-            tipo_evento_id=9, alineacion1_id__contrato_id__persona_id=jugador_id
-            ).count()
-
-            # Obtener el alias, ciudad y país del jugador
-            alias = jugador.alias
-            ciudad = ciudad_id.nombre
-            pais = pais_id.nombre
-
-            # Obtener el logo del equipo al que pertenece el jugador
-            equipo_logo = obtener_logo_equipo(equipo_id)
+        for evento_agrupado in eventos_agrupados:
+            jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
+            jugador = persona.objects.get(pk=jugador_id)
+            ultimo_evento = evento.objects.filter(
+                alineacion1_id__contrato_id__persona_id=jugador_id,
+                tipo_evento_id=tipo_evento_id
+            ).order_by('-encuentro_id').first()
+            print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
+            if ultimo_evento:
+                encuentro_id = ultimo_evento.encuentro_id
+                contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
+                equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
+                equipo_logo = obtener_logo_equipo(equipo_id)
+                logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
 
 
-             # Obtener el alineacion1_id y persona_id
-            alineacion1_id = evento_gol.alineacion1_id.alineacion_id
-            persona_id = evento_gol.alineacion1_id.contrato_id.persona_id
-
-            # Obtener el ID del modelo encuentro_persona
-            encuentro_persona_id = obtener_encuentro_persona_id(encuentro_id, contrato_id)
-
-            print(f"Evento ID: {evento_gol.evento_id}")
-            print(f"Jugador ID: {jugador_id}")
-            print(f"Alineacion1 ID: {alineacion1_id}")
-            print(f"Persona ID: {persona_id}")
-            print(f"Encuentro ID: {encuentro_id}")
-            print(f"Contrato ID: {contrato_id}")
-            print(f"Equipo ID: {equipo_id}")
-            print(f"Encuentro_Persona ID: {encuentro_persona_id}")
-            print(f"Equipo logo: {equipo_logo}")
-
-            goleadores_list.append({
-                'alias': alias,
-                'ciudad': ciudad,
-                'logo_bandera': pais,
+            jugadores_list.append({
+                'alias': jugador.alias,
+                'logo_bandera': logo_bandera,
                 'equipo_logo': equipo_logo,
-                'goles': total_goles,
+                'estadistica_valor': evento_agrupado['total'],
             })
 
-    return render(request, 'lista_jugadores_goles.html', {
-        'goleadores': goleadores_list,
+    return render(request, 'ReporteJugadores.html', {
+        'jugadores': jugadores_list,
         'competiciones': competiciones,
         'competicion_seleccionada': competicion_seleccionada,
-    })
-
-def lista_asistidores(request):
-    competicion_id = request.GET.get('competicion', None)
-    asistidores_list = []
-    competiciones = competicion.objects.all()
-    competicion_seleccionada = None
-
-    if competicion_id:
-        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
-
-        eventos_asistencia = evento.objects.filter(
-            tipo_evento_id = 19, encuentro_id__competicion_id=competicion_id
-        )
-
-        for evento_asistencia in eventos_asistencia:
-            jugador_id = evento_asistencia.alineacion1_id.contrato_id.persona_id
-            jugador = persona.objects.get(persona_id=jugador_id)
-            ciudad_id = jugador.ciudad_id
-            pais_id = ciudad_id.pais_id
-
-            # Obtener el equipo_id del modelo encuentro_persona
-            encuentro_id = evento_asistencia.encuentro_id.encuentro_id
-            contrato_id = evento_asistencia.alineacion1_id.contrato_id.contrato_id
-            equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-
-            total_asistencias = evento.objects.filter(
-            tipo_evento_id= 19, alineacion1_id__contrato_id__persona_id=jugador_id
-            ).count()
-
-            # Obtener el alias, ciudad y país del jugador
-            alias = jugador.alias
-            ciudad = ciudad_id.nombre
-            pais = pais_id.nombre
-
-            # Obtener el logo del equipo al que pertenece el jugador
-            equipo_logo = obtener_logo_equipo(equipo_id)
-
-             # Obtener el alineacion1_id y persona_id
-            alineacion1_id = evento_asistencia.alineacion1_id.alineacion_id
-            persona_id = evento_asistencia.alineacion1_id.contrato_id.persona_id
-
-            # Obtener el ID del modelo encuentro_persona
-            encuentro_persona_id = obtener_encuentro_persona_id(encuentro_id, contrato_id)
-
-            print(f"Evento ID: {evento_asistencia.evento_id}")
-            print(f"Jugador ID: {jugador_id}")
-            print(f"Alineacion1 ID: {alineacion1_id}")
-            print(f"Persona ID: {persona_id}")
-            print(f"Encuentro ID: {encuentro_id}")
-            print(f"Contrato ID: {contrato_id}")
-            print(f"Equipo ID: {equipo_id}")
-            print(f"Encuentro_Persona ID: {encuentro_persona_id}")
-
-            asistidores_list.append({
-                'alias': alias,
-                'ciudad': ciudad,
-                'logo_bandera': pais,
-                'equipo_logo': equipo_logo,
-                'asistencias': total_asistencias,
-            })
-
-    return render(request, 'lista_jugadores_asistencias.html', {
-        'asistidores': asistidores_list,
-        'competiciones': competiciones,
-        'competicion_seleccionada': competicion_seleccionada,
+        'estadistica_tipo': estadistica_tipo,
     })
 # def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
 #     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
@@ -833,7 +761,6 @@ def guardar_eventos_temporales(eventos):
 
     for evento in eventos:
         if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR':
-            print(evento.alineacion1_id.descripcion_encuentro_id.equipo.logo)
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion1_id} </span><img src="{static("img/entrada.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion2_id} </span><img src="{static("img/salida.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
@@ -841,13 +768,16 @@ def guardar_eventos_temporales(eventos):
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-        elif evento.tipo_evento_id.descripcion == 'HIMNO NACIONAL':
+        elif evento.tipo_evento_id.descripcion == 'HIMNO LOCAL':
             banner = {
-            'html': f'<div class="banner-container"> {evento.tipo_evento_id} DEL {evento.alineacion1_id.descripcion_encuentro_id.equipo}</div>'
+            'html': f'<div class="banner-container" style="font-size: 30px;">  <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.nombre} DE {evento.alineacion1_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-            ##
+        elif evento.tipo_evento_id.descripcion == 'HIMNO VISITA':
+            banner = {
+            'html': f'<div class="banner-container" style="font-size: 30px;"> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            }
+          
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':
-            #  jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id)
              jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id.descripcion_encuentro_id)
              jugadores_info = []
 
@@ -864,7 +794,7 @@ def guardar_eventos_temporales(eventos):
              banner = {
 
                         'html': f'''
-                                <div class="banner-container">
+                                <div class="banner-container"   style="top: 150px;">
                                     <div class="row">
 
                                         <div class="col-md-3">
@@ -897,11 +827,10 @@ def guardar_eventos_temporales(eventos):
                         '''
                     
                         }
-        
-            ###
+
         else:    
             banner = {
-                'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario} </div>'
+                'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>'
             }
         banners.append(banner)
 

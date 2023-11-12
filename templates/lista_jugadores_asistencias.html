@@ -39,8 +39,8 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ asistidor.alias }}</td>
                     <td>{{ asistidor.asistencias }}</td>
-                    <td><img src="{{ asistidor.equipo_logo.url }}" alt="Logo del Equipo" style="height:50px;"></td>
-                    <td><img src="{{ asistidor.logo_bandera.url }}" alt="Bandera" style="height:30px;"></td>
+                    <td><img src="{% static asistidor.equipo_logo %}" alt="Logo del Equipo" style="height:50px;"></td>
+                    <td><img src="{% static asistidor.logo_bandera %}" alt="Bandera" style="height:30px;"></td>
                 </tr>
                 {% empty %}
                 <tr>

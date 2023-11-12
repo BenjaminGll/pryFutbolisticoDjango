@@ -17,11 +17,6 @@ class ObteneraJugadoresView(View):
             data = {contrato.contrato_id: str(contrato) for contrato in contratos}
             return JsonResponse(data)
         
-        except ObjectDoesNotExist:
-            return JsonResponse({"error": "El objeto no existe."}, status=404)
-        
-        except MultipleObjectsReturned:
-            return JsonResponse({"error": "Múltiples objetos encontrados. Revisa tus datos."}, status=500)
-        
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+            print(f"Excepción no manejada: {str(e)}")
+            return JsonResponse({"error": "Error interno del servidor."}, status=500)

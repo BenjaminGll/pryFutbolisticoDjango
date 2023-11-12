@@ -178,7 +178,7 @@ class tipo_evento(models.Model):
         super(tipo_evento, self).save(force_insert, force_update)
 
     def __str__(self):
-        return self.descripcion
+        return self.nombre
 
     class Meta:
         verbose_name_plural='tipo_evento'
@@ -190,19 +190,18 @@ class evento(models.Model):
 
     encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
    
-    alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1')
-    alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2')
+    alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1', blank=True)
+    alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2', blank=True)
 
-    tiempo_reglamentario = models.TimeField(null=True)
-    tiempo_extra = models.TimeField(null=True)
+    tiempo_reglamentario = models.TimeField(null=True, blank=True)
+    tiempo_extra = models.TimeField(null=True, blank=True,)
     motivo = models.CharField(max_length=50, blank=True, null=True)
     cantidad = models.IntegerField(blank=True, null=True)
-    estado_evento = models.BooleanField(null=True)
+    estado_evento = models.BooleanField(null=True, blank=True,)
     
 
 
     def save(self, force_insert=False, force_update=False):
-        self.motivo = self.motivo.upper()
         super(evento, self).save(force_insert, force_update)
 
     def __str__(self):

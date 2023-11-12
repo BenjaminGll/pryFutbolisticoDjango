@@ -66,11 +66,10 @@
         // Vincular la función al cambio en el campo de competición
         $("#id_competicion_id").change(actualizarEncuentros);
 
-        // Llamar a la función al cargar la página para inicializar los encuentros
-        actualizarEncuentros();
+
 
         // Vincular la función al cambio en el campo de competición
         $("#id_encuentro_id").change(actualizarAlineaciones);
-        actualizarAlineaciones();
+
     });
 })(django.jQuery);

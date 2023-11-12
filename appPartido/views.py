@@ -23,8 +23,8 @@ class ObtenerAlineacionesView(View):
             alineacionVisita_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroVisita_obj.descripcion_encuentro_id)
 
             data = {
-                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato.persona)} for alineacion in alineacionLocal_objs],
-                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato.persona)} for alineacion in alineacionVisita_objs],
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
             }
 
             return JsonResponse(data)

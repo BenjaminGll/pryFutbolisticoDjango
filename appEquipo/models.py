@@ -103,9 +103,9 @@ class posicion_jugador(models.Model):
 #     class Meta:
 #         verbose_name_plural='alineacion_equipo'
 class alineacion(models.Model):
+    alineacion_id=models.BigAutoField(primary_key=True)
     descripcion_encuentro_id=models.ForeignKey('appPartido.descripcion_encuentro',on_delete=models.CASCADE,db_column='descripcion_encuentro_id',related_name='descripcion_encuentros')
     contrato_id=models.ForeignKey('appContrato.contrato',on_delete=models.CASCADE,db_column='contrato_id', null=True)
-    alineacion_id=models.BigAutoField(primary_key=True)
     dorsal=models.IntegerField(null=True)
     posicion_jugador_id=models.ForeignKey(posicion_jugador,on_delete=models.CASCADE,db_column='posicion_jugador_id',null=True)
     capitan=models.BooleanField(null=True)

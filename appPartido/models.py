@@ -178,7 +178,7 @@ class tipo_evento(models.Model):
         super(tipo_evento, self).save(force_insert, force_update)
 
     def __str__(self):
-        return self.descripcion
+        return self.nombre
 
     class Meta:
         verbose_name_plural='tipo_evento'

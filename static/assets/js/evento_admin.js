@@ -33,22 +33,26 @@
                 $("#id_alineacion2_id option").remove();
                 return;
             }
-
-                
-                $.ajax({
-                    url: "/appPartido/get_alineaciones/",
-                    data: { encuentro_id: encuentroId },
-                    dataType: 'json',
-                    success: function (data) {
-                        $("#id_alineacion1_id option").remove();
-                        $("#id_alineacion2_id option").remove();
-                        $.each(data, function (key, value) {
-                            $("#id_alineacion1_id").append($('<option></option>').attr('value', key).text(value));
-                            $("#id_alineacion2_id").append($('<option></option>').attr('value', key).text(value));
-                        });
-                    }
-                });
+        
+            $.ajax({
+                url: "/appPartido/get_alineaciones/",
+                data: { encuentro_id: encuentroId },
+                dataType: 'json',
+                success: function (data) {
+                    $("#id_alineacion1_id option").remove();
+                    $("#id_alineacion2_id option").remove();
+                    
+                    $.each(data.alineacion1_id, function (index, value) {
+                        $("#id_alineacion1_id").append($('<option></option>').attr('value', index).text(value));
+                    });
+        
+                    $.each(data.alineacion2_id, function (index, value) {
+                        $("#id_alineacion2_id").append($('<option></option>').attr('value', index).text(value));
+                    });
+                }
+            });
         }
+        
 
         // Vincular la función al cambio en el campo de competición
         $("#id_competicion_id").change(actualizarEncuentros);

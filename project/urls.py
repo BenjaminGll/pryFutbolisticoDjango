@@ -47,7 +47,7 @@ urlpatterns = [
     path("reporte/grupos", contextoGrupos, name="filtrar/grupos"),
     path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
-    path('reporte/jugadores', reporte_jugadores, name='reporte_jugadores'),
+    # path('reporte/jugadores', reporte_jugadores, name='reporte_jugadores'),
     
     #Esta si se puede eliminar
     path('reporte/organizacion', contextotablaorganizacion, name='lista_organizacion'),

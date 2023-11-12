@@ -770,11 +770,11 @@ def guardar_eventos_temporales(eventos):
             }
         elif evento.tipo_evento_id.descripcion == 'HIMNO LOCAL':
             banner = {
-            'html': f'<div class="banner-container" style="font-size: 16px;">  <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id} DE {evento.alineacion1_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            'html': f'<div class="banner-container" style="font-size: 16px;">  <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.nombre} DE {evento.alineacion1_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
         elif evento.tipo_evento_id.descripcion == 'HIMNO VISITA':
             banner = {
-            'html': f'<div class="banner-container" style="font-size: 16px;"> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            'html': f'<div class="banner-container" style="font-size: 16px;"> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
           
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':

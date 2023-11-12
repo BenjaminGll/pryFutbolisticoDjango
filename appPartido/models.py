@@ -202,7 +202,6 @@ class evento(models.Model):
 
 
     def save(self, force_insert=False, force_update=False):
-        self.motivo = self.motivo.upper()
         super(evento, self).save(force_insert, force_update)
 
     def __str__(self):

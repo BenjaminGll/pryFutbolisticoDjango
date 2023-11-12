@@ -108,7 +108,7 @@ class alineacion(models.Model):
     posicion_jugador_id=models.ForeignKey(posicion_jugador,on_delete=models.CASCADE,db_column='posicion_jugador_id',null=True)
     capitan=models.BooleanField(null=True)
     estado=models.BooleanField(null=True)
-    descripcion_encuentro_id=models.ForeignKey('appPartido.descripcion_encuentro',on_delete=models.CASCADE,db_column='descripcion_encuentro_id')
+    descripcion_encuentro_id=models.ForeignKey('appPartido.descripcion_encuentro',on_delete=models.CASCADE,db_column='descripcion_encuentro_id',related_name='descripcion_encuentros')
     contrato_id=models.ForeignKey('appContrato.contrato',on_delete=models.CASCADE,db_column='contrato_id', null=True)
     
     def __str__(self):

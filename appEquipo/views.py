@@ -11,9 +11,9 @@ class ObteneraJugadoresView(View):
 
         try:
             descripcion_encuentro_obj = descripcion_encuentro.objects.get(descripcion_encuentro_id=de_id)
-            equipos = equipo.objects.get(equipo=descripcion_encuentro_obj.equipo)
+            equipos = equipo.objects.get(nombre=descripcion_encuentro_obj.equipo)
 
-            contratos = contrato.objects.filter(ultimo_club=equipos.equipo_id)
+            contratos = contrato.objects.filter(nuevo_club=equipos.equipo_id)
         
             data = {contrato.contrato_id: str(contrato) for contrato in contratos}
             return JsonResponse(data)

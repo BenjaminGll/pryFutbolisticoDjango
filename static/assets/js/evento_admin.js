@@ -70,5 +70,6 @@
 
         // Vincular la función al cambio en el campo de competición
         $("#id_encuentro_id").change(actualizarAlineaciones);
+        actualizarAlineaciones();
     });
 })(django.jQuery);

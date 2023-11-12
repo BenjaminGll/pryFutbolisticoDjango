@@ -21,25 +21,35 @@
                     $.each(data, function (key, value) {
                         $("#id_encuentro_id").append($('<option></option>').attr('value', key).text(value));
                     });
-
-                    // Llamar a la función para obtener detalles de alineaciones cuando se selecciona un encuentro
-                    $("#id_encuentro_id").change(function () {
-                        var encuentroId = $(this).val();
-
-                        // Obtener detalles de alineaciones para el encuentro seleccionado
-                        $.ajax({
-                            url: "/appPartido/get_alineaciones/",
-                            data: { encuentro_id: encuentroId },
-                            dataType: 'json',
-                            success: function (alineaciones) {
-                                // Actualizar las vistas de las alineaciones en el formulario
-                                $("#id_alineacion1_id").val(alineaciones.alineacion_local);
-                                $("#id_alineacion2_id").val(alineaciones.alineacion_visita);
-                            }
-                        });
-                    });
+                    
                 }
             });
+        }
+        function actualizarAlineaciones() {
+            var encuentroId =  $("#id_encuentro_id").val();
+           
+            // Si no hay competición seleccionada, ocultar los encuentros
+            if (!competicionId) {
+                $("#id_alineacion1_id option").remove();
+                $("#id_alineacion2_id option").remove();
+                return;
+            }
+
+                
+                // Obtener detalles de alineaciones para el encuentro seleccionado
+                $.ajax({
+                    url: "/appPartido/get_alineaciones/",
+                    data: { encuentro_id: encuentroId },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#id_alineacion1_id option").remove();
+                        $("#id_alineacion2_id option").remove();
+                        $.each(data, function (key, value) {
+                            $("#id_alineacion1_id").append($('<option></option>').attr('value', key).text(value));
+                            $("#id_alineacion2_id").append($('<option></option>').attr('value', key).text(value));
+                        });
+                    }
+                });
         }
 
         // Vincular la función al cambio en el campo de competición
@@ -47,5 +57,12 @@
 
         // Llamar a la función al cargar la página para inicializar los encuentros
         actualizarEncuentros();
+
+
+        // Vincular la función al cambio en el campo de competición
+        $("#id_encuentro_id").change(actualizarAlineaciones);
+
+        // Llamar a la función al cargar la página para inicializar los encuentros
+        actualizarAlineaciones();
     });
 })(django.jQuery);

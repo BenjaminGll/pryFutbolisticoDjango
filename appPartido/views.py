@@ -10,6 +10,7 @@ class ObtenerEncuentrosView(View):
         encuentros = encuentro.objects.filter(competicion_id=competicion_id)
         data = {encuentro.encuentro_id: str(encuentro) for encuentro in encuentros}
         return JsonResponse(data)
+    
 class ObtenerAlineacionesView(View):
     def get(self, request, *args, **kwargs):
         encuentro_id = request.GET.get('encuentro_id')
@@ -22,13 +23,12 @@ class ObtenerAlineacionesView(View):
         contratoVisita_obj = contrato.objects.get(contrato_id=alineacionVisita_obj.contrato_id)
         personaLocal_obj = persona.objects.get(persona_id=contratoLocal_obj.persona)
         personaVisita_obj = persona.objects.get(persona_id=contratoVisita_obj.persona)
-      
+
 
 
         data = {
-            'alineacion_local': str(personaLocal_obj),
-            'alineacion_visita': str(personaVisita_obj),
+            'alineacion_local': [str(p) for p in personaLocal_obj],
+            'alineacion_visita': [str(p) for p in personaVisita_obj],
         }
         return JsonResponse(data)
-
 

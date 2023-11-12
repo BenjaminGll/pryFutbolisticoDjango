@@ -14,7 +14,7 @@ class ObteneraJugadoresView(View):
             equipos = equipo.objects.get(equipo_id=descripcion_encuentro_obj.equipo)
             contratos = contrato.objects.filter(ultimo_club=equipos.equipo_id)
         
-            data = {str(contrato.pk): str(contrato) for contrato in contratos}
+            data = {contrato.contrato_id: str(contrato) for contrato in contratos}
             return JsonResponse(data)
         
         except ObjectDoesNotExist:

@@ -9,7 +9,7 @@ from appPartido.models import *
 from appCompeticion.models import *
 
 from user.models import User
-from django.db.models import Count, Case, When, IntegerField, Value, F
+from django.db.models import *
 from itertools import chain
 from django.http import JsonResponse
 from django.templatetags.static import static
@@ -186,7 +186,7 @@ def obtener_sedes_por_organizacion(organizacion_id):
     return sedes
 
 def contextoSedes(request):
-    competiciones = competicion.objects.all()
+    competiciones = competicion.objects.values('nombre').annotate(min_id=Min('competicion_id')).order_by('nombre')
     competicion_id = request.GET.get("competicionId")
     sedes = (
         obtener_sedes_por_competicion(competicion_id)
@@ -273,7 +273,7 @@ def contextoGrupos(request):
 
 
 def lista_equipos_por_competicion_y_fase(request):
-    competiciones = competicion.objects.all()
+    competiciones = competicion.objects.values('nombre').annotate(min_id=Min('competicion_id')).order_by('nombre')
     fases = fase.objects.all()
     equipos = []
     competicion_seleccionada = None

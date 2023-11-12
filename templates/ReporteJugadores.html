@@ -6,7 +6,20 @@
 {% block content %}
 <section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
     <div class="container">
-        <h2>Reporte de Jugadores - {{ estadistica_tipo|capfirst }}</h2>
+        
+        <h2>
+            {% if estadistica_tipo == 'goleadores' %}
+                Estadística jugadores con más Goles
+            {% elif estadistica_tipo == 'asistidores' %}
+                Estadística jugadores con más Asistencias
+            {% elif estadistica_tipo == 'amarillas' %}
+                Estadística jugadores con más tarjetas Amarillas
+            {% elif estadistica_tipo == 'rojas' %}
+                Estadística jugadores con más tarjetas Rojas
+            {% else %}
+                Estadística de Jugadores
+            {% endif %}
+        </h2>
         <!-- Formulario para seleccionar competición y tipo de estadística -->
         <form method="get">
             <div class="form-group">
@@ -28,6 +41,11 @@
                 </select>
             </div>
         </form>
+        {% if competicion_seleccionada %}
+            <div class="text-center">
+                <img src="{{ competicion_seleccionada.logo_competicion.url }}" alt="Logo de la Competición" style="max-width: 200px; margin-bottom: 20px;" />
+            </div>
+        {% endif %}
         <!-- ... -->
 
         <table class="table">

@@ -31,7 +31,7 @@ urlpatterns = [
     path('contacto', contextoContacto),
     path('tvVivo/<int:id>', contextoTVvivo),
     path('tvHome/', contextoTVhome),
-    path('datostv', obtener_eventos_ajax),
+    path('datostv/', obtener_eventos_ajax),
     path('admintv/<int:idEncuentro>/',mostrarEvento , name='mostrar_evento'),
     path('admintv/encuentros', mostrarEncuentrosEvento, name='mostrar_encuentro_evento'),
     path('limpiar-eventos-temporales/', limpiar_eventos_temporales, name='limpiar_eventos_temporales'),

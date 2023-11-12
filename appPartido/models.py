@@ -190,14 +190,14 @@ class evento(models.Model):
 
     encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
    
-    alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1')
-    alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2')
+    alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1', blank=True)
+    alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2', blank=True)
 
-    tiempo_reglamentario = models.TimeField(null=True)
-    tiempo_extra = models.TimeField(null=True)
+    tiempo_reglamentario = models.TimeField(null=True, blank=True)
+    tiempo_extra = models.TimeField(null=True, blank=True,)
     motivo = models.CharField(max_length=50, blank=True, null=True)
     cantidad = models.IntegerField(blank=True, null=True)
-    estado_evento = models.BooleanField(null=True)
+    estado_evento = models.BooleanField(null=True, blank=True,)
     
 
 

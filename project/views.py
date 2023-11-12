@@ -794,7 +794,7 @@ def guardar_eventos_temporales(eventos):
              banner = {
 
                         'html': f'''
-                                <div class="banner-container"   style="top: 50%;">
+                                <div class="banner-container"   style="top: 150px;">
                                     <div class="row">
 
                                         <div class="col-md-3">

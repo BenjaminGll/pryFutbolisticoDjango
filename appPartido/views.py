@@ -22,21 +22,11 @@ class ObtenerAlineacionesView(View):
             alineacionLocal_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroLocal_obj.descripcion_encuentro_id)
             alineacionVisita_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroVisita_obj.descripcion_encuentro_id)
             
-            # Obtener una lista de IDs de contrato
-            contratoLocal_ids = [a.contrato_id_id for a in alineacionLocal_objs if a.contrato_id_id]
-            contratoVisita_ids = [a.contrato_id_id for a in alineacionVisita_objs if a.contrato_id_id]
 
-            # Filtrar contratos por IDs
-            contratoLocal_objs = contrato.objects.filter(contrato_id__in=contratoLocal_ids)
-            contratoVisita_objs = contrato.objects.filter(contrato_id__in=contratoVisita_ids)
-
-            # Obtener personas a partir de los contratos
-            personaLocal_objs = persona.objects.filter(persona_id__in=[c.persona_id for c in contratoLocal_objs])
-            personaVisita_objs = persona.objects.filter(persona_id__in=[c.persona_id for c in contratoVisita_objs])
 
             data = {
-                'alineacion1_id': [str(persona) for persona in personaLocal_objs],
-                'alineacion2_id': [str(persona) for persona in personaVisita_objs],
+                'alineacion1_id': [str(persona.contrato_id) for persona in alineacionLocal_objs],
+                'alineacion2_id': [str(persona.contrato_id) for persona in alineacionVisita_objs],
             }
 
             return JsonResponse(data)

@@ -25,8 +25,8 @@ class ObtenerAlineacionesView(View):
 
 
             data = {
-                'alineacion1_id': [str(persona.contrato_id) for persona in alineacionLocal_objs],
-                'alineacion2_id': [str(persona.contrato_id) for persona in alineacionVisita_objs],
+                'alineacion1_id': [str(alineacion.contrato_id) for alineacion in alineacionLocal_objs],
+                'alineacion2_id': [str(alineacion.contrato_id) for alineacion in alineacionVisita_objs],
             }
 
             return JsonResponse(data)

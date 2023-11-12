@@ -413,122 +413,67 @@ def contextoFixtureCompetencia(request, nombre_competicion):
     }
 
     return render(request, 'fixtures.html', data)
-def lista_goleadores(request):
+
+def reporte_jugadores(request):
     competicion_id = request.GET.get('competicion', None)
-    goleadores_list = []
+    estadistica_tipo = request.GET.get('estadistica', 'goleadores')
+    print(f"Competicion ID: {competicion_id}")
+    print(f"estadistica ID: {estadistica_tipo}")
+    jugadores_list = []
     competiciones = competicion.objects.all()
     competicion_seleccionada = None
 
+    tipo_evento_map = {
+        'goleadores': 9,
+        'asistidores': 19,
+        'amarillas': 1,
+        'rojas': 2,
+    }
+    tipo_evento_id = tipo_evento_map.get(estadistica_tipo, 9)
+    print(f"Tipo evento ID: {tipo_evento_id}")
+    
     if competicion_id:
         competicion_seleccionada = competicion.objects.get(pk=competicion_id)
 
-        eventos_gol = evento.objects.filter(
-            tipo_evento_id=9, encuentro_id__competicion_id=competicion_id
+        # Agrupar eventos por jugador y contarlos
+        eventos_agrupados = evento.objects.filter(
+            tipo_evento_id=tipo_evento_id, 
+            encuentro_id__competicion_id=competicion_id
+        ).values(
+        'alineacion1_id__contrato_id__persona_id'
+        ).annotate(
+            total=Count('evento_id')
         )
 
-        for evento_gol in eventos_gol:
-            jugador_id = evento_gol.alineacion1_id.contrato_id.persona_id
-            jugador = persona.objects.get(persona_id=jugador_id)
-            pais_id = jugador.ciudad_id.pais_id_id
+        for evento_agrupado in eventos_agrupados:
+            jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
+            jugador = persona.objects.get(pk=jugador_id)
+            ultimo_evento = evento.objects.filter(
+                alineacion1_id__contrato_id__persona_id=jugador_id,
+                tipo_evento_id=tipo_evento_id
+            ).order_by('-encuentro_id').first()
+            print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
+            if ultimo_evento:
+                encuentro_id = ultimo_evento.encuentro_id
+                contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
+                equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
+                equipo_logo = obtener_logo_equipo(equipo_id)
+                logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
 
-            # Obtener el equipo_id del modelo encuentro_persona
-            encuentro_id = evento_gol.encuentro_id.encuentro_id
-            contrato_id = evento_gol.alineacion1_id.contrato_id.contrato_id
-            equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
 
-            total_goles = evento.objects.filter(
-            tipo_evento_id=9, alineacion1_id__contrato_id__persona_id=jugador_id
-            ).count()
-
-            # Obtener el alias, ciudad y país del jugador
-            alias = jugador.alias
-
-            # Obtener el logo del equipo al que pertenece el jugador
-            equipo_logo = obtener_logo_equipo(equipo_id)
-
-            ciudad = jugador.ciudad_id
-            pais = ciudad.pais_id
-            logo_bandera = pais.logo_bandera.url if pais.logo_bandera else None
-
-             # Obtener el alineacion1_id y persona_id
-            alineacion1_id = evento_gol.alineacion1_id.alineacion_id
-            persona_id = evento_gol.alineacion1_id.contrato_id.persona_id
-
-            # Obtener el ID del modelo encuentro_persona
-            encuentro_persona_id = obtener_encuentro_persona_id(encuentro_id, contrato_id)
-
-            print(f"Evento ID: {evento_gol.evento_id}")
-            print(f"Jugador ID: {jugador_id}")
-            print(f"Alineacion1 ID: {alineacion1_id}")
-            print(f"Persona ID: {persona_id}")
-            print(f"Encuentro ID: {encuentro_id}")
-            print(f"Contrato ID: {contrato_id}")
-            print(f"Equipo ID: {equipo_id}")
-            print(f"Encuentro_Persona ID: {encuentro_persona_id}")
-            print(f"Equipo logo: {equipo_logo}")
-            print(f"Pais: {logo_bandera}")
-
-            goleadores_list.append({
-                'alias': alias,
+            jugadores_list.append({
+                'alias': jugador.alias,
                 'logo_bandera': logo_bandera,
                 'equipo_logo': equipo_logo,
-                'goles': total_goles,
+                'estadistica_valor': evento_agrupado['total'],
             })
 
-    return render(request, 'lista_jugadores_goles.html', {
-        'goleadores': goleadores_list,
+    return render(request, 'ReporteJugadores.html', {
+        'jugadores': jugadores_list,
         'competiciones': competiciones,
         'competicion_seleccionada': competicion_seleccionada,
+        'estadistica_tipo': estadistica_tipo,
     })
-
-def lista_asistidores(request):
-    competicion_id = request.GET.get('competicion', None)
-    asistidores_list = []
-    competiciones = competicion.objects.all()
-    competicion_seleccionada = None
-
-    if competicion_id:
-        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
-
-        eventos_asistencia = evento.objects.filter(
-            tipo_evento_id=19, encuentro_id__competicion_id=competicion_id
-        )
-
-        for evento_asistencia in eventos_asistencia:
-            jugador_id = evento_asistencia.alineacion1_id.contrato_id.persona_id
-            jugador = persona.objects.get(persona_id=jugador_id)
-
-            # Obtener ciudad y país como objetos
-            ciudad = jugador.ciudad_id
-            pais = ciudad.pais_id
-            logo_bandera = pais.logo_bandera.url if pais.logo_bandera else None
-
-            # Obtener el equipo_id del modelo encuentro_persona
-            encuentro_id = evento_asistencia.encuentro_id.encuentro_id
-            contrato_id = evento_asistencia.alineacion1_id.contrato_id.contrato_id
-            equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-
-            total_asistencias = evento.objects.filter(
-                tipo_evento_id=19, alineacion1_id__contrato_id__persona_id=jugador_id
-            ).count()
-
-            # Obtener el alias del jugador y el logo del equipo
-            alias = jugador.alias
-            equipo_logo = obtener_logo_equipo(equipo_id)
-
-            asistidores_list.append({
-                'alias': alias,
-                'logo_bandera': logo_bandera,
-                'equipo_logo': equipo_logo,
-                'asistencias': total_asistencias,
-            })
-
-    return render(request, 'lista_jugadores_asistencias.html', {
-        'asistidores': asistidores_list,
-        'competiciones': competiciones,
-        'competicion_seleccionada': competicion_seleccionada,
-    })
-
 # def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
 #     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
 #     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)

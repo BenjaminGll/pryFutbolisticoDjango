@@ -18,22 +18,18 @@ class ObtenerAlineacionesView(View):
             encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
             descripcionEncuentroLocal_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_local)
             descripcionEncuentroVisita_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_visita)
-            
+
             alineacionLocal_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroLocal_obj.descripcion_encuentro_id)
             alineacionVisita_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroVisita_obj.descripcion_encuentro_id)
-            
-
 
             data = {
-                'alineacion1_id': [str(alineacion.alineacion_id) for alineacion in alineacionLocal_objs],
-                'alineacion2_id': [str(alineacion.alineacion_id) for alineacion in alineacionVisita_objs],
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato.persona)} for alineacion in alineacionLocal_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato.persona)} for alineacion in alineacionVisita_objs],
             }
 
             return JsonResponse(data)
         except alineacion.DoesNotExist:
             return JsonResponse({"error": "No se encontró la alineación para el encuentro dado."}, status=404)
-        except contrato.DoesNotExist:
-            return JsonResponse({"error": "No se encontró un contrato para la alineación dada."}, status=404)
         except Exception as e:
             print(f"Excepción no manejada: {str(e)}")
             return JsonResponse({"error": "Error interno del servidor."}, status=500)

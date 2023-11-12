@@ -46,21 +46,22 @@
                 success: function (data) {
                     $("#id_alineacion1_id option").remove();
                     $("#id_alineacion2_id option").remove();
-
+        
                     // Agregar el primer ítem con -----------
                     $("#id_alineacion1_id").append($('<option></option>').attr('value', '').text('-----------'));
                     $("#id_alineacion2_id").append($('<option></option>').attr('value', '').text('-----------'));
                     
-                    $.each(data.alineacion1_id, function (index, value) {
-                        $("#id_alineacion1_id").append($('<option></option>').attr('value', index).text(value));
+                    $.each(data.alineacion1, function (index, value) {
+                        $("#id_alineacion1_id").append($('<option></option>').attr('value', value.id).text(value.jugador));
                     });
         
-                    $.each(data.alineacion2_id, function (index, value) {
-                        $("#id_alineacion2_id").append($('<option></option>').attr('value', index).text(value));
+                    $.each(data.alineacion2, function (index, value) {
+                        $("#id_alineacion2_id").append($('<option></option>').attr('value', value.id).text(value.jugador));
                     });
                 }
             });
         }
+        
 
         // Vincular la función al cambio en el campo de competición
         $("#id_competicion_id").change(actualizarEncuentros);

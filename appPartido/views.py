@@ -28,10 +28,10 @@ class ObtenerAlineacionesView(View):
             }
 
             return JsonResponse(data)
+        except encuentro.DoesNotExist:
+            return JsonResponse({"error": "No se encontró el encuentro dado."}, status=404)
         except alineacion.DoesNotExist:
             return JsonResponse({"error": "No se encontró la alineación para el encuentro dado."}, status=404)
         except Exception as e:
             print(f"Excepción no manejada: {str(e)}")
             return JsonResponse({"error": "Error interno del servidor."}, status=500)
-
-

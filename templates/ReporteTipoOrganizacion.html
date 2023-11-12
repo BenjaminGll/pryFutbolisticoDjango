@@ -13,15 +13,14 @@
             <div class="col-md-12">
                 <form method="get" action="{% url 'filtrar/organizaciones' %}">
                     <div class="form-group">
-                    <label for="tipo">Tipo de Organización:</label>
-                    <select name="tipo" id="tipo" class="form-control">
-                        <option value="">Todos</option>
-                        {% for tipo, label in tipos_organizacion %}
-                            <option value="{{ tipo }}" {% if tipo == tipo_seleccionado %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
+                        <label for="tipo">Tipo de Organización:</label>
+                        <select name="tipo" id="tipo" class="form-control" onchange="this.form.submit()">
+                            <option value="">Todos</option>
+                            {% for tipo, label in tipos_organizacion %}
+                                <option value="{{ tipo }}" {% if tipo == tipo_seleccionado %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <input type="submit" value="Filtrar" class="btn btn-primary">
                 </form>   
             </div>
             <!-- Tabla de organizaciones -->

@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label for="competicionId">Competición:</label>
                         <select name="competicionId" id="competicionSelect" class="form-control">
-                            <option value=""></option> <!-- Opción por defecto vacía -->
+                            <option value="">--- Selecciona Competición ---</option> <!-- Opción por defecto vacía -->
                             {% for competicion in competiciones %}
                                 <option value="{{ competicion.min_id }}"
                                     {% if competicion.min_id|stringformat:"s" == request.GET.competicionId %}

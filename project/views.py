@@ -778,7 +778,6 @@ def guardar_eventos_temporales(eventos):
             }
           
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':
-            #  jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id)
              jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id.descripcion_encuentro_id)
              jugadores_info = []
 
@@ -828,11 +827,10 @@ def guardar_eventos_temporales(eventos):
                         '''
                     
                         }
-        
-            ###
+
         else:    
             banner = {
-                'html': f'<div class="banner-container">Tiempo: {evento.tiempo_reglamentario} </div>'
+                'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>'
             }
         banners.append(banner)
 

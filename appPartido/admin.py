@@ -63,8 +63,7 @@ class eventoAdmin(admin.ModelAdmin):
     list_filter = ['competicion_id']
 
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js')
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/control_botones.js','assets/js/evento_admin.js',)
 
 
 admin.site.register(formacion,formacionAdmin)

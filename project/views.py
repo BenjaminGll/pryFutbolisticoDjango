@@ -446,27 +446,32 @@ def reporte_jugadores(request):
         )
 
         for evento_agrupado in eventos_agrupados:
-            jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
-            jugador = persona.objects.get(pk=jugador_id)
-            ultimo_evento = evento.objects.filter(
-                alineacion1_id__contrato_id__persona_id=jugador_id,
-                tipo_evento_id=tipo_evento_id
-            ).order_by('-encuentro_id').first()
-            print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
-            if ultimo_evento:
-                encuentro_id = ultimo_evento.encuentro_id
-                contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
-                equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-                equipo_logo = obtener_logo_equipo(equipo_id)
-                logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
+            try:
+                jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
+                jugador = persona.objects.get(pk=jugador_id)
+                ultimo_evento = evento.objects.filter(
+                    alineacion1_id__contrato_id__persona_id=jugador_id,
+                    tipo_evento_id=tipo_evento_id
+                ).order_by('-encuentro_id').first()
 
+                if ultimo_evento:
+                    print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
+                    encuentro_id = ultimo_evento.encuentro_id
+                    contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
+                    equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
+                    equipo_logo = obtener_logo_equipo(equipo_id)
+                    logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
 
-            jugadores_list.append({
-                'alias': jugador.alias,
-                'logo_bandera': logo_bandera,
-                'equipo_logo': equipo_logo,
-                'estadistica_valor': evento_agrupado['total'],
-            })
+                jugadores_list.append({
+                    'alias': jugador.alias,
+                    'logo_bandera': logo_bandera,
+                    'equipo_logo': equipo_logo,
+                    'estadistica_valor': evento_agrupado['total'],
+                })
+            except persona.DoesNotExist:
+                print(f"No se encontró un jugador con el ID {jugador_id}")
+            except Exception as e:
+                print(f"Ocurrió un error: {e}")
 
     return render(request, 'ReporteJugadores.html', {
         'jugadores': jugadores_list,
@@ -839,7 +844,6 @@ def guardar_eventos_temporales(eventos):
                         '''
                     
                         }
-
         else:    
             banner = {
                 'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>'

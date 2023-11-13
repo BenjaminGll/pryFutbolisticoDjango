@@ -75,7 +75,7 @@ class organizacion(models.Model):
         ('I', 'FEDERACIÓN INTERNACIONAL'),
         ('C', 'CONFEDERACIÓN'),
         ('L', 'LIGA'),
-        ('L', 'ASOCIACIÓN'),
+        ('A', 'ASOCIACIÓN'),
         
     ]
     organizacion_id=models.BigAutoField(primary_key=True)

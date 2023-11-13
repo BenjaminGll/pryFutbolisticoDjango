@@ -7,39 +7,34 @@ class formacionAdmin(admin.ModelAdmin):
     ordering=['formacion_id']
     search_fields = ['descripcion']
     list_per_page=5
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+
 class ciudadAdmin(admin.ModelAdmin):
     list_display=['nombre','norma','pais_id']
     ordering=['nombre']
     search_fields = ['nombre']
     list_per_page=5
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+
 
 class sedeAdmin(admin.ModelAdmin):
     list_display=['nombre','alias','capacidad','fecha_inauguracion','ciudad_id', 'imagen','estado']
     ordering=['nombre']
     search_fields = ['nombre']
     list_per_page=5
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+
 ##
 class descripcionEncuentroAdmin(admin.ModelAdmin):
     list_display=['encuentro','equipo','goles','goles_ronda_penales','resultado','formacion']
     ordering=['encuentro']
     search_fields = ['encuentro','equipo__nombre', 'encuentro__encuentro_id']
     list_per_page=5
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+
 class encuentroAdmin(admin.ModelAdmin):
     list_display=['competicion_id','equipo_local','equipo_visita','sede_id','fase','grupo','fecha','clima','estado_jugado']
     ordering=['competicion_id']
     search_fields = ['sede_id__nombre','competicion_id__nombre']
     list_per_page=5
     list_filter=['competicion_id']
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+
 
 # class detalleEncuentroAdmin(admin.ModelAdmin):
 #     list_display=['detalle_encuentro_id','encuentro_id','equipo_id','formacion_id','tipo_equipo','resultado']
@@ -51,8 +46,7 @@ class tipo_eventoAdmin(admin.ModelAdmin):
     ordering=['nombre']
     search_fields = ['nombre','tipo_evento_id']
     list_per_page=5
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+    
 
 
 
@@ -64,7 +58,7 @@ class eventoAdmin(admin.ModelAdmin):
 
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js')
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+
 
 
 admin.site.register(formacion,formacionAdmin)

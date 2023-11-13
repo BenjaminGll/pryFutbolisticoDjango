@@ -55,7 +55,6 @@ class eventoAdmin(admin.ModelAdmin):
     ordering = ['tipo_evento_id']
     search_fields = ['encuentro_id__equipo_local__nombre', 'encuentro_id__equipo_visita__nombre']
     list_filter = ['competicion_id']
-    list_per_page=4
 
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js')

@@ -446,32 +446,27 @@ def reporte_jugadores(request):
         )
 
         for evento_agrupado in eventos_agrupados:
-            try:
-                jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
-                jugador = persona.objects.get(pk=jugador_id)
-                ultimo_evento = evento.objects.filter(
-                    alineacion1_id__contrato_id__persona_id=jugador_id,
-                    tipo_evento_id=tipo_evento_id
-                ).order_by('-encuentro_id').first()
+            jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
+            jugador = persona.objects.get(pk=jugador_id)
+            ultimo_evento = evento.objects.filter(
+                alineacion1_id__contrato_id__persona_id=jugador_id,
+                tipo_evento_id=tipo_evento_id
+            ).order_by('-encuentro_id').first()
+            print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
+            if ultimo_evento:
+                encuentro_id = ultimo_evento.encuentro_id
+                contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
+                equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
+                equipo_logo = obtener_logo_equipo(equipo_id)
+                logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
 
-                if ultimo_evento:
-                    print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
-                    encuentro_id = ultimo_evento.encuentro_id
-                    contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
-                    equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-                    equipo_logo = obtener_logo_equipo(equipo_id)
-                    logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
 
-                jugadores_list.append({
-                    'alias': jugador.alias,
-                    'logo_bandera': logo_bandera,
-                    'equipo_logo': equipo_logo,
-                    'estadistica_valor': evento_agrupado['total'],
-                })
-            except persona.DoesNotExist:
-                print(f"No se encontró un jugador con el ID {jugador_id}")
-            except Exception as e:
-                print(f"Ocurrió un error: {e}")
+            jugadores_list.append({
+                'alias': jugador.alias,
+                'logo_bandera': logo_bandera,
+                'equipo_logo': equipo_logo,
+                'estadistica_valor': evento_agrupado['total'],
+            })
 
     return render(request, 'ReporteJugadores.html', {
         'jugadores': jugadores_list,
@@ -781,11 +776,18 @@ def guardar_eventos_temporales(eventos):
             banner = {
             'html': f'<div class="banner-container" style="font-size: 30px;"> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-        elif evento.tipo_evento_id.descripcion == 'PARTIDO SUSPENDIDO':
+        
+        elif evento.tipo_evento_id.descripcion == 'TIEMPO ADICIONAL DEL ENCUENTRO':
             banner = {
-            'html': f'<div class="banner-container" style="background-color: red; color: white; font-size: 30px; font-weight: bold; text-align: center; padding: 10px;">PARTIDO SUSPENDIDO</div>'
+                'html': f'<div class="banner-container" position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; z-index: 1;"> +{evento.cantidad} </div>'
+
             }
 
+
+        elif evento.tipo_evento_id.nombre == 'DIRECTOR TECNICO DE UN EQUIPO':
+            banner = {
+                'html': f'<div class="banner-container"><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/entrenador.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
+            }
           
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':
              jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id.descripcion_encuentro_id)
@@ -804,10 +806,10 @@ def guardar_eventos_temporales(eventos):
              banner = {
 
                         'html': f'''
-                                <div class="banner-container"   style="top: 150px;">
-                                    <div class="row">
-
-                                        <div class="col-md-3">
+                                <div class="banner-container"   style="position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; z-index: 1;">
+                                    <div class="row" style="display: flex;">
+    
+                                        <div class="col-md-3" style="position: relative; display: flex; flex-direction: column; align-items: center;">
                                             <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
                                                 {evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}
                                             </div>
@@ -837,6 +839,7 @@ def guardar_eventos_temporales(eventos):
                         '''
                     
                         }
+
         else:    
             banner = {
                 'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>'

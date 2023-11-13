@@ -776,6 +776,18 @@ def guardar_eventos_temporales(eventos):
             banner = {
             'html': f'<div class="banner-container" style="font-size: 30px;"> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
+        
+        elif evento.tipo_evento_id.descripcion == 'TIEMPO ADICIONAL DEL ENCUENTRO':
+            banner = {
+                'html': f'<div class="banner-container" position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; z-index: 1;"> +{evento.cantidad} </div>'
+
+            }
+
+
+        elif evento.tipo_evento_id.nombre == 'DIRECTOR TECNICO DE UN EQUIPO':
+            banner = {
+                'html': f'<div class="banner-container"><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/entrenador.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
+            }
           
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':
              jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id.descripcion_encuentro_id)
@@ -794,10 +806,10 @@ def guardar_eventos_temporales(eventos):
              banner = {
 
                         'html': f'''
-                                <div class="banner-container"   style="top: 150px;">
-                                    <div class="row">
-
-                                        <div class="col-md-3">
+                                <div class="banner-container"   style="position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; z-index: 1;">
+                                    <div class="row" style="display: flex;">
+    
+                                        <div class="col-md-3" style="position: relative; display: flex; flex-direction: column; align-items: center;">
                                             <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
                                                 {evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}
                                             </div>

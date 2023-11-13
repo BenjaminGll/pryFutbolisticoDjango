@@ -2329,7 +2329,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 .was-validated .form-control:valid, .form-control.is-valid, .was-validated
 .custom-select:valid,
 .custom-select.is-valid {
-  border-color:  #0069d9;
+  border-color: #28a745;
 }
 /* line 32, ../sass/bootstrap/mixins/_forms.scss */
 .was-validated .form-control:valid:focus, .form-control.is-valid:focus, .was-validated
@@ -2351,7 +2351,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 /* line 48, ../sass/bootstrap/mixins/_forms.scss */
 .was-validated .form-check-input:valid + .form-check-label, .form-check-input.is-valid + .form-check-label {
-  color:  #0069d9;
+  color: #28a745;
 }
 
 /* line 58, ../sass/bootstrap/mixins/_forms.scss */
@@ -2360,12 +2360,12 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 }
 /* line 61, ../sass/bootstrap/mixins/_forms.scss */
 .was-validated .custom-control-input:valid ~ .custom-control-description, .custom-control-input.is-valid ~ .custom-control-description {
-  color:  #0069d9;
+  color: #28a745;
 }
 
 /* line 71, ../sass/bootstrap/mixins/_forms.scss */
 .was-validated .custom-file-input:valid ~ .custom-file-control, .custom-file-input.is-valid ~ .custom-file-control {
-  border-color:  #0069d9;
+  border-color: #28a745;
 }
 /* line 74, ../sass/bootstrap/mixins/_forms.scss */
 .was-validated .custom-file-input:valid ~ .custom-file-control::before, .custom-file-input.is-valid ~ .custom-file-control::before {
@@ -2610,14 +2610,14 @@ fieldset[disabled] a.btn {
 /* line 54, ../sass/bootstrap/_buttons.scss */
 .btn-success {
   color: #fff;
-  background-color:  #0069d9;
-  border-color:  #0069d9;
+  background-color: #28a745;
+  border-color: #28a745;
 }
 /* line 12, ../sass/bootstrap/mixins/_buttons.scss */
 .btn-success:hover {
   color: #fff;
-  background-color:  #0069d9;
-  border-color:  #0069d9;
+  background-color: #218838;
+  border-color: #1e7e34;
 }
 /* line 18, ../sass/bootstrap/mixins/_buttons.scss */
 .btn-success:focus, .btn-success.focus {
@@ -2625,14 +2625,14 @@ fieldset[disabled] a.btn {
 }
 /* line 29, ../sass/bootstrap/mixins/_buttons.scss */
 .btn-success.disabled, .btn-success:disabled {
-  background-color:  #0069d9;
-  border-color:  #0069d9;
+  background-color: #28a745;
+  border-color: #28a745;
 }
 /* line 35, ../sass/bootstrap/mixins/_buttons.scss */
 .btn-success:active, .btn-success.active, .show > .btn-success.dropdown-toggle {
-  background-color:  #0069d9;
+  background-color: #218838;
   background-image: none;
-  border-color:  #0069d9
+  border-color: #1e7e34;
 }
 
 /* line 54, ../sass/bootstrap/_buttons.scss */

@@ -119,7 +119,7 @@ class alineacion(models.Model):
         verbose_name_plural='alineacion'
 
 
-
+from django.db import models
 
 class encuentro_persona(models.Model):
     encuentro_persona_id = models.AutoField(primary_key=True)
@@ -138,7 +138,7 @@ class encuentro_persona(models.Model):
     contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
 
     def _str_(self):
-        return str(self.encuentro_id)
+        return str(self.encuentro)
 
     class Meta:
         verbose_name_plural = 'encuentro_persona'

@@ -731,24 +731,21 @@ def mostrarEncuentrosEvento(request):
             
     return render(request, 'moduloTV/listaEncuentros.html', {'competiciones':competiciones,'grupos':grupos,'fases':fases,'encuentros': encuentros,'idEncuentro':idEncuentro})
 
-def mostrarEvento(request,idEncuentro):
-    eventos = evento.objects.filter(encuentro_id=idEncuentro,estado_evento=True)
+def mostrarEvento(request, idEncuentro):
+    tipo_filtro = request.GET.get('filtro', 'en_juego')
+    nombres_eventos = ["CRONOMETRO", "PARTIDO SUSPENDIDO"]
+    if tipo_filtro == 'generales':
+        eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True, tipo_evento_id__nombre__in=nombres_eventos)
+    elif tipo_filtro == 'en_juego':
+        eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True).exclude(tipo_evento_id__nombre__in=nombres_eventos)
+    else:
+        eventos = evento.objects.none()
 
     if request.method == 'POST':
-       
-        eventos_seleccionados = request.POST.getlist('idEvento')
-        eventos = evento.objects.filter(evento_id__in=eventos_seleccionados)
-        guardar_eventos_temporales(eventos)
-        for evento_seleccionado in eventos:
-            print(f"Eventos seleccionado: {evento_seleccionado}")
-            # evento_seleccionado.estado_evento = False
-            evento_seleccionado.save()
-            
-        eventos = evento.objects.filter(encuentro_id=idEncuentro,estado_evento=True)
+        # ... Tu lógica existente para manejar el método POST ...
+        pass
 
-        
-
-    return render(request, 'moduloTV/evento.html', {'eventos': eventos})
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos,'tipo_filtro': tipo_filtro})
 
 
 

@@ -21,21 +21,33 @@
         <div class="position-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link active" href="?filtro=generales">
                         Generales
                     </a>
-
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link active" href="#">Antes</a>
+                <li class="nav-item">
+                    <a class="nav-link active" href="?filtro=en_juego">
+                        En juego
+                    </a>
                 </li>
+                
                 <!-- Puedes agregar más opciones aquí en el futuro -->
             </ul>
         </div>
     </nav>
     
     <main class="content">
-        {% block content %}{% endblock %}
+        <h1>
+            {% if tipo_filtro == 'generales' %}
+                Eventos Generales
+            {% elif tipo_filtro == 'en_juego' %}
+                Eventos en Juego
+            {% else %}
+                Otros Eventos
+            {% endif %}
+        </h1>
+        {% block content %}
+        {% endblock %}
     </main>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

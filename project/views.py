@@ -782,6 +782,12 @@ def guardar_eventos_temporales(eventos):
                 'html': f'<div class="banner-container" position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; z-index: 1;"> +{evento.cantidad} </div>'
 
             }
+            
+        elif evento.tipo_evento_id.descripcion == 'PARTIDO SUSPENDIDO':
+            banner = {
+            'html': f'<div class="banner-container" style="position: absolute;top: -450px; background-color: red; color: white; font-size: 30px; font-weight: bold; text-align: center; padding: 10px; margin-top: -20px;">PARTIDO SUSPENDIDO</div>'
+            }
+
 
 
         elif evento.tipo_evento_id.nombre == 'DIRECTOR TECNICO DE UN EQUIPO':

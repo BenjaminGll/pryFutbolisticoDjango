@@ -19,30 +19,16 @@
   .banners-container {
     position: absolute;
     top: 98%;
-    right: 35%;
+    right: 30%;
     background-color: rgba(0, 0, 0, 0.7);
     color: white;
     text-align: center;
-
-    width: 500px;
+    width: 600px;
     font-size: 20px;
     border-radius: 5px;
     z-index: 1;
   }
 
-  .banner-cronometro {
-    position: absolute;
-    top: 98px;
-    right: 35px;
-    background-color: rgb(0, 0, 0);
-    color: white;
-    text-align: center;
-    height: 30px;
-    width: 100px;
-    font-size: 17px;
-    border-radius: 5px;
-    z-index: 1;
-  }
 
   .banner-marcadores {
     position: absolute;
@@ -59,35 +45,7 @@
   }
 
 
-  /* .banners-container {
-    position: absolute;
-    top: 14px;
-    right: 975px;
-    background-color: rgb(0, 0, 0);
-    color: white;
-    text-align: center;
-    height: 30px;
-    width: 180px;
-    font-size: 17px;
-    border-radius: 5px;
-    z-index: 1;
-  } */
-
-  .info-partido {
-    position: absolute;
-    top: 180px;
-    left: 1030px;
-    background-color: rgba(3, 255, 37, 0.688);
-    color: rgb(0, 0, 0);
-    text-align: center;
-    width: 300px;
-    font-size: 17px;
-    border-radius: 5px;
-    padding: 10px;
-    z-index: 1;
-    box-shadow: 0 0 50px rgba(3, 255, 37, 0.5);
-    /* Ajusta el valor de desenfoque (10px) y opacidad (0.5) según tus preferencias */
-  }
+ 
 </style>
 <div class="container">
   <!-- <h1>TV en Vivo - Partido de Fútbol</h1> -->
@@ -97,19 +55,14 @@
 
 
     <div class="banner-marcadores">
-        <span id="cronometro" style="background-color: rgb(210, 210, 210); color: black;">00:00</span>
-      <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
-        style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span
-        id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img
-        src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
-        style="margin-top:0px; width: 13%">
-    </div>
-    <!-- <div class="info-partido">
-        <h2>Información del Partido</h2>
-        <p><strong>Fecha del Partido:</strong> {{jugar_encuentro.fecha}}</p>
-        <p><strong>Equipos:</strong> {{equipo_a.nombre}} vs. {{equipo_b.nombre}}</p>
-        <p><strong>Estadio:</strong> {{estadio.nombre}}</p>
-      </div> -->
+      <span id="cronometro" style="background-color: rgb(210, 210, 210); color: black;">00:00</span>
+    <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
+      style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span
+      id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img
+      src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
+      style="margin-top:0px; width: 13%">
+  </div>
+
     <div id="banners-container" class="banners-container" style="display: none;">
       <!-- Contenido del banner -->
       <p></p>
@@ -184,7 +137,7 @@
   }
 
   // obtenerBanners();
-  setInterval(obtenerBanners, 3000);
+  setInterval(obtenerBanners, 2000);
 
   document.addEventListener('DOMContentLoaded', function() {
   var minutos = 0;
@@ -202,6 +155,61 @@
 </script>
 
 <!--  -->
+<!-- <script>
+  console.log("Fuera del bucle");
+
+  let bannerElement = null; 
+
+  function obtenerBanners() {
+    fetch('/datostv')
+      .then(response => response.json())
+      .then(data => {
+        const bannersContainer = document.getElementById('banners-container');
+        if (bannersContainer) {
+          const nuevosBanners = data.banners;
+
+          if (nuevosBanners.length > 0) {
+            const banner = nuevosBanners[0];
+
+            if (!bannerElement) {
+              bannerElement = document.createElement('div');
+              bannerElement.classList.add('banner-container');
+              bannersContainer.appendChild(bannerElement);
+            }
+            
+            bannerElement.innerHTML = banner.html; // Actualizar el HTML del banner actual
+            console.log('HTML del banner:', banner.html);
+            // Muestra banners-container
+            bannersContainer.style.display = 'block';
+
+            // Verifica si el banner es de tipo CRONÓMETRO
+            if (banner.html.includes('id="cronometro"')) {
+              // Banner de CRONÓMETRO, no aplicar la lógica de temporización
+              return;
+            }
+
+            // Oculta banners-container después de 10 segundos para banners no CRONÓMETRO
+            setTimeout(() => {
+              bannersContainer.style.display = 'none';
+              // Limpia el archivo temporal 'eventos_temporales.json'
+              fetch('/limpiar-eventos-temporales')
+                .then(response => response.json())
+                .then(data => {
+                  console.log('Archivo temporal limpiado:', data);
+                })
+                .catch(error => console.error(error));
+            }, 10000);
+          }
+        } else {
+          console.error('Elemento con ID "banners-container" no encontrado.');
+        }
+      })
+      .catch(error => console.error(error));
+  }
+
+  // obtenerBanners();
+  setInterval(obtenerBanners, 2000);
+</script> -->
 
 
 {% endblock %}

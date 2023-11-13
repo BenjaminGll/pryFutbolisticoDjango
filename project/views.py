@@ -646,6 +646,8 @@ def contextoTVvivo(request, id):
     
     return render(request, 'tvVivo.html', data)
 
+    
+
 def contextoTVhome(request):
     encuentros = encuentro.objects.filter(estado_jugado='E')  
     
@@ -743,7 +745,7 @@ def mostrarEvento(request, idEncuentro):
         for evento_seleccionado in eventos_para_actualizar:
             print(f"Eventos seleccionado: {evento_seleccionado}")
             # Suponiendo que quieras cambiar el estado_evento a False
-            # evento_seleccionado.estado_evento = False
+            evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
 
         # Redirige a la misma página para evitar reenvíos de formulario
@@ -761,7 +763,6 @@ def mostrarEvento(request, idEncuentro):
         eventos = evento.objects.none()
 
     return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'tipo_filtro': tipo_filtro})
-
         
 
 
@@ -782,7 +783,7 @@ def guardar_eventos_temporales(eventos):
             }
         elif evento.tipo_evento_id.nombre == 'HIMNO LOCAL':
             banner = {
-            'html': f'<div class="banner-container" style="font-size: 30px;"><img src="/static/images/{evento.encuentro_id.equipo_local.logo}"alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.descripcion} DE {evento.encuentro_id.equipo_local} <img src="/static/images/{evento.encuentro_id.equipo_local.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+                'html': f'<div class="banner-container" style="font-size: 30px; display: flex; align-items: center; justify-content: center;"><img src="/static/images/{evento.encuentro_id.equipo_local.logo}" alt="" style="margin-top: 0px; width: 6%"> {evento.tipo_evento_id.descripcion} DE {evento.encuentro_id.equipo_local} <img src="/static/images/{evento.encuentro_id.equipo_local.logo}" alt="" style="margin-top: 0px; width: 6%"></div>'
             }
         elif evento.tipo_evento_id.nombre == 'HIMNO VISITA':
             banner = {
@@ -802,26 +803,7 @@ def guardar_eventos_temporales(eventos):
         
         elif evento.tipo_evento_id.nombre == 'CRONOMETRO':
             banner = {
-            'html': '''
-            <div style="position: absolute; top: 0; left: 0; background-color: rgba(0, 0, 0, 0.6); color: white; text-align: center; padding: 10px; font-size: 20px; z-index: 100;">
-                <span id="cronometro">00:00</span>
-            </div>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var minutos = 0;
-                    var segundos = 0;
-                    var cronometroDisplay = document.getElementById('cronometro');
-                    var cronometro = setInterval(function() {
-                        segundos++;
-                        if (segundos == 60) {
-                            minutos++;
-                            segundos = 0;
-                        }
-                        cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
-                    }, 1000);
-                });
-            </script>
-            '''
+            'html': f'<div class="banners-container" style=" position: absolute;top: 230px; right: 1100px;background-color: rgb(210, 210, 210);color: black;text-align: center;height: 30px;width: 280px;font-size: 16px;border-radius: 5px;z-index: 1;"><span id="cronometro" style="background-color: rgb(210, 210, 210); color: black;">00:00</span><img src="{evento.encuentro_id.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}" alt=""style="margin-top:0px; width: 13%"><span> {evento.encuentro_id.equipo_local.siglas} </span><span id="marcador-local">0</span> - <spanid="marcador-visitante">0</span></span><span> {evento.encuentro_id.equipo_visita.siglas} </span><img src="{evento.encuentro_id.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}" alt=""style="margin-top:0px; width: 13%"></div>'
             }
 
 

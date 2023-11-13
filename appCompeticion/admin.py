@@ -8,6 +8,7 @@ class competicionAdmin(admin.ModelAdmin):
     ordering=['nombre']
     search_fields = ['nombre']
     list_filter=['nombre']
+    list_per_page=4
 
 class paisAdmin(admin.ModelAdmin):
     list_display = ['nombre','sigla','logo_bandera', 'estado']
@@ -46,6 +47,7 @@ class tablaAdmin(admin.ModelAdmin):
     ordering=['-puntos']
     search_fields = ['competicion_id','equipo_id']
     list_filter=['competicion_id']
+    list_per_page=4
     
 class organizacionAdmin(admin.ModelAdmin):
     list_display=['nombre_oficial','siglas','tipo','descripcion','estado','logo']

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n static %}
-{% block title %} Lista de jugadores por tarjetas amarillas {% endblock %}
+{% block title %} Lista de Competiciones {% endblock %}
 {% block content %}
 <!-- Add these to your HTML -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -31,7 +31,7 @@
             <div class="col-md-4">
                 <div class="breadcrumbs">
                     <ul>
-                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="/">Inicio</a></li>
                         <li>Competiciones</li>
                     </ul>
                 </div>
@@ -61,7 +61,13 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ compe.nombre }}</td>
-                        <td>{{ compe.estado }}</td>
+                        <td>
+                            {% if compe.estado %}
+                                En curso
+                            {% else %}
+                                Finalizado
+                            {% endif %}
+                        </td>
                         <td style="display: flex; justify-content: center;"><img
                                 src="{% static 'images/' %}{{ compe.logo_competicion }}" alt=""></td>
                         <td>

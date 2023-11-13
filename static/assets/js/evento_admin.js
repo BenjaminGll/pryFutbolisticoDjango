@@ -31,8 +31,14 @@
         }
 
         function actualizarAlineaciones() {
-            var encuentroId =  $("#id_encuentro_id").val();
-            
+            console.log("Función actualizarAlineaciones ejecutándose...");
+
+            var encuentroId = $("#id_encuentro_id").val();
+            var tipoEventoId = $("#id_tipo_evento_id").val();
+        
+            console.log("encuentroId:", encuentroId);
+            console.log("tipoEventoId:", tipoEventoId);
+        
             if (!encuentroId) {
                 $("#id_alineacion1_id option").remove();
                 $("#id_alineacion2_id option").remove();
@@ -41,7 +47,7 @@
         
             $.ajax({
                 url: "/appPartido/get_alineaciones/",
-                data: { encuentro_id: encuentroId },
+                data: { encuentro_id: encuentroId, tipo_evento_id: tipoEventoId }, // Pasa el tipo_evento_id en la solicitud
                 dataType: 'json',
                 success: function (data) {
                     $("#id_alineacion1_id option").remove();
@@ -50,7 +56,7 @@
                     // Agregar el primer ítem con -----------
                     $("#id_alineacion1_id").append($('<option></option>').attr('value', '').text('-----------'));
                     $("#id_alineacion2_id").append($('<option></option>').attr('value', '').text('-----------'));
-                    
+        
                     $.each(data.alineacion1, function (index, value) {
                         $("#id_alineacion1_id").append($('<option></option>').attr('value', value.id).text(value.jugador));
                     });
@@ -62,15 +68,15 @@
             });
         }
         
+        
 
         // Vincular la función al cambio en el campo de competición
         $("#id_competicion_id").change(actualizarEncuentros);
 
-        // Llamar a la función al cargar la página para inicializar los encuentros
-        actualizarEncuentros();
+
 
         // Vincular la función al cambio en el campo de competición
         $("#id_encuentro_id").change(actualizarAlineaciones);
-        actualizarAlineaciones();
+
     });
 })(django.jQuery);

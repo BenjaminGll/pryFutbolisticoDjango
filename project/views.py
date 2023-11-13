@@ -743,7 +743,7 @@ def mostrarEvento(request, idEncuentro):
         for evento_seleccionado in eventos_para_actualizar:
             print(f"Eventos seleccionado: {evento_seleccionado}")
             # Suponiendo que quieras cambiar el estado_evento a False
-            evento_seleccionado.estado_evento = False
+            # evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
 
         # Redirige a la misma página para evitar reenvíos de formulario
@@ -764,7 +764,6 @@ def mostrarEvento(request, idEncuentro):
 
         
 
-    return render(request, 'moduloTV/evento.html', {'eventos': eventos})
 
 
 

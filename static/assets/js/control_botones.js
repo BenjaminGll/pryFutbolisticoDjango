@@ -37,15 +37,15 @@
        // Ajustar anchos de campos de formulario, incluyendo los combobox
        $('form').find('input, select, textarea').each(function(){
         // Si es un campo de entrada o textarea, ajusta su ancho
-        if ($(this).is('input, textarea')) {
+        if ($(this).is('input[type!="button"][type!="submit"][type!="checkbox"], textarea')) {
             $(this).css({
-                'width': '100%', // Establecer el ancho al 100%
+                'width': '1150px', // Establecer el ancho al 100%
                 'box-sizing': 'border-box' // Considerar el padding y el borde en el ancho total
             });
         }
 
         // Si es un combobox (elemento select), también ajusta su ancho
-        if ($(this).is('select')) {
+        if ($(this).is('select, textarea')) {
             // Aplicar estilos directamente al elemento select
             $(this).css({
                 'width': '1150px', // Establecer el ancho al 100%

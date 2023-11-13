@@ -781,6 +781,11 @@ def guardar_eventos_temporales(eventos):
             banner = {
             'html': f'<div class="banner-container" style="font-size: 30px;"> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
+        elif evento.tipo_evento_id.descripcion == 'PARTIDO SUSPENDIDO':
+            banner = {
+            'html': f'<div class="banner-container" style="background-color: red; color: white; font-size: 30px; font-weight: bold; text-align: center; padding: 10px;">PARTIDO SUSPENDIDO</div>'
+            }
+
           
         elif evento.tipo_evento_id.descripcion == 'ALINEACION':
              jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion1_id.descripcion_encuentro_id.descripcion_encuentro_id)

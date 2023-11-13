@@ -16,7 +16,7 @@
   }
 
 
-  /* .banners-container {
+  .banners-container {
     position: absolute;
     top: 98%;
     right: 35%;
@@ -28,9 +28,7 @@
     font-size: 20px;
     border-radius: 5px;
     z-index: 1;
-  } */
-
-
+  }
 
   .banner-cronometro {
     position: absolute;
@@ -45,22 +43,6 @@
     border-radius: 5px;
     z-index: 1;
   }
-
-  
-  .banner-cronometro2 {
-    position: absolute;
-    top: 98px;
-    right: 35px;
-    background-color: rgb(0, 0, 0);
-    color: white;
-    text-align: center;
-    height: 30px;
-    width: 100px;
-    font-size: 17px;
-    border-radius: 5px;
-    z-index: 1;
-  }
-
 
   .banner-marcadores {
     position: absolute;
@@ -130,7 +112,11 @@
         <p><strong>Equipos:</strong> {{equipo_a.nombre}} vs. {{equipo_b.nombre}}</p>
         <p><strong>Estadio:</strong> {{estadio.nombre}}</p>
       </div> -->
+    <div id="banners-container" class="banners-container" style="display: none;">
+      <!-- Contenido del banner -->
+      <p></p>
 
+    </div>
   </div>
   <br>
   <br>
@@ -162,7 +148,7 @@
     fetch('/datostv')
       .then(response => response.json())
       .then(data => {
-        const bannersContainer = document.getElementById('banner-container');
+        const bannersContainer = document.getElementById('banners-container');
         if (bannersContainer) {
           const nuevosBanners = data.banners;
 

@@ -48,7 +48,7 @@
         if ($(this).is('select')) {
             // Aplicar estilos directamente al elemento select
             $(this).css({
-                'width': '1150px', // Establecer el ancho al 100%
+                'width': '1188px', // Establecer el ancho al 100%
                 'box-sizing': 'border-box' // Considerar el padding y el borde en el ancho total
             });
         }

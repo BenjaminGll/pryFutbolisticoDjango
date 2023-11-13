@@ -16,11 +16,14 @@ class ObtenerAlineacionesView(View):
         encuentro_id = request.GET.get('encuentro_id')
         try:
             encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
-            descripcionEncuentroLocal_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_local)
-            descripcionEncuentroVisita_obj = descripcion_encuentro.objects.get(equipo=encuentro_obj.equipo_visita)
 
-            alineacionLocal_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroLocal_obj.descripcion_encuentro_id)
-            alineacionVisita_objs = alineacion.objects.filter(descripcion_encuentro_id=descripcionEncuentroVisita_obj.descripcion_encuentro_id)
+            # Obtener todos los objetos que cumplen con la condición
+            descripcionEncuentroLocal_objs = descripcion_encuentro.objects.filter(equipo=encuentro_obj.equipo_local)
+            descripcionEncuentroVisita_objs = descripcion_encuentro.objects.filter(equipo=encuentro_obj.equipo_visita)
+
+            # Obtener alineaciones asociadas a los objetos obtenidos
+            alineacionLocal_objs = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+            alineacionVisita_objs = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
 
             data = {
                 'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
@@ -30,6 +33,8 @@ class ObtenerAlineacionesView(View):
             return JsonResponse(data)
         except encuentro.DoesNotExist:
             return JsonResponse({"error": "No se encontró el encuentro dado."}, status=404)
+        except descripcion_encuentro.DoesNotExist:
+            return JsonResponse({"error": "No se encontró la descripción del encuentro para el equipo dado."}, status=404)
         except alineacion.DoesNotExist:
             return JsonResponse({"error": "No se encontró la alineación para el encuentro dado."}, status=404)
         except Exception as e:

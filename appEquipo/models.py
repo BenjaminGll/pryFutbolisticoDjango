@@ -137,8 +137,8 @@ class encuentro_persona(models.Model):
     equipo_id = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
     contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
 
-    def _str_(self):
-        return str(self.encuentro)
+    def __str__(self):
+        return str(self.encuentro_persona_id)
 
     class Meta:
         verbose_name_plural = 'encuentro_persona'

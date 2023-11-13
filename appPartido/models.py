@@ -79,10 +79,10 @@ class descripcion_encuentro(models.Model):
     ]
 
     descripcion_encuentro_id = models.BigAutoField(primary_key=True)
-    tipo_equipo = models.CharField(max_length=10, choices=CHOICE_EQUIPO, blank=True, null=True)
-    goles = models.CharField(max_length=4,blank=True, null=True)
-    goles_ronda_penales = models.CharField(max_length=4,blank=True, null=True)
-    resultado = models.CharField(max_length=2, choices=CHOICE_RESULTADO,blank=True, null=True)
+    tipo_equipo = models.CharField(max_length=10, choices=CHOICE_EQUIPO, null=True)
+    goles = models.CharField(max_length=4)
+    goles_ronda_penales = models.CharField(max_length=4)
+    resultado = models.CharField(max_length=2, choices=CHOICE_RESULTADO,null=True)
     formacion = models.ForeignKey('formacion', on_delete=models.CASCADE, db_column='formacion_id', related_name='descripcion_encuentros', blank=True, null=True)
     equipo = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id', related_name='descripcion_encuentros', blank=True, null=True)
     encuentro = models.ForeignKey('encuentro', on_delete=models.CASCADE, db_column='encuentro_id', related_name='descripcion_encuentros', blank=True, null=True)
@@ -108,7 +108,7 @@ class encuentro(models.Model):
     competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')
     sede_id=models.ForeignKey(sede,on_delete=models.CASCADE,db_column='sede_id',blank=True,null=True)
     fase=models.ForeignKey("appCompeticion.fase", on_delete=models.CASCADE,db_column='fase',related_name='fase')
-    grupo=models.ForeignKey("appCompeticion.grupo", on_delete=models.CASCADE,db_column='grupo',related_name='grupo', blank=True,null=True)
+    grupo=models.ForeignKey("appCompeticion.grupo", on_delete=models.CASCADE,db_column='grupo',related_name='grupo')
     equipo_local=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_local',related_name='equipo_local')
     equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
     fecha=models.DateTimeField(blank=True,null=True)

@@ -8,30 +8,36 @@ class competicionAdmin(admin.ModelAdmin):
     ordering=['nombre']
     search_fields = ['nombre']
     list_filter=['nombre']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)   
 class paisAdmin(admin.ModelAdmin):
     list_display = ['nombre','sigla','logo_bandera', 'estado']
     ordering = ['nombre']
     search_fields = ['nombre','sigla','estado']
     list_per_page=6
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)   
 class deporteAdmin(admin.ModelAdmin):
     list_display=['nombre','estado']
     ordering=['deporte_id']
     search_fields = ['nombre']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)   
 class grupoAdmin(admin.ModelAdmin):
     list_display=['nombre']
     ordering=['nombre']
     search_fields = ['nombre']
     list_per_page =4
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)   
 
 class faseAdmin(admin.ModelAdmin):
     list_display=['nombre']
     ordering=['nombre']
     search_fields=['nombre']
     list_per_page =4
-    
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)    
 
 class detalle_grupoAdmin(admin.ModelAdmin):
     list_display=['competicion_id','fase_id','grupo_id','equipo_id']
@@ -39,29 +45,34 @@ class detalle_grupoAdmin(admin.ModelAdmin):
     ordering =['competicion_id']
     list_per_page =4
     list_filter=['competicion_id']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 
 class tablaAdmin(admin.ModelAdmin):
     list_display=['competicion_id','equipo_id','ganado','perdido','empatado','goles_favor','goles_contra','tarjetas_amarillas','tarjetas_rojas','puntos']
     ordering=['-puntos']
     search_fields = ['competicion_id','equipo_id']
     list_filter=['competicion_id']
-    
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class organizacionAdmin(admin.ModelAdmin):
     list_display=['nombre_oficial','siglas','tipo','descripcion','estado','logo']
     ordering=['nombre_oficial']
     search_fields = ['nombre_oficial']
     list_per_page=4
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class patrocinadorAdmin(admin.ModelAdmin):
     list_display=['nombre_patrocinador','nombre_abreviado','descripcion','estado','logo_1','logo_2']
     ordering=['nombre_patrocinador']
     search_fields=['nombre_patrocinador','nombre_abreviado']
     list_per_page=5
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class detalle_patrocinadorAdmin(admin.ModelAdmin):
     list_display=['competicion_id']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 admin.site.register(competicion,competicionAdmin)
 admin.site.register(pais,paisAdmin)
 admin.site.register(deporte,deporteAdmin)

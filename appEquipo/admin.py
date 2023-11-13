@@ -9,7 +9,8 @@ class categoriaEquipo(admin.ModelAdmin):
     list_display=['nombre']
     ordering=['nombre']
     search_fields=['nombre']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class equipoForm(ModelForm):
     class Meta:
         model = equipo
@@ -30,18 +31,21 @@ class equipoAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
     list_per_page=5
     list_filter=['categoria_equipo','tipo_equipo_id']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class tipoEquipoAdmin(admin.ModelAdmin):
     list_display=['descripcion']
     ordering=['tipo_equipo_id']
     search_fields = ['descripcion']
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class posicionJugadorAdmin(admin.ModelAdmin):
     list_display=['descripcion']
     ordering=['descripcion']
     search_fields = ['descripcion']
     list_per_page=5
-
+    class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 # class alineacionAdmin(admin.ModelAdmin):
 #     list_display=['alineacion_id','fecha_juego','descripcion','estado']
 #     ordering=['alineacion_id']
@@ -53,13 +57,13 @@ class AlineacionEquipoAdmin(admin.ModelAdmin):
     search_fields = ['descripcion_encuentro_id']
     list_filter = ['descripcion_encuentro_id__equipo'] 
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js')
-    
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js','assets/js/control_botones.js',)
 class EncuentroPersonaAdmin(admin.ModelAdmin):
      list_display = ['encuentro_persona_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado','contrato_id','encuentro_id', 'equipo_id']
      ordering = ['encuentro_persona_id']
      search_fields = ['equipo_id']
-
+     class Media:
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 
 
 admin.site.register(categoria_equipo,categoriaEquipo)

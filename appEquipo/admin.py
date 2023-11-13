@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.forms import TextInput, ModelForm
+from django.utils.html import format_html
 from appEquipo.models import *
 
 # Register your models here.
@@ -24,8 +25,31 @@ class equipoForm(ModelForm):
 
 class equipoAdmin(admin.ModelAdmin):
     form = equipoForm
-    list_display = ['nombre', 'presidente', 'logo', 'vestimenta_principal_color_principal','vestimenta_principal_color_secundario',
-                    'vestimenta_alterna_color_principal','vestimenta_alterna_color_secundario', 'portada', 'siglas',
+    def color_vestimenta_principal_principal(self, obj):
+        return format_html(
+            '<div style="width: 30px; height: 20px; background-color: {}"></div>',
+            obj.vestimenta_principal_color_principal
+        )
+
+    def color_vestimenta_principal_secundario(self, obj):
+        return format_html(
+            '<div style="width: 30px; height: 20px; background-color: {}"></div>',
+            obj.vestimenta_principal_color_secundario
+        )
+
+    def color_vestimenta_alterna_principal(self, obj):
+        return format_html(
+            '<div style="width: 30px; height: 20px; background-color: {}"></div>',
+            obj.vestimenta_alterna_color_principal
+        )
+
+    def color_vestimenta_alterna_secundario(self, obj):
+        return format_html(
+            '<div style="width: 30px; height: 20px; background-color: {}"></div>',
+            obj.vestimenta_alterna_color_secundario
+        )
+    list_display = ['nombre', 'presidente', 'logo', 'color_vestimenta_principal_principal','color_vestimenta_principal_secundario',
+                    'color_vestimenta_alterna_principal','color_vestimenta_alterna_secundario', 'portada', 'siglas',
                     'categoria_equipo', 'tipo_equipo_id', 'sede_id']
     ordering = ['nombre']
     search_fields = ['nombre']

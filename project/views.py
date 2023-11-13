@@ -766,7 +766,6 @@ def mostrarEvento(request, idEncuentro):
 
 
 
-
 def guardar_eventos_temporales(eventos):
     default_storage.delete('eventos_temporales.json')
     
@@ -802,9 +801,33 @@ def guardar_eventos_temporales(eventos):
 
             }
             
-        elif evento.tipo_evento_id.descripcion == 'PARTIDO SUSPENDIDO':
+        elif evento.tipo_evento_id.nombre == 'PARTIDO SUSPENDIDO':
             banner = {
-            'html': f'<div class="banner-container" style="position: absolute;top: -450px; background-color: red; color: white; font-size: 30px; font-weight: bold; text-align: center; padding: 10px; margin-top: -20px;">PARTIDO SUSPENDIDO</div>'
+            'html': f'<div class="banner-container" style="background-color: red; color: white">PARTIDO SUSPENDIDO</div>'
+            }
+        
+        elif evento.tipo_evento_id.nombre == 'CRONOMETRO':
+            banner = {
+            'html': '''
+            <div style="position: absolute; top: 0; left: 0; background-color: rgba(0, 0, 0, 0.6); color: white; text-align: center; padding: 10px; font-size: 20px; z-index: 100;">
+                <span id="cronometro">00:00</span>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var minutos = 0;
+                    var segundos = 0;
+                    var cronometroDisplay = document.getElementById('cronometro');
+                    var cronometro = setInterval(function() {
+                        segundos++;
+                        if (segundos == 60) {
+                            minutos++;
+                            segundos = 0;
+                        }
+                        cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
+                    }, 1000);
+                });
+            </script>
+            '''
             }
 
 

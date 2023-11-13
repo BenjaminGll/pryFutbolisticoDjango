@@ -781,13 +781,19 @@ def guardar_eventos_temporales(eventos):
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-        elif evento.tipo_evento_id.descripcion == 'HIMNO LOCAL':
+        elif evento.tipo_evento_id.nombre == 'HIMNO LOCAL':
             banner = {
-            'html': f'<div class="banner-container" style="font-size: 30px;">  <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.nombre} DE {evento.alineacion1_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            'html': f'<div class="banner-container" style="font-size: 30px;">
+            <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}"
+            alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.nombre} DE {evento.alineacion1_id.descripcion_encuentro_id.equipo} 
+            <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-        elif evento.tipo_evento_id.descripcion == 'HIMNO VISITA':
+        elif evento.tipo_evento_id.nombre == 'HIMNO VISITA':
             banner = {
-            'html': f'<div class="banner-container" style="font-size: 30px;"> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            'html': f'<div class="banner-container" style="font-size: 30px;">
+            <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}"
+            alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} 
+            <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
         
         elif evento.tipo_evento_id.descripcion == 'TIEMPO ADICIONAL DEL ENCUENTRO':

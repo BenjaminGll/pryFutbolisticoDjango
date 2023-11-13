@@ -4,22 +4,38 @@
 {% block title %}Reporte de Jugadores{% endblock %}
 
 {% block content %}
+<div class="section-title" style="background:url(/static/img/background-fifa.webp)">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>{% if estadistica_tipo == 'goleadores' %}
+                    Estadística jugadores con más Goles
+                {% elif estadistica_tipo == 'asistidores' %}
+                    Estadística jugadores con más Asistencias
+                {% elif estadistica_tipo == 'amarillas' %}
+                    Estadística jugadores con más tarjetas Amarillas
+                {% elif estadistica_tipo == 'rojas' %}
+                    Estadística jugadores con más tarjetas Rojas
+                {% else %}
+                    Estadística de Jugadores
+                {% endif %}</h1>
+            </div>
+
+            <div class="col-md-4">
+                <div class="breadcrumbs">
+                    <ul>
+                        <li><a href="/">Inicio</a></li>
+                        <li>Reportes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
     <div class="container">
-        
-        <h2>
-            {% if estadistica_tipo == 'goleadores' %}
-                Estadística jugadores con más Goles
-            {% elif estadistica_tipo == 'asistidores' %}
-                Estadística jugadores con más Asistencias
-            {% elif estadistica_tipo == 'amarillas' %}
-                Estadística jugadores con más tarjetas Amarillas
-            {% elif estadistica_tipo == 'rojas' %}
-                Estadística jugadores con más tarjetas Rojas
-            {% else %}
-                Estadística de Jugadores
-            {% endif %}
-        </h2>
+
         <!-- Formulario para seleccionar competición y tipo de estadística -->
         <form method="get">
             <div class="form-group">

@@ -784,16 +784,16 @@ def guardar_eventos_temporales(eventos):
         elif evento.tipo_evento_id.nombre == 'HIMNO LOCAL':
             banner = {
             'html': f'<div class="banner-container" style="font-size: 30px;">
-            <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}"
-            alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.nombre} DE {evento.alineacion1_id.descripcion_encuentro_id.equipo} 
-            <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            <img src="/static/images/{evento.encuentro_id.equipo_local.equipo_local.logo}"
+            alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.descripcion} DE {evento.encuentro_id.equipo_local.equipo_local} 
+            <img src="/static/images/{evento.encuentro_id.equipo_local.equipo_local.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
         elif evento.tipo_evento_id.nombre == 'HIMNO VISITA':
             banner = {
             'html': f'<div class="banner-container" style="font-size: 30px;">
-            <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}"
-            alt="" style="margin-top:0px; width: 6%">{evento.tipo_evento_id.nombre} DE {evento.alineacion2_id.descripcion_encuentro_id.equipo} 
-            <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
+            <img src="/static/images/{evento.encuentro_id.equipo_visita.equipo_local.logo}"
+            alt="" style="margin-top:0px; width: 6%"> {evento.tipo_evento_id.descripcion} DE {evento.encuentro_id.equipo_local.equipo_local} 
+            <img src="/static/images/{evento.encuentro_id.equipo_visita.equipo_local.logo}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
         
         elif evento.tipo_evento_id.descripcion == 'TIEMPO ADICIONAL DEL ENCUENTRO':

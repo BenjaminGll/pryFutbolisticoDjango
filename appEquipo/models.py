@@ -119,7 +119,7 @@ class alineacion(models.Model):
         verbose_name_plural='alineacion'
 
 
-from django.db import models
+
 
 class encuentro_persona(models.Model):
     encuentro_persona_id = models.AutoField(primary_key=True)

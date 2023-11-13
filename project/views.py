@@ -731,26 +731,40 @@ def mostrarEncuentrosEvento(request):
             
     return render(request, 'moduloTV/listaEncuentros.html', {'competiciones':competiciones,'grupos':grupos,'fases':fases,'encuentros': encuentros,'idEncuentro':idEncuentro})
 
-def mostrarEvento(request,idEncuentro):
-    eventos = evento.objects.filter(encuentro_id=idEncuentro,estado_evento=True)
-
+def mostrarEvento(request, idEncuentro):
+    # Manejo de la solicitud POST
     if request.method == 'POST':
-       
         eventos_seleccionados = request.POST.getlist('idEvento')
-        eventos = evento.objects.filter(evento_id__in=eventos_seleccionados)
-        guardar_eventos_temporales(eventos)
-        for evento_seleccionado in eventos:
+        eventos_para_actualizar = evento.objects.filter(evento_id__in=eventos_seleccionados)
+        
+        # Aquí asumo que 'guardar_eventos_temporales' es una función que necesitas ejecutar.
+        guardar_eventos_temporales(eventos_para_actualizar)
+
+        for evento_seleccionado in eventos_para_actualizar:
             print(f"Eventos seleccionado: {evento_seleccionado}")
-            # evento_seleccionado.estado_evento = False
+            # Suponiendo que quieras cambiar el estado_evento a False
+            evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
-            
-        eventos = evento.objects.filter(encuentro_id=idEncuentro,estado_evento=True)
+
+        # Redirige a la misma página para evitar reenvíos de formulario
+        return redirect('mostrar_evento', idEncuentro=idEncuentro)
+
+    # Manejo de la solicitud GET
+    tipo_filtro = request.GET.get('filtro', 'en_juego')
+    nombres_eventos_generales = ["CRONOMETRO", "PARTIDO SUSPENDIDO"]
+
+    if tipo_filtro == 'generales':
+        eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True, tipo_evento_id__nombre__in=nombres_eventos_generales)
+    elif tipo_filtro == 'en_juego':
+        eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales)
+    else:
+        eventos = evento.objects.none()
+
+    return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'tipo_filtro': tipo_filtro})
 
         
 
     return render(request, 'moduloTV/evento.html', {'eventos': eventos})
-
-
 
 
 

@@ -1794,18 +1794,18 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 }
 
 .was-validated .form-check-input:valid + .form-check-label, .form-check-input.is-valid + .form-check-label {
-  color: #28a745;
+  color:  #0069d9;
 }
 
 .was-validated .custom-control-input:valid ~ .custom-control-indicator, .custom-control-input.is-valid ~ .custom-control-indicator {
   background-color: rgba(40, 167, 69, 0.25);
 }
 .was-validated .custom-control-input:valid ~ .custom-control-description, .custom-control-input.is-valid ~ .custom-control-description {
-  color: #28a745;
+  color:  #0069d9;
 }
 
 .was-validated .custom-file-input:valid ~ .custom-file-control, .custom-file-input.is-valid ~ .custom-file-control {
-  border-color: #28a745;
+  border-color:  #0069d9;
 }
 .was-validated .custom-file-input:valid ~ .custom-file-control::before, .custom-file-input.is-valid ~ .custom-file-control::before {
   border-color: inherit;
@@ -2007,25 +2007,25 @@ fieldset[disabled] a.btn {
 
 .btn-success {
   color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: #0069d9;
+  border-color: #0069d9;
 }
 .btn-success:hover {
   color: #fff;
-  background-color: #218838;
-  border-color: #1e7e34;
+  background-color:  #0069d9;
+  border-color:  #0069d9;
 }
 .btn-success:focus, .btn-success.focus {
   box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5);
 }
 .btn-success.disabled, .btn-success:disabled {
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color:  #0069d9;
+  border-color:  #0069d9;
 }
 .btn-success:active, .btn-success.active, .show > .btn-success.dropdown-toggle {
-  background-color: #218838;
+  background-color:  #0069d9;
   background-image: none;
-  border-color: #1e7e34;
+  border-color:  #0069d9;
 }
 
 .btn-info {

@@ -827,7 +827,6 @@ def guardar_eventos_temporales(eventos):
                         '''
                     
                         }
-
         else:    
             banner = {
                 'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>'

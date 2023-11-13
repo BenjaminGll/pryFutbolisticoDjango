@@ -32,7 +32,7 @@
 
         function actualizarAlineaciones() {
             var encuentroId =  $("#id_encuentro_id").val();
-           
+            
             if (!encuentroId) {
                 $("#id_alineacion1_id option").remove();
                 $("#id_alineacion2_id option").remove();

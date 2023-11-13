@@ -208,7 +208,7 @@ def contextoSedes(request):
 
 def detalle_sede(request, sede_id):
     sede_instance = get_object_or_404(sede, pk=sede_id)  # Cambia sede_id a pk
-    print(f"sede ID: {sede_instance.imagen}")
+    # Aquí puedes agregar más contexto si es necesario
     return render(request, "detalle_sede.html", {"sede": sede_instance})
 
 def contextoOrganizaciones(request):
@@ -444,33 +444,29 @@ def reporte_jugadores(request):
         ).annotate(
             total=Count('evento_id')
         )
-        print(f"Evento: {eventos_agrupados}")
+
         for evento_agrupado in eventos_agrupados:
             jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
-            try:
-                jugador = persona.objects.get(pk=jugador_id)
-                ultimo_evento = evento.objects.filter(
-                    alineacion1_id__contrato_id__persona_id=jugador_id,
-                    tipo_evento_id=tipo_evento_id
-                ).order_by('-encuentro_id').first()
-                print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
-                if ultimo_evento:
-                    encuentro_id = ultimo_evento.encuentro_id
-                    contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
-                    equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-                    equipo_logo = obtener_logo_equipo(equipo_id)
-                    logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
-            
-                print(f"url: {logo_bandera}")
-                print(f"url: {equipo_logo}")
-                jugadores_list.append({
-                    'alias': jugador.alias,
-                    'logo_bandera': logo_bandera,
-                    'equipo_logo': equipo_logo,
-                    'estadistica_valor': evento_agrupado['total'],
-                })
-            except persona.DoesNotExist:
-                continue
+            jugador = persona.objects.get(pk=jugador_id)
+            ultimo_evento = evento.objects.filter(
+                alineacion1_id__contrato_id__persona_id=jugador_id,
+                tipo_evento_id=tipo_evento_id
+            ).order_by('-encuentro_id').first()
+            print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
+            if ultimo_evento:
+                encuentro_id = ultimo_evento.encuentro_id
+                contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
+                equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
+                equipo_logo = obtener_logo_equipo(equipo_id)
+                logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
+
+
+            jugadores_list.append({
+                'alias': jugador.alias,
+                'logo_bandera': logo_bandera,
+                'equipo_logo': equipo_logo,
+                'estadistica_valor': evento_agrupado['total'],
+            })
 
     return render(request, 'ReporteJugadores.html', {
         'jugadores': jugadores_list,

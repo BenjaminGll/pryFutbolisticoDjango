@@ -2,30 +2,13 @@
 {% load i18n static %}
 {% block title %} Lista de sedes por organización {% endblock %}
 {% block content %}
-<div class="section-title" style="background:url(/static/img/background-fifa.webp)">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <h1>Reporte Sedes por competición</h1>
-            </div>
-
-            <div class="col-md-4">
-                <div class="breadcrumbs">
-                    <ul>
-                        <li><a href="/">Inicio</a></li>
-                        <li>Reportes</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
     <div class="container">
         <div class="row">
             <!-- Combobox para filtrar por tipo de organización -->
             <div class="col-md-12">
+                <h2>Reporte Sedes por competición</h2>
                 <form method="get" action="{% url 'sedes/filtrar' %}">
                     <div class="form-group">
                         <label for="competicionId">Competición:</label>

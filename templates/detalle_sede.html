@@ -11,12 +11,12 @@
         <!-- Imagen de la sede -->
         <div class="sede-imagen">
             {% if sede.imagen %}
-                <img src="{% static sede.imagen.url %}" alt="Imagen de {{ sede.nombre }}" width="400" height="200">  
+                <img src="{{ sede.imagen.url }}" alt="Imagen de {{ sede.nombre }}">
             {% else %}
                 <p>No hay imagen disponible.</p>
             {% endif %}
         </div>
-        <br>
+        
         <!-- Descripción de la sede -->
         <div class="sede-descripcion">
             <h2>Descripción</h2>

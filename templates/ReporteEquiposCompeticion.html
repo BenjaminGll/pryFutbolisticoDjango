@@ -33,26 +33,11 @@
 
 {% block title %} Lista de equipos por competición y fase {% endblock %}
 {% block content %}
-<div class="section-title" style="background:url(/static/img/background_fixture.webp)">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <h1>Equipos por Competición y Fase</h1>
-            </div>
 
-            <div class="col-md-4">
-                <div class="breadcrumbs">
-                    <ul>
-                        <li><a href="/">Inicio</a></li>
-                        <li>Reportes</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <section class="content-info" style="margin-top: 20px; margin-bottom: 20px">
     <div class="container">
+        <h2>Equipos por Competición y Fase</h2>
+        
         {% if competicion_seleccionada %}
             <div class="text-center">
                 <img src="{{ competicion_seleccionada.logo_competicion.url }}" alt="Logo de la Competición" style="max-width: 200px; margin-bottom: 20px;" />

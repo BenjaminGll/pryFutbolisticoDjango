@@ -743,7 +743,7 @@ def mostrarEvento(request, idEncuentro):
         for evento_seleccionado in eventos_para_actualizar:
             print(f"Eventos seleccionado: {evento_seleccionado}")
             # Suponiendo que quieras cambiar el estado_evento a False
-            evento_seleccionado.estado_evento = False
+            # evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
 
         # Redirige a la misma página para evitar reenvíos de formulario
@@ -763,8 +763,6 @@ def mostrarEvento(request, idEncuentro):
     return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'tipo_filtro': tipo_filtro})
 
         
-
-    return render(request, 'moduloTV/evento.html', {'eventos': eventos})
 
 
 
@@ -797,9 +795,33 @@ def guardar_eventos_temporales(eventos):
 
             }
             
-        elif evento.tipo_evento_id.descripcion == 'PARTIDO SUSPENDIDO':
+        elif evento.tipo_evento_id.nombre == 'PARTIDO SUSPENDIDO':
             banner = {
-            'html': f'<div class="banner-container" style="position: absolute;top: -450px; background-color: red; color: white; font-size: 30px; font-weight: bold; text-align: center; padding: 10px; margin-top: -20px;">PARTIDO SUSPENDIDO</div>'
+            'html': f'<div class="banner-container" style="background-color: red; color: white">PARTIDO SUSPENDIDO</div>'
+            }
+        
+        elif evento.tipo_evento_id.nombre == 'CRONOMETRO':
+            banner = {
+            'html': '''
+            <div style="position: absolute; top: 0; left: 0; background-color: rgba(0, 0, 0, 0.6); color: white; text-align: center; padding: 10px; font-size: 20px; z-index: 100;">
+                <span id="cronometro">00:00</span>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var minutos = 0;
+                    var segundos = 0;
+                    var cronometroDisplay = document.getElementById('cronometro');
+                    var cronometro = setInterval(function() {
+                        segundos++;
+                        if (segundos == 60) {
+                            minutos++;
+                            segundos = 0;
+                        }
+                        cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
+                    }, 1000);
+                });
+            </script>
+            '''
             }
 
 

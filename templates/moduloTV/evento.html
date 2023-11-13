@@ -3,7 +3,8 @@
 <hr>
 
 <!--  -->
-<div class="form-inline mb-4 table" style="background-color: #2d2d2d; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,.1);">
+<div class="form-inline mb-4 table"
+    style="background-color: #2d2d2d; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,.1);">
     <div class="col-md-3 mb-2 text-center">
         <h5 style="color: #ffffff;">Tipo suceso</h5>
     </div>
@@ -55,9 +56,11 @@
             <div class="col-md-2 mb-2">
                 <input type="time" class="form-control" id="tiempo" name="tiempo">
             </div>
-
             <div class="col-md-1 mb-2">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> </button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-eye"> Mostrar</i> </button>
+                {% if e.tipo_evento_id.nombre == "CRONOMETRO" %}
+                <button type="submit" class="btn btn-success">Iniciar</button>
+                {% endif %}
             </div>
         </form>
     </div>

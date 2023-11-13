@@ -48,12 +48,12 @@
     position: absolute;
     top: 230px;
     right: 1100px;
-    background-color: rgb(0, 0, 0);
-    color: white;
+    background-color: rgb(210, 210, 210);
+    color: black;
     text-align: center;
     height: 30px;
-    width: 180px;
-    font-size: 17px;
+    width: 280px;
+    font-size: 16px;
     border-radius: 5px;
     z-index: 1;
   }
@@ -95,11 +95,9 @@
     <br>
     <img class="fondo" src="/static/images/fondoFut.jpg" alt="">
 
-    <div class="banner-cronometro">
-      <span id="cronometro">00:00
-    </div>
 
     <div class="banner-marcadores">
+        <span id="cronometro" style="background-color: rgb(210, 210, 210); color: black;">00:00</span>
       <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
         style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span
         id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img
@@ -186,7 +184,21 @@
   }
 
   // obtenerBanners();
-  setInterval(obtenerBanners, 3000); 
+  setInterval(obtenerBanners, 3000);
+
+  document.addEventListener('DOMContentLoaded', function() {
+  var minutos = 0;
+  var segundos = 0;
+  var cronometroDisplay = document.getElementById('cronometro');
+  var cronometro = setInterval(function() {
+      segundos++;
+      if (segundos == 60) {
+          minutos++;
+          segundos = 0;
+      }
+      cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
+  }, 1000);
+});
 </script>
 
 <!--  -->

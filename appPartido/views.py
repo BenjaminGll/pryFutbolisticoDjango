@@ -14,6 +14,7 @@ class ObtenerEncuentrosView(View):
 class ObtenerAlineacionesView(View):
     def get(self, request, *args, **kwargs):
         encuentro_id = request.GET.get('encuentro_id')
+        tipo_evento_id = request.GET.get('tipo_evento_id')
         try:
             encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
 
@@ -24,11 +25,18 @@ class ObtenerAlineacionesView(View):
             # Obtener alineaciones asociadas a los objetos obtenidos
             alineacionLocal_objs = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
             alineacionVisita_objs = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
-
-            data = {
+            
+            if (tipo_evento_id==3):
+                data = {
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],}
+            else:
+                data = {
                 'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
                 'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
-            }
+                }    
+            
+            
 
             return JsonResponse(data)
         except encuentro.DoesNotExist:

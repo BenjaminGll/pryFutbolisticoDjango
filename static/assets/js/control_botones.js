@@ -22,14 +22,21 @@
         });
 
         var cancelarContainer = $('<div></div>').append(cancelarButton);
+        var guardarContainer = $('<div></div>').append(guardarButton);
+
+        // Cambia el orden de inserción de los botones
+        guardarButton.before(cancelarContainer);
 
         // Utiliza display: inline-block y vertical-align: top para alinear correctamente los botones
-        guardarButton.after(cancelarContainer);
-        guardarButton.css('vertical-align', 'top');
+        guardarContainer.css({
+            'display': 'inline-block',
+            'vertical-align': 'top',
+            'margin-right': '20px' // Ajusta el margen entre los botones según sea necesario
+        });
         cancelarContainer.css({
             'display': 'inline-block',
             'vertical-align': 'top',
-            'margin-right': '10px'
+            'margin-right': '10px' // Ajusta el margen entre los botones según sea necesario
         });
 
         $(':submit[name="_addanother"]').css('display', 'none');
@@ -55,4 +62,3 @@
         });
     });
 })(django.jQuery);
-

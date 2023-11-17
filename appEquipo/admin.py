@@ -76,12 +76,28 @@ class posicionJugadorAdmin(admin.ModelAdmin):
 #     search_fields=['descripcion']
 
 class AlineacionEquipoAdmin(admin.ModelAdmin):
-    list_display=['posicion_jugador_id','dorsal','contrato_id','capitan','estado','descripcion_encuentro_id']
+    list_display=['posicion_jugador_id','dorsal','contrato_id','capitan','estado']
     ordering=['posicion_jugador_id']
     search_fields = ['descripcion_encuentro_id']
-    list_filter = ['descripcion_encuentro_id__equipo'] 
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js','assets/js/control_botones.js',)
+    list_filter = ['descripcion_encuentro_id__encuentro_id','descripcion_encuentro_id__equipo']
+    change_form_template='admin/appEquipo/change_form.html'
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+    # Obtén el objeto AlineacionEquipo
+        alineacion_obj = self.get_object(request, object_id)
+
+        # Filtra los jugadores según el encuentro y el equipo
+        jugadores_equipo_izquierdo = alineacion_obj.descripcion_encuentro_id.equipo.descripcion_encuentros.filter(tipo_equipo='L').jugadores.all()
+        jugadores_equipo_derecho = alineacion_obj.descripcion_encuentro_id.equipo.descripcion_encuentros.filter(tipo_equipo='V').jugadores.all()
+
+        # Agrega las variables al contexto
+        extra_context = extra_context or {}
+        extra_context['jugadores_equipo_izquierdo'] = jugadores_equipo_izquierdo
+        extra_context['jugadores_equipo_derecho'] = jugadores_equipo_derecho
+
+        return super().change_view(request, object_id, form_url, extra_context)
+
+    # class Media:
+    #     js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js','assets/js/control_botones.js',)
 class EncuentroPersonaAdmin(admin.ModelAdmin):
      list_display = ['encuentro_persona_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado','contrato_id','encuentro_id', 'equipo_id']
      ordering = ['encuentro_persona_id']

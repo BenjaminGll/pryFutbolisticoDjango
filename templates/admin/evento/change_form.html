@@ -1,0 +1,53 @@
+{% extends "admin/change_form.html" %}
+
+{% block content %}
+<!-- {{ block.super }} -->
+
+{# Contenido personalizado aquí #}
+<div>
+    <h2>Acciones Adicionales</h2>
+    {# En este ejemplo, estoy creando un formulario simple con botones y campos #}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" action="{% url 'admin:appPartido_evento_change' object_id %}">
+                {% csrf_token %}
+
+                <div>
+                    <label for="tiempo_reglamentario">Tiempo Reglamentario:</label>
+                    <input type="time" name="tiempo_reglamentario" id="id_tiempo_reglamentario" required>
+                </div>
+
+                <div>
+                    <label for="tiempo_extra">Tiempo Extra:</label>
+                    <input type="time" name="tiempo_extra" id="id_tiempo_extra">
+                </div>
+
+                <div>
+                    <label for="motivo">Motivo:</label>
+                    <input type="text" name="motivo" id="id_motivo">
+                </div>
+
+                <div>
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="number" name="cantidad" id="id_cantidad">
+                </div>
+
+                <div>
+                    <label for="estado_evento">Estado del Evento:</label>
+                    <input type="checkbox" name="estado_evento" id="id_estado_evento">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Realizar Acción</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div>
+    <h2>Acciones Adicionales</h2>
+    {# Incluir tu submit_line.html personalizado aquí #}
+    {% include "admin/appPartido/evento/submit_line.html" %}
+</div>
+
+
+{% endblock %}

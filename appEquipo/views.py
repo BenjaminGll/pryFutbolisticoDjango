@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from .models import *
+from .admin import *
 from appPartido.models import *
 from appContrato.models import *
 
@@ -21,3 +22,4 @@ class ObteneraJugadoresView(View):
         except Exception as e:
             print(f"Excepción no manejada: {str(e)}")
             return JsonResponse({"error": "Error interno del servidor."}, status=500)
+

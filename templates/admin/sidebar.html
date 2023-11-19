@@ -52,7 +52,45 @@
                     <span class="sidebar-text">{% trans 'Inicio' %}</span>
                 </a>
             </li>
+            <li class="nav-item {% if 'dashboard' in segment %} active {% endif %}">
+                <a href="/admintv/encuentros" class="nav-link">
+                    <span class="sidebar-icon fa fa-tv"></span>
+                    <span class="sidebar-text">{% trans 'Modulo Tv' %}</span>
+                </a>
+            </li>
+            <style>
+                .submenu {
+                    display: none; /* Oculta los submenús inicialmente */
+                }
 
+                .nav-item.active .submenu {
+                    display: block; /* Muestra los submenús cuando su elemento principal está activo */
+                }
+
+            </style>
+            <li class="nav-item {% if 'dashboard' in segment %} active {% endif %}">
+                <a class="nav-link">
+                    <span class="sidebar-icon fa fa-exchange"></span>
+                    <span class="sidebar-text">{% trans 'Transacciones' %}</span>
+                    <span class="arrow-icon fa fa-chevron-right"></span> <!-- Flecha para indicar el despliegue -->
+                </a>
+                <ul class="submenu">
+                    <a href="{% url 'lista_encuentros' %}?tipo=alineaciones">Asignar Alineaciones</a><br><br>
+                    <a href="{% url 'lista_encuentros' %}?tipo=terna_arbitral">Asignar Terna arbitral</a><br><br>
+                    <a href="{% url 'lista_encuentros' %}?tipo=eventos">Asignar Eventos</a><br><br>
+                    <a href="{% url 'lista_encuentros' %}?tipo=Estadisticas">Asignar Estadisticas</a>
+                </ul>
+            </li>
+            
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('.nav-item').click(function () {
+                        // Alternar la visibilidad de los submenús al hacer clic en la flecha
+                        $(this).find('.submenu').toggle();
+                    });
+                });
+            </script>
             {% admin_get_menu as app_list %}
             {% if app_list %}
                 {% for app in app_list %}

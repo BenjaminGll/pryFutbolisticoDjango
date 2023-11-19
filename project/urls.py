@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', contadoresAdmin), 
     path('admin/', admin.site.urls),
     path('appPartido/', include('appPartido.urls')),
-    path('appEquipo/', include('appEquipo.urls')),# Ajusta esto con el nombre de tu aplicación
+    path('appEquipo/', include('appEquipo.urls')),
     path('jugador/<str:alias>', contextoJugador), 
     path('equipo/<str:nombre_equipo>', contextoEquipo),
     # path('competencias/<str:nombre_deporte>', contextoCompetencias),
@@ -48,6 +48,7 @@ urlpatterns = [
     path("reporte/grupos", contextoGrupos, name="filtrar/grupos"),
     path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
+    path('reporte/personas/', lista_personas_por_tipo, name='lista_personas'),
     path('reporte/jugadores', reporte_jugadores, name='reporte_jugadores'),
     
     #Esta si se puede eliminar

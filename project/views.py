@@ -272,6 +272,36 @@ def contextoGrupos(request):
     )
 
 
+def lista_personas_por_tipo(request):
+    tipo_personas = tipo_persona.objects.values('descripcion').annotate(min_id=models.Min('tipo_persona_id')).order_by('descripcion')
+    paises = pais.objects.values('nombre').annotate(min_id=models.Min('pais_id')).order_by('nombre')
+    ciudades = ciudad.objects.all()
+    personas = []
+    tipo_persona_seleccionada = None
+
+    tipo_persona_id = request.GET.get("tipo_persona")
+    pais_id = request.GET.get("pais")
+
+    if tipo_persona_id:
+        tipo_persona_seleccionada = tipo_persona.objects.get(pk=tipo_persona_id)
+        personas = persona.objects.filter(tipo_persona_id=tipo_persona_id)
+
+        if pais_id:
+            ciudades = ciudad.objects.filter(pais_id=pais_id)
+            
+            personas = persona.objects.filter(ciudad_id__in=ciudades, tipo_persona_id=tipo_persona_id)
+    return render(
+        request,
+        "ReportePersonas.html",
+        {
+            "tipo_personas": tipo_personas,
+            "paises": paises,
+            "personas": personas,
+            "ciudades": ciudades,
+            "tipo_persona_seleccionada": tipo_persona_seleccionada,
+        },
+    )
+    
 def lista_equipos_por_competicion_y_fase(request):
     competiciones = competicion.objects.values('nombre').annotate(min_id=Min('competicion_id')).order_by('nombre')
     fases = fase.objects.all()
@@ -298,7 +328,7 @@ def lista_equipos_por_competicion_y_fase(request):
             "equipos": equipos,
             "competicion_seleccionada": competicion_seleccionada,
         },
-    )
+    )    
 
 def obtener_encuentro_persona_id(encuentro_id, contrato_id):
     try:

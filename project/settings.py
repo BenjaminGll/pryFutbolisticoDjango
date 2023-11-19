@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pryFutbolisticoV5',
+        'NAME': 'pryFutbolisticoV4',
         'USER': 'administrador',
         'PASSWORD': 'administrador',
         'HOST': 'containers-us-west-205.railway.app',  # si tienes otra dirección host debes remplazar esta

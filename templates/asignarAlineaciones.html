@@ -7,6 +7,7 @@
   <div class="container mt-4">
     <h1 class="mb-4">Asignar Alineaciones</h1>
 
+
     <form method="post" action="{% url 'asignarAlineaciones' encuentro_id=encuentro.encuentro_id %}">
       {% csrf_token %}
 
@@ -29,7 +30,8 @@
                   <td>{{ jugador.posicion_jugador }}</td>
                   <td>{{ jugador.dorsal }}</td>
                   <td>
-                    <input type="checkbox" name="jugadores_local[]" value="{{ jugador.persona.id }}">
+                    <input type="checkbox" name="jugadores_local[]" value="{{ jugador.persona.persona_id }}">
+
                   </td>
                 </tr>
               {% endfor %}
@@ -55,7 +57,7 @@
                   <td>{{ jugador.posicion_jugador }}</td>
                   <td>{{ jugador.dorsal }}</td>
                   <td>
-                    <input type="checkbox" name="jugadores_visita[]" value="{{ jugador.persona.id }}">
+                    <input type="checkbox" name="jugadores_visita[]"  value="{{ jugador.persona.persona_id }}">
                   </td>
                 </tr>
               {% endfor %}

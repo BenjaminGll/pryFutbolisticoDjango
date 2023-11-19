@@ -4,62 +4,70 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-<H1>Asignar Alineaciones</H1>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <div class="container mt-4">
+    <h1 class="mb-4">Asignar Alineaciones</h1>
 
-<div>
-  <h2>Equipos</h2>
-  {# En este ejemplo, estoy creando un formulario simple con botones y campos #}
-  <div class="card mb-4">
-    <div class="card-body">
-        <form method="post" action="{% url 'asignarAlineaciones' encuentro_id=encuentro.encuentro_id %}">
-        {% csrf_token %}
+    <form method="post" action="{% url 'asignarAlineaciones' encuentro_id=encuentro.encuentro_id %}">
+      {% csrf_token %}
 
-        <div style="display: flex; justify-content: space-between;">
-          {# Tabla para el equipo izquierdo #}
+      <div class="row">
+        <div class="col-md-6">
+            <h2>{{ equipoLocal.0.nuevo_club.nombre }}</h2>
           <table class="table">
             <thead>
               <tr>
-                <th>Seleccionar</th>
                 <th>Jugador</th>
+                <th>Posición</th>
+                <th>Dorsal</th>
+                <th>Seleccionar</th>
               </tr>
             </thead>
             <tbody>
               {% for jugador in equipoLocal %}
                 <tr>
-                  <td><input type="checkbox" name="jugadores_seleccionados[]" value="{{ jugador.persona.id }}"></td>
                   <td>{{ jugador.persona.nombre }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-
-          {# Tabla para el equipo derecho #}
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Seleccionar</th>
-                <th>Jugador</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for jugador in equipoVisita %}
-                <tr>
-                  <td><input type="checkbox" name="jugadores_seleccionados[]" value="{{ jugador.persona.id }}"></td>
-                  <td>{{ jugador.persona.nombre }}</td>
+                  <td>{{ jugador.posicion_jugador }}</td>
+                  <td>{{ jugador.dorsal }}</td>
+                  <td>
+                    <input type="checkbox" name="jugadores_local[]" value="{{ jugador.persona.id }}">
+                  </td>
                 </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
-      </form>
-    </div>
-  </div>
-</div>
-{% endblock %}
+        <div class="col-md-6">
+            <h2>{{ equipoVisita.0.nuevo_club.nombre }}</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Jugador</th>
+                <th>Posición</th>
+                <th>Dorsal</th>
+                <th>Seleccionar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jugador in equipoVisita %}
+                <tr>
+                  <td>{{ jugador.persona.nombre }}</td>
+                  <td>{{ jugador.posicion_jugador }}</td>
+                  <td>{{ jugador.dorsal }}</td>
+                  <td>
+                    <input type="checkbox" name="jugadores_visita[]" value="{{ jugador.persona.id }}">
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-{% block extrascript %}
-    {# Puedes agregar aquí tus scripts adicionales si es necesario #}
+      <div class="text-right mt-4">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="#" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
 {% endblock %}

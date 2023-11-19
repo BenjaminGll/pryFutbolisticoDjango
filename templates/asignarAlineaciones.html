@@ -15,11 +15,19 @@
           <h2>{{ equipoLocal.0.nuevo_club.nombre }}</h2>
           <!-- Agrega el campo de selección para la formación -->
           <label for="formacion_local">Formación:</label>
-          <select name="formacion_local" id="formacion_local" class="form-control">
-            {% for formacion in CHOICE_FORMACION %}
-              <option value="{{ formacion.0 }}">{{ formacion.1 }}</option>
-            {% endfor %}
-          </select>
+        <!-- Agrega el campo de selección para la formación -->
+        <label for="formacion_local">Formación:</label>
+        <select name="formacion_local" id="formacion_local" class="form-control">
+        <option value="4-3-3">4-3-3</option>
+        <option value="4-4-2">4-4-2</option>
+        <option value="4-2-3-1">4-2-3-1</option>
+        <option value="3-5-2">3-5-2</option>
+        <option value="4-1-4-1">4-1-4-1</option>
+        <option value="4-3-2-1">4-3-2-1</option>
+        <option value="3-4-3">3-4-3</option>
+        <option value="4-4-1-1">4-4-1-1</option>
+        </select>
+
 
           <table class="table">
             <thead>
@@ -48,12 +56,18 @@
         <div class="col-md-6">
           <h2>{{ equipoVisita.0.nuevo_club.nombre }}</h2>
           <!-- Agrega el campo de selección para la formación -->
-          <label for="formacion_visita">Formación:</label>
-          <select name="formacion_visita" id="formacion_visita" class="form-control">
-            {% for formacion in CHOICE_FORMACION %}
-              <option value="{{ formacion.0 }}">{{ formacion.1 }}</option>
-            {% endfor %}
-          </select>
+        <!-- Agrega el campo de selección para la formación -->
+        <label for="formacion_visita">Formación:</label>
+        <select name="formacion_visita" id="formacion_local" class="form-control">
+        <option value="4-3-3">4-3-3</option>
+        <option value="4-4-2">4-4-2</option>
+        <option value="4-2-3-1">4-2-3-1</option>
+        <option value="3-5-2">3-5-2</option>
+        <option value="4-1-4-1">4-1-4-1</option>
+        <option value="4-3-2-1">4-3-2-1</option>
+        <option value="3-4-3">3-4-3</option>
+        <option value="4-4-1-1">4-4-1-1</option>
+        </select>
 
           <table class="table">
             <thead>

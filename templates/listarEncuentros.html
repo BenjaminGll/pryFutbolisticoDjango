@@ -4,7 +4,7 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-<H1>Asignar Alineaciones</H1>
+<H1>Asignar {{ tipo|title }}</H1>
 
     {% csrf_token %}
     <div class="table-responsive">
@@ -28,7 +28,7 @@
                     <td>{{ encuentro.equipo_local.nombre }}</td>
                     <td>{{ encuentro.equipo_visita.nombre }}</td>
                     <td>
-                        <a href="{% url 'asignarAlineaciones' encuentro_id=encuentro.encuentro_id %}" class="btn btn-primary">
+                        <a href="{% url 'asignar' tipo=tipo encuentro_id=encuentro.encuentro_id %}" class="btn btn-primary">
                             Acción
                         </a>
                     </td>

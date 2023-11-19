@@ -46,14 +46,36 @@ class ObtenerAlineacionesView(View):
 
         return JsonResponse(data)
 
+def mostrarEncuentros(request):
 
-def mostrarEncuentrosEnJuego(request):
-    encuentros = encuentro.objects.filter(estado_jugado='E')
-    return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
+    tipo = request.GET.get('tipo', 'alineaciones')  
 
-def mostrarEncuentrosNoJugado(request):
-    encuentros = encuentro.objects.filter(estado_jugado='N')
-    return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
+    # Obtén los encuentros según el tipo
+    if tipo == 'alineaciones':
+            encuentros = encuentro.objects.filter(estado_jugado='N')
+    elif tipo == 'terna_arbitral':
+            encuentros = encuentro.objects.filter(estado_jugado='N')
+    elif tipo == 'eventos':
+         encuentros = encuentro.objects.filter(estado_jugado='E')
+    else:
+          encuentros = encuentro.objects.all()
+
+    return render(request, 'listarEncuentros.html', {'encuentros': encuentros, 'tipo': tipo})
+
+
+
+def asignar(request, tipo, encuentro_id):
+    if tipo == 'alineaciones':
+        return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
+    elif tipo == 'terna_arbitral':
+        return render(request, 'asignar_terna_arbitral.html', {'encuentro_id': encuentro_id})
+    elif tipo == 'eventos':
+        return render(request, 'asignar_eventos.html', {'encuentro_id': encuentro_id})
+    else:
+        # Manejo de error o redirección predeterminada
+        return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
+    
+
 
 def asignarAlineacion(request, encuentro_id):
     

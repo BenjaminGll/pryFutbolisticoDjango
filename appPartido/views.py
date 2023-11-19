@@ -56,6 +56,12 @@ def mostrarEncuentrosNoJugado(request):
     return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
 
 def asignarAlineacion(request, encuentro_id):
+    
+    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+    contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
+    contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
     if request.method == 'POST':
         jugadores_local = request.POST.getlist('jugadores_local[]', [])
         jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
@@ -63,8 +69,8 @@ def asignarAlineacion(request, encuentro_id):
         formacion_visita = request.POST.get('formacion_visita', '4-3-3')  # Valor predeterminado
 
         # Obtener descripciones de encuentro local y visita
-        descripcion_encuentro_local = descripcion_encuentro.objects.filter(encuentro_id=jugadores_local.).first()
-        descripcion_encuentro_visita = descripcion_encuentro.objects.filter(encuentro_id=encuentro_id).first()
+        descripcion_encuentro_local = descripcion_encuentro.objects.filter(equipo=equipoLocal).first()
+        descripcion_encuentro_visita = descripcion_encuentro.objects.filter(equipo=equipoVisita).first()
 
         # Guardar jugadores del equipo local
         for jugador_id_local in jugadores_local[:11]:
@@ -101,10 +107,5 @@ def asignarAlineacion(request, encuentro_id):
         messages.success(request, 'Alineaciones guardadas correctamente.')
         return redirect('lista_encuentros_N')
 
-    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
-    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
-    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
-    contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
-    contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
 
     return render(request, 'asignarAlineaciones.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})

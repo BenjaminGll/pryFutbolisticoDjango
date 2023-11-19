@@ -19,7 +19,7 @@ class sedeAdmin(admin.ModelAdmin):
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 ##
 class descripcionEncuentroAdmin(admin.ModelAdmin):
-    list_display=['encuentro','equipo','goles','goles_ronda_penales','resultado','formacion']
+    list_display=['encuentro','equipo','goles','goles_ronda_penales','resultado']
     ordering=['encuentro']
     search_fields = ['encuentro','equipo__nombre', 'encuentro__encuentro_id']
     list_per_page=5

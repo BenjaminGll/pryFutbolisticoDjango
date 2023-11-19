@@ -3,6 +3,7 @@ from django.views import View
 from .models import *
 from appEquipo.models import *
 from appContrato.models import *
+from django.shortcuts import render
 
 class ObtenerEncuentrosView(View):
     def get(self, request, *args, **kwargs):
@@ -52,3 +53,9 @@ class ObtenerAlineacionesView(View):
         except Exception as e:
             print(f"Excepción no manejada: {str(e)}")
             return JsonResponse({"error": "Error interno del servidor."}, status=500)
+def mostrarEncuentros(request):
+    encuentros = encuentro.objects.filter(estado_jugado='E')
+    return render(request, 'asignarAlineacion.html', {'encuentros': encuentros})
+def mostrarEncuentrosAlineacion(request):
+    encuentros = encuentro.objects.filter(estado_jugado='N')
+    return render(request, 'asignarAlineacion.html', {'encuentros': encuentros})

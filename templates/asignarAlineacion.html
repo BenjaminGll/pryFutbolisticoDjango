@@ -1,0 +1,46 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Encuentro ID</th>
+                    <th>Competición</th>
+                    <th>Fase</th>
+                    <th>Grupo</th>
+                    <th>Equipo Local</th>
+                    <th>Equipo Visita</th>
+                    <th>Fecha</th>
+                    <th>Clima</th>
+                    <th>Estado Jugado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for encuentro in encuentros %}
+                    <tr>
+                        <td>{{ encuentro.encuentro_id }}</td>
+                        <td>{{ encuentro.competicion_id.nombre }}</td>
+                        <td>{{ encuentro.fase.nombre }}</td>
+                        <td>{{ encuentro.grupo.nombre }}</td>
+                        <td>{{ encuentro.equipo_local.nombre }}</td>
+                        <td>{{ encuentro.equipo_visita.nombre }}</td>
+                        <td>
+                            <a href="{% url 'lista_encuentros' %}" class="btn btn-primary">
+                                Acción
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block extrascript %}
+    {# Puedes agregar aquí tus scripts adicionales si es necesario #}
+{% endblock %}

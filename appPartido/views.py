@@ -3,7 +3,7 @@ from django.views import View
 from .models import *
 from appEquipo.models import equipo
 from appContrato.models import *
-from django.shortcuts import render
+from django.shortcuts import render,  redirect
 from django.contrib import messages
 
 class ObtenerEncuentrosView(View):
@@ -92,8 +92,8 @@ def asignarAlineacion(request, encuentro_id):
                 )
                 alineacion_visita.save()
 
-    messages.success(request, 'Alineaciones guardadas correctamente.')
-
+        messages.success(request, 'Alineaciones guardadas correctamente.')
+        return redirect('mostrarEncuentros')
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)

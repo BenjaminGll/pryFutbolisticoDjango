@@ -290,10 +290,6 @@ def lista_personas_por_tipo(request):
             ciudades = ciudad.objects.filter(pais_id=pais_id)
             
             personas = persona.objects.filter(ciudad_id__in=ciudades, tipo_persona_id=tipo_persona_id)
-        print("Tipo Personas:", tipo_personas)
-        print("Paises:", paises)
-        print("Ciudades:", ciudades)
-        print("Personas:", personas)
     return render(
         request,
         "ReportePersonas.html",

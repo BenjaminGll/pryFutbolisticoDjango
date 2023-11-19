@@ -3,7 +3,8 @@ from django.views import View
 from .models import *
 from appEquipo.models import equipo
 from appContrato.models import *
-from django.shortcuts import render
+from django.shortcuts import render,  redirect
+from django.contrib import messages
 
 class ObtenerEncuentrosView(View):
     def get(self, request, *args, **kwargs):
@@ -46,54 +47,59 @@ class ObtenerAlineacionesView(View):
         return JsonResponse(data)
 
 
-def mostrarEncuentros(request):
+def mostrarEncuentrosEnJuego(request):
     encuentros = encuentro.objects.filter(estado_jugado='E')
+    return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
+
+def mostrarEncuentrosNoJugado(request):
+    encuentros = encuentro.objects.filter(estado_jugado='N')
     return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
 
 def asignarAlineacion(request, encuentro_id):
     if request.method == 'POST':
         jugadores_local = request.POST.getlist('jugadores_local[]', [])
         jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
+        formacion_local = request.POST.get('formacion_local', '4-3-3')  # Valor predeterminado
+        formacion_visita = request.POST.get('formacion_visita', '4-3-3')  # Valor predeterminado
+
+        # Obtener descripciones de encuentro local y visita
+        descripcion_encuentro_local = descripcion_encuentro.objects.filter(encuentro_id=encuentro_id).first()
+        descripcion_encuentro_visita = descripcion_encuentro.objects.filter(encuentro_id=encuentro_id).first()
 
         # Guardar jugadores del equipo local
-        for jugador_id in jugadores_local[:11]:
-            if jugador_id:
-                try:
-                    contrato_local = contrato.objects.get(contrato_id=jugador_id)
-                    alineacion_local = alineacion(
-                        descripcion_encuentro_id=encuentro_id,
-                        contrato_id=contrato_local,
-                        dorsal=contrato_local.dorsal,
-                        posicion_jugador_id=1,
-                        capitan=False,
-                        estado=True
-                    )
-                    alineacion_local.save()
-                    print(f"Guardada alineación para el jugador {contrato_local.persona.nombre} en el equipo local.")
-                except contrato.DoesNotExist:
-                    print(f"No se encontró contrato para el jugador con ID {jugador_id}")
-                except ValueError:
-                    print(f"El ID del jugador no es un número válido: {jugador_id}")
+        for jugador_id_local in jugadores_local[:11]:
+            if jugador_id_local:
+                contrato_local = contrato.objects.filter(persona_id=jugador_id_local).first()
+                posicionLocal = posicion_jugador.objects.get(posicion_jugador_id=contrato_local.posicion_jugador.posicion_jugador_id)
+                alineacion_local = alineacion(
+                    descripcion_encuentro_id=descripcion_encuentro_local,
+                    contrato_id=contrato_local,
+                    dorsal=contrato_local.dorsal,
+                    posicion_jugador_id=posicionLocal,
+                    capitan=False,
+                    estado=True,
+                    formacion=formacion_local
+                )
+                alineacion_local.save()
 
         # Guardar jugadores del equipo visitante
-        for jugador_id in jugadores_visita[:11]:
-            if jugador_id:
-                try:
-                    contrato_visita = contrato.objects.get(contrato_id=jugador_id)
-                    alineacion_visita = alineacion(
-                        descripcion_encuentro_id=encuentro_id,
-                        contrato_id=contrato_visita,
-                        dorsal=contrato_visita.dorsal,
-                        posicion_jugador_id=1,
-                        capitan=False,
-                        estado=True
-                    )
-                    alineacion_visita.save()
-                    print(f"Guardada alineación para el jugador {contrato_visita.persona.nombre} en el equipo visitante.")
-                except contrato.DoesNotExist:
-                    print(f"No se encontró contrato para el jugador con ID {jugador_id}")
-                except ValueError:
-                    print(f"El ID del jugador no es un número válido: {jugador_id}")
+        for jugador_id_visita in jugadores_visita[:11]:
+            if jugador_id_visita:
+                contrato_visita = contrato.objects.filter(persona_id=jugador_id_visita).first()
+                posicionVisita = posicion_jugador.objects.get(posicion_jugador_id=contrato_visita.posicion_jugador.posicion_jugador_id)
+                alineacion_visita = alineacion(
+                    descripcion_encuentro_id=descripcion_encuentro_visita,
+                    contrato_id=contrato_visita,
+                    dorsal=contrato_visita.dorsal,
+                    posicion_jugador_id=posicionVisita,
+                    capitan=False,
+                    estado=True,
+                    formacion=formacion_visita
+                )
+                alineacion_visita.save()
+
+        messages.success(request, 'Alineaciones guardadas correctamente.')
+        return redirect('mostrarEncuentros')
 
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)

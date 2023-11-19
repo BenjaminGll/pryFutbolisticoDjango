@@ -1,4 +1,5 @@
 from django.db import models
+from appEquipo.models import * 
 from django.db.models.functions import Upper
 from project.settings import MEDIA_URL, STATIC_URL
 # Create your models here.
@@ -15,9 +16,6 @@ class tipo_persona(models.Model):
     def __str__(self):
         return self.descripcion
 
-    def save(self, force_insert=False, force_update=False):
-        self.descripcion = self.decripcion.upper()
-        super(tipo_persona, self).save(force_insert, force_update)
     class Meta:
         verbose_name_plural='tipo_persona'
 
@@ -70,12 +68,6 @@ class contrato(models.Model):
             ('S', 'SELECCIÓN'),
         ]
 
-        CHOICE_POSICION_CONTRATO = [
-            ('DEL', 'DELANTERO'),
-            ('CEN', 'CENTROCAMPISTA'),
-            ('DEF', 'DEFENSA'),
-            ('POR', 'PORTERO'),
-        ]
         contrato_id = models.BigAutoField(primary_key=True)
         tipo_persona = models.ForeignKey('tipo_persona', on_delete=models.CASCADE, related_name='contratos_tipo_persona',default=1)
         persona = models.ForeignKey('persona', on_delete=models.CASCADE, db_column='persona_id',related_name='contratos_persona', default=1)
@@ -85,7 +77,7 @@ class contrato(models.Model):
         valor = models.FloatField(blank=True, null=True)
         nuevo_club = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='nuevo_club', related_name='nuevo_club', null=True, blank=True)
         dorsal = models.IntegerField(blank=True, null=True)
-        posicion_jugador =models.CharField(max_length=3, choices=CHOICE_POSICION_CONTRATO, default='DEL')
+        posicion_jugador=models.ForeignKey(posicion_jugador,on_delete=models.CASCADE,db_column='posicion_jugador_id',null=True)
         estado = models.BooleanField()
         def save(self, force_insert=False, force_update=False):
             self.posicion_jugador = self.posicion_jugador

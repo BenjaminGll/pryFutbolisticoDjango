@@ -130,12 +130,10 @@ class encuentro_persona(models.Model):
     pases_acertados = models.IntegerField()
     pases_errados = models.IntegerField()
     minutosjugando = models.IntegerField()
-    expulsado = models.IntegerField()
-    sustituidos = models.IntegerField()
     amonestado = models.BooleanField(null=True)
     encuentro_id = models.ForeignKey('appPartido.encuentro', on_delete=models.CASCADE, db_column='encuentro_id')  # Corrected column name
     equipo_id = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
-    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
+    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='posicion_jugador', related_name='encuentro_personas')
 
     def __str__(self):
         return str(self.encuentro_id)

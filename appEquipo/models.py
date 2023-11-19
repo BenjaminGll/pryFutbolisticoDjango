@@ -102,21 +102,34 @@ class posicion_jugador(models.Model):
     
 #     class Meta:
 #         verbose_name_plural='alineacion_equipo'
+
+
 class alineacion(models.Model):
-    alineacion_id=models.BigAutoField(primary_key=True)
-    descripcion_encuentro_id=models.ForeignKey('appPartido.descripcion_encuentro',on_delete=models.CASCADE,db_column='descripcion_encuentro_id',related_name='descripcion_encuentros')
-    contrato_id=models.ForeignKey('appContrato.contrato',on_delete=models.CASCADE,db_column='contrato_id', null=True)
-    dorsal=models.IntegerField(null=True)
-    posicion_jugador_id=models.ForeignKey(posicion_jugador,on_delete=models.CASCADE,db_column='posicion_jugador_id',null=True)
-    capitan=models.BooleanField(null=True)
-    estado=models.BooleanField(null=True)
-    
-    
+    CHOICE_FORMACION = [
+        ('4-3-3', '4-3-3'),
+        ('4-4-2', '4-4-2'),
+        ('4-2-3-1', '4-2-3-1'),
+        ('3-5-2', '3-5-2'),
+        ('4-1-4-1', '4-1-4-1'),
+        ('4-3-2-1', '4-3-2-1'),
+        ('3-4-3', '3-4-3'),
+        ('4-4-1-1', '4-4-1-1')
+    ]
+
+    alineacion_id = models.BigAutoField(primary_key=True)
+    descripcion_encuentro_id = models.ForeignKey('appPartido.descripcion_encuentro', on_delete=models.CASCADE, db_column='descripcion_encuentro_id', related_name='descripcion_encuentros')
+    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id', null=True)
+    dorsal = models.IntegerField(null=True)
+    posicion_jugador_id = models.ForeignKey(posicion_jugador, on_delete=models.CASCADE, db_column='posicion_jugador_id', null=True)
+    capitan = models.BooleanField(null=True)
+    estado = models.BooleanField(null=True)
+    formacion = models.CharField(max_length=10, choices=CHOICE_FORMACION, default='4-3-3')
+
     def __str__(self):
         return str(self.contrato_id)
 
     class Meta:
-        verbose_name_plural='alineacion'
+        verbose_name_plural = 'alineacion'
 
 
 

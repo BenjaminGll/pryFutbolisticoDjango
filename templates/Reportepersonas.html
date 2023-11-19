@@ -39,7 +39,7 @@
         <h2>Personas por Tipo de Persona y País</h2>
         
         <!-- Filtros para seleccionar tipo de persona y país -->
-        <form method="get">
+        <form method="get"action="{% url 'lista_personas' %}">
             <div class="form-group">
                 <label for="tipo_persona">Tipo de persona:</label>
                 <select name="tipo_persona" id="tipo_persona" class="form-control" onchange="this.form.submit()">

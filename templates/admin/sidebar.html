@@ -81,6 +81,7 @@
                     <a href="{% url 'lista_encuentros_E' %}">Asignar Estadisticas</a>
                 </ul>
             </li>
+            
             <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
             <script>
                 $(document).ready(function () {
@@ -90,8 +91,6 @@
                     });
                 });
             </script>
-
-
             {% admin_get_menu as app_list %}
             {% if app_list %}
                 {% for app in app_list %}

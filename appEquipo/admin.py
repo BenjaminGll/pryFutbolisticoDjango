@@ -99,10 +99,11 @@ class AlineacionEquipoAdmin(admin.ModelAdmin):
     # class Media:
     #     js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js','assets/js/control_botones.js',)
 class EncuentroPersonaAdmin(admin.ModelAdmin):
-     list_display = ['encuentro_persona_id', 'pases', 'asistencias', 'kmrecorridos','pasestotales','pases_acertados', 'pases_errados', 'minutosjugando','expulsado', 'sustituidos', 'amonestado','contrato_id','encuentro_id', 'equipo_id']
-     ordering = ['encuentro_persona_id']
-     search_fields = ['equipo_id']
-     class Media:
+    list_display = ('encuentro_id', 'pases', 'asistencias', 'kmrecorridos', 'pasestotales', 'pases_acertados', 'pases_errados', 'minutosjugando', 'amonestado')
+    list_filter = ('equipo_id', 'contrato_id__posicion_jugador')
+    search_fields = ('encuentro_id__nombre', 'persona__nombre')
+
+    class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 
 

@@ -63,7 +63,7 @@ def asignarAlineacion(request, encuentro_id):
         formacion_visita = request.POST.get('formacion_visita', '4-3-3')  # Valor predeterminado
 
         # Obtener descripciones de encuentro local y visita
-        descripcion_encuentro_local = descripcion_encuentro.objects.filter(encuentro_id=encuentro_id).first()
+        descripcion_encuentro_local = descripcion_encuentro.objects.filter(encuentro_id=jugadores_local.).first()
         descripcion_encuentro_visita = descripcion_encuentro.objects.filter(encuentro_id=encuentro_id).first()
 
         # Guardar jugadores del equipo local

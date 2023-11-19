@@ -47,8 +47,12 @@ class ObtenerAlineacionesView(View):
         return JsonResponse(data)
 
 
-def mostrarEncuentros(request):
+def mostrarEncuentrosEnJuego(request):
     encuentros = encuentro.objects.filter(estado_jugado='E')
+    return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
+
+def mostrarEncuentrosNoJugado(request):
+    encuentros = encuentro.objects.filter(estado_jugado='N')
     return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
 
 def asignarAlineacion(request, encuentro_id):

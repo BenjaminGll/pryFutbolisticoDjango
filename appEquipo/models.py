@@ -146,7 +146,7 @@ class encuentro_persona(models.Model):
     amonestado = models.BooleanField(null=True)
     encuentro_id = models.ForeignKey('appPartido.encuentro', on_delete=models.CASCADE, db_column='encuentro_id')  # Corrected column name
     equipo_id = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
-    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='posicion_jugador', related_name='encuentro_personas')
+    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
 
     def __str__(self):
         return str(self.encuentro_id)

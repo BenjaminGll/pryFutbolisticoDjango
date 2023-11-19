@@ -54,8 +54,6 @@ def mostrarEncuentros(request):
 def asignarAlineacion(request, encuentro_id):
 
     if request.method == 'POST':
-        print(request.POST)
-        print(f"Processing local player for encuentro_id: {encuentro_id}")
 
         jugadores_local = request.POST.getlist('jugadores_local[]', [])
         jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
@@ -66,10 +64,8 @@ def asignarAlineacion(request, encuentro_id):
         
         # Guardar jugadores del equipo local
         for jugador_id_local in jugadores_local[:11]:
-            print(f"Processing local player with ID: {jugador_id_local}")
             if jugador_id_local:
                 contrato_local = contrato.objects.filter(persona_id=jugador_id_local).first()
-                print(f"Found contrato for local player: {contrato_local}")
                 posicionLocal = posicion_jugador.objects.get(posicion_jugador_id=contrato_local.posicion_jugador.posicion_jugador_id)
                 alineacion_local = alineacion(
                     descripcion_encuentro_id=descripcion_encuentro_local,
@@ -80,14 +76,11 @@ def asignarAlineacion(request, encuentro_id):
                     estado=True
                 )
                 alineacion_local.save()
-                print(f"Alineacion local creada: {alineacion_local}")
 
         # Guardar jugadores del equipo visitante
         for jugador_id_visita in jugadores_visita[:11]:
-            print(f"Processing visita player with ID: {jugador_id_visita}")
             if jugador_id_visita:
                 contrato_visita = contrato.objects.filter(persona_id=jugador_id_visita).first()
-                print(f"Found contrato for visitant player: {contrato_visita}")
                 posicionVisita = posicion_jugador.objects.get(posicion_jugador_id=contrato_visita.posicion_jugador.posicion_jugador_id)
                 alineacion_visita = alineacion(
                     descripcion_encuentro_id=descripcion_encuentro_visita,
@@ -98,7 +91,6 @@ def asignarAlineacion(request, encuentro_id):
                     estado=True
                 )
                 alineacion_visita.save()
-                print(f"Alineacion visita creada: {alineacion_visita}")
 
     messages.success(request, 'Alineaciones guardadas correctamente.')
 

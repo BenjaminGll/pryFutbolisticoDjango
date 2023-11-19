@@ -5,4 +5,9 @@ urlpatterns = [
     path('get_encuentros/', ObtenerEncuentrosView.as_view(), name='get_encuentros'),
     path('get_alineaciones/', ObtenerAlineacionesView.as_view(), name='get_alineaciones'),
     path('lista_encuentros/', mostrarEncuentros, name='lista_encuentros'),
+    path('asignarAlineaciones/<int:encuentro_id>/', asignarAlineacion, name='asignarAlineaciones'),
+
+
+
+
 ]

@@ -4,11 +4,13 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
+<H1>Asignar Alineaciones</H1>
+
+    {% csrf_token %}
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
-       
                     <th>Competición</th>
                     <th>Fase</th>
                     <th>Grupo</th>
@@ -19,23 +21,24 @@
             </thead>
             <tbody>
                 {% for encuentro in encuentros %}
-                    <tr>
- 
-                        <td>{{ encuentro.competicion_id.nombre }}</td>
-                        <td>{{ encuentro.fase.nombre }}</td>
-                        <td>{{ encuentro.grupo.nombre }}</td>
-                        <td>{{ encuentro.equipo_local.nombre }}</td>
-                        <td>{{ encuentro.equipo_visita.nombre }}</td>
-                        <td>
-                            <a href="{% url 'lista_encuentros' %}" class="btn btn-primary">
-                                Acción
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
+                <tr>
+                    <td>{{ encuentro.competicion_id.nombre }}</td>
+                    <td>{{ encuentro.fase.nombre }}</td>
+                    <td>{{ encuentro.grupo.nombre }}</td>
+                    <td>{{ encuentro.equipo_local.nombre }}</td>
+                    <td>{{ encuentro.equipo_visita.nombre }}</td>
+                    <td>
+                        <a href="{% url 'asignarAlineaciones' encuentro_id=encuentro.encuentro_id %}" class="btn btn-primary">
+                            Acción
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            
             </tbody>
         </table>
     </div>
+
 {% endblock %}
 
 {% block extrascript %}

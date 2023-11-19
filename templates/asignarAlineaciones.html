@@ -1,0 +1,65 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<H1>Asignar Alineaciones</H1>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+<div>
+  <h2>Equipos</h2>
+  {# En este ejemplo, estoy creando un formulario simple con botones y campos #}
+  <div class="card mb-4">
+    <div class="card-body">
+        <form method="post" action="{% url 'asignarAlineaciones' encuentro_id=encuentro.encuentro_id %}">
+        {% csrf_token %}
+
+        <div style="display: flex; justify-content: space-between;">
+          {# Tabla para el equipo izquierdo #}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Seleccionar</th>
+                <th>Jugador</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jugador in equipoLocal %}
+                <tr>
+                  <td><input type="checkbox" name="jugadores_seleccionados[]" value="{{ jugador.persona.id }}"></td>
+                  <td>{{ jugador.persona.nombre }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {# Tabla para el equipo derecho #}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Seleccionar</th>
+                <th>Jugador</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jugador in equipoVisita %}
+                <tr>
+                  <td><input type="checkbox" name="jugadores_seleccionados[]" value="{{ jugador.persona.id }}"></td>
+                  <td>{{ jugador.persona.nombre }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extrascript %}
+    {# Puedes agregar aquí tus scripts adicionales si es necesario #}
+{% endblock %}

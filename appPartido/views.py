@@ -55,7 +55,14 @@ class ObtenerAlineacionesView(View):
             return JsonResponse({"error": "Error interno del servidor."}, status=500)
 def mostrarEncuentros(request):
     encuentros = encuentro.objects.filter(estado_jugado='E')
-    return render(request, 'asignarAlineacion.html', {'encuentros': encuentros})
-def mostrarEncuentrosAlineacion(request):
-    encuentros = encuentro.objects.filter(estado_jugado='N')
-    return render(request, 'asignarAlineacion.html', {'encuentros': encuentros})
+    return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
+
+
+def asignarAlineacion(request, encuentro_id):
+    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+    contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
+    contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
+
+    return render(request, 'asignarAlineaciones.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})

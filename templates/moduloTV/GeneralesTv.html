@@ -1,0 +1,495 @@
+{% extends 'moduloTV/base.html' %}
+{% block content %}
+<hr>
+<style>
+    .banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #f0f0f0;
+    }
+
+    .equipo-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .nombre-equipo {
+        font-weight: bold;
+
+    }
+
+    .goles-equipo {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+    .versus {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .equipo-info img {
+        width: 50px;
+        height: auto;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+
+        <!-- Datos de Encuentro -->
+        <div class="col-md-4">
+            <form action="{% url 'mostrar_eventos_generales' idEncuentro %}" method="post" id="enviarDatosEncuentro">
+                {% csrf_token %}
+
+                <div class="card">
+                    <div class="card-header form-inline">
+                        <h3>Datos de Encuentro</h3>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="tiempo" name="tiempo"
+                                pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                            </div>
+                            &nbsp;
+                            <button type="submit" class="btn btn-primary" id="generarBannerEncuentro"><i
+                                    class="fas fa-eye"></i> Mostrar</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="temperaturaCheckbox"
+                                    value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.clima }}{% endwith %}">
+                                <label class="form-check-label" for="temperaturaCheckboxx">Temperatura</label>
+                                <!-- <input type="text" class="form-control" id="temperaturaInput"
+                                    placeholder="Ingrese la temperatura"> -->
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="marcadorCheckbox"
+                                    value="{% with equipo_local=equipo_local %}{{ equipo_local.goles }}{% endwith %} - {% with equipo_visita=equipo_visita %}{{ equipo_visita.goles }}{% endwith %}">
+                                <label class="form-check-label" for="marcadorCheckbox">Marcador</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="estadioCheckbox"
+                                    value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.sede_id }}{% endwith %}">
+                                <label class="form-check-label" for="estadioCheckbox">Estadio</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="tipoEncuentroCheckbox"
+                                    value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.competicion_id }} - {{ equipo_local.encuentro.grupo }} - {{ equipo_local.encuentro.fase }}{% endwith %}">
+                                <label class="form-check-label" for="tipoEncuentroCheckbox">Tipo de Encuentro</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="patrocinadorCheckbox">
+                                <label class="form-check-label" for="patrocinadorCheckbox">Patrocinador</label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <textarea id="miTextarea" name="miTextarea"></textarea>
+
+            </form>
+        </div>
+
+
+
+
+        <!-- Cronómetro -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Cronómetro</h3>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
+                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                        </div> &nbsp;
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Agrega aquí tu código para el cronómetro -->
+                    <div class="input-group align-items-center">
+                        <label class="form-check-label" for="inputCronometro">Tiempo </label>
+                        <!-- <h5>Minuto: </h5>  -->
+                        &nbsp;
+                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
+                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                        </div>
+                        <div class="btn-group ml-2" role="group" aria-label="Controles de tiempo">
+                            <button type="button" class="btn btn-success" id="playButton">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            &nbsp;
+                            <button type="button" class="btn btn-warning" id="pauseButton">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="cronoemtroCheckbox">
+                        <label class="form-check-label" for="cronometroCheckbox">Ocultar</label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Himnos -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Himnos</h3>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
+                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                        </div>
+                        &nbsp;
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="localHimno" name="himno" value="local">
+                            &nbsp;
+                            <label class="form-check-label" for="localHimno">Local</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="visitaHimno" name="himno" value="visita">
+                            <label class="form-check-label" for="visitaHimno">Visita</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alineación -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Alineación Local</h3>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
+                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                        </div>
+                        &nbsp;
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="alineacionLocal" name="alineacion"
+                                value="local">
+                            <label class="form-check-label" for="alineacionLocal">Local</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Alineación Visita</h3>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
+                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                        </div>
+                        &nbsp;
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="alineacionVisita" name="alineacion"
+                                value="visita">
+                            <label class="form-check-label" for="alineacionVisita">Visita</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <!--  -->
+
+
+</div>
+
+
+<!-- Aqui inicia script-->
+<!-- <script>
+    $(document).ready(function () {
+        $('#generarBannerEncuentro').click(function () {
+            // Objeto para almacenar las opciones seleccionadas
+            var contenidoBannerTextarea = $('#contenido_banner');
+            var opcionesSeleccionadas = {};
+
+            // Recorre las casillas de verificación y recopila las selecciones
+            $('input[type="checkbox"]').each(function () {
+                var checkboxId = $(this).attr('id');
+                opcionesSeleccionadas[checkboxId.replace('Checkbox', '')] = $(this).prop('checked');
+            });
+
+            // Construye dinámicamente el HTML del banner
+            // var bannerHtml = '<div class="banner">';
+            // if (opcionesSeleccionadas.temperatura) {
+            //     bannerHtml += '<p>Temperatura: <span class="valor-temperatura">[Valor]</span></p>';
+            // }
+            // // Repite el patrón para otras opciones
+
+            // bannerHtml += '</div>';}
+            //Inicio
+            var bannerHtml = '<div class="banner">';
+            // Equipo Local
+            bannerHtml += '<div class="equipo-info">';
+            bannerHtml += '<p class="goles-equipo">2</p>';
+            bannerHtml += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
+            bannerHtml += '<p class="nombre-equipo">Equipo Local</p>';
+            bannerHtml += '<img src="/ruta/al/logo_local.png" alt="Equipo Local">';
+            var valorCheckbox = document.getElementById('temperaturaCheckbox').value;
+            if (opcionesSeleccionadas.temperatura) {
+                bannerHtml += '<p>' + valorCheckbox + '</p>';
+            }
+            bannerHtml += '</div>';
+            bannerHtml += '</div>';
+
+            // Versus
+            bannerHtml += '<div class="versus">VS</div>';
+
+            // Equipo Visitante
+            bannerHtml += '<div class="equipo-info">';
+            bannerHtml += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
+            bannerHtml += '<p class="nombre-equipo">Equipo Visitante</p>';
+            bannerHtml += '<img src="/ruta/al/logo_visita.png" alt="Equipo Visitante">';
+            bannerHtml += '<p>Competicion</p>';
+            bannerHtml += '</div>';
+            bannerHtml += '<p class="goles-equipo">1</p>';
+            bannerHtml += '</div>';
+
+            bannerHtml += '</div>';
+
+            var dataToSend = { html: bannerHtml};
+
+            //fin
+
+            // Muestra el banner generado
+            $('#bannerContainer').html(bannerHtml);
+            $('#contenido_banner').html(bannerHtml);
+            contenidoBannerTextarea.val(bannerHtml);
+
+
+
+            //  // Enviar el bannerHtml al servidor usando AJAX
+            // $.ajax({
+            //     type: 'POST',
+            //     url: '{% url "mostrar_eventos_generales" idEncuentro %}',  // Reemplaza "guardar_banner" con la URL de tu vista
+            //     data: JSON.stringify(dataToSend),
+            //     contentType: 'application/json',  // Agregar esta línea para indicar que estás enviando JSON
+
+            //     success: function (data) {
+            //         console.log('Banner enviado exitosamente');
+            //     },
+            //     error: function (error) {
+            //         console.error('Error al enviar el banner');
+            //     }
+            // });
+
+
+        });
+    });
+</script>  -->
+
+<!-- Contenedor donde se mostrará el banner generado -->
+<div id="bannerContainer">
+    <div class="banner">
+        <!-- Equipo Local -->
+        <div class="equipo-info">
+            <p class="goles-equipo">2</p>
+            <div class="row" style="display: flex;
+            flex-direction: column;
+            align-items: center;">
+                <p class="nombre-equipo">Equipo Local</p>
+
+                <img src="/static/images/equipo/logo/7.png" alt="Equipo Local">
+                <p>Competicion</p>
+            </div>
+
+
+        </div>
+
+        <!-- Versus -->
+        <div class="versus">VS</div>
+
+        <!-- Equipo Visitante -->
+        <div class="equipo-info">
+            <div class="row" style="display: flex;
+            flex-direction: column;
+            align-items: center;">
+                <p class="nombre-equipo">Equipo Visitante</p>
+                <img src="/static/images/equipo/logo/7.png" alt="Equipo Visitante">
+                <p>Sede</p>
+
+            </div>
+            <p class="goles-equipo">1</p>
+        </div>
+    </div>
+</div>
+
+<!-- Área del banner -->
+
+<!-- Aqui acababa scriot -->
+
+
+<!-- <script>
+    // Script para mostrar/ocultar el área del banner según las opciones seleccionadas
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        var bannerContainer = document.getElementById('banner-container');
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                if (checkbox.checked) {
+                    bannerContainer.style.display = 'block';
+                } else {
+                    bannerContainer.style.display = 'none';
+                }
+            });
+        });
+    });
+</script> -->
+
+<!-- <SCript>
+
+// Obtén los checkboxes por su clase o id
+const checkbox1 = document.getElementById('temperaturaCheckbox');
+const checkbox2 = document.getElementById('marcadorCheckbox');
+const idEncuentro=2
+// Función para generar el HTML dinámico
+function generarHTML() {
+  let html = '';
+
+  // Verifica si el checkbox 1 está seleccionado
+  if (checkbox1.checked) {
+    html += '<p>Contenido del checkbox 1</p>';
+  }
+
+  // Verifica si el checkbox 2 está seleccionado
+  if (checkbox2.checked) {
+    html += '<p>Contenido del checkbox 2</p>';
+  }
+
+  // Devuelve el HTML generado
+  return html;
+}
+const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+// Función para enviar el HTML al servidor
+function enviarHTML() {
+  // Genera el HTML dinámico
+  const dynamicHTML = generarHTML();
+
+  // Realiza una solicitud HTTP POST al servidor
+ // Ejemplo si tu proyecto Django tiene un prefijo de URL como '/appname/'
+fetch('/admintv/generales/' + idEncuentro + '/', {
+    
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrfToken
+    },
+    body: JSON.stringify({ html: dynamicHTML })
+})
+
+    .then(response => {
+      // Maneja la respuesta del servidor
+      if (response.ok) {
+        // El HTML se envió correctamente
+        console.log('HTML enviado al servidor');
+      } else {
+        // Hubo un error al enviar el HTML
+        console.error('Error al enviar el HTML al servidor');
+      }
+    })
+    .catch(error => {
+      // Maneja los errores de la solicitud
+      console.error('Error en la solicitud HTTP:', error);
+    });
+}
+
+// Evento para enviar el HTML al hacer clic en un botón
+const enviarButton = document.getElementById('generarBannerEncuentro');
+enviarButton.addEventListener('click', enviarHTML);
+
+</SCript> -->
+
+<!-- <textarea id="miTextarea" name="miTextarea"></textarea> -->
+
+<script>
+    // function enviarHTML() {
+    //     // Obtén el elemento textarea por su id
+    //     const textarea = document.getElementById('miTextarea');
+
+    //     // Crea el contenido que deseas colocar en el textarea
+    //     const contenido = 'Este es el contenido que quiero colocar en el textarea.';
+
+    //     // Establece el contenido en el textarea
+    //     textarea.value = contenido;
+
+
+    // }
+    // const enviarButton = document.getElementById('generarBannerEncuentro');
+    // enviarButton.addEventListener('click', enviarHTML);
+    // document.getElementById('enviarDatosEncuentro').submit();
+
+
+
+
+    document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
+        // Evita que el formulario se envíe automáticamente
+        // event.preventDefault();
+
+        const textarea = document.getElementById('miTextarea');
+
+        // Crea el contenido que deseas colocar en el textarea
+        const contenido = 'Este es el contenido que quiero colocar en el textarea.';
+
+        // Establece el contenido en el textarea
+        textarea.value = contenido;
+        body: JSON.stringify({ miTextarea: contenido })
+
+        // Envía el formulario
+        document.getElementById('enviarDatosEncuentro').submit();
+    });
+
+</script>
+
+
+<div id="banner-container" style="display:block;">
+    <!-- Contenido del banner -->
+    <textarea name="contenido_banner" id="contenido_banner"></textarea>
+    <!-- <button type="submit">Guardar Banner</button> -->
+
+</div>
+
+{% endblock %}

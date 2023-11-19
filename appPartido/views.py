@@ -56,16 +56,16 @@ def mostrarEncuentrosNoJugado(request):
     return render(request, 'listarEncuentros.html', {'encuentros': encuentros})
 
 def asignarAlineacion(request, encuentro_id):
-
     if request.method == 'POST':
-
         jugadores_local = request.POST.getlist('jugadores_local[]', [])
         jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
+        formacion_local = request.POST.get('formacion_local', '4-3-3')  # Valor predeterminado
+        formacion_visita = request.POST.get('formacion_visita', '4-3-3')  # Valor predeterminado
 
         # Obtener descripciones de encuentro local y visita
         descripcion_encuentro_local = descripcion_encuentro.objects.filter(encuentro_id=encuentro_id).first()
         descripcion_encuentro_visita = descripcion_encuentro.objects.filter(encuentro_id=encuentro_id).first()
-        
+
         # Guardar jugadores del equipo local
         for jugador_id_local in jugadores_local[:11]:
             if jugador_id_local:
@@ -77,7 +77,8 @@ def asignarAlineacion(request, encuentro_id):
                     dorsal=contrato_local.dorsal,
                     posicion_jugador_id=posicionLocal,
                     capitan=False,
-                    estado=True
+                    estado=True,
+                    formacion=formacion_local
                 )
                 alineacion_local.save()
 
@@ -92,12 +93,14 @@ def asignarAlineacion(request, encuentro_id):
                     dorsal=contrato_visita.dorsal,
                     posicion_jugador_id=posicionVisita,
                     capitan=False,
-                    estado=True
+                    estado=True,
+                    formacion=formacion_visita
                 )
                 alineacion_visita.save()
 
         messages.success(request, 'Alineaciones guardadas correctamente.')
         return redirect('mostrarEncuentros')
+
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)

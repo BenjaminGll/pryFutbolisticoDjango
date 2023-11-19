@@ -7,13 +7,20 @@
   <div class="container mt-4">
     <h1 class="mb-4">Asignar Alineaciones</h1>
 
-
     <form method="post" action="{% url 'asignarAlineaciones' encuentro_id=encuentro.encuentro_id %}">
       {% csrf_token %}
 
       <div class="row">
         <div class="col-md-6">
-            <h2>{{ equipoLocal.0.nuevo_club.nombre }}</h2>
+          <h2>{{ equipoLocal.0.nuevo_club.nombre }}</h2>
+          <!-- Agrega el campo de selección para la formación -->
+          <label for="formacion_local">Formación:</label>
+          <select name="formacion_local" id="formacion_local" class="form-control">
+            {% for formacion in CHOICE_FORMACION %}
+              <option value="{{ formacion.0 }}">{{ formacion.1 }}</option>
+            {% endfor %}
+          </select>
+
           <table class="table">
             <thead>
               <tr>
@@ -31,7 +38,6 @@
                   <td>{{ jugador.dorsal }}</td>
                   <td>
                     <input type="checkbox" name="jugadores_local[]" value="{{ jugador.persona.persona_id }}">
-
                   </td>
                 </tr>
               {% endfor %}
@@ -40,7 +46,15 @@
         </div>
 
         <div class="col-md-6">
-            <h2>{{ equipoVisita.0.nuevo_club.nombre }}</h2>
+          <h2>{{ equipoVisita.0.nuevo_club.nombre }}</h2>
+          <!-- Agrega el campo de selección para la formación -->
+          <label for="formacion_visita">Formación:</label>
+          <select name="formacion_visita" id="formacion_visita" class="form-control">
+            {% for formacion in CHOICE_FORMACION %}
+              <option value="{{ formacion.0 }}">{{ formacion.1 }}</option>
+            {% endfor %}
+          </select>
+
           <table class="table">
             <thead>
               <tr>
@@ -65,7 +79,7 @@
           </table>
         </div>
       </div>
-
+      
       <div class="text-right mt-4">
         <button type="submit" class="btn btn-primary">Guardar</button>
         <a href="{% url 'lista_encuentros_N' %}" class="btn btn-secondary">Cancelar</a>

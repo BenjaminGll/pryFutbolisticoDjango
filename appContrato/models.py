@@ -16,6 +16,9 @@ class tipo_persona(models.Model):
     def __str__(self):
         return self.descripcion
 
+    def save(self, force_insert=False, force_update=False):
+        self.descripcion = self.decripcion.upper()
+        super(tipo_persona, self).save(force_insert, force_update)
     class Meta:
         verbose_name_plural='tipo_persona'
 

@@ -11,7 +11,7 @@ from appCompeticion.models import *
 from user.models import User
 from django.db.models import *
 from itertools import chain
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.templatetags.static import static
 from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
@@ -817,7 +817,9 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
 
         #return redirect('mostrar_evento', id_encuentro=idEncuentro)
 
-    #if request.method == 'POST'and filtro_default=='generales':
+    # if request.method == 'POST'and filtro_default=='generales':
+    #     dynamic_html = request.POST.get('miTextarea')
+    #     print("El valor del html es", dynamic_html)
 
 
 
@@ -836,11 +838,11 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
 
         equipo_local = descripcion_encuentro.objects.filter( 
                 encuentro_id=idEncuentro,
-                equipo_id__in=[encuentro_obj.equipo_local, encuentro_obj.equipo_visita],tipo_equipo='L'
+                equipo_id__in=[encuentro_obj.equipo_local, encuentro_obj.equipo_visita],tipo_equipo__in=['L','Local','LOCAL']
             ).first()
         equipo_visita = descripcion_encuentro.objects.filter( 
                 encuentro_id=idEncuentro,
-                equipo_id__in=[encuentro_obj.equipo_local, encuentro_obj.equipo_visita],tipo_equipo='V'
+                equipo_id__in=[encuentro_obj.equipo_visita, encuentro_obj.equipo_visita],tipo_equipo__in=['V','Visita','VISITA']
             ).first()
 
     elif tipo_filtro == 'en_juego':
@@ -855,12 +857,20 @@ def mostrarEvento(request, idEncuentro):
     return base_evento_view(request, idEncuentro, 'moduloTV/evento.html',filtro_default='en_juego')
 
 def mostrarEventosGenerales(request, idEncuentro):
-
+    banners = []
+    # html_dinamico = request.POST.getlist('miTextarea')
+    # print(html_dinamico)
     if request.method == 'POST':
-        # Obtén el HTML enviado en la solicitud POST
-        dynamic_html = request.POST.get('miTextarea')
-        print("El html es: ",dynamic_html)
-
+        print("POST request recibido")
+        print(request.POST)  # Imprime los datos POST
+        html_dinamico = request.POST.getlist('miTextarea')
+        html_dinamico = {'html': request.POST.get('miTextarea')}
+        print(html_dinamico)
+        banners.append(html_dinamico)
+        contenido = json.dumps({'banners': banners})
+        default_storage.save('eventos_temporales.json', ContentFile(contenido))
+            
+    
     return base_evento_view(request, idEncuentro, 'moduloTV/GeneralesTV.html', filtro_default='generales')
 
 

@@ -5,14 +5,18 @@
     .banner {
         display: flex;
         justify-content: space-between;
+        justify-content: space-around;
         align-items: center;
         padding: 10px;
+        flex-direction: row;
         background-color: #f0f0f0;
     }
 
     .equipo-info {
         display: flex;
         align-items: center;
+        flex-direction: column;
+        
     }
 
     .nombre-equipo {
@@ -34,15 +38,40 @@
         width: 50px;
         height: auto;
         margin-right: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
+   
+
+    
+
+    
 </style>
 
 <div class="container">
     <div class="row">
+        <div style="display: none;">
+            {% with equipo_local=equipo_local %}
+                <input type="text" id="logoLocal" name="logoLocal"   value="{{ equipo_local.equipo.logo  }}">
+                <input type="text" id="nombreLocal" name="nombreLocal"  value="{{ equipo_local.equipo.nombre }}">
+                <input type="text" id="golesLocal" name="golesLocal" value="{{ equipo_local.goles|default:'0' }}">
 
+            {% endwith %}
+
+            {% with equipo_visita=equipo_visita %}
+
+            <input type="text" id="logoVisita" name="logoVisita" value="{{ equipo_visita.equipo.logo  }}">
+            <input type="text" id="nombreVisita" name="nombreVisita" value="{{ equipo_visita.equipo.nombre }}">
+            <input type="text" id="golesVisita" name="golesVisita" value="{{ equipo_visita.goles|default:'0' }}">
+
+            {% endwith %}
+        </div>
         <!-- Datos de Encuentro -->
         <div class="col-md-4">
-            <form action="{% url 'mostrar_eventos_generales' idEncuentro %}" method="post" id="enviarDatosEncuentro">
+            <form id="enviarDatosEncuentro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
+                enctype="multipart/form-data">
+
                 {% csrf_token %}
 
                 <div class="card">
@@ -55,7 +84,7 @@
                                 <span class="input-group-text"><i class="fas fa-clock"></i></span>
                             </div>
                             &nbsp;
-                            <button type="submit" class="btn btn-primary" id="generarBannerEncuentro"><i
+                            <button type="button" class="btn btn-primary" id="generarBannerEncuentro"><i
                                     class="fas fa-eye"></i> Mostrar</button>
                         </div>
                     </div>
@@ -90,7 +119,7 @@
                         </form>
                     </div>
                 </div>
-                <textarea id="miTextarea" name="miTextarea"></textarea>
+                <!-- <textarea id="miTextarea" name="miTextarea"></textarea> -->
 
             </form>
         </div>
@@ -465,31 +494,118 @@ enviarButton.addEventListener('click', enviarHTML);
 
 
 
+    // document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
+    //     // Evita que el formulario se envíe automáticamente
+    //     // event.preventDefault();
+
+    //     const textarea = document.getElementById('miTextarea');
+
+    //     // Crea el contenido que deseas colocar en el textarea
+    //     const contenido = 'Este es el contenido que quiero colocar en el textarea.';
+
+    //     // Establece el contenido en el textarea
+    //     textarea.value = contenido;
+
+    //     // Envía el formulario
+    //     document.getElementById('enviarDatosEncuentro').submit();
+
+
+    //     textarea = document.getElementById('miTextarea');
+
+    //     // Crea el contenido que deseas colocar en el textarea
+    //     contenido = 'Este es el contenido que quiero colocar en el textarea.';
+
+    //     // Establece el contenido en el textarea
+    //     textarea.value = contenido;
+    // });
+    // document.addEventListener('DOMContentLoaded', function () {
+
+    // Función para generar el HTML dinámico
+    function generarHTML() {
+        const checkbox1 = document.getElementById('temperaturaCheckbox');
+        const checkbox2 = document.getElementById('marcadorCheckbox');
+        const checkbox3 = document.getElementById('estadioCheckbox');
+        const checkbox4 = document.getElementById('tipoEncuentroCheckbox');
+        const checkbox5 = document.getElementById('patrocinadorCheckbox');
+
+        // const idEncuentro = 2
+        let html = '';
+        //
+        // Construye dinámicamente el HTML del banner
+            html = '<div class="banner">';
+            // Equipo Local
+            html += '<div class="equipo-info">';
+
+        // Verifica si el checkbox 2 está seleccionado
+        if (checkbox2.checked) {
+            html += '<p class="goles-equipo">'+document.getElementById('golesLocal').value+'</p>';
+        }   
+            html += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
+            html += '<p class="nombre-equipo">'+document.getElementById('nombreLocal').value+'</p>';
+            html += '<img src="/static/images/'+document.getElementById('logoLocal').value+'" alt="Equipo Local">';
+        //
+        // Verifica si el checkbox 1 está seleccionado
+        if (checkbox1.checked) {
+            html += ''
+        }
+            html += '</div>';
+            html += '</div>';
+            
+            // Versus
+            html += '<div class="versus">VS</div>';
+
+            // Equipo Visitante
+            html += '<div class="equipo-info">';
+            html += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
+            html += '<p class="nombre-equipo">'+document.getElementById('nombreVisita').value+'</p>';
+            html += '<img src="/static/images/'+document.getElementById('logoVisita').value+'" alt="Equipo Visitante">';
+            if (checkbox4.checked) {
+                html += '<p>'+document.getElementById('tipoEncuentroCheckbox').value+'</p>';
+            }
+            
+            html += '</div>';
+            if (checkbox2.checked) {
+            html += '<p class="goles-equipo">'+document.getElementById('golesVisita').value+'</p>';
+            }
+            html += '</div>';
+
+            html += '</div>';
+
+        // Devuelve el HTML generado
+        return html;
+    }
     document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
         // Evita que el formulario se envíe automáticamente
         // event.preventDefault();
 
         const textarea = document.getElementById('miTextarea');
-
-        // Crea el contenido que deseas colocar en el textarea
-        const contenido = 'Este es el contenido que quiero colocar en el textarea.';
-
-        // Establece el contenido en el textarea
+        let contenido = '';
+        contenido += generarHTML();
         textarea.value = contenido;
-        body: JSON.stringify({ miTextarea: contenido })
+
+        console.log(contenido);
+        // Envía el formulario
+        // document.getElementById('enviarDatosEncuentro').submit();
+        // event.preventDefault();
+
+
+
+        // Agrega el valor del textarea como un nuevo campo al formulario antes de enviarlo
+        const formulario = document.getElementById('enviarDatosEncuentro');
+        const nuevoCampo = document.createElement('input');
+        nuevoCampo.type = 'hidden';
+        nuevoCampo.name = 'miTextarea';
+        nuevoCampo.value = contenido;
+        formulario.appendChild(nuevoCampo);
 
         // Envía el formulario
-        document.getElementById('enviarDatosEncuentro').submit();
+        formulario.submit();
     });
-
+    // });
 </script>
 
 
-<div id="banner-container" style="display:block;">
-    <!-- Contenido del banner -->
-    <textarea name="contenido_banner" id="contenido_banner"></textarea>
-    <!-- <button type="submit">Guardar Banner</button> -->
 
-</div>
+<textarea id="miTextarea" name="miTextarea" style="display: none;"></textarea>
 
 {% endblock %}

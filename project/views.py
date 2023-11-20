@@ -3,7 +3,7 @@ from unittest import case
 from django.forms import CharField
 from django.shortcuts import get_object_or_404, render,redirect
 from appContrato.models import *
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from appEquipo.models import *
 from appPartido.models import *
 from appCompeticion.models import *

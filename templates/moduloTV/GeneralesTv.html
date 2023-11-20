@@ -39,10 +39,27 @@
 
 <div class="container">
     <div class="row">
+        <div style="display: none;">
+            {% with equipo_local=equipo_local %}
+            <input type="text" id="logoLocal" name="logoLocal" value="{{ equipo_local.equipo.logo  }}">
+            <input type="text" id="nombreLocal" name="nombreLocal" value="{{ equipo_local.equipo.nombre }}">
+            <input type="text" id="golesLocal" name="golesLocal" value="{{ equipo_local.goles|default:'0' }}">
 
+            {% endwith %}
+
+            {% with equipo_visita=equipo_visita %}
+
+            <input type="text" id="logoVisita" name="logoVisita" value="{{ equipo_visita.equipo.logo  }}">
+            <input type="text" id="nombreVisita" name="nombreVisita" value="{{ equipo_visita.equipo.nombre }}">
+            <input type="text" id="golesVisita" name="golesVisita" value="{{ equipo_visita.goles|default:'0' }}">
+
+            {% endwith %}
+        </div>
         <!-- Datos de Encuentro -->
         <div class="col-md-4">
-            <form action="{% url 'mostrar_eventos_generales' idEncuentro %}" method="post" id="enviarDatosEncuentro">
+            <form id="enviarDatosEncuentro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
+                enctype="multipart/form-data">
+
                 {% csrf_token %}
 
                 <div class="card">
@@ -55,7 +72,7 @@
                                 <span class="input-group-text"><i class="fas fa-clock"></i></span>
                             </div>
                             &nbsp;
-                            <button type="submit" class="btn btn-primary" id="generarBannerEncuentro"><i
+                            <button type="button" class="btn btn-primary" id="generarBannerEncuentro"><i
                                     class="fas fa-eye"></i> Mostrar</button>
                         </div>
                     </div>
@@ -90,7 +107,7 @@
                         </form>
                     </div>
                 </div>
-                <textarea id="miTextarea" name="miTextarea"></textarea>
+                <!-- <textarea id="miTextarea" name="miTextarea"></textarea> -->
 
             </form>
         </div>
@@ -100,79 +117,89 @@
 
         <!-- Cronómetro -->
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Cronómetro</h3>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
-                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                        </div> &nbsp;
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+            <form id="enviarDatosCronometro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Cronómetro</h3>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="tiempo" name="tiempo"
+                                pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                            </div> &nbsp;
+                            <button type="button" class="btn btn-primary" id="generarBannerCronometro"><i
+                                    class="fas fa-eye"></i> Mostrar</button>
 
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- Agrega aquí tu código para el cronómetro -->
-                    <div class="input-group align-items-center">
-                        <label class="form-check-label" for="inputCronometro">Tiempo </label>
-                        <!-- <h5>Minuto: </h5>  -->
-                        &nbsp;
-                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
-                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
                         </div>
-                        <div class="btn-group ml-2" role="group" aria-label="Controles de tiempo">
-                            <button type="button" class="btn btn-success" id="playButton">
-                                <i class="fas fa-play"></i>
-                            </button>
+                    </div>
+                    <div class="card-body">
+                        <!-- Agrega aquí tu código para el cronómetro -->
+                        <div class="input-group align-items-center">
+                            <label class="form-check-label" for="inputCronometro">Tiempo </label>
+                            <!-- <h5>Minuto: </h5>  -->
                             &nbsp;
-                            <button type="button" class="btn btn-warning" id="pauseButton">
-                                <i class="fas fa-pause"></i>
-                            </button>
+                            <input type="text" class="form-control" id="tiempo" name="tiempo"
+                                pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                            </div>
+                            <div class="btn-group ml-2" role="group" aria-label="Controles de tiempo">
+                                <button type="button" class="btn btn-success" id="playButton">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                &nbsp;
+                                <button type="button" class="btn btn-warning" id="pauseButton">
+                                    <i class="fas fa-pause"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="cronoemtroCheckbox">
+                            <label class="form-check-label" for="cronometroCheckbox">Ocultar</label>
                         </div>
 
                     </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="cronoemtroCheckbox">
-                        <label class="form-check-label" for="cronometroCheckbox">Ocultar</label>
-                    </div>
-
                 </div>
-            </div>
+            </form>
         </div>
 
         <!-- Himnos -->
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Himnos</h3>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
-                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+            <form id="enviarDatosHimno" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Himnos</h3>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="tiempo" name="tiempo"
+                                pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                            </div>
+                            &nbsp;
+                            <button type="button" class="btn btn-primary" id="generarBannerHimno"><i class="fas fa-eye"></i> Mostrar</button>
                         </div>
-                        &nbsp;
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="localHimno" name="himno" value="local">
+                                &nbsp;
+                                <label class="form-check-label" for="localHimno">Local</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="visitaHimno" name="himno"
+                                    value="visita">
+                                <label class="form-check-label" for="visitaHimno">Visita</label>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="card-body">
-                    <form>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="localHimno" name="himno" value="local">
-                            &nbsp;
-                            <label class="form-check-label" for="localHimno">Local</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="visitaHimno" name="himno" value="visita">
-                            <label class="form-check-label" for="visitaHimno">Visita</label>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -357,7 +384,14 @@
 </div>
 
 <!-- Área del banner -->
-
+<div class="banner-container form-inline"
+    style="position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 30px; border-radius: 5px; z-index: 1;">
+    <img src="/static/images/equipo/logo/7.png" alt="Equipo Visitante"
+        style="width: 30px; height: auto; margin-right: 10px;">
+    <div class="banner-content" style="flex-grow: 1;">
+        Himno nacional de Perú
+    </div>
+</div>
 <!-- Aqui acababa scriot -->
 
 
@@ -446,50 +480,140 @@ enviarButton.addEventListener('click', enviarHTML);
 <!-- <textarea id="miTextarea" name="miTextarea"></textarea> -->
 
 <script>
-    // function enviarHTML() {
-    //     // Obtén el elemento textarea por su id
-    //     const textarea = document.getElementById('miTextarea');
-
-    //     // Crea el contenido que deseas colocar en el textarea
-    //     const contenido = 'Este es el contenido que quiero colocar en el textarea.';
-
-    //     // Establece el contenido en el textarea
-    //     textarea.value = contenido;
 
 
-    // }
-    // const enviarButton = document.getElementById('generarBannerEncuentro');
-    // enviarButton.addEventListener('click', enviarHTML);
-    // document.getElementById('enviarDatosEncuentro').submit();
+    // Función para generar el HTML dinámico
+    function generarHTML() {
+        const checkbox1 = document.getElementById('temperaturaCheckbox');
+        const checkbox2 = document.getElementById('marcadorCheckbox');
+        const checkbox3 = document.getElementById('estadioCheckbox');
+        const checkbox4 = document.getElementById('tipoEncuentroCheckbox');
+        const checkbox5 = document.getElementById('patrocinadorCheckbox');
+
+        // const idEncuentro = 2
+        let html = '';
+        //
+        // Construye dinámicamente el HTML del banner
+        html = '<div class="banner-container " style="position: absolute;top: -380px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; ">';
+        // Equipo Local
+        html += '<div class="equipo-info">';
+
+        // Verifica si el checkbox 2 está seleccionado
+        if (checkbox2.checked) {
+            html += '<p class="goles-equipo">' + document.getElementById('golesLocal').value + '</p>';
+        }
+        html += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
+        html += '   <p class="nombre-equipo">' + document.getElementById('nombreLocal').value + '</p>';
+        html += '   <img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Equipo Local" style="width: 150px; height: 150px; margin-right: 10px;">';
+        //
+        // Verifica si el checkbox 1 está seleccionado
+        if (checkbox1.checked) {
+            html += ''
+        }
+        html += '</div>';
+        html += '</div>';
+
+        // Versus
+        html += '<div class="versus">VS</div>';
+
+        // Equipo Visitante
+        html += '<div class="equipo-info">';
+        html += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
+        html += '<p class="nombre-equipo">' + document.getElementById('nombreVisita').value + '</p>';
+        html += '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Equipo Visitante" style="width: 180px; height: 180px; margin-right: 10px;">';
+        if (checkbox4.checked) {
+            html += '<p>' + document.getElementById('tipoEncuentroCheckbox').value + '</p>';
+        }
+
+        html += '</div>';
+        if (checkbox2.checked) {
+            html += '<p class="goles-equipo">' + document.getElementById('golesVisita').value + '</p>';
+        }
+        html += '</div>';
+
+        html += '</div>';
+
+        // Devuelve el HTML generado
+        return html;
+    }
 
 
+    //
+    function generarHTMLHimno() {
+        const radioLocal = document.getElementById('localHimno');
+        const radioVisita = document.getElementById('visitaHimno');
 
+        let html = '';
 
+        // Construye dinámicamente el HTML del banner
+        html = '<div class="banner-container form-inline" style="position: absolute;top: -80px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; ">';
+
+        // Verifica si se seleccionó el himno local
+        if (radioLocal.checked) {
+            html += '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Equipo Local" style="width: 100px; height: 100px; margin-right: 10px;">';
+            html += '<div class="banner-content" style="flex-grow: 1;">Himno nacional de ' + document.getElementById('nombreLocal').value + ' - Local </div>';
+        }
+
+        // Verifica si se seleccionó el himno de visita
+        if (radioVisita.checked) {
+            html += '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Equipo Visitante" style="width: 30px; height: auto; margin-right: 10px;">';
+            html += '<div class="banner-content" style="flex-grow: 1;">Himno nacional de ' + document.getElementById('nombreVisita').value + ' - Visita</div>';
+        }
+
+        html += '</div>';
+
+        // Devuelve el HTML generado
+        return html;
+    }
+
+    //
     document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
         // Evita que el formulario se envíe automáticamente
         // event.preventDefault();
 
         const textarea = document.getElementById('miTextarea');
-
-        // Crea el contenido que deseas colocar en el textarea
-        const contenido = 'Este es el contenido que quiero colocar en el textarea.';
-
-        // Establece el contenido en el textarea
+        let contenido = '';
+        contenido += generarHTML();
         textarea.value = contenido;
-        body: JSON.stringify({ miTextarea: contenido })
 
-        // Envía el formulario
-        document.getElementById('enviarDatosEncuentro').submit();
+        console.log(contenido);
+
+        escribirDatos(contenido, 'enviarDatosEncuentro')
+
     });
 
+    document.getElementById('generarBannerHimno').addEventListener('click', function (event) {
+        // Evita que el formulario se envíe automáticamente
+        // event.preventDefault();
+
+        const textarea = document.getElementById('miTextarea');
+        let contenido = '';
+        contenido += generarHTMLHimno();
+        textarea.value = contenido;
+
+        console.log(contenido);
+
+        escribirDatos(contenido, 'enviarDatosHimno')
+
+    });
+
+    function escribirDatos(contenido, idBoton) {
+        // Agrega el valor del textarea como un nuevo campo al formulario antes de enviarlo
+        const formulario = document.getElementById(idBoton);
+        const nuevoCampo = document.createElement('input');
+        nuevoCampo.type = 'hidden';
+        nuevoCampo.name = 'miTextarea';
+        nuevoCampo.value = contenido;
+        formulario.appendChild(nuevoCampo);
+
+        // Envía el formulario
+        formulario.submit();
+    }
+    // });
 </script>
 
 
-<div id="banner-container" style="display:block;">
-    <!-- Contenido del banner -->
-    <textarea name="contenido_banner" id="contenido_banner"></textarea>
-    <!-- <button type="submit">Guardar Banner</button> -->
 
-</div>
+<textarea id="miTextarea" name="miTextarea" style="display: none;"></textarea>
 
 {% endblock %}

@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from django.views import View
 from .models import *
-from appEquipo.models import equipo
+from appEquipo.models import *
 from appContrato.models import *
+from appPartido.models import *
 from django.shortcuts import render,  redirect
 from django.contrib import messages
 
@@ -195,3 +196,45 @@ def asignarEventos(request, encuentro_id):
 
 
     return render(request, 'asignarEventos.html', {'encuentro': encuentro_obj,'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita, 'tipos_evento_relacionados': tipos_evento_relacionados,'atributos_evento': atributos_evento})
+
+def asignarEstadisticas(request, encuentro_id):
+    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+    contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
+    contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
+
+    if request.method == 'POST':
+        
+        posesion_balon = request.POST.get('posesion_balon', None)
+        pases_acertados = request.POST.get('pases_acertados', None)
+        tiros_desviados = request.POST.get('tiros_desviados', None)
+        efectividad_pases = request.POST.get('efectividad_pases', None)
+        tiros_arco = request.POST.get('tiros_arco', None)
+        tiros_esquina = request.POST.get('tiros_esquina', None)
+
+        estadistica_local = estadisticas(
+            encuentro=encuentro_obj,
+            equipo=equipoLocal,
+            posesion_balon=posesion_balon,
+            pases_acertados=pases_acertados,
+            tiros_desviados=tiros_desviados,
+            efectividad_pases=efectividad_pases,
+            tiros_arco=tiros_arco,
+            tiros_esquina=tiros_esquina
+        )
+        estadistica_local.save()
+
+        estadistica_visita = estadisticas(
+            encuentro=encuentro_obj,
+            equipo=equipoVisita,
+            posesion_balon=posesion_balon,
+            pases_acertados=pases_acertados,
+            tiros_desviados=tiros_desviados,
+            efectividad_pases=efectividad_pases,
+            tiros_arco=tiros_arco,
+            tiros_esquina=tiros_esquina
+        )
+        estadistica_visita.save()
+
+    return render(request, 'asignarEstadisticas.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})

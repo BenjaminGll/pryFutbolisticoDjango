@@ -3,7 +3,7 @@ from unittest import case
 from django.forms import CharField
 from django.shortcuts import get_object_or_404, render,redirect
 from appContrato.models import *
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from appEquipo.models import *
 from appPartido.models import *
 from appCompeticion.models import *
@@ -871,7 +871,11 @@ def mostrarEventosGenerales(request, idEncuentro):
         default_storage.save('eventos_temporales.json', ContentFile(contenido))
             
     
+<<<<<<< HEAD
     return base_evento_view(request, idEncuentro, 'moduloTV/GeneralesTV.html', filtro_default='generales')
+=======
+    return base_evento_view(request, idEncuentro, 'moduloTV/GeneralesTv.html', filtro_default='generales')
+>>>>>>> 59f38fe73285b7856fe563ab231ad196ec7c7991
 
 
 #####

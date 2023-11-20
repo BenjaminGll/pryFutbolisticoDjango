@@ -195,3 +195,19 @@ class evento(models.Model):
 
     class Meta:
         verbose_name_plural = 'evento'
+
+class estadisticas(models.Model):
+       
+    estadisticas_id=models.BigAutoField(primary_key=True)
+    posesion_balon=models.IntegerField()
+    pases_acertados=models.IntegerField()
+    tiros_desviados=models.IntegerField()
+    efectividad_pases=models.IntegerField()
+    tiros_arco=models.IntegerField()
+    tiros_esquina=models.IntegerField()
+
+    def __str__(self):
+        return str(self.estadisticas_id)
+
+    class Meta:
+        verbose_name_plural='estadisticas'

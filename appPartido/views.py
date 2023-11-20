@@ -57,6 +57,8 @@ def mostrarEncuentros(request):
             encuentros = encuentro.objects.filter(estado_jugado='N')
     elif tipo == 'eventos':
          encuentros = encuentro.objects.filter(estado_jugado='E')
+    elif tipo == 'estadisticas':
+         encuentros = encuentro.objects.filter(estado_jugado='E')
     else:
           encuentros = encuentro.objects.all()
 
@@ -71,6 +73,8 @@ def asignar(request, tipo, encuentro_id):
         return render(request, 'asignar_terna_arbitral.html', {'encuentro_id': encuentro_id})
     elif tipo == 'eventos':
         return render(request, 'asignar_eventos.html', {'encuentro_id': encuentro_id})
+    elif tipo == 'estadisticas':
+        return render(request, 'asignarEstadisticas.html', {'encuentro_id': encuentro_id})
     else:
         # Manejo de error o redirección predeterminada
         return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
@@ -131,3 +135,51 @@ def asignarAlineacion(request, encuentro_id):
 
 
     return render(request, 'asignarAlineaciones.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})
+
+def asignarEstadisticas(request, encuentro_id):
+    encuentro_obj = get_object_or_404(encuentro, encuentro_id=encuentro_id)
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+
+    if request.method == 'POST':
+        
+        posesion_balon = request.POST.get('posesion_balon', None)
+        pases_acertados = request.POST.get('pases_acertados', None)
+        tiros_desviados = request.POST.get('tiros_desviados', None)
+        efectividad_pases = request.POST.get('efectividad_pases', None)
+        tiros_arco = request.POST.get('tiros_arco', None)
+        tiros_esquina = request.POST.get('tiros_esquina', None)
+
+        estadistica_local = estadistica(
+            encuentro=encuentro_obj,
+            equipo=equipoLocal,
+            tiempo_extra=tiempo_extra,
+            motivo=motivo,
+            cantidad=cantidad,
+            estado_evento=estado_evento,
+            posesion_balon=posesion_balon,
+            pases_acertados=pases_acertados,
+            tiros_desviados=tiros_desviados,
+            efectividad_pases=efectividad_pases,
+            tiros_arco=tiros_arco,
+            tiros_esquina=tiros_esquina
+        )
+        estadistica_local.save()
+
+        estadistica_visita = estadistica(
+            encuentro=encuentro_obj,
+            equipo=equipoVisita,
+            tiempo_extra=tiempo_extra,
+            motivo=motivo,
+            cantidad=cantidad,
+            estado_evento=estado_evento,
+            posesion_balon=posesion_balon,
+            pases_acertados=pases_acertados,
+            tiros_desviados=tiros_desviados,
+            efectividad_pases=efectividad_pases,
+            tiros_arco=tiros_arco,
+            tiros_esquina=tiros_esquina
+        )
+        estadistica_visita.save()
+
+    return render(request, 'asignarEstadistiicas.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})

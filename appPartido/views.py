@@ -70,7 +70,7 @@ def asignar(request, tipo, encuentro_id):
     elif tipo == 'terna_arbitral':
         return render(request, 'asignar_terna_arbitral.html', {'encuentro_id': encuentro_id})
     elif tipo == 'eventos':
-        return render(request, 'asignar_eventos.html', {'encuentro_id': encuentro_id})
+        return render(request, 'asignarEventos.html', {'encuentro_id': encuentro_id})
     else:
         # Manejo de error o redirección predeterminada
         return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
@@ -131,3 +131,63 @@ def asignarAlineacion(request, encuentro_id):
 
 
     return render(request, 'asignarAlineaciones.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})
+
+
+def asignarEventos(request, encuentro_id):
+    
+    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    fecha = encuentro_obj.fecha
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+    contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
+    contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
+    eventos_relacionados = evento.objects.filter(encuentro_id=encuentro_obj.encuentro_id)
+    atributos_evento = evento.objects.all()
+    tipos_evento_relacionados = tipo_evento.objects.all()
+    if request.method == 'POST':
+        jugadores_local = request.POST.getlist('jugadores_local[]', [])
+        jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
+        formacion_local = request.POST.get('formacion_local', '4-3-3')  # Valor predeterminado
+        formacion_visita = request.POST.get('formacion_visita', '4-3-3')  # Valor predeterminado
+
+        # Obtener descripciones de encuentro local y visita
+        descripcion_encuentro_local = descripcion_encuentro.objects.filter(equipo=equipoLocal).first()
+        descripcion_encuentro_visita = descripcion_encuentro.objects.filter(equipo=equipoVisita).first()
+
+        # Guardar jugadores del equipo local
+        for jugador_id_local in jugadores_local[:11]:
+            if jugador_id_local:
+                contrato_local = contrato.objects.filter(persona_id=jugador_id_local).first()
+                posicionLocal = posicion_jugador.objects.get(posicion_jugador_id=contrato_local.posicion_jugador.posicion_jugador_id)
+                alineacion_local = alineacion(
+                    descripcion_encuentro_id=descripcion_encuentro_local,
+                    contrato_id=contrato_local,
+                    dorsal=contrato_local.dorsal,
+                    posicion_jugador_id=posicionLocal,
+                    capitan=False,
+                    estado=True,
+                    formacion=formacion_local
+                )
+                alineacion_local.save()
+
+        # Guardar jugadores del equipo visitante
+        for jugador_id_visita in jugadores_visita[:11]:
+            if jugador_id_visita:
+                contrato_visita = contrato.objects.filter(persona_id=jugador_id_visita).first()
+                posicionVisita = posicion_jugador.objects.get(posicion_jugador_id=contrato_visita.posicion_jugador.posicion_jugador_id)
+                alineacion_visita = alineacion(
+                    descripcion_encuentro_id=descripcion_encuentro_visita,
+                    contrato_id=contrato_visita,
+                    dorsal=contrato_visita.dorsal,
+                    posicion_jugador_id=posicionVisita,
+                    capitan=False,
+                    estado=True,
+                    formacion=formacion_visita
+                )
+                alineacion_visita.save()
+
+        messages.success(request, 'Eventos guardados correctamente.')
+        return redirect('lista_encuentros_N')
+
+
+    return render(request, 'asignarEventos.html', {'encuentro': encuentro_obj,'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita, 'tipos_evento_relacionados': tipos_evento_relacionados,'atributos_evento': atributos_evento})

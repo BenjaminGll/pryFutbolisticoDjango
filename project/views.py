@@ -3,7 +3,7 @@ from unittest import case
 from django.forms import CharField
 from django.shortcuts import get_object_or_404, render,redirect
 from appContrato.models import *
-
+# from bs4 import BeautifulSoup
 from appEquipo.models import *
 from appPartido.models import *
 from appCompeticion.models import *
@@ -11,7 +11,7 @@ from appCompeticion.models import *
 from user.models import User
 from django.db.models import *
 from itertools import chain
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.templatetags.static import static
 from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
@@ -763,7 +763,7 @@ def mostrarEncuentrosEvento(request):
             
     return render(request, 'moduloTV/listaEncuentros.html', {'competiciones':competiciones,'grupos':grupos,'fases':fases,'encuentros': encuentros,'idEncuentro':idEncuentro})
 
-def mostrarEvento(request, idEncuentro):
+def mostrarEventos(request, idEncuentro):
     # Manejo de la solicitud POST
     if request.method == 'POST':
         eventos_seleccionados = request.POST.getlist('idEvento')
@@ -787,13 +787,96 @@ def mostrarEvento(request, idEncuentro):
 
     if tipo_filtro == 'generales':
         eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True, tipo_evento_id__nombre__in=nombres_eventos_generales)
+        redirect('moduloTV/GeneralesTV.html',eventos)
     elif tipo_filtro == 'en_juego':
         eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales)
+        
     else:
         eventos = evento.objects.none()
 
     return render(request, 'moduloTV/evento.html', {'eventos': eventos, 'tipo_filtro': tipo_filtro})
-        
+
+
+
+###
+# views.py
+# ...
+
+def base_evento_view(request, idEncuentro, template_name, filtro_default):
+
+    if request.method == 'POST'and filtro_default=='en_juego':
+        eventos_seleccionados = request.POST.getlist('idEvento')
+        eventos_para_actualizar = evento.objects.filter(evento_id__in=eventos_seleccionados)
+
+        # Lógica específica para cada vista hija
+        guardar_eventos_temporales(eventos_para_actualizar)
+
+        for evento_seleccionado in eventos_para_actualizar:
+            evento_seleccionado.estado_evento = False
+            evento_seleccionado.save()
+
+        #return redirect('mostrar_evento', id_encuentro=idEncuentro)
+
+    # if request.method == 'POST'and filtro_default=='generales':
+    #     dynamic_html = request.POST.get('miTextarea')
+    #     print("El valor del html es", dynamic_html)
+
+
+
+
+    
+
+
+    tipo_filtro = request.GET.get('filtro', filtro_default)
+    nombres_eventos_generales = ["CRONOMETRO", "PARTIDO SUSPENDIDO"]
+    equipo_local=''
+    equipo_visita=''
+    if tipo_filtro == 'generales':
+
+        eventos = evento.objects.none()
+        encuentro_obj = encuentro.objects.filter(encuentro_id=idEncuentro).first()
+
+        equipo_local = descripcion_encuentro.objects.filter( 
+                encuentro_id=idEncuentro,
+                equipo_id__in=[encuentro_obj.equipo_local, encuentro_obj.equipo_visita],tipo_equipo__in=['L','Local','LOCAL']
+            ).first()
+        equipo_visita = descripcion_encuentro.objects.filter( 
+                encuentro_id=idEncuentro,
+                equipo_id__in=[encuentro_obj.equipo_visita, encuentro_obj.equipo_visita],tipo_equipo__in=['V','Visita','VISITA']
+            ).first()
+
+    elif tipo_filtro == 'en_juego':
+        eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales)
+    else:
+        print('Template name evento:', template_name)
+        eventos = evento.objects.none()
+
+    return render(request, template_name, {'eventos': eventos, 'tipo_filtro': tipo_filtro,'idEncuentro': idEncuentro, 'equipo_local':equipo_local,'equipo_visita':equipo_visita})
+
+def mostrarEvento(request, idEncuentro):
+    return base_evento_view(request, idEncuentro, 'moduloTV/evento.html',filtro_default='en_juego')
+
+def mostrarEventosGenerales(request, idEncuentro):
+    banners = []
+    # html_dinamico = request.POST.getlist('miTextarea')
+    # print(html_dinamico)
+    if request.method == 'POST':
+        print("POST request recibido")
+        print(request.POST)  # Imprime los datos POST
+        html_dinamico = request.POST.getlist('miTextarea')
+        html_dinamico = {'html': request.POST.get('miTextarea')}
+        print(html_dinamico)
+        banners.append(html_dinamico)
+        contenido = json.dumps({'banners': banners})
+        default_storage.save('eventos_temporales.json', ContentFile(contenido))
+            
+    
+    return base_evento_view(request, idEncuentro, 'moduloTV/GeneralesTv.html', filtro_default='generales')
+
+
+#####
+
+
 
 
 

@@ -5,19 +5,6 @@ from django import forms
 from appEquipo.models import alineacion
 
 # Create your models here.
-class formacion(models.Model):
-    formacion_id=models.BigAutoField(primary_key=True)
-    descripcion=models.CharField(max_length=10)
-
-    def save(self, force_insert=False, force_update=False):
-        self.descripcion = self.descripcion.upper()
-        super(formacion, self).save(force_insert, force_update)
-
-    def __str__(self):
-        return self.descripcion
-    
-    class Meta:
-        verbose_name_plural='formacion'
 
 
 class ciudad(models.Model):
@@ -83,7 +70,6 @@ class descripcion_encuentro(models.Model):
     goles = models.CharField(max_length=4, blank=True, null=True)
     goles_ronda_penales = models.CharField(max_length=4 , blank=True, null=True)
     resultado = models.CharField(max_length=2, choices=CHOICE_RESULTADO, blank=True, null=True)
-    formacion = models.ForeignKey('formacion', on_delete=models.CASCADE, db_column='formacion_id', related_name='descripcion_encuentros', blank=True, null=True)
     equipo = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id', related_name='descripcion_encuentros', blank=True, null=True)
     encuentro = models.ForeignKey('encuentro', on_delete=models.CASCADE, db_column='encuentro_id', related_name='descripcion_encuentros', blank=True, null=True)
 

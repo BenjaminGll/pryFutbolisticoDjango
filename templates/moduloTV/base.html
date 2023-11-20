@@ -21,12 +21,12 @@
         <div class="position-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="?filtro=generales">
+                    <a class="nav-link active" href="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}?filtro=generales">
                         Generales
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="?filtro=en_juego">
+                    <a class="nav-link active" href="{% if idEncuentro %}{% url 'mostrar_evento' idEncuentro=idEncuentro %}{% endif %}?filtro=en_juego">
                         En juego
                     </a>
                 </li>

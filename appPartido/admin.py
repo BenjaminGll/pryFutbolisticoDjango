@@ -2,13 +2,6 @@ from django.contrib import admin
 from appPartido.models import *
 
 
-class formacionAdmin(admin.ModelAdmin):
-    list_display=['descripcion']
-    ordering=['formacion_id']
-    search_fields = ['descripcion']
-    list_per_page=5
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class ciudadAdmin(admin.ModelAdmin):
     list_display=['nombre','norma','pais_id']
     ordering=['nombre']
@@ -26,7 +19,7 @@ class sedeAdmin(admin.ModelAdmin):
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 ##
 class descripcionEncuentroAdmin(admin.ModelAdmin):
-    list_display=['encuentro','equipo','goles','goles_ronda_penales','resultado','formacion']
+    list_display=['encuentro','equipo','goles','goles_ronda_penales','resultado']
     ordering=['encuentro']
     search_fields = ['encuentro','equipo__nombre', 'encuentro__encuentro_id']
     list_per_page=5
@@ -66,7 +59,6 @@ class eventoAdmin(admin.ModelAdmin):
         js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js','assets/js/control_botones.js',)
 
 
-admin.site.register(formacion,formacionAdmin)
 admin.site.register(ciudad,ciudadAdmin)
 admin.site.register(sede,sedeAdmin)
 admin.site.register(descripcion_encuentro,descripcionEncuentroAdmin)

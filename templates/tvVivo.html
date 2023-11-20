@@ -43,9 +43,6 @@
     border-radius: 5px;
     z-index: 1;
   }
-
-
- 
 </style>
 <div class="container">
   <!-- <h1>TV en Vivo - Partido de Fútbol</h1> -->
@@ -56,12 +53,12 @@
 
     <div class="banner-marcadores">
       <span id="cronometro" style="background-color: rgb(210, 210, 210); color: black;">00:00</span>
-    <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
-      style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span
-      id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img
-      src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
-      style="margin-top:0px; width: 13%">
-  </div>
+      <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
+        style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span
+        id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img
+        src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
+        style="margin-top:0px; width: 13%">
+    </div>
 
     <div id="banners-container" class="banners-container" style="display: none;">
       <!-- Contenido del banner -->
@@ -93,7 +90,7 @@
 <script>
   console.log("Fuera del bucle");
   // ...
-  let bannerElement = null; 
+  let bannerElement = null;
   function obtenerBanners() {
 
     fetch('/datostv')
@@ -111,7 +108,7 @@
               bannerElement.classList.add('banner-container');
               bannersContainer.appendChild(bannerElement);
             }
-            
+
             bannerElement.innerHTML = banner.html; // Actualizar el HTML del banner actual
             console.log('HTML del banner:', banner.html);
             // Muestra banners-container
@@ -139,19 +136,19 @@
   // obtenerBanners();
   setInterval(obtenerBanners, 2000);
 
-  document.addEventListener('DOMContentLoaded', function() {
-  var minutos = 0;
-  var segundos = 0;
-  var cronometroDisplay = document.getElementById('cronometro');
-  var cronometro = setInterval(function() {
+  document.addEventListener('DOMContentLoaded', function () {
+    var minutos = 0;
+    var segundos = 0;
+    var cronometroDisplay = document.getElementById('cronometro');
+    var cronometro = setInterval(function () {
       segundos++;
       if (segundos == 60) {
-          minutos++;
-          segundos = 0;
+        minutos++;
+        segundos = 0;
       }
       cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
-  }, 1000);
-});
+    }, 1000);
+  });
 </script>
 
 <!--  -->

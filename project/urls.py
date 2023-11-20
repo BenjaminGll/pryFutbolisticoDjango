@@ -35,6 +35,7 @@ urlpatterns = [
     path('admintv/<int:idEncuentro>/',mostrarEvento , name='mostrar_evento'),
     path('admintv/encuentros', mostrarEncuentrosEvento, name='mostrar_encuentro_evento'),
     path('limpiar-eventos-temporales/', limpiar_eventos_temporales, name='limpiar_eventos_temporales'),
+    path('admintv/generales/<int:idEncuentro>/',mostrarEventosGenerales , name='mostrar_eventos_generales'),
 
 
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),

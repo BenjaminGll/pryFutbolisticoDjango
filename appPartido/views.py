@@ -132,7 +132,7 @@ def asignarAlineacion(request, encuentro_id):
                 alineacion_visita.save()
 
         messages.success(request, 'Alineaciones guardadas correctamente.')
-        return redirect('lista_encuentros_N')
+        return redirect('lista_encuentros')
 
 
     return render(request, 'asignarAlineaciones.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})

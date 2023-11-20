@@ -871,7 +871,7 @@ def mostrarEventosGenerales(request, idEncuentro):
         default_storage.save('eventos_temporales.json', ContentFile(contenido))
             
     
-    return base_evento_view(request, idEncuentro, 'moduloTV/GeneralesTV.html', filtro_default='generales')
+    return base_evento_view(request, idEncuentro, 'moduloTV/GeneralesTv.html', filtro_default='generales')
 
 
 #####

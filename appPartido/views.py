@@ -179,7 +179,31 @@ def asignarEventos(request, encuentro_id):
         print(eventos_obj)
         messages.success(request, 'Eventos guardados correctamente.')
 
-    return render(request, 'asignarEventos.html', {'encuentro': encuentro_obj,'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita, 'tipos_evento_relacionados': tipos_evento_relacionados,'atributos_evento': atributos_evento})
+    return render(request, 'asignarEventos.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita, 'tipos_evento_relacionados': tipos_evento_relacionados, 'eventos_obj': eventos_obj})
+
+def guardar_eventos(jugadores, descripcion_encuentro, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento):
+    for jugador_id in jugadores:
+        if jugador_id:
+            contrato_jugador = contrato.objects.get(persona_id=jugador_id)
+            alineacion_jugador = alineacion.objects.get(contrato_id=contrato_jugador)  # Utilizar el campo correcto
+
+            tipo_evento_seleccionado = tipo_evento.objects.first()  # Ajusta este valor según tus necesidades
+            encuentro_obj = descripcion_encuentro.encuentro
+
+            evento_obj = evento(
+                tipo_evento_id=tipo_evento_seleccionado,
+                competicion_id=None,
+                encuentro_id=encuentro_obj,
+                alineacion1_id=alineacion_jugador,
+                alineacion2_id=alineacion_jugador,  # Ajusta este valor según tus necesidades
+                tiempo_reglamentario=tiempo_reglamentario,
+                tiempo_extra=tiempo_extra,
+                motivo=motivo,
+                cantidad=cantidad,
+                estado_evento=estado_evento
+            )
+            evento_obj.save()
+
 
 def asignarEstadisticas(request, encuentro_id):
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)

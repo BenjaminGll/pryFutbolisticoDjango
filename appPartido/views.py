@@ -170,10 +170,10 @@ def asignarEventos(request, encuentro_id):
         descripcion_encuentro_visita = descripcion_encuentro.objects.filter(equipo=equipoVisita).first()
 
         # Guardar eventos del equipo local
-        guardar_eventos(jugadores_local[:11], descripcion_encuentro_local, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento)
+        guardar_eventos(jugadores_local[:1], descripcion_encuentro_local, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento)
 
         # Guardar eventos del equipo visitante
-        guardar_eventos(jugadores_visita[:11], descripcion_encuentro_visita, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento)
+        guardar_eventos(jugadores_visita[:1], descripcion_encuentro_visita, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento)
 
         eventos_obj = evento.objects.filter(encuentro_id=encuentro_obj)
         print(eventos_obj)

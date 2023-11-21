@@ -33,11 +33,11 @@ class ObtenerAlineacionesView(View):
         if tipo_evento_id == '3':
             data = {
                 'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
-                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
             }
         elif tipo_evento_id == '37':
             data = {
-                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
                 'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
             }
         else:
@@ -196,10 +196,10 @@ def guardar_eventos(jugadores, descripcion_encuentro, motivo, cantidad, tiempo_r
                 encuentro_id=encuentro_obj,
                 alineacion1_id=alineacion_jugador,
                 alineacion2_id=alineacion_jugador,  # Ajusta este valor según tus necesidades
-                tiempo_reglamentario=tiempo_reglamentario,
-                tiempo_extra=tiempo_extra,
-                motivo=motivo,
-                cantidad=cantidad,
+                tiempo_reglamentario=tiempo_reglamentario if tiempo_reglamentario else None,
+                tiempo_extra=tiempo_extra if tiempo_extra else None,
+                motivo=motivo if motivo else None,
+                cantidad=cantidad if cantidad else None,
                 estado_evento=estado_evento
             )
             evento_obj.save()

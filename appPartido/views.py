@@ -50,7 +50,7 @@ class ObtenerAlineacionesView(View):
 
 def mostrarEncuentros(request):
 
-    tipo = request.GET.get('tipo', 'alineaciones')  
+    tipo = request.GET.get('tipo','Alineacion')  
 
     # Obtén los encuentros según el tipo
     if tipo == 'alineaciones':
@@ -74,7 +74,7 @@ def asignar(request, tipo, encuentro_id):
     elif tipo == 'terna_arbitral':
         return render(request, 'asignar_terna_arbitral.html', {'encuentro_id': encuentro_id})
     elif tipo == 'eventos':
-        return render(request, 'asignar_eventos.html', {'encuentro_id': encuentro_id})
+        return render(request, 'asignarEventos.html', {'encuentro_id': encuentro_id})
     elif tipo == 'estadisticas':
         return render(request, 'asignarEstadisticas.html', {'encuentro_id': encuentro_id})
     else:

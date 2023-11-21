@@ -5,15 +5,15 @@
 
 {% block content %}
   <div class="container mt-4">
-    <h1 class="mb-4">Asignar Eventos: {{ equipoLocal.0.nuevo_club.nombre }} vs {{ equipoVisita.0.nuevo_club.nombre }} - {{encuentro.fecha}} </h1>
+    <h1 class="mb-4">Asignar Eventos: {{ equipoLocal.0.nuevo_club.nombre }} vs {{ equipoVisita.0.nuevo_club.nombre }} - {{ encuentro.fecha }} </h1>
 
     <form method="post" action="{% url 'asignarEventos' encuentro_id=encuentro.encuentro_id %}">
       {% csrf_token %}
 
       <div class="row">
         <div class="col-md-6">
-            <label for="formacion_local">Tipo evento:</label>
-            <select name="formacion_local" id="formacion_local" class="form-control">
+            <label for="tipo_evento">Tipo de Evento:</label>
+            <select name="tipo_evento" id="tipo_evento" class="form-control">
                 {% for tipo_evento in tipos_evento_relacionados %}
                     <option value="{{ tipo_evento.tipo_evento_id }}">
                         {{ tipo_evento.nombre }}
@@ -21,87 +21,94 @@
                 {% endfor %}
             </select>
         </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-          <label for="tiempo_reglamentario">Tiempo Reglamentario:</label>
-          <input name="tiempo_reglamentario" id="tiempo_reglamentario" class="form-control" type="time">
-          {% for evento in atributos_evento %}
-              <option value="{{ evento.evento_id }}">
-                {{ evento.tiempo_reglamentario}}
-            </option>
-          {% endfor %}
       </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-6">
-        <label for="tiempo_extra">Tiempo Extra:</label>
-        <input type="time" name="tiempo_extra" id="tiempo_extra" class="form-control">
-        {% for evento in atributos_evento %}
-              <option value="{{ evento.evento_id }}">
-                {{ evento.tiempo_extra}}
-            </option>
-          {% endfor %}
-    </div>
-</div>
-
-<div class="row">
-  <div class="col-md-6">
-      <label for="motivo">Motivo:</label>
-      <input type="text" name="motivo" id="motivo" class="form-control">
-      {% for evento in atributos_evento %}
-            <option value="{{ evento.evento_id }}">
-              {{ evento.motivo}}
-          </option>
-        {% endfor %}
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-6">
-      <label for="cantidad">Cantidad:</label>
-      <input type="number" name="cantidad" id="cantidad" class="form-control">
-      {% for evento in atributos_evento %}
-            <option value="{{ evento.evento_id }}">
-              {{ evento.cantidad}}
-          </option>
-        {% endfor %}
-  </div>
-</div>
-
-  
-<div class="row">
-  <div class="col-md-6">
-  <div>
-    <label for="jugadores_local">Alineacion Local:</label>
-    <select name="jugadores_local" id="jugadores_local">
-      {% for jugador in equipoLocal %}
-        <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  
-
-        <div class="col-md-6">
-          <!-- Agrega el campo de selección para la formación -->
-        <!-- Agrega el campo de selección para la formación -->
-        
-        <div>
-          <label for="formacion_visita">Alineación Visita:</label>
-          <select name="jugadores_visita" id="formacion_visita">
-            {% for jugador in equipoVisita %}
-              <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        
       
+<div class="row">
+  <div class="col-md-6">
+      <label for="tiempo_reglamentario">Tiempo Reglamentario:</label>
+      <input name="tiempo_reglamentario" id="tiempo_reglamentario" class="form-control" type="time" step="1" required>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+      <label for="tiempo_extra">Tiempo Extra:</label>
+      <input type="time" name="tiempo_extra" id="tiempo_extra" class="form-control" step="1" required>
+  </div>
+</div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label for="motivo">Motivo:</label>
+          <input type="text" name="motivo" id="motivo" class="form-control">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label for="cantidad">Cantidad:</label>
+          <input type="number" name="cantidad" id="cantidad" class="form-control">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div>
+            <label for="jugadores_local">Alineacion Local:</label>
+            <select name="jugadores_local[]" id="jugadores_local" multiple>
+              {% for jugador in equipoLocal %}
+                <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div>
+            <label for="jugadores_visita">Alineación Visita:</label>
+            <select name="jugadores_visita[]" id="jugadores_visita" multiple>
+              {% for jugador in equipoVisita %}
+                <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="text-right mt-4">
         <button type="submit" class="btn btn-primary">Guardar</button>
         <a href="{% url 'lista_encuentros' %}?tipo=alineaciones" class="btn btn-secondary">Cancelar</a>
       </div>
+
+      <h2>Eventos Guardados</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tipo de Evento</th>
+            <th>Tiempo Reglamentario</th>
+            <th>Persona Local</th>
+            <th>Persona Visitante</th>
+            <th>Motivo</th>
+            <th>Cantidad</th>
+            <!-- Agrega más columnas según tus campos de evento -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for evento in eventos_obj %}
+            <tr>
+                <td>{{ evento.tipo_evento_id.nombre }}</td>
+                <td>{{ evento.tiempo_reglamentario }}</td>
+                <td>{{ evento.alineacion1_id.contrato_id.persona.nombre }}</td> 
+                <td>{{ evento.alineacion2_id.contrato_id.persona.nombre }}</td> 
+                <td>{{ evento.motivo }}</td>
+                <td>{{ evento.cantidad }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
     </form>
   </div>
 {% endblock %}

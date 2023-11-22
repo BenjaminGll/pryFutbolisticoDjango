@@ -1,0 +1,85 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">Asignar Estadisticas</h1>
+
+    <form method="post" action="{% url 'asignarEstadisticas' encuentro_id=encuentro.encuentro_id %}">
+      {% csrf_token %}
+
+      <div class="row">
+        <!-- Columna de estadísticas -->
+        <div class="col-md-3">
+            <h2>Estadísticas</h2>
+            <form>
+                <div>
+                    <label for="posesion_balon">Posesión balón %:</label>
+                    <input type="int" name="posesion_balon" id="posesion_balon">
+                </div>
+    
+                <div>
+                    <label for="pases_acertados">Pases acertados:</label>
+                    <input type="int" name="pases_acertados" id="pases_acertados">
+                </div>
+    
+                <div>
+                    <label for="tiros_desviados">Tiros desviados:</label>
+                    <input type="int" name="tiros_desviados" id="tiros_desviados">
+                </div>
+    
+                <div>
+                    <label for="efectividad_pases">Efectividad pases %:</label>
+                    <input type="int" name="efectividad_pases" id="efectividad_pases">
+                </div>
+
+                <div>
+                    <label for="tiros_arco">Tiros arco:</label>
+                    <input type="int" name="tiros_arcos" id="tiros_arco">
+                </div>
+
+                <div>
+                    <label for="tiros_esquina">Tiros esquina:</label>
+                    <input type="int" name="tiros_esquina" id="tiros_esquina">
+                </div>
+    
+                <button type="submit" class="btn btn-primary">Realizar Acción</button>
+            </form>
+        </div>
+    
+        <!-- Columna de equipos locales y visitantes -->
+        <div class="col-md-9">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Estadísticas</th>
+                        <th>{{ equipoLocal.0.nuevo_club.nombre }}</th>
+                        <th>{{ equipoVisita.0.nuevo_club.nombre }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estadistica in ["Tiempo Extra", "Motivo", "Cantidad", "Estado del Evento"] %}
+                        <tr>
+                            <td>{{ estadistica }}</td>
+                            <td>
+                                <input type="text" name="equipo_local_estadistica[]" placeholder="Ingresar {{ estadistica }}">
+                            </td>
+                            <td>
+                                <input type="text" name="equipo_visita_estadistica[]" placeholder="Ingresar {{ estadistica }}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+      <div class="text-right mt-4">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="#" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

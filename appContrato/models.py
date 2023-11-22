@@ -7,7 +7,6 @@ from project.settings import MEDIA_URL, STATIC_URL
 class tipo_persona(models.Model):
     tipo_persona_id=models.BigAutoField(primary_key=True)
     descripcion=models.CharField(max_length=30)
-    estado=models.BooleanField()
 
     def save(self, force_insert=False, force_update=False):
         self.descripcion = self.descripcion.upper()
@@ -41,6 +40,7 @@ class persona(models.Model):
         estado=models.BooleanField()
         tipo_persona_id=models.ForeignKey(tipo_persona,on_delete=models.CASCADE, db_column='tipo_persona_id')
         foto = models.ImageField(null=True,blank=True, upload_to='jugador/foto/', default='jugador/def_jugador.png')
+        organizacion_id=models.ForeignKey("appCompeticion.organizacion",on_delete=models.CASCADE, db_column='organizacion_id',null=True)
         #Guardar en mayùscula
         def save(self, force_insert=False, force_update=False):
             self.nombre = self.nombre.upper()
@@ -69,7 +69,6 @@ class contrato(models.Model):
         ]
 
         contrato_id = models.BigAutoField(primary_key=True)
-        tipo_persona = models.ForeignKey('tipo_persona', on_delete=models.CASCADE, related_name='contratos_tipo_persona',default=1)
         persona = models.ForeignKey('persona', on_delete=models.CASCADE, db_column='persona_id',related_name='contratos_persona', default=1)
         tipo_contrato = models.CharField(max_length=1, choices=CHOICE_TIPO_CONTRATO, default='C')
         fecha_inicio = models.DateField(blank=True, null=True)

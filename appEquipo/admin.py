@@ -50,7 +50,7 @@ class equipoAdmin(admin.ModelAdmin):
         )
     list_display = ['nombre', 'presidente', 'logo', 'color_vestimenta_principal_principal','color_vestimenta_principal_secundario',
                     'color_vestimenta_alterna_principal','color_vestimenta_alterna_secundario', 'portada', 'siglas',
-                    'categoria_equipo', 'tipo_equipo_id', 'sede_id']
+                    'categoria_equipo', 'tipo_equipo_id', 'sede_id','entrenador_id']
     ordering = ['nombre']
     search_fields = ['nombre']
     list_per_page=5
@@ -58,7 +58,7 @@ class equipoAdmin(admin.ModelAdmin):
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class tipoEquipoAdmin(admin.ModelAdmin):
-    list_display=['descripcion']
+    list_display=['descripcion','estado']
     ordering=['tipo_equipo_id']
     search_fields = ['descripcion']
     class Media:
@@ -84,13 +84,6 @@ class AlineacionEquipoAdmin(admin.ModelAdmin):
 
     # class Media:
     #     js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/alineacion_admin.js','assets/js/control_botones.js',)
-class EncuentroPersonaAdmin(admin.ModelAdmin):
-    list_display = ('encuentro_id', 'pases', 'asistencias', 'kmrecorridos', 'pasestotales', 'pases_acertados', 'pases_errados', 'minutosjugando', 'amonestado')
-    list_filter = ('equipo_id', 'contrato_id__posicion_jugador')
-    search_fields = ('encuentro_id__nombre', 'persona__nombre')
-
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 
 
 admin.site.register(categoria_equipo,categoriaEquipo)
@@ -98,4 +91,3 @@ admin.site.register(tipo_equipo,tipoEquipoAdmin)
 admin.site.register(equipo,equipoAdmin)
 admin.site.register(posicion_jugador,posicionJugadorAdmin)
 admin.site.register(alineacion,AlineacionEquipoAdmin)
-admin.site.register(encuentro_persona, EncuentroPersonaAdmin)

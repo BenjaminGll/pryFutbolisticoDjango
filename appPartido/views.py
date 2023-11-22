@@ -1,10 +1,12 @@
 from django.http import JsonResponse
 from django.views import View
 from .models import *
-from appEquipo.models import equipo
+from appEquipo.models import *
 from appContrato.models import *
+from appPartido.models import *
 from django.shortcuts import render,  redirect
 from django.contrib import messages
+from datetime import datetime
 
 class ObtenerEncuentrosView(View):
     def get(self, request, *args, **kwargs):
@@ -31,11 +33,11 @@ class ObtenerAlineacionesView(View):
         if tipo_evento_id == '3':
             data = {
                 'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
-                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
             }
         elif tipo_evento_id == '37':
             data = {
-                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
                 'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
             }
         else:
@@ -48,7 +50,7 @@ class ObtenerAlineacionesView(View):
 
 def mostrarEncuentros(request):
 
-    tipo = request.GET.get('tipo', 'alineaciones')  
+    tipo = request.GET.get('tipo','Alineacion')  
 
     # Obtén los encuentros según el tipo
     if tipo == 'alineaciones':
@@ -56,6 +58,8 @@ def mostrarEncuentros(request):
     elif tipo == 'terna_arbitral':
             encuentros = encuentro.objects.filter(estado_jugado='N')
     elif tipo == 'eventos':
+         encuentros = encuentro.objects.filter(estado_jugado='E')
+    elif tipo == 'estadisticas':
          encuentros = encuentro.objects.filter(estado_jugado='E')
     else:
           encuentros = encuentro.objects.all()
@@ -70,7 +74,9 @@ def asignar(request, tipo, encuentro_id):
     elif tipo == 'terna_arbitral':
         return render(request, 'asignar_terna_arbitral.html', {'encuentro_id': encuentro_id})
     elif tipo == 'eventos':
-        return render(request, 'asignar_eventos.html', {'encuentro_id': encuentro_id})
+        return render(request, 'asignarEventos.html', {'encuentro_id': encuentro_id})
+    elif tipo == 'estadisticas':
+        return render(request, 'asignarEstadisticas.html', {'encuentro_id': encuentro_id})
     else:
         # Manejo de error o redirección predeterminada
         return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
@@ -127,7 +133,116 @@ def asignarAlineacion(request, encuentro_id):
                 alineacion_visita.save()
 
         messages.success(request, 'Alineaciones guardadas correctamente.')
-        return redirect('lista_encuentros_N')
+        #return redirect('lista_encuentros_N')
 
 
     return render(request, 'asignarAlineaciones.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})
+
+def asignarEventos(request, encuentro_id):
+    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+    contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
+    contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
+    tipos_evento_relacionados = tipo_evento.objects.all()
+    eventos_obj = []
+
+    if request.method == 'POST':
+        jugadores_local = request.POST.getlist('jugadores_local[]', [])
+        jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
+        motivo = request.POST.get('motivo', '')
+        cantidad = request.POST.get('cantidad', 0)
+        tiempo_reglamentario = request.POST.get('tiempo_reglamentario', '')
+        tiempo_extra = request.POST.get('tiempo_extra', '')
+        # Validar y formatear los valores de tiempo
+        try:
+            tiempo_reglamentario = datetime.strptime(tiempo_reglamentario, '%H:%M:%S').time()
+            tiempo_extra = datetime.strptime(tiempo_extra, '%H:%M:%S').time()
+        except ValueError:
+            # Manejar el error o mostrar un mensaje al usuario
+            messages.error(request, 'Formato de tiempo inválido. Utiliza el formato HH:MM:SS.')
+            return render(request, 'asignarEventos.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita, 'tipos_evento_relacionados': tipos_evento_relacionados})
+
+        estado_evento = True  # Puedes ajustar este valor según tus necesidades
+
+        # Obtener descripciones de encuentro local y visita
+        descripcion_encuentro_local = descripcion_encuentro.objects.filter(equipo=equipoLocal).first()
+        descripcion_encuentro_visita = descripcion_encuentro.objects.filter(equipo=equipoVisita).first()
+
+        # Guardar eventos del equipo local
+        guardar_eventos(jugadores_local[:1], descripcion_encuentro_local, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento)
+
+        # Guardar eventos del equipo visitante
+        guardar_eventos(jugadores_visita[:1], descripcion_encuentro_visita, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento)
+
+        eventos_obj = evento.objects.filter(encuentro_id=encuentro_obj)
+        print(eventos_obj)
+        messages.success(request, 'Eventos guardados correctamente.')
+
+    return render(request, 'asignarEventos.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita, 'tipos_evento_relacionados': tipos_evento_relacionados, 'eventos_obj': eventos_obj})
+
+def guardar_eventos(jugadores, descripcion_encuentro, motivo, cantidad, tiempo_reglamentario, tiempo_extra, estado_evento):
+    for jugador_id in jugadores:
+        if jugador_id:
+            contrato_jugador = contrato.objects.get(persona_id=jugador_id)
+            alineacion_jugador = alineacion.objects.get(contrato_id=contrato_jugador)  # Utilizar el campo correcto
+
+            tipo_evento_seleccionado = tipo_evento.objects.first()  # Ajusta este valor según tus necesidades
+            encuentro_obj = descripcion_encuentro.encuentro
+
+            evento_obj = evento(
+                tipo_evento_id=tipo_evento_seleccionado,
+                competicion_id=None,
+                encuentro_id=encuentro_obj,
+                alineacion1_id=alineacion_jugador,
+                alineacion2_id=alineacion_jugador,  # Ajusta este valor según tus necesidades
+                tiempo_reglamentario=tiempo_reglamentario if tiempo_reglamentario else None,
+                tiempo_extra=tiempo_extra if tiempo_extra else None,
+                motivo=motivo if motivo else None,
+                cantidad=cantidad if cantidad else None,
+                estado_evento=estado_evento
+            )
+            evento_obj.save()
+
+
+def asignarEstadisticas(request, encuentro_id):
+    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+    contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
+    contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
+
+    if request.method == 'POST':
+        
+        posesion_balon = request.POST.get('posesion_balon', None)
+        pases_acertados = request.POST.get('pases_acertados', None)
+        tiros_desviados = request.POST.get('tiros_desviados', None)
+        efectividad_pases = request.POST.get('efectividad_pases', None)
+        tiros_arco = request.POST.get('tiros_arco', None)
+        tiros_esquina = request.POST.get('tiros_esquina', None)
+
+        estadistica_local = estadisticas(
+            encuentro=encuentro_obj,
+            equipo=equipoLocal,
+            posesion_balon=posesion_balon,
+            pases_acertados=pases_acertados,
+            tiros_desviados=tiros_desviados,
+            efectividad_pases=efectividad_pases,
+            tiros_arco=tiros_arco,
+            tiros_esquina=tiros_esquina
+        )
+        estadistica_local.save()
+
+        estadistica_visita = estadisticas(
+            encuentro=encuentro_obj,
+            equipo=equipoVisita,
+            posesion_balon=posesion_balon,
+            pases_acertados=pases_acertados,
+            tiros_desviados=tiros_desviados,
+            efectividad_pases=efectividad_pases,
+            tiros_arco=tiros_arco,
+            tiros_esquina=tiros_esquina
+        )
+        estadistica_visita.save()
+
+    return render(request, 'asignarEstadisticas.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})

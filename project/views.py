@@ -662,19 +662,31 @@ def contextoContacto(request):
 
 
 def contextoTVvivo(request, id):
-    jugar_encuentro=encuentro.objects.get(encuentro_id=id)
-    equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
-    equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
-    
-    estadio=sede.objects.get(nombre=jugar_encuentro.sede_id)
-    data={
-        'jugar_encuentro':jugar_encuentro,
-        'equipo_a':equipo_a,
-        'equipo_b':equipo_b,
-        'estadio':estadio,
+    jugar_encuentro = encuentro.objects.get(encuentro_id=id)
+    equipo_a = equipo.objects.get(nombre=jugar_encuentro.equipo_local)
+    equipo_b = equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
+    estadio = sede.objects.get(nombre=jugar_encuentro.sede_id)
+
+    # Obtener los goles de cada equipo
+    descripcion_equipo_a = descripcion_encuentro.objects.get(
+        encuentro_id=id, equipo_id=equipo_a.equipo_id
+    )
+    descripcion_equipo_b = descripcion_encuentro.objects.get(
+        encuentro_id=id, equipo_id=equipo_b.equipo_id
+    )
+
+    data = {
+        'jugar_encuentro': jugar_encuentro,
+        'equipo_a': equipo_a,
+        'equipo_b': equipo_b,
+        'estadio': estadio,
+        'goles_equipo_a': descripcion_equipo_a.goles,
+        'goles_equipo_b': descripcion_equipo_b.goles,
     }
     
     return render(request, 'tvVivo.html', data)
+
+
 
     
 

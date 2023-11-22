@@ -53,15 +53,9 @@
     <div class="row">
         <div style="display: none;">
             {% with equipo_local=equipo_local %}
-<<<<<<< HEAD
                 <input type="text" id="logoLocal" name="logoLocal"   value="{{ equipo_local.equipo.logo  }}">
                 <input type="text" id="nombreLocal" name="nombreLocal"  value="{{ equipo_local.equipo.nombre }}">
                 <input type="text" id="golesLocal" name="golesLocal" value="{{ equipo_local.goles|default:'0' }}">
-=======
-            <input type="text" id="logoLocal" name="logoLocal" value="{{ equipo_local.equipo.logo  }}">
-            <input type="text" id="nombreLocal" name="nombreLocal" value="{{ equipo_local.equipo.nombre }}">
-            <input type="text" id="golesLocal" name="golesLocal" value="{{ equipo_local.goles|default:'0' }}">
->>>>>>> 59f38fe73285b7856fe563ab231ad196ec7c7991
 
             {% endwith %}
 
@@ -563,84 +557,6 @@ enviarButton.addEventListener('click', enviarHTML);
 
         let html = '';
 
-<<<<<<< HEAD
-    // document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
-    //     // Evita que el formulario se envíe automáticamente
-    //     // event.preventDefault();
-
-    //     const textarea = document.getElementById('miTextarea');
-
-    //     // Crea el contenido que deseas colocar en el textarea
-    //     const contenido = 'Este es el contenido que quiero colocar en el textarea.';
-
-    //     // Establece el contenido en el textarea
-    //     textarea.value = contenido;
-
-    //     // Envía el formulario
-    //     document.getElementById('enviarDatosEncuentro').submit();
-
-
-    //     textarea = document.getElementById('miTextarea');
-
-    //     // Crea el contenido que deseas colocar en el textarea
-    //     contenido = 'Este es el contenido que quiero colocar en el textarea.';
-
-    //     // Establece el contenido en el textarea
-    //     textarea.value = contenido;
-    // });
-    // document.addEventListener('DOMContentLoaded', function () {
-
-    // Función para generar el HTML dinámico
-    function generarHTML() {
-        const checkbox1 = document.getElementById('temperaturaCheckbox');
-        const checkbox2 = document.getElementById('marcadorCheckbox');
-        const checkbox3 = document.getElementById('estadioCheckbox');
-        const checkbox4 = document.getElementById('tipoEncuentroCheckbox');
-        const checkbox5 = document.getElementById('patrocinadorCheckbox');
-
-        // const idEncuentro = 2
-        let html = '';
-        //
-        // Construye dinámicamente el HTML del banner
-            html = '<div class="banner">';
-            // Equipo Local
-            html += '<div class="equipo-info">';
-
-        // Verifica si el checkbox 2 está seleccionado
-        if (checkbox2.checked) {
-            html += '<p class="goles-equipo">'+document.getElementById('golesLocal').value+'</p>';
-        }   
-            html += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
-            html += '<p class="nombre-equipo">'+document.getElementById('nombreLocal').value+'</p>';
-            html += '<img src="/static/images/'+document.getElementById('logoLocal').value+'" alt="Equipo Local">';
-        //
-        // Verifica si el checkbox 1 está seleccionado
-        if (checkbox1.checked) {
-            html += ''
-        }
-            html += '</div>';
-            html += '</div>';
-            
-            // Versus
-            html += '<div class="versus">VS</div>';
-
-            // Equipo Visitante
-            html += '<div class="equipo-info">';
-            html += '<div class="row" style="display: flex; flex-direction: column; align-items: center;">';
-            html += '<p class="nombre-equipo">'+document.getElementById('nombreVisita').value+'</p>';
-            html += '<img src="/static/images/'+document.getElementById('logoVisita').value+'" alt="Equipo Visitante">';
-            if (checkbox4.checked) {
-                html += '<p>'+document.getElementById('tipoEncuentroCheckbox').value+'</p>';
-            }
-            
-            html += '</div>';
-            if (checkbox2.checked) {
-            html += '<p class="goles-equipo">'+document.getElementById('golesVisita').value+'</p>';
-            }
-            html += '</div>';
-
-            html += '</div>';
-=======
         // Construye dinámicamente el HTML del banner
         html = '<div class="banner-container form-inline" style="position: absolute;top: -80px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; ">';
 
@@ -657,16 +573,12 @@ enviarButton.addEventListener('click', enviarHTML);
         }
 
         html += '</div>';
->>>>>>> 59f38fe73285b7856fe563ab231ad196ec7c7991
 
         // Devuelve el HTML generado
         return html;
     }
-<<<<<<< HEAD
-=======
 
     //
->>>>>>> 59f38fe73285b7856fe563ab231ad196ec7c7991
     document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
         // Evita que el formulario se envíe automáticamente
         // event.preventDefault();
@@ -675,27 +587,6 @@ enviarButton.addEventListener('click', enviarHTML);
         let contenido = '';
         contenido += generarHTML();
         textarea.value = contenido;
-<<<<<<< HEAD
-
-        console.log(contenido);
-        // Envía el formulario
-        // document.getElementById('enviarDatosEncuentro').submit();
-        // event.preventDefault();
-
-
-
-        // Agrega el valor del textarea como un nuevo campo al formulario antes de enviarlo
-        const formulario = document.getElementById('enviarDatosEncuentro');
-        const nuevoCampo = document.createElement('input');
-        nuevoCampo.type = 'hidden';
-        nuevoCampo.name = 'miTextarea';
-        nuevoCampo.value = contenido;
-        formulario.appendChild(nuevoCampo);
-
-        // Envía el formulario
-        formulario.submit();
-    });
-=======
 
         console.log(contenido);
 
@@ -730,7 +621,6 @@ enviarButton.addEventListener('click', enviarHTML);
         // Envía el formulario
         formulario.submit();
     }
->>>>>>> 59f38fe73285b7856fe563ab231ad196ec7c7991
     // });
 </script>
 

@@ -77,7 +77,7 @@ def asignar(request, tipo, encuentro_id):
     elif tipo == 'estadisticas':
         return render(request, 'asignarEstadisticas.html', {'encuentro_id': encuentro_id})
     else:
-        # Manejo de error o redirección predeterminada
+# Manejo de error o redirección predeterminada
         return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
     
 
@@ -89,6 +89,23 @@ def asignarAlineacion(request, encuentro_id):
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
     contratoLocal = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
     contratoVisita = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
+    
+    # Verificar si ya hay alineaciones registradas para este encuentro
+
+    # Verificar si ya hay alineaciones registradas para este encuentro
+    alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id__equipo=equipoLocal)
+    alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id__equipo=equipoVisita)
+
+    # Obtener los IDs de los jugadores en la alineación para este encuentro específico
+    jugadores_en_alineacion_local = set(alineaciones_local.values_list('contrato_id__persona_id', flat=True))
+    jugadores_en_alineacion_visita = set(alineaciones_visita.values_list('contrato_id__persona_id', flat=True))
+
+    # Obtener IDs de jugadores en la alineación del mismo encuentro actual
+    jugadores_en_alineacion_actual_local = set(alineaciones_local.filter(descripcion_encuentro_id__encuentro_id=encuentro_obj).values_list('contrato_id__persona_id', flat=True))
+    jugadores_en_alineacion_actual_visita = set(alineaciones_visita.filter(descripcion_encuentro_id__encuentro_id=encuentro_obj).values_list('contrato_id__persona_id', flat=True))
+
+
+
     if request.method == 'POST':
         jugadores_local = request.POST.getlist('jugadores_local[]', [])
         jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
@@ -132,11 +149,18 @@ def asignarAlineacion(request, encuentro_id):
                 alineacion_visita.save()
 
         messages.success(request, 'Alineaciones guardadas correctamente.')
-        #return redirect('lista_encuentros_N')
 
 
-    return render(request, 'asignarAlineaciones.html', {'encuentro': encuentro_obj, 'equipoLocal': contratoLocal, 'equipoVisita': contratoVisita})
 
+    return render(request, 'asignarAlineaciones.html', {
+    'encuentro': encuentro_obj,
+    'equipoLocal': contratoLocal,
+    'equipoVisita': contratoVisita,
+    'jugadores_en_alineacion_local': jugadores_en_alineacion_local,
+    'jugadores_en_alineacion_visita': jugadores_en_alineacion_visita,
+    'jugadores_en_alineacion_actual_local': jugadores_en_alineacion_actual_local,
+    'jugadores_en_alineacion_actual_visita': jugadores_en_alineacion_actual_visita,
+})
 def asignarEventos(request, encuentro_id):
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
@@ -203,7 +227,7 @@ def guardar_eventos(jugadores, descripcion_encuentro, motivo, cantidad, tiempo_r
     evento_obj.save()
 
 def asignarEstadisticas(request, encuentro_id):
-    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    encuentro_obj = descripcion_encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
 
@@ -223,7 +247,7 @@ def asignarEstadisticas(request, encuentro_id):
     return render(request, 'asignarEstadisticas.html', {'encuentro': encuentro_obj, 'equipoLocal': equipoLocal, 'equipoVisita': equipoVisita})
 
 def guardar_estadisticas(encuentro_obj, equipo_obj, estadisticas):
-    estadistica_obj = Estadisticas(
+    estadistica_obj = estadisticas(
         encuentro=encuentro_obj,
         equipo=equipo_obj,
         posesion_balon=estadisticas.get('posesion_balon'),

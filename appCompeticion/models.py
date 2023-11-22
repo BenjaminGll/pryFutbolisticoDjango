@@ -68,11 +68,20 @@ class patrocinador (models.Model):
         verbose_name_plural='patrocinador'
 
 class organizacion(models.Model):
-    
+       
+    CHOICE_TIPO = [
+        ('F', 'FEDERACIÓN NACIONAL'),
+        ('I', 'FEDERACIÓN INTERNACIONAL'),
+        ('C', 'CONFEDERACIÓN'),
+        ('L', 'LIGA'),
+        ('L', 'ASOCIACIÓN'),
+        
+    ]
     organizacion_id=models.BigAutoField(primary_key=True)
     nombre_oficial=models.CharField(max_length=200)
     siglas=models.CharField(max_length=10,default='')
     descripcion=models.CharField(max_length=200)
+    tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
     estado=models.BooleanField()
     logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')
     
@@ -87,7 +96,7 @@ class organizacion(models.Model):
 
     class Meta:
         verbose_name_plural='organizaciones'
-
+        
 class competicion(models.Model):
     competicion_id=models.BigAutoField(primary_key=True)
     organizacion_id=models.ForeignKey(organizacion,on_delete=models.CASCADE, db_column='organizacion_id', null=True)

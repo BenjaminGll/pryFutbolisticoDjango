@@ -3,13 +3,13 @@ from appContrato.models import *
 
 # Register your models here.
 class tipo_personaAdmin(admin.ModelAdmin):
-    list_display = ['descripcion', 'estado']
+    list_display = ['descripcion']
     ordering = ['descripcion']
     search_fields = ['descripcion']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class personaAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'apellido', 'alias', 'sexo', 'fecha_nacimiento', 'ciudad_id', 'estatura', 'peso', 'tipo_persona_id', 'estado', 'foto']
+    list_display = ['nombre', 'apellido', 'alias', 'sexo', 'fecha_nacimiento', 'ciudad_id', 'estatura', 'peso', 'tipo_persona_id', 'estado', 'foto','organizacion_id']
     ordering = ['nombre']
     search_fields = ['nombre', 'apellido', 'alias']
     list_per_page = 11
@@ -18,9 +18,9 @@ class personaAdmin(admin.ModelAdmin):
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 
 class contratoAdmin(admin.ModelAdmin):
-    list_display=['tipo_contrato','persona','tipo_persona','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
+    list_display=['tipo_contrato','persona','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
     ordering = ['persona']
-    search_fields = ['contrato_id','tipo_persona','persona','tipo_contrato']
+    search_fields = ['tipo_persona','persona','tipo_contrato']
     list_filter=['tipo_contrato', 'nuevo_club']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)   

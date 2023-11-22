@@ -203,7 +203,7 @@ def guardar_eventos(jugadores, descripcion_encuentro, motivo, cantidad, tiempo_r
     evento_obj.save()
 
 def asignarEstadisticas(request, encuentro_id):
-    encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+    encuentro_obj = descripcion_encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
 
@@ -223,7 +223,7 @@ def asignarEstadisticas(request, encuentro_id):
     return render(request, 'asignarEstadisticas.html', {'encuentro': encuentro_obj, 'equipoLocal': equipoLocal, 'equipoVisita': equipoVisita})
 
 def guardar_estadisticas(encuentro_obj, equipo_obj, estadisticas):
-    estadistica_obj = Estadisticas(
+    estadistica_obj = estadisticas(
         encuentro=encuentro_obj,
         equipo=equipo_obj,
         posesion_balon=estadisticas.get('posesion_balon'),

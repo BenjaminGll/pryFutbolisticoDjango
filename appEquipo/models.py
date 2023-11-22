@@ -20,6 +20,7 @@ class categoria_equipo(models.Model):
 class tipo_equipo(models.Model):
     tipo_equipo_id=models.BigAutoField(primary_key=True)
     descripcion=models.CharField(max_length=30)
+    estado=models.BooleanField(null=True)
 
     def save(self, force_insert=False, force_update=False):
         self.descripcion = self.descripcion.upper()
@@ -46,7 +47,8 @@ class equipo(models.Model):
     tipo_equipo_id = models.ForeignKey('tipo_equipo', on_delete=models.CASCADE, db_column='tipo_equipo_id')
     sede_id = models.ForeignKey("appPartido.sede", on_delete=models.CASCADE, db_column='sede_id')
     deporte_id = models.ForeignKey("appCompeticion.deporte", on_delete=models.CASCADE, db_column='deporte_id', default=1)
-    
+    entrenador_id = models.ForeignKey("appContrato.contrato",on_delete=models.CASCADE,db_column='contrato_id',null=True)
+
 
     def save(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
@@ -132,27 +134,6 @@ class alineacion(models.Model):
         verbose_name_plural = 'alineacion'
 
 
-
-
-class encuentro_persona(models.Model):
-    encuentro_persona_id = models.AutoField(primary_key=True)
-    pases = models.IntegerField()
-    asistencias = models.IntegerField()
-    kmrecorridos = models.IntegerField()
-    pasestotales = models.IntegerField()
-    pases_acertados = models.IntegerField()
-    pases_errados = models.IntegerField()
-    minutosjugando = models.IntegerField()
-    amonestado = models.BooleanField(null=True)
-    encuentro_id = models.ForeignKey('appPartido.encuentro', on_delete=models.CASCADE, db_column='encuentro_id')  # Corrected column name
-    equipo_id = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id')
-    contrato_id = models.ForeignKey('appContrato.contrato', on_delete=models.CASCADE, db_column='contrato_id')
-
-    def __str__(self):
-        return str(self.encuentro_id)
-
-    class Meta:
-        verbose_name_plural = 'encuentro_persona'
 
 
        

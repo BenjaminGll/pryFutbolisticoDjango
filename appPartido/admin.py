@@ -19,7 +19,7 @@ class sedeAdmin(admin.ModelAdmin):
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 ##
 class descripcionEncuentroAdmin(admin.ModelAdmin):
-    list_display=['encuentro','equipo','goles','goles_ronda_penales','resultado']
+    list_display=['encuentro','equipo','goles','goles_ronda_penales']
     ordering=['encuentro']
     search_fields = ['encuentro','equipo__nombre', 'encuentro__encuentro_id']
     list_per_page=5
@@ -50,7 +50,7 @@ class tipo_eventoAdmin(admin.ModelAdmin):
 
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display = ['competicion_id', 'tipo_evento_id', 'encuentro_id', 'estado_evento']
+    list_display = ['competicion_id', 'tipo_evento_id', 'encuentro_id', 'tiempo','alineacion1_id','alineacion2_id']
     ordering = ['tipo_evento_id']
     search_fields = ['encuentro_id__equipo_local__nombre', 'encuentro_id__equipo_visita__nombre']
     list_filter = ['competicion_id']

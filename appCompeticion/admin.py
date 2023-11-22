@@ -11,9 +11,9 @@ class competicionAdmin(admin.ModelAdmin):
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)   
 class paisAdmin(admin.ModelAdmin):
-    list_display = ['nombre','sigla','logo_bandera', 'estado']
+    list_display = ['nombre','sigla','logo_bandera']
     ordering = ['nombre']
-    search_fields = ['nombre','sigla','estado']
+    search_fields = ['nombre','sigla']
     list_per_page=6
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)   
@@ -56,7 +56,7 @@ class tablaAdmin(admin.ModelAdmin):
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class organizacionAdmin(admin.ModelAdmin):
-    list_display=['nombre_oficial','siglas','tipo','descripcion','estado','logo']
+    list_display=['nombre_oficial','siglas','descripcion','estado','logo']
     ordering=['nombre_oficial']
     search_fields = ['nombre_oficial']
     list_per_page=4

@@ -55,11 +55,6 @@ class sede(models.Model):
 
 ##NUEVO
 class descripcion_encuentro(models.Model):
-    CHOICE_RESULTADO = [
-        ('G', 'GANADO'),
-        ('E', 'EMPATADO'),
-        ('P', 'PERDIDO'),
-    ]
     CHOICE_EQUIPO = [
         ('L', 'LOCAL'),
         ('V', 'VISITA')
@@ -69,7 +64,6 @@ class descripcion_encuentro(models.Model):
     tipo_equipo = models.CharField(max_length=10, choices=CHOICE_EQUIPO,  blank=True, null=True)
     goles = models.CharField(max_length=4, blank=True, null=True)
     goles_ronda_penales = models.CharField(max_length=4 , blank=True, null=True)
-    resultado = models.CharField(max_length=2, choices=CHOICE_RESULTADO, blank=True, null=True)
     equipo = models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE, db_column='equipo_id', related_name='descripcion_encuentros', blank=True, null=True)
     encuentro = models.ForeignKey('encuentro', on_delete=models.CASCADE, db_column='encuentro_id', related_name='descripcion_encuentros', blank=True, null=True)
 
@@ -179,11 +173,8 @@ class evento(models.Model):
     alineacion1_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1', blank=True)
     alineacion2_id = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2', blank=True)
 
-    tiempo_reglamentario = models.TimeField(null=True, blank=True)
-    tiempo_extra = models.TimeField(null=True, blank=True,)
-    motivo = models.CharField(max_length=50, blank=True, null=True)
-    cantidad = models.IntegerField(blank=True, null=True)
-    estado_evento = models.BooleanField(null=True, blank=True,)
+    tiempo = models.TimeField(null=True, blank=True)
+
     
 
 
@@ -205,8 +196,9 @@ class estadisticas(models.Model):
     efectividad_pases=models.IntegerField()
     tiros_arco=models.IntegerField()
     tiros_esquina=models.IntegerField()
+    descripcion_encuentro_id = models.ForeignKey(descripcion_encuentro, on_delete=models.CASCADE, db_column='descripcion_encuentro_id', null=True)
 
-    def __str__(self):
+    def _str_(self):
         return str(self.estadisticas_id)
 
     class Meta:

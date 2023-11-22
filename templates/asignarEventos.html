@@ -97,10 +97,11 @@
         <tr>
           <th>Tipo de Evento</th>
           <th>Tiempo Reglamentario</th>
-          <th>Persona Local</th>
-          <th>Persona Visitante</th>
+          <th>Local</th>
+          <th>Visitante</th>
           <th>Motivo</th>
           <th>Cantidad</th>
+
 
         </tr>
       </thead>
@@ -109,10 +110,10 @@
           <tr>
             <td>{{ evento.tipo_evento_id.nombre }}</td>
             <td>{{ evento.tiempo_reglamentario }}</td>
-            <td>{{ evento.alineacion1_id.contrato_id.persona.nombre }}</td>
-            <td>{{ evento.alineacion2_id.contrato_id.persona.nombre }}</td>
             <td>{{ evento.motivo }}</td>
             <td>{{ evento.cantidad }}</td>
+            <td>{{ evento.alineacion1_id.contrato_id.persona.nombre }}</td>
+            <td>{{ evento.alineacion2_id.contrato_id.persona.nombre }}</td>
           </tr>
         {% endfor %}
       </tbody>

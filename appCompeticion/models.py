@@ -18,7 +18,6 @@ class pais(models.Model):
     nombre = models.CharField(max_length=30)
     sigla = models.CharField(max_length=3, default='')
     logo_bandera = models.ImageField(blank=True, null=True, upload_to='bandera/', default='bandera/bandera_default.png')
-    estado = models.CharField(max_length=20, choices=PAIS_CHOICES, default='MIEMBRO')
 
     def save(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
@@ -69,20 +68,11 @@ class patrocinador (models.Model):
         verbose_name_plural='patrocinador'
 
 class organizacion(models.Model):
-       
-    CHOICE_TIPO = [
-        ('F', 'FEDERACIÓN NACIONAL'),
-        ('I', 'FEDERACIÓN INTERNACIONAL'),
-        ('C', 'CONFEDERACIÓN'),
-        ('L', 'LIGA'),
-        ('L', 'ASOCIACIÓN'),
-        
-    ]
+    
     organizacion_id=models.BigAutoField(primary_key=True)
     nombre_oficial=models.CharField(max_length=200)
     siglas=models.CharField(max_length=10,default='')
     descripcion=models.CharField(max_length=200)
-    tipo=models.CharField(max_length=1,choices=CHOICE_TIPO, default='I')
     estado=models.BooleanField()
     logo=models.ImageField(blank=True,null=True,upload_to='organizacion/',default='organizacion/bandera_default.png')
     

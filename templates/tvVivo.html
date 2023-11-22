@@ -51,6 +51,8 @@
     <img class="fondo" src="/static/images/fondoFut.jpg" alt="">
 
 
+<<<<<<< HEAD
+=======
     <div class="banner-marcadores">
       <span id="cronometro" style="background-color: rgb(210, 210, 210); color: black;">00:00</span>
       <img src="{{ jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt=""
@@ -60,6 +62,7 @@
       <img src="{{ jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt=""
         style="margin-top:0px; width: 13%">
     </div>
+>>>>>>> 27de53de387990c85b5e5f9265d18da70c06edb9
 
 
 
@@ -97,6 +100,8 @@
   function obtenerBanners() {
 
     fetch('/datostv')
+
+
       .then(response => response.json())
       .then(data => {
         const bannersContainer = document.getElementById('banners-container');
@@ -116,7 +121,11 @@
             console.log('HTML del banner:', banner.html);
             // Muestra banners-container
             bannersContainer.style.display = 'block';
-
+            //Tiempo para mostrarse
+            const tiempoSegundos = banner.tiempo;
+            // const tiempoEnMilisegundos = tiempoSegundos*1000;
+            const tiempoEnMilisegundos = tiempoSegundos * 1000;
+            console.log(tiempoEnMilisegundos)
             // Oculta banners-container después de 10 segundos
             setTimeout(() => {
               bannersContainer.style.display = 'none';
@@ -127,7 +136,7 @@
                   console.log('Archivo temporal limpiado:', data);
                 })
                 .catch(error => console.error(error));
-            }, 10000);
+            }, tiempoEnMilisegundos);
           }
         } else {
           console.error('Elemento con ID "banners-container" no encontrado.');
@@ -139,19 +148,88 @@
   // obtenerBanners();
   setInterval(obtenerBanners, 2000);
 
-  document.addEventListener('DOMContentLoaded', function () {
-    var minutos = 0;
-    var segundos = 0;
-    var cronometroDisplay = document.getElementById('cronometro');
-    var cronometro = setInterval(function () {
-      segundos++;
-      if (segundos == 60) {
-        minutos++;
-        segundos = 0;
-      }
-      cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
-    }, 1000);
-  });
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   var minutos = 0;
+  //   var segundos = 0;
+  //   var cronometroDisplay = document.getElementById('cronometro');
+  //   var cronometro = setInterval(function () {
+  //     segundos++;
+  //     if (segundos == 60) {
+  //       minutos++;
+  //       segundos = 0;
+  //     }
+  //     cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
+  //   }, 1000);
+  // });
+
+
+
+
+
+  function convertirTiempoAMilisegundos(tiempo) {
+    const [minutos, segundos] = tiempo.split(':').map(Number);
+
+    // Convierte minutos y segundos a milisegundos
+    const minutosEnMilisegundos = minutos * 60 * 1000;
+    const segundosEnMilisegundos = segundos * 1000;
+
+    // Suma los milisegundos
+    const totalMilisegundos = minutosEnMilisegundos + segundosEnMilisegundos;
+
+    return totalMilisegundos;
+  }
+
+
+  //   function obtenerBanners() {
+  //   fetch('/datostv')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // Aquí puedes procesar los datos obtenidos de '/datostv'
+  //     })
+  //     .catch(error => console.error(error));
+  // }
+
+  // // Llama a la función obtenerBanners cada 3 segundos
+  // setInterval(obtenerBanners, 3000);
+  var estadoAccion = '';
+  function actualizarCronometro() {
+    // Realizar la solicitud AJAX para obtener la información del cronómetro
+    fetch('/obtener_cronometro/')
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Error en la solicitud AJAX');
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        var cronometroDiv = document.getElementById('cronometro');
+
+        // Verificar la acción y realizar acciones correspondientes
+        if (data.accion == 'ocultar') {
+          console.log('ocul');
+          cronometroDisplay.style.display = 'none';
+        } else if (data.accion == 'mostrar') {
+          console.log('mos');
+          cronometroDisplay.style.display = 'inline-block';
+        } else if (data.accion == 'pausa' && estadoAccion != 'pausa') {
+          console.log('pau');
+          clearInterval(cronometro);
+        } else if (data.accion == 'play' && estadoAccion != 'play') {
+          console.log('play');
+          clearInterval(cronometro);  // Detener el intervalo existente antes de configurar uno nuevo
+          cronometro = setInterval(Cronometro, 1000);  // Configurar un nuevo intervalo
+        }
+
+        // Actualizar el estado de la acción
+        estadoAccion = data.accion;
+      })
+      .catch(function (error) {
+        console.error('Error en la solicitud AJAX', error);
+      });
+  }
+
+  // Llamar a la función para actualizar el cronómetro cada cierto tiempo
+  setInterval(actualizarCronometro, 2000);
 </script>
 
 <!--  -->

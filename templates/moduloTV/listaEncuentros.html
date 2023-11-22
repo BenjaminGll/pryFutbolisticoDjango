@@ -146,8 +146,10 @@
             </thead>
             <tbody>
                 {% for encuentro in encuentros %}
-                <form action="{% if idEncuentro %}{% url 'mostrar_evento' idEncuentro=idEncuentro %}{% endif %}"
+                <form
+                    action="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}"
                     method="post">
+                    {% csrf_token %}
                     <tr>
                         <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{ encuentro.equipo_visita }} </td>
                         <td>{{ encuentro.fecha }}</td>
@@ -155,7 +157,7 @@
                         <td>
                             <input type="hidden" name="idEncuentro" id="idEncuentro"
                                 value="{{ encuentro.encuentro_id }}"></input>
-                            {% csrf_token %}
+
                             <button type="submit" class="btn btn-submit">Mostrar Eventos</button>
                         </td>
                     </tr>

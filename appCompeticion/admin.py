@@ -56,7 +56,7 @@ class tablaAdmin(admin.ModelAdmin):
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
 class organizacionAdmin(admin.ModelAdmin):
-    list_display=['nombre_oficial','siglas','descripcion','estado','logo']
+    list_display=['nombre_oficial','siglas','descripcion','tipo','estado','logo']
     ordering=['nombre_oficial']
     search_fields = ['nombre_oficial']
     list_per_page=4

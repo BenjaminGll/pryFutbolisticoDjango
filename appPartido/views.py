@@ -203,28 +203,23 @@ def guardar_eventos(jugadores, descripcion_encuentro, motivo, cantidad, tiempo_r
     evento_obj.save()
 
 def asignarEstadisticas(request, encuentro_id):
-    try:
-        encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
-        print(encuentro_obj.encuentro_id)
-        equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
-        equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
+    encuentro_obj = descripcion_encuentro.objects.get(encuentro_id=encuentro_id)
+    equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
+    equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
 
-        estadisticas_lista = ["posesion_balon", "pases_acertados", "tiros_desviados", "efectividad_pases", "tiros_arco", "tiros_esquina"]
+    estadisticas_lista = ["posesion_balon", "pases_acertados", "tiros_desviados", "efectividad_pases", "tiros_arco", "tiros_esquina"]
 
-        if request.method == 'POST':
-            estadisticas_local = {}
-            estadisticas_visita = {}
+    if request.method == 'POST':
+        estadisticas_local = {}
+        estadisticas_visita = {}
 
-            for estadistica in estadisticas_lista:
-                estadisticas_local[estadistica] = request.POST.get(f'equipo_local_{estadistica}', None)
-                estadisticas_visita[estadistica] = request.POST.get(f'equipo_visita_{estadistica}', None)
+        for estadistica in estadisticas_lista:
+            estadisticas_local[estadistica] = request.POST.get(f'equipo_local_{estadistica}', None)
+            estadisticas_visita[estadistica] = request.POST.get(f'equipo_visita_{estadistica}', None)
 
-            guardar_estadisticas(encuentro_obj, equipoLocal, estadisticas_local)
-            guardar_estadisticas(encuentro_obj, equipoVisita, estadisticas_visita)
-    except encuentro.DoesNotExist:
-        print(f"No se encontró encuentro con ID {encuentro_id}")
-    except Exception as e:
-        print(f"Error: {e}")
+        guardar_estadisticas(encuentro_obj, equipoLocal, estadisticas_local)
+        guardar_estadisticas(encuentro_obj, equipoVisita, estadisticas_visita)
+
     return render(request, 'asignarEstadisticas.html', {'encuentro': encuentro_obj, 'equipoLocal': equipoLocal, 'equipoVisita': equipoVisita})
 
 def guardar_estadisticas(encuentro_obj, equipo_obj, estadisticas):

@@ -27,7 +27,7 @@
         </select>
           <!-- Agrega el checkbox para seleccionar todos -->
           <label class="mt-2">
-            <input type="checkbox" id="seleccionar_todos_local"> Seleccionar Todos
+            <input type="checkbox" id="seleccionar_todos_local"> Seleccionar 11
           </label>
 
           <table class="table">
@@ -46,8 +46,10 @@
                   <td>{{ jugador.posicion_jugador }}</td>
                   <td>{{ jugador.dorsal }}</td>
                   <td>
-                    <input type="checkbox" name="jugadores_local[]" value="{{ jugador.persona.persona_id }}">
-                  </td>
+                    <input type="checkbox" name="jugadores_local[]" value="{{ jugador.persona.persona_id }}"
+                           {% if jugador.persona.persona_id in jugadores_en_alineacion_actual_local %} checked {% endif %}
+                           {% if jugador.persona.persona_id in jugadores_en_alineacion_local and jugador.persona.persona_id not in jugadores_en_alineacion_actual_local %} checked {% endif %}>
+                          </td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -70,7 +72,7 @@
         </select>
         <!-- Agrega el checkbox para seleccionar todos -->
         <label class="mt-2">
-          <input type="checkbox" id="seleccionar_todos_visita"> Seleccionar Todos
+          <input type="checkbox" id="seleccionar_todos_visita"> Seleccionar 11
         </label>
         
           <table class="table">
@@ -89,8 +91,10 @@
                   <td>{{ jugador.posicion_jugador }}</td>
                   <td>{{ jugador.dorsal }}</td>
                   <td>
-                    <input type="checkbox" name="jugadores_visita[]"  value="{{ jugador.persona.persona_id }}">
-                  </td>
+                    <input type="checkbox" name="jugadores_visita[]" value="{{ jugador.persona.persona_id }}"
+                           {% if jugador.persona.persona_id in jugadores_en_alineacion_actual_visita %} checked {% endif %}
+                           {% if jugador.persona.persona_id in jugadores_en_alineacion_visita and jugador.persona.persona_id not in jugadores_en_alineacion_actual_visita %} onchange="deseleccionar(this)" {% endif %}>
+                          </td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -106,19 +110,20 @@
   </div>
 
   <script>
-    // Script para manejar la funcionalidad de seleccionar todos
+    // Script para manejar la funcionalidad de seleccionar los 11 primeros
     document.getElementById('seleccionar_todos_local').addEventListener('change', function () {
       var checkboxes = document.getElementsByName('jugadores_local[]');
-      for (var checkbox of checkboxes) {
-        checkbox.checked = this.checked;
+      for (var i = 0; i < checkboxes.length && i < 11; i++) {
+        checkboxes[i].checked = this.checked;
       }
     });
-
+  
     document.getElementById('seleccionar_todos_visita').addEventListener('change', function () {
       var checkboxes = document.getElementsByName('jugadores_visita[]');
-      for (var checkbox of checkboxes) {
-        checkbox.checked = this.checked;
+      for (var i = 0; i < checkboxes.length && i < 11; i++) {
+        checkboxes[i].checked = this.checked;
       }
     });
   </script>
+  
 {% endblock %}

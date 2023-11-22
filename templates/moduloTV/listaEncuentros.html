@@ -151,14 +151,13 @@
                     method="post">
                     {% csrf_token %}
                     <tr>
-                        <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{
-                            encuentro.equipo_visita }} </td>
+                        <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{ encuentro.equipo_visita }} </td>
                         <td>{{ encuentro.fecha }}</td>
 
                         <td>
                             <input type="hidden" name="idEncuentro" id="idEncuentro"
                                 value="{{ encuentro.encuentro_id }}"></input>
-                            
+
                             <button type="submit" class="btn btn-submit">Mostrar Eventos</button>
                         </td>
                     </tr>

@@ -831,6 +831,7 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
     nombres_eventos_generales = ["CRONOMETRO", "PARTIDO SUSPENDIDO"]
     equipo_local=''
     equipo_visita=''
+    alineaciones = ''
     if tipo_filtro == 'generales':
 
         eventos = evento.objects.none()
@@ -844,14 +845,17 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
                 encuentro_id=idEncuentro,
                 equipo_id__in=[encuentro_obj.equipo_visita, encuentro_obj.equipo_visita],tipo_equipo__in=['V','Visita','VISITA']
             ).first()
+        alineaciones_local = alineacion.objects.filter(descripcion_encuentro=equipo_local.descripcion_encuentro_id)
+        alineaciones_visita = alineacion.objects.filter(descripcion_encuentro=equipo_visita.descripcion_encuentro_id)
+
 
     elif tipo_filtro == 'en_juego':
-        eventos = evento.objects.filter(encuentro_id=idEncuentro, estado_evento=True).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales)
+        eventos = evento.objects.filter(encuentro_id=idEncuentro).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales).reverse()
     else:
         print('Template name evento:', template_name)
         eventos = evento.objects.none()
 
-    return render(request, template_name, {'eventos': eventos, 'tipo_filtro': tipo_filtro,'idEncuentro': idEncuentro, 'equipo_local':equipo_local,'equipo_visita':equipo_visita})
+    return render(request, template_name, {'eventos': eventos, 'tipo_filtro': tipo_filtro,'idEncuentro': idEncuentro, 'equipo_local':equipo_local,'equipo_visita':equipo_visita,'alineacion_local':alineaciones_local,'alineacion_visita':alineaciones_visita})
 
 def mostrarEvento(request, idEncuentro):
     return base_evento_view(request, idEncuentro, 'moduloTV/evento.html',filtro_default='en_juego')
@@ -864,14 +868,23 @@ def mostrarEventosGenerales(request, idEncuentro):
         print("POST request recibido")
         print(request.POST)  # Imprime los datos POST
         html_dinamico = request.POST.getlist('miTextarea')
-        html_dinamico = {'html': request.POST.get('miTextarea')}
-        print(html_dinamico)
+        tiempo = request.POST.get('tiempo')
+
+        if not tiempo:
+            tiempo=10
+
+        print("El tiempo es",tiempo)
+        html_dinamico = {'html': request.POST.get('miTextarea'),'tiempo':tiempo}
+        # print(html_dinamico)
         banners.append(html_dinamico)
         contenido = json.dumps({'banners': banners})
         default_storage.save('eventos_temporales.json', ContentFile(contenido))
             
     
     return base_evento_view(request, idEncuentro, 'moduloTV/GeneralesTv.html', filtro_default='generales')
+
+
+
 
 
 #####

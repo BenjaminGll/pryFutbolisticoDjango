@@ -115,6 +115,12 @@
 
 
 {% endfor %}
-
+<script>
+    function actualizarPagina() {
+      location.reload();
+    }
+    
+    setInterval(actualizarPagina, 500000);
+    </script>
 
 {% endblock %}

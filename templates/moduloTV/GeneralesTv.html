@@ -65,12 +65,12 @@
                 <div class="card">
                     <div class="card-header form-inline">
                         <h3>Datos de Encuentro</h3>
+                        <div class="align-items-center">Duración (s): </div>
+                        &nbsp;
                         <div class="input-group">
-                            <input type="text" class="form-control" id="tiempo" name="tiempo"
-                                pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                            </div>
+
+                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
+                                max="59">
                             &nbsp;
                             <button type="button" class="btn btn-primary" id="generarBannerEncuentro"><i
                                     class="fas fa-eye"></i> Mostrar</button>
@@ -78,7 +78,7 @@
                     </div>
                     <div class="card-body">
                         <form>
-                            <div class="form-check">
+                            <div class="form-check" style="display: none;">
                                 <input type="checkbox" class="form-check-input" id="temperaturaCheckbox"
                                     value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.clima }}{% endwith %}">
                                 <label class="form-check-label" for="temperaturaCheckboxx">Temperatura</label>
@@ -100,7 +100,7 @@
                                     value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.competicion_id }} - {{ equipo_local.encuentro.grupo }} - {{ equipo_local.encuentro.fase }}{% endwith %}">
                                 <label class="form-check-label" for="tipoEncuentroCheckbox">Tipo de Encuentro</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check" style="display: none;">
                                 <input type="checkbox" class="form-check-input" id="patrocinadorCheckbox">
                                 <label class="form-check-label" for="patrocinadorCheckbox">Patrocinador</label>
                             </div>
@@ -121,18 +121,11 @@
                 enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="card">
-                    <div class="card-header">
-                        <h3>Cronómetro</h3>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="tiempo" name="tiempo"
-                                pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                            </div> &nbsp;
-                            <button type="button" class="btn btn-primary" id="generarBannerCronometro"><i
-                                    class="fas fa-eye"></i> Mostrar</button>
+                    <div class="card-header form-inline">
+                        <h3>Cronómetro</h3> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary right" id="generarBannerCronometro"><i
+                                class="fas fa-eye"></i> Mostrar</button>
 
-                        </div>
                     </div>
                     <div class="card-body">
                         <!-- Agrega aquí tu código para el cronómetro -->
@@ -174,14 +167,15 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Himnos</h3>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="tiempo" name="tiempo"
-                                pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                            </div>
+
+                        <div class="input-group align-items-center  ">
+                            <div class="align-items-center">Duración (s): </div>
                             &nbsp;
-                            <button type="button" class="btn btn-primary" id="generarBannerHimno"><i class="fas fa-eye"></i> Mostrar</button>
+                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
+                                max="59">
+                            &nbsp;
+                            <button type="button" class="btn btn-primary" id="generarBannerHimno"><i
+                                    class="fas fa-eye"></i> Mostrar</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -209,12 +203,11 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Alineación Local</h3>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
-                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                        </div>
+                    <div class="input-group align-items-center">
+                        <div class="align-items-center">Duración (s): </div>
+                        &nbsp;
+
+                        <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="59">
                         &nbsp;
                         <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
                     </div>
@@ -222,6 +215,34 @@
                 <div class="card-body">
                     <form>
                         <div class="form-check">
+
+                            <!--  -->
+                            <div id="contenedorTabla" style="display: flex;justify-content: center; ">
+                                <table>
+                                    <thead style="justify-content: center;">
+                                        { }
+                                        <tr>
+                                            <th>Dorsal</th>
+                                            <th>Jugador</th>
+                                            <th>Seleccionar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaJugadoresBody">
+                                        <!-- Aquí se llenarán dinámicamente los datos -->
+                                        {% for a_l in alieacion_local %}
+                                        <tr>
+                                            <!-- <td>{{ a_l.posicion_jugador }}</td>
+                                            <td>{{ a_l.contrato.persona.alias }}</td>
+                                            <td>
+                                                <input type="radio" class="form-check-input" id="alineacionLocal"
+                                                    name="alineacion" value="local">
+                                            </td> -->
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--  -->
                             <input type="radio" class="form-check-input" id="alineacionLocal" name="alineacion"
                                 value="local">
                             <label class="form-check-label" for="alineacionLocal">Local</label>
@@ -235,12 +256,11 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Alineación Visita</h3>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="tiempo" name="tiempo" pattern="[0-9]{2}:[0-9]{2}"
-                            placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                        </div>
+                    <div class="input-group align-items-center">
+                        <div class="align-items-center">Duración (s): </div>
+                        &nbsp;
+
+                        <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="59">
                         &nbsp;
                         <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
                     </div>
@@ -615,5 +635,8 @@ enviarButton.addEventListener('click', enviarHTML);
 
 
 <textarea id="miTextarea" name="miTextarea" style="display: none;"></textarea>
+
+
+
 
 {% endblock %}

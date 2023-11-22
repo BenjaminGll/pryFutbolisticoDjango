@@ -3,7 +3,6 @@ from django.views import View
 from .models import *
 from appEquipo.models import *
 from appContrato.models import *
-from appPartido.models import *
 from django.shortcuts import render,  redirect
 from django.contrib import messages
 from datetime import datetime

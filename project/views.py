@@ -330,22 +330,22 @@ def lista_equipos_por_competicion_y_fase(request):
         },
     )    
 
-def obtener_encuentro_persona_id(encuentro_id, contrato_id):
-    try:
-        encuentro_persona_obj = encuentro_persona.objects.get(encuentro_id=encuentro_id, contrato_id=contrato_id)
-        return encuentro_persona_obj.encuentro_persona_id
-    except encuentro_persona.DoesNotExist:
-        return None
-def obtener_equipo_id(encuentro_id, contrato_id):
-    try:
-        encuentro_persona_obj = encuentro_persona.objects.get(
-            encuentro_id=encuentro_id, contrato_id=contrato_id
-        )
-        # Obtiene el ID del equipo directamente
-        equipo_id = encuentro_persona_obj.equipo_id_id
-    except encuentro_persona.DoesNotExist:
-        equipo_id = None
-    return equipo_id
+# def obtener_encuentro_persona_id(encuentro_id, contrato_id):
+#     try:
+#         encuentro_persona_obj = encuentro_persona.objects.get(encuentro_id=encuentro_id, contrato_id=contrato_id)
+#         return encuentro_persona_obj.encuentro_persona_id
+#     except encuentro_persona.DoesNotExist:
+#         return None
+# def obtener_equipo_id(encuentro_id, contrato_id):
+#     try:
+#         encuentro_persona_obj = encuentro_persona.objects.get(
+#             encuentro_id=encuentro_id, contrato_id=contrato_id
+#         )
+#         # Obtiene el ID del equipo directamente
+#         equipo_id = encuentro_persona_obj.equipo_id_id
+#     except encuentro_persona.DoesNotExist:
+#         equipo_id = None
+#     return equipo_id
 
 
 def obtener_logo_equipo(equipo_id):

@@ -105,24 +105,7 @@ class encuentro(models.Model):
         
         self.clima = self.clima.upper()
         super(encuentro, self).save(force_insert, force_update)
-
-        # Crear registros en descripcion_encuentro
-        descripcion_local = descripcion_encuentro(
-            encuentro=self,
-            equipo=self.equipo_local,
-            # Agrega los demás campos necesarios para descripcion_encuentro
-            tipo_equipo = 'Local'
-        )
-        descripcion_local.save()
-
-        descripcion_visita = descripcion_encuentro(
-            encuentro=self,
-            equipo=self.equipo_visita,
-            tipo_equipo = 'Visita'
-            # Agrega los demás campos necesarios para descripcion_encuentro
-        )
-        descripcion_visita.save()
-
+        
     def __str__(self):
         
         return str(self.equipo_local) + " vs " + str(self.equipo_visita)

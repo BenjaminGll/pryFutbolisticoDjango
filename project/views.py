@@ -292,7 +292,7 @@ def lista_personas_por_tipo(request):
             personas = persona.objects.filter(ciudad_id__in=ciudades, tipo_persona_id=tipo_persona_id)
     return render(
         request,
-        "ReportePersonas.html",
+        "Reportepersonas.html",
         {
             "tipo_personas": tipo_personas,
             "paises": paises,

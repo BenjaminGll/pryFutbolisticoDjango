@@ -83,12 +83,18 @@ class encuentro(models.Model):
          ('E', 'EN JUEGO'),
          ('S', 'SUSPENDIDO'),
      ]
+    CHOICE_RESULTADO = [
+         ('L', 'LOCAL'),
+         ('E', 'EMPATE'),
+         ('V', 'VISITA'),
+     ]
 
     encuentro_id=models.BigAutoField(primary_key=True)
     competicion_id=models.ForeignKey("appCompeticion.competicion", on_delete=models.CASCADE,db_column='competicion_id')
     sede_id=models.ForeignKey(sede,on_delete=models.CASCADE,db_column='sede_id',blank=True,null=True)
     fase=models.ForeignKey("appCompeticion.fase", on_delete=models.CASCADE,db_column='fase',related_name='fase')
     grupo=models.ForeignKey("appCompeticion.grupo", on_delete=models.CASCADE,db_column='grupo',related_name='grupo')
+    resultado=models.CharField(max_length=1,null=True,choices=CHOICE_RESULTADO, default='E')
     equipo_local=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_local',related_name='equipo_local')
     equipo_visita=models.ForeignKey('appEquipo.equipo', on_delete=models.CASCADE,db_column='equipo_visita',related_name='equipo_visita')
     fecha=models.DateTimeField(blank=True,null=True)

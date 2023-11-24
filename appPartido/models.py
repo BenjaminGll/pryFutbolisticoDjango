@@ -200,8 +200,8 @@ class estadisticas(models.Model):
     pases_acertados=models.IntegerField()
     tiros_desviados=models.IntegerField()
     efectividad_pases=models.IntegerField()
-    tiros_arco=models.IntegerField()
-    tiros_esquina=models.IntegerField()
+    tiros_indirectos_arco=models.IntegerField()
+    tiros_directos_arco=models.IntegerField()
     descripcion_encuentro_id = models.ForeignKey(descripcion_encuentro, on_delete=models.CASCADE, db_column='descripcion_encuentro_id', null=True)
 
     def _str_(self):

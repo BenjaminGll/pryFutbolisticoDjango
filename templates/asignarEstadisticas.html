@@ -17,8 +17,8 @@
             <thead>
               <tr>
                 <th>Estadísticas</th>
-                <th>{{ equipoLocal.0.nuevo_club.nombre }}</th>
-                <th>{{ equipoVisita.0.nuevo_club.nombre }}</th>
+                <th>{{ equipoLocal }}</th>
+                <th>{{ equipoVisita }}</th>
               </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@
     
       <div class="text-right mt-4">
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="#" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Cancelar</a>
       </div>
     </form>
   </div>

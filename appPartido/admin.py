@@ -50,7 +50,7 @@ class tipo_eventoAdmin(admin.ModelAdmin):
 
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display = [ 'tipo_evento_id', 'encuentro_id', 'tiempo','contrato_id1','contrato_id2']
+    list_display = [ 'tipo_evento_id', 'encuentro_id', 'tiempo','alineacion_id1','alineacion_id2']
     ordering = ['tipo_evento_id']
     search_fields = ['encuentro_id__equipo_local__nombre', 'encuentro_id__equipo_visita__nombre']
     list_filter = ['encuentro_id__competicion_id']

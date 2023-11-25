@@ -156,11 +156,10 @@ class evento(models.Model):
     evento_id = models.BigAutoField(primary_key=True)
     tipo_evento_id = models.ForeignKey(tipo_evento, on_delete=models.CASCADE, db_column='tipo_evento_id', null=True)
     encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
-    contrato_id1 = models.ForeignKey("appContrato.contrato", on_delete=models.CASCADE, db_column='contrato_id1', null=True, related_name='eventos_contrato1', blank=True)
-    contrato_id2 = models.ForeignKey("appContrato.contrato", on_delete=models.CASCADE, db_column='contrato_id2', null=True, related_name='eventos_contrato2', blank=True)
+    alineacion_id1 = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1', blank=True)
+    alineacion_id2 = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2', blank=True)
     tiempo = models.TimeField(null=True, blank=True)
     evento_equipo = models.CharField(max_length=1,null=True, blank=True)
-    
 
     def save(self, force_insert=False, force_update=False):
         super(evento, self).save(force_insert, force_update)

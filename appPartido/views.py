@@ -286,37 +286,42 @@ def asignarEventos(request, encuentro_id):
     eventos = evento.objects.filter(encuentro_id=encuentro_id)
     
     if request.method == 'POST':
-        tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
-        alineacion011 = request.POST.get('alineacion01', None)
-        alineacion021 = request.POST.get('alineacion02', None)
-        tiempo = request.POST.get('tiempo', 0)
-        tiempo = int(tiempo) if tiempo else 0
-        motivo = request.POST.get('motivo', '')
-        encuentro_id = int(encuentro_id) if encuentro_id else 0
-        evento_equipo=request.POST.get('evento_equipo', False)
+        if 'guardar_evento' in request.POST:
+            tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
+            alineacion011 = request.POST.get('alineacion01', None)
+            alineacion021 = request.POST.get('alineacion02', None)
+            tiempo = request.POST.get('tiempo', 0)
+            tiempo = int(tiempo) if tiempo else 0
+            motivo = request.POST.get('motivo', '')
+            encuentro_id = int(encuentro_id) if encuentro_id else 0
+            evento_equipo=request.POST.get('equipo', '')
+            equipoSe = (evento_equipo=='Local')
+                
+            alineacion_id1 = alineacion.objects.get(alineacion_id=alineacion011) if alineacion011 else None
+            alineacion_id2 = alineacion.objects.get(alineacion_id=alineacion021) if alineacion021 else None
 
-        evento_obj = evento(
-            tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
-            alineacion_id1=alineacion.objects.get(alineacion_id=alineacion011),
-            alineacion_id2=alineacion.objects.get(alineacion_id=alineacion021),
-            encuentro_id=encuentro_obj,
-            evento_equipo=evento_equipo,
-            motivo=motivo,
-            tiempo=tiempo
-        )
-        evento_obj.save()
+            evento_obj = evento(
+                tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
+                alineacion_id1=alineacion_id1,
+                alineacion_id2=alineacion_id2,
+                encuentro_id=encuentro_obj,
+                evento_equipo=equipoSe,
+                motivo=motivo,
+                tiempo=tiempo
+            )
+            evento_obj.save()
 
-        messages.success(request, 'Eventos guardados correctamente.')
+            messages.success(request, 'Eventos guardados correctamente.')
         
-    elif 'eliminar_evento' in request.POST:
-            # Lógica para eliminar un detalle de la terna arbitral
-            evento_id = int(request.POST.get('eliminar_evento'))
-            evento_obj = get_object_or_404(evento, pk=evento_id)
-            print(f"Eliminando evento con ID {evento_id}")
-    
-            evento_obj.delete()
-            print(f"Evento eliminado correctamente")
-        
+        elif 'eliminar_evento' in request.POST:
+                # Lógica para eliminar un detalle de la terna arbitral
+                evento_id = int(request.POST.get('eliminar_evento'))
+                evento_obj = get_object_or_404(evento, pk=evento_id)
+                print(f"Eliminando evento con ID {evento_id}")
+
+                evento_obj.delete()
+                print(f"Evento eliminado correctamente")
+            # return redirect(f'/appPartido/asignar/eventos/{evento_id}/')
     return render(request, 'asignarEventos.html', {
         'fecha_encuentro': encuentro_obj.fecha,
         'encuentro_id': encuentro_id,

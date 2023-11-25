@@ -42,9 +42,9 @@
         <div class="col-md-6">
           <label for="equipo">Equipo:</label>
           <select name="equipo" id="equipo" class="form-control">
-            <option value="" selected disabled>Seleccionar tipo de evento</option>
-              <option value="{{ tipo_evento.tipo_evento_id }}">{{ tipo_evento.nombre }}</option>
-
+            <option value="" selected disabled>Seleccionar</option>
+              <option value="">Local</option>
+              <option value="">Visita</option>
           </select>
 
           <label for="tiempo">Tiempo:</label>
@@ -57,10 +57,10 @@
       </div>
 
       <div class="text-right mt-4">
-        <button type="submit" class="btn btn-primary">Guardar Evento</button>
+        <button type="submit" name="guardar_evento"  class="btn btn-success">Guardar Evento</button>
         <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Cancelar</a>
       </div>
-    </form>
+
   </div> <br>
 
 
@@ -68,8 +68,8 @@
     <div class="row">
 
       <h3 class="text-center">Eventos Añadidos</h3>
-      <table class="table table-bordered mx-auto" id="eventoTable">
-          <thead>
+      <table class="table table-bordered mx-auto mr-4" id="eventoTable">
+        <thead>
               <tr>
                   <th>Evento</th>
                   <th>Alineacion {{ equipoLocal }}</th>

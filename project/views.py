@@ -705,11 +705,15 @@ def contextoTVhomeEncuentro(request,id):
     jugar_encuentro=encuentro.objects.get(encuentro_id=id)
     equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
     equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
-    
+    descripcion_local = descripcion_encuentro.objects.get(equipo=equipo_a.equipo_id, encuentro_id=id)
+    descripcion_visita = descripcion_encuentro.objects.get(equipo=equipo_b.equipo_id, encuentro_id=id)
+
     data={
           'equipo_local': equipo_a,
           'equipo_visita': equipo_b,
           'encuentro' : jugar_encuentro,
+          'descripcion_local':descripcion_local,
+          'descripcion_visita':descripcion_visita
     }
     
     return render(request, 'tvHomeEncuentro.html', data)

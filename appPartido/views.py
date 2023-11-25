@@ -40,11 +40,11 @@ class ObtenerAlineacionesView(View):
         if tipo_evento_id == '3':
             data = {
                 'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
-                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
             }
         elif tipo_evento_id == '37':
             data = {
-                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
                 'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
             }
         else:
@@ -267,7 +267,7 @@ def asignarAlineacion(request, encuentro_id):
 
 
 def asignarEventos(request, encuentro_id):
-    tipos_evento_relacionados = request.GET.get('tipo_evento_id')
+    tipos_evento_relacionados = tipo_evento.objects.all()
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
@@ -284,7 +284,7 @@ def asignarEventos(request, encuentro_id):
     alineacion02 = alineacion.objects.filter(
             descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
     eventos = evento.objects.filter(encuentro_id=encuentro_id)
-
+    
     if request.method == 'POST':
         tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
         alineacion011 = request.POST.get('alineacion01', None)
@@ -293,13 +293,14 @@ def asignarEventos(request, encuentro_id):
         tiempo = int(tiempo) if tiempo else 0
         motivo = request.POST.get('motivo', '')
         encuentro_id = int(encuentro_id) if encuentro_id else 0
-
+        evento_equipo=request.POST.get('evento_equipo', False)
 
         evento_obj = evento(
             tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
             alineacion_id1=alineacion.objects.get(alineacion_id=alineacion011),
             alineacion_id2=alineacion.objects.get(alineacion_id=alineacion021),
             encuentro_id=encuentro_obj,
+            evento_equipo=evento_equipo,
             motivo=motivo,
             tiempo=tiempo
         )

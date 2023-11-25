@@ -175,48 +175,49 @@
       document.getElementById('contador_visita').innerText = contadorVisita;
     }
   
-    // Función para inhabilitar otros checkboxes de capitán cuando se selecciona un capitán
-    function inhabilitarOtrosCapitanes(checkbox, checkboxes) {
-      if (checkbox.checked) {
-        for (var otherCheckbox of checkboxes) {
-          if (otherCheckbox !== checkbox) {
-            otherCheckbox.disabled = true;
-          }
-        }
-      } else {
-        for (var otherCheckbox of checkboxes) {
-          otherCheckbox.disabled = false;
+  // Función para inhabilitar otros checkboxes de capitán cuando se selecciona un capitán
+  function inhabilitarOtrosCapitanes(checkbox, checkboxes) {
+    if (checkbox.checked) {
+      for (var otherCheckbox of checkboxes) {
+        if (otherCheckbox !== checkbox) {
+          otherCheckbox.disabled = true;
         }
       }
+    } else {
+      for (var otherCheckbox of checkboxes) {
+        otherCheckbox.disabled = false;
+      }
     }
-     // Función para seleccionar/deseleccionar todos los checkboxes
+  }
+
+  // Función para seleccionar/deseleccionar todos los checkboxes
   function seleccionarTodos(checkboxes, isChecked) {
     for (var checkbox of checkboxes) {
       checkbox.checked = isChecked;
     }
     manejarContadores();
   }
-    // Agregar evento de carga del documento para ejecutar la función
-    document.addEventListener('DOMContentLoaded', function () {
-      manejarContadores();
-    
-      // Agregar evento de cambio a cada checkbox de jugador para contar selecciones individualmente
-      var checkboxesJugadorLocal = document.getElementsByClassName('jugador-checkbox-local');
-      for (var checkbox of checkboxesJugadorLocal) {
-        checkbox.addEventListener('change', function () {
-          manejarContadores();
- 
-        });
-      }
-    
-      var checkboxesJugadorVisita = document.getElementsByClassName('jugador-checkbox-visita');
-      for (var checkbox of checkboxesJugadorVisita) {
-        checkbox.addEventListener('change', function () {
-          manejarContadores();
 
-        });
-      }
-       // Agregar evento de cambio al checkbox "seleccionar todos" para seleccionar/deseleccionar todos los checkboxes
+  // Agregar evento de carga del documento para ejecutar la función
+  document.addEventListener('DOMContentLoaded', function () {
+    manejarContadores();
+
+    // Agregar evento de cambio a cada checkbox de jugador para contar selecciones individualmente
+    var checkboxesJugadorLocal = document.getElementsByClassName('jugador-checkbox-local');
+    for (var checkbox of checkboxesJugadorLocal) {
+      checkbox.addEventListener('change', function () {
+        manejarContadores();
+      });
+    }
+
+    var checkboxesJugadorVisita = document.getElementsByClassName('jugador-checkbox-visita');
+    for (var checkbox of checkboxesJugadorVisita) {
+      checkbox.addEventListener('change', function () {
+        manejarContadores();
+      });
+    }
+
+    // Agregar evento de cambio al checkbox "seleccionar todos" para seleccionar/deseleccionar todos los checkboxes
     var seleccionarTodosLocal = document.getElementById('seleccionar_todos_local');
     seleccionarTodosLocal.addEventListener('change', function () {
       var checkboxesJugadorLocal = document.getElementsByClassName('jugador-checkbox-local');
@@ -228,27 +229,36 @@
       var checkboxesJugadorVisita = document.getElementsByClassName('jugador-checkbox-visita');
       seleccionarTodos(checkboxesJugadorVisita, this.checked);
     });
-      // Agregar evento de cambio a cada checkbox de capitán para contar selecciones individualmente
-      var capitanCheckboxesLocal = document.getElementsByClassName('capitan-checkbox-local');
-      for (var capitanCheckbox of capitanCheckboxesLocal) {
-        capitanCheckbox.addEventListener('change', function () {
-          var checkboxesJugadorLocal = document.getElementsByClassName('capitan-checkbox-local');
-          inhabilitarOtrosCapitanes(this, checkboxesJugadorLocal);
-        });
-      }
-    
-      var capitanCheckboxesVisita = document.getElementsByClassName('capitan-checkbox-visita');
-      for (var capitanCheckbox of capitanCheckboxesVisita) {
-        capitanCheckbox.addEventListener('change', function () {
-          var checkboxesJugadorVisita = document.getElementsByClassName('capitan-checkbox-visita');
-          inhabilitarOtrosCapitanes(this, checkboxesJugadorVisita);
-        });
-      }
-     // Llamar a la función para inhabilitar otros checkboxes de capitán al cargar la página
-  inhabilitarOtrosCapitanes(null, capitanCheckboxesLocal);
-  inhabilitarOtrosCapitanes(null, capitanCheckboxesVisita);
-});
-  </script>
+
+    // Agregar evento de cambio a cada checkbox de capitán para contar selecciones individualmente
+    var capitanCheckboxesLocal = document.getElementsByClassName('capitan-checkbox-local');
+    for (var capitanCheckbox of capitanCheckboxesLocal) {
+      capitanCheckbox.addEventListener('change', function () {
+        var checkboxesJugadorLocal = document.getElementsByClassName('capitan-checkbox-local');
+        inhabilitarOtrosCapitanes(this, checkboxesJugadorLocal);
+      });
+    }
+
+    var capitanCheckboxesVisita = document.getElementsByClassName('capitan-checkbox-visita');
+    for (var capitanCheckbox of capitanCheckboxesVisita) {
+      capitanCheckbox.addEventListener('change', function () {
+        var checkboxesJugadorVisita = document.getElementsByClassName('capitan-checkbox-visita');
+        inhabilitarOtrosCapitanes(this, checkboxesJugadorVisita);
+      });
+    }
+
+    // Verificar si hay un capitán seleccionado al cargar la página y deshabilitar los demás
+    var capitanActualLocal = document.querySelector('.capitan-checkbox-local:checked');
+    if (capitanActualLocal) {
+      inhabilitarOtrosCapitanes(capitanActualLocal, capitanCheckboxesLocal);
+    }
+
+    var capitanActualVisita = document.querySelector('.capitan-checkbox-visita:checked');
+    if (capitanActualVisita) {
+      inhabilitarOtrosCapitanes(capitanActualVisita, capitanCheckboxesVisita);
+    }
+  });
+</script>
   
 
   

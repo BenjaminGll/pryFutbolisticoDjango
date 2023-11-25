@@ -175,8 +175,7 @@ def asignarAlineacion(request, encuentro_id):
     ).formacion if alineaciones_visita.exists() else '4-3-3'
 
     if request.method == 'POST':
-        alineaciones_local.delete()
-        alineaciones_visita.delete()
+
         jugadoresLocales=  request.POST.getlist('jugadoresLocales[]', [])
         jugadoresVisitas=  request.POST.getlist('jugadoresVisitas[]', [])
         jugadores_local_sel = request.POST.getlist('jugadores_local[]', [])
@@ -198,6 +197,8 @@ def asignarAlineacion(request, encuentro_id):
         descripcion_encuentro_visita = descripcion_encuentro.objects.filter(
             equipo=equipoVisita, encuentro=encuentro_obj).first()
         # Guardar jugadores del equipo local
+        alineaciones_local.delete()
+        alineaciones_visita.delete()
         for jugador_id_local in jugadoresLocales[:40]:
             if jugador_id_local:
                 contrato_local = contrato.objects.filter(

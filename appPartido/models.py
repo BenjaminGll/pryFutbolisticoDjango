@@ -158,7 +158,8 @@ class evento(models.Model):
     encuentro_id = models.ForeignKey(encuentro, on_delete=models.CASCADE, db_column='encuentro_id', null=True)
     alineacion_id1 = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id1', null=True, related_name='eventos_alineacion1', blank=True)
     alineacion_id2 = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2', blank=True)
-    tiempo = models.TimeField(null=True, blank=True)
+    tiempo = models.IntegerField(null=True, blank=True)
+    motivo=models.CharField(max_length=255, null=True, blank=True)
     evento_equipo = models.CharField(max_length=1,null=True, blank=True)
 
     def save(self, force_insert=False, force_update=False):

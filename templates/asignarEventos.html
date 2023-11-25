@@ -6,7 +6,7 @@
 {% block content %}
   <div class="container mt-4">
     <h1 class="mb-4">Asignar Eventos: {{ equipoLocal }} vs. {{ equipoVisita }} - {{ fecha_encuentro }}</h1>
-    <form method="POST" action="{% url 'asignarEventos' encuentro_id=encuentro_id %}">
+    <form method="POST" action="{% url 'asignarEventos'   encuentro_id=encuentro_id %}">
       {% csrf_token %}
 
       <div class="row">
@@ -24,7 +24,7 @@
           <select name="alineacion01" id="alineacion01" class="form-control">
             <option value="input" selected disabled>Seleccionar alineación 01</option>
             {% for alineacion in alineacion01 %}
-              <option value="{{ alineacion.contrato_id }}">{{ alineacion.persona }}</option>
+              <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
             {% endfor %}
           </select>
 
@@ -32,7 +32,7 @@
           <select name="alineacion02" id="alineacion02" class="form-control">
             <option value="input" selected disabled>Seleccionar alineación 02</option>
             {% for alineacion in alineacion02 %}
-              <option value="{{ alineacion.contrato_id }}">{{ alineacion.persona }}</option>
+              <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
             {% endfor %}
           </select>
 

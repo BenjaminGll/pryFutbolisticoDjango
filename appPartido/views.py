@@ -271,30 +271,33 @@ def asignarEventos(request, encuentro_id):
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
-    alineacion01 = contrato.objects.filter(nuevo_club=equipoLocal.equipo_id)
-    alineacion02 = contrato.objects.filter(nuevo_club=equipoVisita.equipo_id)
 
+    # Obtener todos los objetos que cumplen con la condición
+    descripcionEncuentroLocal_objs = descripcion_encuentro.objects.filter(
+        equipo=encuentro_obj.equipo_local,  encuentro=encuentro_obj)
+    descripcionEncuentroVisita_objs = descripcion_encuentro.objects.filter(
+        equipo=encuentro_obj.equipo_visita,  encuentro=encuentro_obj)
+
+    # Obtener alineaciones asociadas a los objetos obtenidos
+    alineacion01 = alineacion.objects.filter(
+        descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+    alineacion02 = alineacion.objects.filter(
+            descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
     evento_id = evento.objects.all()
     if request.method == 'POST':
         tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
-        alineacion01 = request.POST.get('alineacion01', None)
-        alineacion02 = request.POST.get('alineacion02', None)
+        alineacion011 = request.POST.get('alineacion01', None)
+        alineacion021 = request.POST.get('alineacion02', None)
         tiempo = request.POST.get('tiempo', 0)
         tiempo = int(tiempo) if tiempo else 0
         motivo = request.POST.get('motivo', '')
         encuentro_id = int(encuentro_id) if encuentro_id else 0
 
-        print("Tipo de Evento ID:", tipo_evento_id)
-        print("Alineación 01 List:", alineacion01)
-        print("Alineación 02 List:", alineacion02)
-        print("Tiempo:", tiempo)
-        print("Motivo:", motivo)
-        print("Encuentro:", encuentro_id)
 
         evento_obj = evento(
-            tipo_evento_id=tipo_evento_id,
-            alineacion_id1=alineacion.objects.get(alineacion_id=alineacion01),
-            alineacion_id2=alineacion.objects.get(alineacion_id=alineacion02),
+            tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
+            alineacion_id1=alineacion.objects.get(alineacion_id=alineacion011),
+            alineacion_id2=alineacion.objects.get(alineacion_id=alineacion021),
             encuentro_id=encuentro_obj,
             motivo=motivo,
             tiempo=tiempo

@@ -40,11 +40,11 @@ class ObtenerAlineacionesView(View):
         if tipo_evento_id == '3':
             data = {
                 'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
-                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
+                'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
             }
         elif tipo_evento_id == '37':
             data = {
-                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionLocal_objs],
+                'alineacion1': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
                 'alineacion2': [{'id': str(alineacion.alineacion_id), 'jugador': str(alineacion.contrato_id)} for alineacion in alineacionVisita_objs],
             }
         else:
@@ -284,7 +284,7 @@ def asignarEventos(request, encuentro_id):
     alineacion02 = alineacion.objects.filter(
             descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
     eventos = evento.objects.filter(encuentro_id=encuentro_id)
-
+    
     if request.method == 'POST':
         tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
         alineacion011 = request.POST.get('alineacion01', None)

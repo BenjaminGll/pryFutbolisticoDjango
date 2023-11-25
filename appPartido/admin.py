@@ -50,10 +50,10 @@ class tipo_eventoAdmin(admin.ModelAdmin):
 
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display = ['competicion_id', 'tipo_evento_id', 'encuentro_id', 'tiempo','alineacion1_id','alineacion2_id']
+    list_display = [ 'tipo_evento_id', 'encuentro_id', 'tiempo','contrato_id1','contrato_id2']
     ordering = ['tipo_evento_id']
     search_fields = ['encuentro_id__equipo_local__nombre', 'encuentro_id__equipo_visita__nombre']
-    list_filter = ['competicion_id']
+    list_filter = ['encuentro_id__competicion_id']
   
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js','assets/js/control_botones.js',)

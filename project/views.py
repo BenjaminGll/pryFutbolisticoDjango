@@ -292,7 +292,7 @@ def lista_personas_por_tipo(request):
             personas = persona.objects.filter(ciudad_id__in=ciudades, tipo_persona_id=tipo_persona_id)
     return render(
         request,
-        "ReportePersonas.html",
+        "Reportepersonas.html",
         {
             "tipo_personas": tipo_personas,
             "paises": paises,
@@ -877,12 +877,13 @@ def mostrarEvento(request, idEncuentro):
 
 def mostrarEventosGenerales(request, idEncuentro):
     banners = []
-    # html_dinamico = request.POST.getlist('miTextarea')
-    # print(html_dinamico)
+    html_dinamico = request.POST.getlist('miTextarea')
+    print(html_dinamico)
     if request.method == 'POST':
         print("POST request recibido")
         print(request.POST)  # Imprime los datos POST
         html_dinamico = request.POST.getlist('miTextarea')
+        print("El html dinamico es",html_dinamico)
         tiempo = request.POST.get('tiempo')
 
         if not tiempo:

@@ -5,9 +5,9 @@
 
 {% block content %}
   <div class="container mt-4">
-    <h1 class="mb-4">Asignar Estadísticas</h1>
 
-    <form method="post" action="{% url 'asignarEstadisticas' encuentro_id=encuentro_id %}">
+
+    <form method="post" action="{% url 'asignarEstadisticas' encuentro_id=encuentro.encuentro_id %}">
       {% csrf_token %}
 
       <div class="row">
@@ -17,8 +17,8 @@
             <thead>
               <tr>
                 <th>Estadísticas</th>
-                <th>{{ equipoLocal }}</th>
-                <th>{{ equipoVisita }}</th>
+                <th>{{ equipoLocal.nombre }}</th>
+                <th>{{ equipoVisita.nombre }}</th>
               </tr>
             </thead>
             <tbody>
@@ -62,5 +62,6 @@
         <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Cancelar</a>
       </div>
     </form>
+    
   </div>
 {% endblock %}

@@ -323,7 +323,7 @@ def asignarEstadisticas(request, encuentro_id):
         estadistica_local.efectividad_pases = efectividad_pases_local
         estadistica_local.tiros_indirectos_arco = tiros_indirectos_arco_local
         estadistica_local.tiros_directos_arco = tiros_directos_arco_local 
-        estadistica_local.descripcion_encuentro_id = desc_encuentro_local
+        estadistica_local.descripcion_encuentro_id = descripcion_encuentro_local
         estadistica_local.save()
         
         # Guardamos estadísticas visitante
@@ -334,7 +334,7 @@ def asignarEstadisticas(request, encuentro_id):
         estadistica_visitante.efectividad_pases = efectividad_pases_visitante
         estadistica_visitante.tiros_indirectos_arco = tiros_indirectos_arco_visitante
         estadistica_visitante.tiros_directos_arco = tiros_directos_arco_visitante
-        estadistica_visitante.descripcion_encuentro_id = desc_encuentro_visitante 
+        estadistica_visitante.descripcion_encuentro_id = descripcion_encuentro_visita 
         estadistica_visitante.save()
         
         messages.success(request, 'Estadísticas guardadas exitosamente')

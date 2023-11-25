@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %} TV en Vivo - Partido de Fútbol {% endblock %}
+{% block content %}
+<style>
+  .fondo {
+    width: 100%;
+    /* Hace que el fondo ocupe el 100% del ancho del contenedor */
+    height: 100%;
+    /* Hace que el fondo ocupe el 100% de la altura de la ventana */
+    background-size: cover;
+    /* Escala la imagen de fondo para cubrir todo el elemento */
+    background-position: center;
+    /* Centra la imagen de fondo horizontalmente */
+
+  }
+
+
+  .banners-container {
+    position: absolute;
+    top: 98%;
+    right: 30%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    width: 600px;
+    font-size: 20px;
+    border-radius: 5px;
+    z-index: 1;
+  }
+
+
+  .banner-marcadores {
+    position: absolute;
+    top: 230px;
+    right: 1100px;
+    background-color: rgb(210, 210, 210);
+    color: black;
+    text-align: center;
+    height: 30px;
+    width: 280px;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 1;
+  }
+</style>
+<div class="container">
+  <!-- <h1>TV en Vivo - Partido de Fútbol</h1> -->
+  <div class="video-container">
+    <br>
+    <img class="fondo" src="/static/images/fondoFut.jpg" alt="">
+
+
+
+
+
+    <div id="banners-container" class="banners-container" style="display: none;">
+      <!-- Contenido del banner -->
+      <p></p>
+
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+
+
+  <!-- {% for e in eventos %} -->
+
+  <!-- Comprueba si el evento debe mostrar un banner -->
+  <!-- {% if e.mostrar_banner %} -->
+  <!-- Aquí coloca el código HTML para el banner basado en el evento e -->
+
+  <!-- {% endif %} -->
+  <!-- {% endfor %} -->
+
+
+</div>
+
+
+
+
+<script>
+  console.log("Fuera del bucle");
+  // ...
+  let bannerElement = null;
+  function obtenerBanners() {
+
+    fetch('/datostv')
+
+
+      .then(response => response.json())
+      .then(data => {
+        const bannersContainer = document.getElementById('banners-container');
+        if (bannersContainer) {
+          const nuevosBanners = data.banners;
+
+          if (nuevosBanners.length > 0) {
+            const banner = nuevosBanners[0];
+
+            if (!bannerElement) {
+              bannerElement = document.createElement('div');
+              bannerElement.classList.add('banner-container');
+              bannersContainer.appendChild(bannerElement);
+            }
+
+            bannerElement.innerHTML = banner.html; // Actualizar el HTML del banner actual
+            console.log('HTML del banner:', banner.html);
+            // Muestra banners-container
+            bannersContainer.style.display = 'block';
+            //Tiempo para mostrarse
+            const tiempoSegundos = banner.tiempo;
+            // const tiempoEnMilisegundos = tiempoSegundos*1000;
+            const tiempoEnMilisegundos = tiempoSegundos * 1000;
+            console.log(tiempoEnMilisegundos)
+            // Oculta banners-container después de 10 segundos
+            setTimeout(() => {
+              bannersContainer.style.display = 'none';
+              //   // Limpia el archivo temporal 'eventos_temporales.json'
+              fetch('/limpiar-eventos-temporales')
+                .then(response => response.json())
+                .then(data => {
+                  console.log('Archivo temporal limpiado:', data);
+                })
+                .catch(error => console.error(error));
+            }, tiempoEnMilisegundos);
+          }
+        } else {
+          console.error('Elemento con ID "banners-container" no encontrado.');
+        }
+      })
+      .catch(error => console.error(error));
+  }
+
+  // obtenerBanners();
+  setInterval(obtenerBanners, 2000);
+
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   var minutos = 0;
+  //   var segundos = 0;
+  //   var cronometroDisplay = document.getElementById('cronometro');
+  //   var cronometro = setInterval(function () {
+  //     segundos++;
+  //     if (segundos == 60) {
+  //       minutos++;
+  //       segundos = 0;
+  //     }
+  //     cronometroDisplay.innerHTML = (minutos < 10 ? '0' + minutos : minutos) + ':' + (segundos < 10 ? '0' + segundos : segundos);
+  //   }, 1000);
+  // });
+
+
+
+
+
+  function convertirTiempoAMilisegundos(tiempo) {
+    const [minutos, segundos] = tiempo.split(':').map(Number);
+
+    // Convierte minutos y segundos a milisegundos
+    const minutosEnMilisegundos = minutos * 60 * 1000;
+    const segundosEnMilisegundos = segundos * 1000;
+
+    // Suma los milisegundos
+    const totalMilisegundos = minutosEnMilisegundos + segundosEnMilisegundos;
+
+    return totalMilisegundos;
+  }
+
+
+  //   function obtenerBanners() {
+  //   fetch('/datostv')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // Aquí puedes procesar los datos obtenidos de '/datostv'
+  //     })
+  //     .catch(error => console.error(error));
+  // }
+
+  // // Llama a la función obtenerBanners cada 3 segundos
+  // setInterval(obtenerBanners, 3000);
+  var estadoAccion = '';
+  function actualizarCronometro() {
+    // Realizar la solicitud AJAX para obtener la información del cronómetro
+    fetch('/obtener_cronometro/')
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Error en la solicitud AJAX');
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        var cronometroDiv = document.getElementById('cronometro');
+
+        // Verificar la acción y realizar acciones correspondientes
+        if (data.accion == 'ocultar') {
+          console.log('ocul');
+          cronometroDisplay.style.display = 'none';
+        } else if (data.accion == 'mostrar') {
+          console.log('mos');
+          cronometroDisplay.style.display = 'inline-block';
+        } else if (data.accion == 'pausa' && estadoAccion != 'pausa') {
+          console.log('pau');
+          clearInterval(cronometro);
+        } else if (data.accion == 'play' && estadoAccion != 'play') {
+          console.log('play');
+          clearInterval(cronometro);  // Detener el intervalo existente antes de configurar uno nuevo
+          cronometro = setInterval(Cronometro, 1000);  // Configurar un nuevo intervalo
+        }
+
+        // Actualizar el estado de la acción
+        estadoAccion = data.accion;
+      })
+      .catch(function (error) {
+        console.error('Error en la solicitud AJAX', error);
+      });
+  }
+
+  // Llamar a la función para actualizar el cronómetro cada cierto tiempo
+  setInterval(actualizarCronometro, 2000);
+</script>
+
+<!--  -->
+<!-- <script>
+  console.log("Fuera del bucle");
+
+  let bannerElement = null; 
+
+  function obtenerBanners() {
+    fetch('/datostv')
+      .then(response => response.json())
+      .then(data => {
+        const bannersContainer = document.getElementById('banners-container');
+        if (bannersContainer) {
+          const nuevosBanners = data.banners;
+
+          if (nuevosBanners.length > 0) {
+            const banner = nuevosBanners[0];
+
+            if (!bannerElement) {
+              bannerElement = document.createElement('div');
+              bannerElement.classList.add('banner-container');
+              bannersContainer.appendChild(bannerElement);
+            }
+            
+            bannerElement.innerHTML = banner.html; // Actualizar el HTML del banner actual
+            console.log('HTML del banner:', banner.html);
+            // Muestra banners-container
+            bannersContainer.style.display = 'block';
+
+            // Verifica si el banner es de tipo CRONÓMETRO
+            if (banner.html.includes('id="cronometro"')) {
+              // Banner de CRONÓMETRO, no aplicar la lógica de temporización
+              return;
+            }
+
+            // Oculta banners-container después de 10 segundos para banners no CRONÓMETRO
+            setTimeout(() => {
+              bannersContainer.style.display = 'none';
+              // Limpia el archivo temporal 'eventos_temporales.json'
+              fetch('/limpiar-eventos-temporales')
+                .then(response => response.json())
+                .then(data => {
+                  console.log('Archivo temporal limpiado:', data);
+                })
+                .catch(error => console.error(error));
+            }, 10000);
+          }
+        } else {
+          console.error('Elemento con ID "banners-container" no encontrado.');
+        }
+      })
+      .catch(error => console.error(error));
+  }
+
+  // obtenerBanners();
+  setInterval(obtenerBanners, 2000);
+</script> -->
+
+
+{% endblock %}

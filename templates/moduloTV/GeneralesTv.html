@@ -139,10 +139,10 @@
                                 <i class="fas fa-pause"></i>
                             </button>
                             &nbsp;
-                            <button type="button" class="btn btn-primary" onclick="enviarComando('ocultar')">
+                            <button type="button" class="btn btn-primary" onclick="enviarComando('mostrar')">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button type="button" class="btn btn-danger" onclick="enviarComando('mostrar')">
+                            <button type="button" class="btn btn-danger" onclick="enviarComando('ocultar')">
                                 <i class="fas fa-eye-slash"></i>
                             </button>
 
@@ -872,7 +872,41 @@ enviarButton.addEventListener('click', enviarHTML);
 
 </script>
 
+<script>
+    function enviarComando(accion) {
+        var tiempo = document.getElementById('tiempoCrono').value;
 
+    
+        fetch('/actualizar_cronometro/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': obtenerCSRFToken()  // Asegúrate de definir esta función para obtener el token CSRF
+            },
+            body: JSON.stringify({ accion: accion, tiempo: tiempo })
+           
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud AJAX');
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                
+            })
+            .catch(function (error) {
+                console.error('Error en la solicitud AJAX', error);
+            });
+    }
+
+    // Función para obtener el token CSRF del formulario
+    function obtenerCSRFToken() {
+        var csrfTokenElement = document.getElementsByName('csrfmiddlewaretoken')[0];
+        return csrfTokenElement.value;
+    }
+
+</script>
 
 <textarea id="miTextarea" name="miTextarea" style="display: none;"></textarea>
 

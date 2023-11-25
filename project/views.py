@@ -700,6 +700,20 @@ def contextoTVhome(request):
     return render(request, 'tvHome.html', data)
 
 
+
+def contextoTVhomeEncuentro(request,id):
+    jugar_encuentro=encuentro.objects.get(encuentro_id=id)
+    equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)
+    equipo_b=equipo.objects.get(nombre=jugar_encuentro.equipo_visita)
+    
+    data={
+          'equipo_local': equipo_a,
+          'equipo_visita': equipo_b,
+          'encuentro' : jugar_encuentro,
+    }
+    
+    return render(request, 'tvHomeEncuentro.html', data)
+
 def contextoTv(request,id):
     jugar_encuentro=encuentro.objects.get(encuentro_id=id)
     equipo_a=equipo.objects.get(nombre=jugar_encuentro.equipo_local)

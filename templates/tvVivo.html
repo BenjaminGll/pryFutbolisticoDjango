@@ -53,7 +53,7 @@
       <span id="cronometro">00:00</span>
     </div>--> 
     
-    <div class="banner-marcadores">
+    <div class="banner-marcadores" id="general">
       <span id="cronometro">00:00</span>&nbsp;<img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%">
     </div>
     <div id="banners-container" class="banners-container" style="display: none;">
@@ -186,13 +186,14 @@
         return response.json();
       })
       .then(function (data) {
+        var generalDisplay = document.getElementById('general');
         // Verificar la acción y realizar acciones correspondientes
         if (data.accion == 'ocultar') {
           console.log('ocul');
-          cronometroDisplay.style.display = 'none';
+          generalDisplay.style.display = 'none';
         } else if (data.accion == 'mostrar') {
           console.log('mos');
-          cronometroDisplay.style.display = 'inline-block';
+          generalDisplay.style.display = 'inline-block';
         } else if (data.accion == 'pausa' && estadoAccion != 'pausa') {
           console.log('pau');
           clearInterval(cronometro);

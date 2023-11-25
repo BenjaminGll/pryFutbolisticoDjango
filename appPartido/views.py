@@ -293,8 +293,8 @@ def asignarEventos(request, encuentro_id):
 
         evento_obj = evento(
             tipo_evento_id=tipo_evento_id,
-            contrato1_id=contrato.objects.get(contrato_id=alineacion01),
-            contrato2_id=contrato.objects.get(contrato_id=alineacion02),
+            alineacion_id1=alineacion.objects.get(alineacion_id=alineacion01),
+            alineacion_id2=alineacion.objects.get(alineacion_id=alineacion02),
             encuentro_id=encuentro_obj,
             motivo=motivo,
             tiempo=tiempo

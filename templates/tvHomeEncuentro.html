@@ -5,12 +5,14 @@
 
 
 <style>
+
     .card {
         border: 1px solid #ddd;
         border-radius: 8px;
         margin: 10px 0;
         overflow: hidden;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 500px; /* Set the width to 100% or any desired value */
     }
 
     .card-header {
@@ -71,10 +73,10 @@
     <div class="recent-results results-page">
         <div class="info-results">
             <ul>
-                <li class="mx-auto" style="max-width: 400px;">
+                <li class="text-center" style="max-width: 500px; margin: 0 auto;">
                     <div class="card">
                         <div class="card-header">
-                            <span class="date">{{ encuentro.fecha | date:'d-m-Y h:m' }}</span>
+                            <span class="date">{{ encuentro.competicion_id}} {{ encuentro.fecha | date:'d-m-Y h:m' }}</span>
                             <a href="/tvVivo/{{encuentro.encuentro_id}}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
                         </div>
                         <div class="card-body" style="display: flex; align-items: center; justify-content: space-around;">
@@ -83,7 +85,7 @@
                                 <p class="team-name">{{ equipo_local.nombre }}</p>
                             </div>
                             <span class="score">
-                                <b>{{ encuentro.resultado_goles_local }}</b> - <b>{{ encuentro.resultado_goles_visita }}</b>
+                                <b>{{ descripcion_local.goles }}</b> - <b>{{ descripcion_visita.goles }}</b>
                             </span>
                             <div class="team-info">
                                 <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">

@@ -160,7 +160,7 @@ class evento(models.Model):
     alineacion_id2 = models.ForeignKey("appEquipo.alineacion", on_delete=models.CASCADE, db_column='alineacion_id2', null=True, related_name='eventos_alineacion2', blank=True)
     tiempo = models.IntegerField(null=True, blank=True)
     motivo=models.CharField(max_length=255, null=True, blank=True)
-    evento_equipo = models.CharField(max_length=1,null=True, blank=True)
+    evento_equipo = models.BooleanField()
 
     def save(self, force_insert=False, force_update=False):
         super(evento, self).save(force_insert, force_update)

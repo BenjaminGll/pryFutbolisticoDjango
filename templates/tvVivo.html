@@ -172,7 +172,7 @@
     cronometroDisplay.innerHTML = formattedTime;
   }
 
-  cronometro = setInterval(Cronometro, 1000);
+ //cronometro = setInterval(Cronometro, 1000);
 
   
   var estadoAccion = '';
@@ -201,6 +201,18 @@
           console.log('play');
             if(data.tiempo){
               const tiempoArray = data.tiempo.split(':');
+              const minutos = parseInt(tiempoArray[0],10);
+              const segundos = parseInt(tiempoArray[1],10);
+
+              elapsedTime = minutos * 60 + segundos;
+            }
+          clearInterval(cronometro);  // Detener el intervalo existente antes de configurar uno nuevo
+          cronometro = setInterval(Cronometro, 1000);  // Configurar un nuevo intervalo
+        }else if (data.accion == 'reset' && estadoAccion != 'reset') {
+          console.log('reset');
+          var tiemporeset = '00:00';
+            if(tiemporeset){
+              const tiempoArray = tiemporeset.split(':');
               const minutos = parseInt(tiempoArray[0],10);
               const segundos = parseInt(tiempoArray[1],10);
 

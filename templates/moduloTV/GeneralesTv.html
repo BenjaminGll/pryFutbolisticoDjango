@@ -132,7 +132,7 @@
                         <div class="input-group">
                             <input type="text" class="form-control" id="tiempoCrono" name="tiempoCrono"
                                 pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                            <button type="button" class="btn btn-success" onclick="enviarComando('play')">
+                            <button type="button" class="btn btn-success" id="btnlimpiarplay" onclick="enviarComando('play')">
                                 <i class="fas fa-play"></i>
                             </button>
                             <button type="button" class="btn btn-warning" onclick="enviarComando('pausa')">
@@ -145,7 +145,9 @@
                             <button type="button" class="btn btn-danger" onclick="enviarComando('ocultar')">
                                 <i class="fas fa-eye-slash"></i>
                             </button>
-
+                            <button type="button" class="btn btn-info" onclick="enviarComando('reset')">
+                                <i class="fas fa-undo"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -873,6 +875,13 @@ enviarButton.addEventListener('click', enviarHTML);
 </script>
 
 <script>
+    var inputcrono = document.getElementById('tiempoCrono');
+    var btnlimpiar = document.getElementById('btnlimpiarplay');
+    btnlimpiar.addEventListener('click',function(){
+        console.log('entrando la funcion limpiar');
+        inputcrono.value = '';
+    });
+
     function enviarComando(accion) {
         var tiempo = document.getElementById('tiempoCrono').value;
 
@@ -893,7 +902,9 @@ enviarButton.addEventListener('click', enviarHTML);
                 return response.json();
             })
             .then(function (data) {
-                
+                console.log('respuesta correcta')
+               
+
             })
             .catch(function (error) {
                 console.error('Error en la solicitud AJAX', error);

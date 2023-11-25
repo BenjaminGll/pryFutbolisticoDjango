@@ -57,6 +57,8 @@ urlpatterns = [
     path('reporte/organizacion/<int:orga_id>', contextotablaorganizacionindi, name='lista_organizacion_indi'),
     path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
 
+    path('actualizar_cronometro/', actualizar_cronometro, name='actualizar_cronometro'),
+    path('obtener_cronometro/', obtener_hora_actual, name='obtener_cronometro'),
 
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),

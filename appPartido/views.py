@@ -277,7 +277,6 @@ def asignarEventos(request, encuentro_id):
         equipo=encuentro_obj.equipo_local,  encuentro=encuentro_obj)
     descripcionEncuentroVisita_objs = descripcion_encuentro.objects.filter(
         equipo=encuentro_obj.equipo_visita,  encuentro=encuentro_obj)
-
     # Obtener alineaciones asociadas a los objetos obtenidos
     alineacion01 = alineacion.objects.filter(
         descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
@@ -299,7 +298,7 @@ def asignarEventos(request, encuentro_id):
                 
             alineacion_id1 = alineacion.objects.get(alineacion_id=alineacion011) if alineacion011 else None
             alineacion_id2 = alineacion.objects.get(alineacion_id=alineacion021) if alineacion021 else None
-
+    
             evento_obj = evento(
                 tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
                 alineacion_id1=alineacion_id1,
@@ -322,6 +321,7 @@ def asignarEventos(request, encuentro_id):
                 evento_obj.delete()
                 print(f"Evento eliminado correctamente")
             # return redirect(f'/appPartido/asignar/eventos/{evento_id}/')
+            
     return render(request, 'asignarEventos.html', {
         'fecha_encuentro': encuentro_obj.fecha,
         'encuentro_id': encuentro_id,

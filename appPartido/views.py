@@ -135,9 +135,9 @@ def asignarAlineacion(request, encuentro_id):
         nuevo_club=equipoVisita.equipo_id).exclude(persona__tipo_persona_id=2)
     # Verificar si ya hay alineaciones registradas para este encuentro
     alineaciones_local = alineacion.objects.filter(
-        descripcion_encuentro_id__encuentro=encuentro_obj, descripcion_encuentro_id__equipo=equipoLocal)
+        descripcion_encuentro_id__encuentro=encuentro_obj, descripcion_encuentro_id__equipo=equipoLocal, estado=True)
     alineaciones_visita = alineacion.objects.filter(
-        descripcion_encuentro_id__encuentro=encuentro_obj, descripcion_encuentro_id__equipo=equipoVisita)
+        descripcion_encuentro_id__encuentro=encuentro_obj, descripcion_encuentro_id__equipo=equipoVisita,estado=True)
 
     # Obtener los IDs de los jugadores en la alineación para este encuentro específico
     jugadores_en_alineacion_local = set(
@@ -154,16 +154,17 @@ def asignarAlineacion(request, encuentro_id):
     if request.method == 'POST':
         alineaciones_local.delete()
         alineaciones_visita.delete()
-
-        jugadores_local = request.POST.getlist('jugadores_local[]', [])
-        jugadores_visita = request.POST.getlist('jugadores_visita[]', [])
+        jugadoresLocales=  request.POST.getlist('jugadoresLocales[]', [])
+        jugadoresVisitas=  request.POST.getlist('jugadoresVisitas[]', [])
+        jugadores_local_sel = request.POST.getlist('jugadores_local[]', [])
+        jugadores_visita_sel = request.POST.getlist('jugadores_visita[]', [])
         formacion_local = request.POST.get('formacion_local', '4-3-3')
         formacion_visita = request.POST.get('formacion_visita', '4-3-3')
 
         capitan_local = request.POST.get('capitan_local', None)
         capitan_visita = request.POST.get('capitan_visita', None)
         # Validate that both teams have exactly 11 players
-        if len(jugadores_local) != 11 or len(jugadores_visita) != 11:
+        if len(jugadores_local_sel) != 11 or len(jugadores_visita_sel) != 11:
             messages.success(
                 request, 'Debe seleccionar exactamente 11 jugadores por equipo.')
             return redirect(f"/appPartido/asignar/alineaciones/{encuentro_id}/")
@@ -174,12 +175,18 @@ def asignarAlineacion(request, encuentro_id):
         descripcion_encuentro_visita = descripcion_encuentro.objects.filter(
             equipo=equipoVisita, encuentro=encuentro_obj).first()
         # Guardar jugadores del equipo local
-        for jugador_id_local in jugadores_local[:11]:
+        for jugador_id_local in jugadoresLocales[:40]:
             if jugador_id_local:
                 contrato_local = contrato.objects.filter(
                     persona_id=jugador_id_local).first()
                 posicionLocal = posicion_jugador.objects.get(
                     posicion_jugador_id=contrato_local.posicion_jugador.posicion_jugador_id)
+                for i in jugadores_local_sel[:11]:
+                    estadoJugadorLocal = (jugador_id_local == i)
+                    if estadoJugadorLocal == False:
+                        estadoJugadorLocal = False
+                    else:
+                        break
                 # Verifica si este jugador es el capitán
                 capitanL = (jugador_id_local == capitan_local)
                 alineacion_local = alineacion(
@@ -188,30 +195,36 @@ def asignarAlineacion(request, encuentro_id):
                     dorsal=contrato_local.dorsal,
                     posicion_jugador_id=posicionLocal,
                     capitan=capitanL,  # Usa el valor booleano aquí
-                    estado=True,
+                    estado=estadoJugadorLocal,
                     formacion=formacion_local
                 )
                 alineacion_local.save()
 
         # Guardar jugadores del equipo visitante
-        for jugador_id_visita in jugadores_visita[:11]:
-            if jugador_id_visita:
-                contrato_visita = contrato.objects.filter(
-                    persona_id=jugador_id_visita).first()
-                posicionVisita = posicion_jugador.objects.get(
-                    posicion_jugador_id=contrato_visita.posicion_jugador.posicion_jugador_id)
-                # Verifica si este jugador es el capitán
-                capitanV = (jugador_id_visita == capitan_visita)
-                alineacion_visita = alineacion(
-                    descripcion_encuentro_id=descripcion_encuentro_visita,
-                    contrato_id=contrato_visita,
-                    dorsal=contrato_visita.dorsal,
-                    posicion_jugador_id=posicionVisita,
-                    capitan=capitanV,  # Usa el valor booleano aquí
-                    estado=True,
-                    formacion=formacion_visita
-                )
-                alineacion_visita.save()
+        for jugador_id_visita in jugadoresVisitas[:40]:
+                if jugador_id_visita:
+                    contrato_visita = contrato.objects.filter(
+                        persona_id=jugador_id_visita).first()
+                    posicionVisita = posicion_jugador.objects.get(
+                        posicion_jugador_id=contrato_visita.posicion_jugador.posicion_jugador_id)
+                    for i in jugadores_visita_sel[:11]:
+                        estadoJugadorVisita = (jugador_id_visita == i)
+                        if estadoJugadorVisita == False:
+                            estadoJugadorVisita = False
+                        else:
+                            break    
+                        # Verifica si este jugador es el capitán
+                    capitanV = (jugador_id_visita == capitan_visita)
+                    alineacion_visita = alineacion(
+                        descripcion_encuentro_id=descripcion_encuentro_visita,
+                        contrato_id=contrato_visita,
+                        dorsal=contrato_visita.dorsal,
+                        posicion_jugador_id=posicionVisita,
+                        capitan=capitanV,  # Usa el valor booleano aquí
+                        estado=estadoJugadorVisita,
+                        formacion=formacion_visita
+                    )
+                    alineacion_visita.save()
 
         messages.success(request, 'Alineaciones guardadas correctamente.')
         return redirect("/appPartido/lista_encuentros/?tipo=alineaciones")
@@ -310,7 +323,7 @@ def asignarEstadisticas(request, encuentro_id):
         estadistica_local.efectividad_pases = efectividad_pases_local
         estadistica_local.tiros_indirectos_arco = tiros_indirectos_arco_local
         estadistica_local.tiros_directos_arco = tiros_directos_arco_local 
-        estadistica_local.descripcion_encuentro_id = desc_encuentro_local
+        estadistica_local.descripcion_encuentro_id = descripcion_encuentro_local
         estadistica_local.save()
         
         # Guardamos estadísticas visitante
@@ -321,7 +334,7 @@ def asignarEstadisticas(request, encuentro_id):
         estadistica_visitante.efectividad_pases = efectividad_pases_visitante
         estadistica_visitante.tiros_indirectos_arco = tiros_indirectos_arco_visitante
         estadistica_visitante.tiros_directos_arco = tiros_directos_arco_visitante
-        estadistica_visitante.descripcion_encuentro_id = desc_encuentro_visitante 
+        estadistica_visitante.descripcion_encuentro_id = descripcion_encuentro_visita 
         estadistica_visitante.save()
         
         messages.success(request, 'Estadísticas guardadas exitosamente')

@@ -71,7 +71,11 @@
       <tbody>
         {% for jugador in equipoLocal %}
           <tr>
-            <td>{{ jugador.persona.alias }}</td>
+            <td>
+              <input type="hidden" name="jugadoresLocales[]" value="{{ jugador.persona.persona_id }}">
+              {{ jugador.persona.alias }}
+            </td>
+            
             <td>{{ jugador.posicion_jugador }}</td>
             <td>{{ jugador.dorsal }}</td>
             <td>
@@ -118,7 +122,7 @@
             <tbody>
               {% for jugador in equipoVisita %}
                 <tr>
-                  <td>{{ jugador.persona.alias }}</td>
+                  <td> <input type="hidden" name="jugadoresVisitas[]" value="{{ jugador.persona.persona_id }}">{{ jugador.persona.alias }}</td>
                   <td>{{ jugador.posicion_jugador }}</td>
                   <td>{{ jugador.dorsal }}</td>
                   <td>
@@ -129,7 +133,7 @@
                           <td>
                             <input type="checkbox" name="capitan_visita" value="{{ jugador.persona.persona_id }}"
                             class="capitan-checkbox-visita" {% if capitan_actual_visita == jugador.persona.persona_id %}checked{% endif %}>                         </td>
-                         
+                        
                 </tr>
               {% endfor %}
             </tbody>

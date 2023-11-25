@@ -49,15 +49,16 @@
   <div class="video-container">
     <br>
     <img class="fondo" src="/static/images/fondoFut.jpg" alt="">
-
-
-
-
-
+    <!--   <div class="banner-cronometro">
+      <span id="cronometro">00:00</span>
+    </div>--> 
+    
+    <div class="banner-marcadores">
+      <span id="cronometro">00:00</span>&nbsp;<img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%">
+    </div>
     <div id="banners-container" class="banners-container" style="display: none;">
       <!-- Contenido del banner -->
       <p></p>
-
     </div>
   </div>
   <br>
@@ -153,32 +154,27 @@
 
 
 
+  var minutos = 0;
+  var segundos = 0;
+  var cronometroDisplay = document.getElementById('cronometro');
+  var cronometro;
 
-  function convertirTiempoAMilisegundos(tiempo) {
-    const [minutos, segundos] = tiempo.split(':').map(Number);
+  let elapsedTime = 0;
+  function Cronometro() {
 
-    // Convierte minutos y segundos a milisegundos
-    const minutosEnMilisegundos = minutos * 60 * 1000;
-    const segundosEnMilisegundos = segundos * 1000;
+    elapsedTime++;
+    const minutes = Math.floor(elapsedTime / 60);
+    const seconds = elapsedTime % 60;
 
-    // Suma los milisegundos
-    const totalMilisegundos = minutosEnMilisegundos + segundosEnMilisegundos;
+    const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-    return totalMilisegundos;
+
+    cronometroDisplay.innerHTML = formattedTime;
   }
 
+  cronometro = setInterval(Cronometro, 1000);
 
-  //   function obtenerBanners() {
-  //   fetch('/datostv')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // Aquí puedes procesar los datos obtenidos de '/datostv'
-  //     })
-  //     .catch(error => console.error(error));
-  // }
-
-  // // Llama a la función obtenerBanners cada 3 segundos
-  // setInterval(obtenerBanners, 3000);
+  
   var estadoAccion = '';
   function actualizarCronometro() {
     // Realizar la solicitud AJAX para obtener la información del cronómetro
@@ -190,8 +186,6 @@
         return response.json();
       })
       .then(function (data) {
-        var cronometroDiv = document.getElementById('cronometro');
-
         // Verificar la acción y realizar acciones correspondientes
         if (data.accion == 'ocultar') {
           console.log('ocul');
@@ -204,6 +198,13 @@
           clearInterval(cronometro);
         } else if (data.accion == 'play' && estadoAccion != 'play') {
           console.log('play');
+            if(data.tiempo){
+              const tiempoArray = data.tiempo.split(':');
+              const minutos = parseInt(tiempoArray[0],10);
+              const segundos = parseInt(tiempoArray[1],10);
+
+              elapsedTime = minutos * 60 + segundos;
+            }
           clearInterval(cronometro);  // Detener el intervalo existente antes de configurar uno nuevo
           cronometro = setInterval(Cronometro, 1000);  // Configurar un nuevo intervalo
         }
@@ -218,6 +219,18 @@
 
   // Llamar a la función para actualizar el cronómetro cada cierto tiempo
   setInterval(actualizarCronometro, 2000);
+
+  //   function obtenerBanners() {
+  //   fetch('/datostv')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // Aquí puedes procesar los datos obtenidos de '/datostv'
+  //     })
+  //     .catch(error => console.error(error));
+  // }
+
+  // // Llama a la función obtenerBanners cada 3 segundos
+  // setInterval(obtenerBanners, 3000);
 </script>
 
 <!--  -->

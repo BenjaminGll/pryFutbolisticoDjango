@@ -138,13 +138,36 @@ def asignarAlineacion(request, encuentro_id):
         descripcion_encuentro_id__encuentro=encuentro_obj, descripcion_encuentro_id__equipo=equipoLocal, estado=True)
     alineaciones_visita = alineacion.objects.filter(
         descripcion_encuentro_id__encuentro=encuentro_obj, descripcion_encuentro_id__equipo=equipoVisita,estado=True)
-
     # Obtener los IDs de los jugadores en la alineación para este encuentro específico
     jugadores_en_alineacion_local = set(
         alineaciones_local.values_list('contrato_id__persona_id', flat=True))
     jugadores_en_alineacion_visita = set(
         alineaciones_visita.values_list('contrato_id__persona_id', flat=True))
+    
+    capitan_actual_local = None  # Inicializa la variable antes del bucle
+    capitan_actual_visita = None  # Inicializa la variable antes del bucle
+    alineacion_capitan_local = alineacion.objects.filter(
+        descripcion_encuentro_id__encuentro=encuentro_obj,
+        descripcion_encuentro_id__equipo=equipoLocal,
+        capitan=True,
+        estado=True
+    ).first()
 
+    if alineacion_capitan_local:
+        capitan_actual_local = alineacion_capitan_local.contrato_id.persona_id
+
+
+    alineacion_capitan_visita = alineacion.objects.filter(
+        descripcion_encuentro_id__encuentro=encuentro_obj,
+        descripcion_encuentro_id__equipo=equipoVisita,
+        capitan=True,
+        estado=True
+    ).first()
+
+    if alineacion_capitan_visita:
+        capitan_actual_visita = alineacion_capitan_visita.contrato_id.persona_id
+
+            
     # Obtener formación actual de cada equipo
     formacion_local_actual = alineaciones_local.first(
     ).formacion if alineaciones_local.exists() else '4-3-3'
@@ -220,7 +243,7 @@ def asignarAlineacion(request, encuentro_id):
                         contrato_id=contrato_visita,
                         dorsal=contrato_visita.dorsal,
                         posicion_jugador_id=posicionVisita,
-                        capitan=capitanV,  # Usa el valor booleano aquí
+                        capitan=capitanV, 
                         estado=estadoJugadorVisita,
                         formacion=formacion_visita
                     )
@@ -237,6 +260,8 @@ def asignarAlineacion(request, encuentro_id):
         'jugadores_en_alineacion_visita': jugadores_en_alineacion_visita,
         'formacion_local_actual': formacion_local_actual,
         'formacion_visita_actual': formacion_visita_actual,
+        'capitan_actual_local': capitan_actual_local,  
+        'capitan_actual_visita': capitan_actual_visita, 
     })
 
 

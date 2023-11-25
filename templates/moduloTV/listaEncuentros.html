@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar encuentros para mostrar eventos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+            /* Centrar el título */
+        }
+
+        .form-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            text-align: center;
+            /* Centrar elementos en la fila */
+        }
+
+        .form-container select {
+            width: 70%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+            /* Centrar texto en las celdas */
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #f8f9fa;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            /* Reducir el padding del botón */
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Seleccionar encuentro para mostrar evento</h1>
+
+    <div class="form-container">
+        <form class="form-inline" method="GET" action="{% url 'mostrar_encuentro_evento' %}" id="filterForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="competicion">Competición &nbsp</label>
+                <select class="form-control" id="competicion" name="competicion">
+                    <option value="">Seleccionar...</option>
+                    {% for competicion in competiciones %}
+                    <option value="{{ competicion.competicion_id }}">{{ competicion.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="grupo">&nbsp Grupo &nbsp</label>
+                <select class="form-control" id="grupo" name="grupo">
+                    <option value="">Seleccionar...</option>
+                    {% for grupo in grupos %}
+                    <option value="{{ grupo.grupo_id }}">{{ grupo.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="fase">&nbsp Fase &nbsp</label>
+                <select class="form-control" id="fase" name="fase">
+                    <option value="">Seleccionar...</option>
+                    {% for fase in fases %}
+                    <option value="{{ fase.fase_id }}">{{ fase.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Botón para enviar manualmente el formulario -->
+            <button type="button" class="btn btn-submit" id="filterButton">Filtrar</button>
+        </form>
+    </div>
+
+
+
+    <div class="container">
+        <br>
+        {% if encuentros %}
+        {% with primer_encuentro=encuentros.0 %}
+        <div class="row align-items-center col-12">
+            <div class="col-md-5">
+                <h5>Competicion: {{ primer_encuentro.competicion_id }}</h5>
+            </div>
+            <div class="col-md-4">
+                <h5>Fase: {{ primer_encuentro.fase.nombre }}</h5>
+            </div>
+            <div class="col-md-3">
+                <h5>Grupo: {{ primer_encuentro.grupo.nombre }}</h5>
+            </div>
+        </div>
+        {% endwith %}
+        {% endif %}
+
+        <br>
+
+
+
+
+        <table>
+            <thead>
+                <tr>
+                    <!-- <th>Encuentro ID</th> -->
+                    <th>Encuentro</th>
+                    <th>Fecha</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for encuentro in encuentros %}
+                <form
+                    action="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}"
+                    method="post">
+                    {% csrf_token %}
+                    <tr>
+                        <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{ encuentro.equipo_visita }} </td>
+                        <td>{{ encuentro.fecha }}</td>
+
+                        <td>
+                            <input type="hidden" name="idEncuentro" id="idEncuentro"
+                                value="{{ encuentro.encuentro_id }}"></input>
+
+                            <button type="submit" class="btn btn-submit">Mostrar Eventos</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </form>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+<script>
+    document.getElementById('filterButton').addEventListener('click', function () {
+        var competicion = document.getElementById('competicion').value;
+        var grupo = document.getElementById('grupo').value;
+        var fase = document.getElementById('fase').value;
+
+        // Verifica si se han seleccionado los tres valores
+        if (competicion && grupo && fase) {
+            // Envía el formulario
+            document.getElementById('filterForm').submit();
+        } else {
+            // Muestra un mensaje o toma otra acción si no se han seleccionado los tres valores
+            alert('Por favor, selecciona competición, grupo y fase.');
+        }
+    });
+</script>
+
+
+
+</html>

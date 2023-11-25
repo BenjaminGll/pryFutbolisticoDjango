@@ -56,13 +56,14 @@ class ObtenerAlineacionesView(View):
         return JsonResponse(data)
 
 def mostrarEncuentros(request):
-    tipo = request.GET.get('tipo', 'Alineacion')
+    tipo = request.GET.get('tipo', 'alineaciones')
 
     if request.method == 'POST':
         competicion_id = request.POST.get('competicion')
         fase_id = request.POST.get('fase')
         grupo_id = request.POST.get('grupo')
-        return redirect('lista_encuentros')
+        # Procesa los filtros y redirige a la misma vista con los parámetros aplicados
+        return redirect('lista_encuentros', tipo=tipo, competicion_id=competicion_id, fase_id=fase_id, grupo_id=grupo_id)
 
     # Obtén los encuentros según el tipo
     if tipo == 'alineaciones':
@@ -155,7 +156,6 @@ def asignarAlineacion(request, encuentro_id):
 
     if alineacion_capitan_local:
         capitan_actual_local = alineacion_capitan_local.contrato_id.persona_id
-
 
     alineacion_capitan_visita = alineacion.objects.filter(
         descripcion_encuentro_id__encuentro=encuentro_obj,

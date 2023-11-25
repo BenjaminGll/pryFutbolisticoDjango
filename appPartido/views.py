@@ -267,7 +267,7 @@ def asignarAlineacion(request, encuentro_id):
 
 
 def asignarEventos(request, encuentro_id):
-    tipos_evento_relacionados = tipo_evento.objects.all()
+    tipos_evento_relacionados = request.GET.get('tipo_evento_id')
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
@@ -283,7 +283,8 @@ def asignarEventos(request, encuentro_id):
         descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
     alineacion02 = alineacion.objects.filter(
             descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
-    evento_id = evento.objects.all()
+    eventos = evento.objects.filter(encuentro_id=encuentro_id)
+
     if request.method == 'POST':
         tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
         alineacion011 = request.POST.get('alineacion01', None)
@@ -305,16 +306,25 @@ def asignarEventos(request, encuentro_id):
         evento_obj.save()
 
         messages.success(request, 'Eventos guardados correctamente.')
-
+        
+    elif 'eliminar_evento' in request.POST:
+            # Lógica para eliminar un detalle de la terna arbitral
+            evento_id = int(request.POST.get('eliminar_evento'))
+            evento_obj = get_object_or_404(evento, pk=evento_id)
+            print(f"Eliminando evento con ID {evento_id}")
+    
+            evento_obj.delete()
+            print(f"Evento eliminado correctamente")
+        
     return render(request, 'asignarEventos.html', {
         'fecha_encuentro': encuentro_obj.fecha,
         'encuentro_id': encuentro_id,
         'equipoLocal': equipoLocal,
         'equipoVisita': equipoVisita,
-        'evento_id': evento_id,
+        'eventos': eventos,
         'tipos_evento_relacionados': tipos_evento_relacionados,
         'alineacion01': alineacion01,
-        'alineacion02': alineacion02,
+        'alineacion02': alineacion02
     })
 
 def asignarEstadisticas(request, encuentro_id):
@@ -409,4 +419,3 @@ def asignar_terna_arbitral(request, encuentro_id):
         return redirect(f"/appPartido/asignar/terna_arbitral/{encuentro_id}/")
 
     return render(request, 'asignar_terna_arbitral.html', {'encuentro': encuentro_obj, 'arbitros': arbitros, 'tipos_arbitro': tipos_arbitro,'detalles_terna': detalles_terna})
-

@@ -317,7 +317,6 @@ def asignarEventos(request, encuentro_id):
         'alineacion02': alineacion02,
     })
 
-
 def asignarEstadisticas(request, encuentro_id):
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
@@ -325,66 +324,58 @@ def asignarEstadisticas(request, encuentro_id):
     descripcion_encuentro_local = descripcion_encuentro.objects.filter(equipo=equipoLocal).first()
     descripcion_encuentro_visita = descripcion_encuentro.objects.filter(equipo=equipoVisita).first()
 
-    if request.method == 'POST':
-
-        # Estadísticas Equipo Local
-        posesion_balon_local = request.POST['posesion_balon_equipo1']
-        pases_acertados_local = request.POST['pases_acertados_equipo1'] 
-        tiros_desviados_local = request.POST['tiros_desviados_equipo1']
-        efectividad_pases_local = request.POST['efectividad_pases_equipo1']
-        tiros_indirectos_arco_local = request.POST['tiros_indirectos_arco_equipo1']
-        tiros_directos_arco_local = request.POST['tiros_directos_arco_equipo1']
-
-        # Estadísticas Equipo Visitante
-        posesion_balon_visitante = request.POST['posesion_balon_equipo2'] 
-        pases_acertados_visitante = request.POST['pases_acertados_equipo2']
-        tiros_desviados_visitante = request.POST['tiros_desviados_equipo2'] 
-        efectividad_pases_visitante = request.POST['efectividad_pases_equipo2']
-        tiros_indirectos_arco_visitante = request.POST['tiros_indirectos_arco_equipo2']
-        tiros_directos_arco_visitante = request.POST['tiros_directos_arco_equipo2']
-
-        
-        # Guardamos estadísticas local
-        estadistica_local = estadisticas() 
-        estadistica_local.posesion_balon = posesion_balon_local
-        estadistica_local.pases_acertados = pases_acertados_local 
-        estadistica_local.tiros_desviados = tiros_desviados_local
-        estadistica_local.efectividad_pases = efectividad_pases_local
-        estadistica_local.tiros_indirectos_arco = tiros_indirectos_arco_local
-        estadistica_local.tiros_directos_arco = tiros_directos_arco_local 
-        estadistica_local.descripcion_encuentro_id = descripcion_encuentro_local
-        estadistica_local.save()
-        
-        # Guardamos estadísticas visitante
-        estadistica_visitante = estadisticas()
-        estadistica_visitante.posesion_balon = posesion_balon_visitante
-        estadistica_visitante.pases_acertados = pases_acertados_visitante
-        estadistica_visitante.tiros_desviados = tiros_desviados_visitante
-        estadistica_visitante.efectividad_pases = efectividad_pases_visitante
-        estadistica_visitante.tiros_indirectos_arco = tiros_indirectos_arco_visitante
-        estadistica_visitante.tiros_directos_arco = tiros_directos_arco_visitante
-        estadistica_visitante.descripcion_encuentro_id = descripcion_encuentro_visita 
-        estadistica_visitante.save()
-        
-        messages.success(request, 'Estadísticas guardadas exitosamente')
-        
-    return render(request, 'asignarEstadisticas.html', {'encuentro': encuentro_obj, 
-                                                        'equipoLocal': equipoLocal, 
-                                                        'equipoVisita': equipoVisita})
-
-
-def guardar_estadisticas(encuentro_obj, equipo_obj, estadisticas):
-    estadistica_obj = estadisticas(
-        encuentro=encuentro_obj,
-        equipo=equipo_obj,
-        posesion_balon=estadisticas.get('posesion_balon'),
-        pases_acertados=estadisticas.get('pases_acertados'),
-        tiros_desviados=estadisticas.get('tiros_desviados'),
-        efectividad_pases=estadisticas.get('efectividad_pases'),
-        tiros_arco=estadisticas.get('tiros_arco'),
-        tiros_esquina=estadisticas.get('tiros_esquina')
+    estadistica_local, created_local = estadisticas.objects.get_or_create(
+        descripcion_encuentro_id=descripcion_encuentro_local,
+        defaults={
+            'posesion_balon': 0,
+            'pases_acertados': 0,
+            'tiros_desviados': 0,
+            'efectividad_pases': 0,
+            'tiros_indirectos_arco': 0,
+            'tiros_directos_arco': 0,
+        }
     )
-    estadistica_obj.save()
+    estadistica_visitante, created_visitante = estadisticas.objects.get_or_create(
+        descripcion_encuentro_id=descripcion_encuentro_visita,
+        defaults={
+            'posesion_balon': 0,
+            'pases_acertados': 0,
+            'tiros_desviados': 0,
+            'efectividad_pases': 0,
+            'tiros_indirectos_arco': 0,
+            'tiros_directos_arco': 0,
+        }
+    )
+
+    if request.method == 'POST':
+        # Actualiza los valores de las estadísticas locales
+        estadistica_local.posesion_balon = request.POST.get('posesion_balon_equipo1', 0)
+        estadistica_local.pases_acertados = request.POST.get('pases_acertados_equipo1', 0)
+        estadistica_local.tiros_desviados = request.POST.get('tiros_desviados_equipo1', 0)
+        estadistica_local.efectividad_pases = request.POST.get('efectividad_pases_equipo1', 0)
+        estadistica_local.tiros_indirectos_arco = request.POST.get('tiros_indirectos_arco_equipo1', 0)
+        estadistica_local.tiros_directos_arco = request.POST.get('tiros_directos_arco_equipo1', 0)
+
+        # Actualiza los valores de las estadísticas visitantes
+        estadistica_visitante.posesion_balon = request.POST.get('posesion_balon_equipo2', 0)
+        estadistica_visitante.pases_acertados = request.POST.get('pases_acertados_equipo2', 0)
+        estadistica_visitante.tiros_desviados = request.POST.get('tiros_desviados_equipo2', 0)
+        estadistica_visitante.efectividad_pases = request.POST.get('efectividad_pases_equipo2', 0)
+        estadistica_visitante.tiros_indirectos_arco = request.POST.get('tiros_indirectos_arco_equipo2', 0)
+        estadistica_visitante.tiros_directos_arco = request.POST.get('tiros_directos_arco_equipo2', 0)
+
+        estadistica_local.save()
+        estadistica_visitante.save()
+
+        messages.success(request, 'Estadísticas guardadas exitosamente')
+
+    return render(request, 'asignarEstadisticas.html', {
+        'encuentro': encuentro_obj,
+        'equipoLocal': equipoLocal,
+        'equipoVisita': equipoVisita,
+        'estadistica_local': estadistica_local,
+        'estadistica_visitante': estadistica_visitante,
+    })
 
 
 def asignar_terna_arbitral(request, encuentro_id):

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %} Cronología {% endblock %}
+{% block content %}
+
+
+<style>
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin: 10px 0;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #f5f5f5;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .team-info {
+        margin-top: 10px;
+    }
+
+    .team-name {
+        margin-top: 5px;
+        font-weight: bold;
+    }
+
+    .score {
+        font-size: 24px;
+        margin: 15px 0;
+    }
+
+    .encuentro-link {
+        background-color: #4285f4;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 7px 20px;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .encuentro-link:hover {
+        background-color: #2d5ca9;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Cronología del Encuentro</h1>
+        </div>
+        <div class="col-md-4">
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="{% url 'contextoTVhome' %}">Volver</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="recent-results results-page">
+        <div class="info-results">
+            <ul>
+                <li class="mx-auto" style="max-width: 400px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="date">{{ encuentro.fecha | date:'d-m-Y h:m' }}</span>
+                            <a href="/tvVivo/{{encuentro.encuentro_id}}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
+                        </div>
+                        <div class="card-body" style="display: flex; align-items: center; justify-content: space-around;">
+                            <div class="team-info">
+                                <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                                <p class="team-name">{{ equipo_local.nombre }}</p>
+                            </div>
+                            <span class="score">
+                                <b>{{ encuentro.resultado_goles_local }}</b> - <b>{{ encuentro.resultado_goles_visita }}</b>
+                            </span>
+                            <div class="team-info">
+                                <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                                <p class="team-name">{{ equipo_visita.nombre }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

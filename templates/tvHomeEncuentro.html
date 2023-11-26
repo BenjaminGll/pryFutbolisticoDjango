@@ -99,6 +99,10 @@
         max-width: 500px; /* Puedes ajustar el ancho máximo según tus preferencias */
         
     }
+    img.logo-equipo {
+    width: 100%;
+    height: auto;
+} 
 </style>
 
 <body  data-encuentro-id="{{ encuentro.encuentro_id }}">
@@ -212,25 +216,31 @@
             <div class="info-results event-card">
                 <div class="card">
                     <div class="card-header">
-                        <span class="date">{{ evento.encuentro_id.competicion_id }} {{ evento.encuentro_id.fecha | date:'D h:m' }}</span>
+                        {% if evento.tipo_evento_id.nombre == "TARJETA ROJA" %}
+                        <span class="date"> 🟥 TARJETA ROJA 🟥</span>
+                            {% elif evento.tipo_evento_id.nombre == "GOL" %}
+                            <span class="date">  ⚽ ¡GOOOOOOL! ⚽ </span>
+                            {% elif evento.tipo_evento_id.nombre == "TARJETA AMARILLA" %}
+                            <span class="date">🟨 TARJETA AMARILLA 🟨</span>
+                            {% endif %}
+                       
                     </div>
                     <div class="card-body">
                         <p class="event-info">
                             {% if evento.evento_equipo == True %}
-                                <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona.alias }}</span>
+                                <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona }}</span>
+                                <span class="event-minute">{{ evento.tiempo }}'</span>
+                                <span class="event-minute"> <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;"></span>
                             {% else %}
-                                <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona.alias }}</span>
+                                <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona }}</span>
+                                <span class="event-minute">{{ evento.tiempo }}'</span>
+                                <span class="event-minute"><img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;"></span>
+
                             {% endif %}
-                            <span class="event-minute">{{ evento.tiempo }}'</span>
-                            {% if evento.tipo_evento_id.nombre == "TARJETA ROJA" %}
-                                <span class="event-type">🟥 Tarjeta Roja</span>
-                            {% elif evento.tipo_evento_id.nombre == "GOL" %}
-                                <span class="event-type">⚽ Gol</span>
-                            {% elif evento.tipo_evento_id.nombre == "TARJETA AMARILLA" %}
-                                <span class="event-type">🟨 Tarjeta Amarilla</span>
-                            {% endif %}
+                         
+                          
                         </p>
-                        <p class="event-info">{{ evento.motivo }}</p>
+               
                     </div>
                 </div>
             </div>

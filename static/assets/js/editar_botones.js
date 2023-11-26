@@ -34,8 +34,9 @@
                 // Aquí puedes agregar la lógica de eliminación, por ejemplo, mostrar un cuadro de diálogo de confirmación
                 var confirmDelete = confirm('¿Estás seguro de que quieres eliminar este elemento?');
                 if(confirmDelete){
-                    // Realizar la eliminación, por ejemplo, redireccionar a la URL de eliminación
-                    window.location.href = '/path/to/delete/' + row.find('th a').data('id');
+                    // Simular la acción de marcado de casilla de verificación y enviar el formulario de eliminación masiva
+                    row.find('td input[type="checkbox"]').prop('checked', true);
+                    $('#changelist-form').submit();
                 }
             });
         });

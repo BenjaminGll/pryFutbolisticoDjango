@@ -674,6 +674,10 @@ def contextoTVvivo(request, id):
     descripcion_equipo_b = descripcion_encuentro.objects.get(
         encuentro_id=id, equipo_id=equipo_b.equipo_id
     )
+    #contrato_equipo_a = contrato.objects.filter(nuevo_club=equipo_a.equipo_id)
+    #primer_contrato_equipo_a = contrato.objects.filter(nuevo_club=equipo_a.equipo_id).first()
+    alineacion_equipo_a= alineacion.objects.filter(descripcion_encuentro_id=descripcion_equipo_a.descripcion_encuentro_id,estado=True)
+    formacion_a= alineacion.objects.filter(descripcion_encuentro_id=descripcion_equipo_a.descripcion_encuentro_id,estado=True).first()
 
     data = {
         'jugar_encuentro': jugar_encuentro,
@@ -682,6 +686,9 @@ def contextoTVvivo(request, id):
         'estadio': estadio,
         'goles_equipo_a': descripcion_equipo_a.goles,
         'goles_equipo_b': descripcion_equipo_b.goles,
+        #'contrato_equipo_a':contrato_equipo_a ,
+        'alineacion_equipo_a':alineacion_equipo_a,
+        'formacion_a':formacion_a,
     }
     
     return render(request, 'tvVivo.html', data)

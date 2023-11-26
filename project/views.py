@@ -710,6 +710,7 @@ def contextoTVhomeEncuentro(request,id):
     eventos_local = evento.objects.filter(alineacion_id1__contrato_id__nuevo_club=equipo_a, encuentro_id=id)
     eventos_visita = evento.objects.filter(alineacion_id2__contrato_id__nuevo_club=equipo_b, encuentro_id=id)
     eventos_todos = evento.objects.filter( encuentro_id=id)
+    
     data={
           'equipo_local': equipo_a,
           'equipo_visita': equipo_b,

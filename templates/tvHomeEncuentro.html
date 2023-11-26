@@ -1,6 +1,9 @@
+
 {% extends 'base.html' %}
 {% load i18n static %}
+
 {% block title %} Cronología {% endblock %}
+
 {% block content %}
 
 <style>
@@ -97,7 +100,9 @@
         
     }
 </style>
-<body data-encuentro-id="{{ encuentro.encuentro_id }}"></body>
+
+<body  data-encuentro-id="{{ encuentro.encuentro_id }}">
+
 <div class="container">
     <div class="row">
         <div class="col-md-8">
@@ -198,6 +203,9 @@
     </div>
 </div>
 <!-- Mostrar eventos uno a uno en cards -->
+<!-- Agrega un contenedor para los eventos con el ID "eventos-container" -->
+
+
 <div class="container">
     <div class="recent-results results-page event-cards-container">
         {% for evento in eventos_todos %}
@@ -228,43 +236,38 @@
             </div>
         {% endfor %}
     </div>
+
 </div>
-<!-- Agrega jQuery (puedes cambiar a una versión local si lo prefieres) -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
 <script>
-    // Función para cargar eventos
-    function cargarEventos() {
-        // Obtiene el ID del encuentro del atributo de datos
-        var encuentroId = $('body').data('encuentro-id');
-        if (encuentroId) {
+    $(document).ready(function () {
+        function actualizarPagina() {
+            // Cargar la página actual sin caché
             $.ajax({
-                url: '{% url "contextoTVhomeEncuentro" id=encuentro.encuentro_id %}',
+                url: window.location.href,
                 type: 'GET',
-            data: { id: encuentroId },  // Pasa el ID del encuentro
-            success: function(data) {
-                // Actualiza la sección de eventos con la nueva información
-                $('#eventos-container').html(data);
-            },
-            error: function(error) {
-                console.error('Error al cargar eventos:', error);
-            },
-            complete: function() {
-                // Vuelve a cargar eventos después de un intervalo de tiempo (por ejemplo, cada 30 segundos)
-                setTimeout(cargarEventos, 3000);
-            }
-        });
-        
-    }
-}
+                cache: false,
+                success: function (data) {
+                    // Actualizar el contenido de la página con la respuesta
+                    var nuevoContenido = $(data);
 
-    // Inicia la carga de eventos al cargar la página
-    $(document).ready(function() {
-        cargarEventos();
+                    // Actualizar contenedor principal
+                    var contenedorPrincipal = nuevoContenido.find('.recent-results.results-page');
+                    $('.recent-results.results-page').html(contenedorPrincipal.html());
+
+                    // Actualizar contenedor de eventos individuales
+                    var contenedorEventos = nuevoContenido.find('.event-cards-container');
+                    $('.event-cards-container').html(contenedorEventos.html());
+                },
+            });
+        }
+
+        // Actualizar la página cada 3 segundos
+        setInterval(actualizarPagina, 2000);
     });
 </script>
 
+
+
 </body>
-
-
 {% endblock %}

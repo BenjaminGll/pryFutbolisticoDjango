@@ -212,7 +212,7 @@
 
 <div class="container">
     <div class="recent-results results-page event-cards-container">
-        {% for evento in eventos_todos %}
+        {% for evento in eventos_todos reversed %}
             <div class="info-results event-card">
                 <div class="card">
                     <div class="card-header">
@@ -242,12 +242,15 @@
                         </p>
                
                     </div>
+                   
                 </div>
+                <BR></BR>
             </div>
         {% endfor %}
     </div>
 
 </div>
+<BR></BR>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {

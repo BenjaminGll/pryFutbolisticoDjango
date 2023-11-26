@@ -17,6 +17,7 @@ from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import json
+from operator import attrgetter
 def contextoNav():
     
     deportes = deporte.objects.all()
@@ -710,6 +711,8 @@ def contextoTVhomeEncuentro(request,id):
     eventos_local = evento.objects.filter(alineacion_id1__contrato_id__nuevo_club=equipo_a, encuentro_id=id)
     eventos_visita = evento.objects.filter(alineacion_id2__contrato_id__nuevo_club=equipo_b, encuentro_id=id)
     eventos_todos = evento.objects.filter( encuentro_id=id)
+    # Ordena los eventos por tiempo en orden ascendente
+    eventos_todos = sorted(eventos_todos, key=attrgetter('tiempo'))
     
     data={
           'equipo_local': equipo_a,

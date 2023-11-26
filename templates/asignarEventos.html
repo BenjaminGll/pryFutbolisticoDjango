@@ -53,6 +53,7 @@
             <option value="Local">Local</option>
             <option value="Visita">Visita</option>
           </select>
+
           <label for="tiempo">Tiempo:</label>
           <input type="text" name="tiempo" class="form-control">
 
@@ -143,30 +144,8 @@
           $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
         }
       }
-      $.ajax({
-        url: 'asignar/eventos/<int:encuentro_id>/',  // Reemplaza esto con la URL de tu vista en Django
-        type: 'POST',
-        data: {
-          tipos_evento_relacionados: tipoEvento,
-          equipo: equipo,
-        },
-        success: function(data) {
-          // Actualizar la página con la respuesta del servidor
-          $('body').html(data);
-        },
-        error: function(error) {
-          console.error('Error en la solicitud AJAX', error);
-        }
-      });
-    }
-
-    // Escuchar el evento de cambio en los elementos relevantes
-    $('#tipos_evento_relacionados, #equipo').change(function() {
-      // Llamar a la función para actualizar la página de manera asíncrona
-      actualizarPagina();
-    }));
+    });
   });
-
 </script>
 
 {% endblock %}

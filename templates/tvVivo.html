@@ -47,8 +47,12 @@
 <div class="container">
   <!-- <h1>TV en Vivo - Partido de Fútbol</h1> -->
   <div class="video-container">
+
     <br>
     <img class="fondo" src="/static/images/fondoFut.jpg" alt="">
+
+
+    
     <!--   <div class="banner-cronometro">
       <span id="cronometro">00:00</span>
     </div>--> 
@@ -59,6 +63,25 @@
     <div id="banners-container" class="banners-container" style="display: none;">
       <!-- Contenido del banner -->
       <p></p>
+    </div>
+    <div class="banner-container" style="display: flex;justify-content: center; align-items: center;position: absolute;left:30%;top:60%; background-size: cover;">
+      <div class="banner" style="background: rgba(0, 0, 0, 0.7);color: white;border-radius: 5px;font-family: 'Arial', sans-serif; display: flex;width: 500px;">
+          <div class="left-side" style="padding: 20px;display: flex;flex-direction: column; align-items: center;background: rgba(0, 0, 0, 0.8);">
+              <span class="team-name" style="font-size: 24px;font-weight: bold;background: rgba(0, 0, 0, 0.8);margin-bottom: 10px; width: 100%; text-align: center;">{{equipo_a.siglas}} <!-- Nombre del equipo o siglas--></span>
+              <!-- escudo Equipo--><img src="{{equipo_a.logo.url}}" alt="Team Logo" class="team-logo" style="width: 150px;height: auto;margin-bottom: 20px;">
+              <div class="formation" style="font-size: 18px;font-weight: bold;background: rgba(0, 0, 0, 0.8);padding: 5px;border-radius: 5px;width: 100%;text-align: center;">{{formacion_a.formacion}}<!-- alineación o formacion--></div>
+          </div>
+          <div class="middle-side" style="display: flex;align-items: center;background: rgba(50, 50, 50, 0.8);padding: 0 10px;">
+              <span class="title" style="font-size: 16px;font-weight: bold;color: white;writing-mode: vertical-lr;transform: rotate(180deg);">TITULARES<!-- creo que esto queda asi--></span>
+          </div>
+          <div class="right-side" style="padding: 20px;display: flex;flex-direction: column;align-items: flex-start;">
+              <div class="player-list" style="display: flex;flex-direction: column;">
+                {% for alineacion_a in alineacion_equipo_a %}
+                  <div class="player" style="font-size: 16px;line-height: 1.4;text-align: left;"><span class="dorsal" style="font-weight: bold;margin-right: 5px;">{{alineacion_a.dorsal}}<!-- dorsal jugador --></span><span class="name" style="font-weight: normal;">{{alineacion_a}} <!-- Nombre jugador y posición--></span></div>
+                {% endfor %}
+              </div>
+          </div>
+      </div>
     </div>
   </div>
   <br>
@@ -302,6 +325,7 @@
   // obtenerBanners();
   setInterval(obtenerBanners, 2000);
 </script> -->
+
 
 
 {% endblock %}

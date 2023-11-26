@@ -268,6 +268,7 @@ def asignarAlineacion(request, encuentro_id):
 
 def asignarEventos(request, encuentro_id):
     tipos_evento_relacionados = tipo_evento.objects.all()
+    tipo_evento_id = request.GET.get('tipos_evento_relacionados')
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
@@ -283,10 +284,10 @@ def asignarEventos(request, encuentro_id):
     alineacion02 = alineacion.objects.filter(
             descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
     eventos = evento.objects.filter(encuentro_id=encuentro_id)
-    
+           
     if request.method == 'POST':
         if 'guardar_evento' in request.POST:
-            tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
+            tipos_evento_id = request.POST.get('tipos_evento_relacionados',None)
             alineacion011 = request.POST.get('alineacion01', None)
             alineacion021 = request.POST.get('alineacion02', None)
             tiempo = request.POST.get('tiempo', 0)
@@ -298,7 +299,29 @@ def asignarEventos(request, encuentro_id):
 
             alineacion_id1 = alineacion.objects.get(alineacion_id=alineacion011) if alineacion011 else None
             alineacion_id2 = alineacion.objects.get(alineacion_id=alineacion021) if alineacion021 else None
-    
+            
+            if tipos_evento_id == '3':
+                if evento_equipo == 'Local':
+                    descripcionEncuentroLocal_objs = descripcion_encuentro.objects.filter(
+                        equipo=encuentro_obj.equipo_local, encuentro=encuentro_obj)
+                    alineacion01 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                    alineacion02 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                elif evento_equipo == 'Visita':
+                    descripcionEncuentroVisita_objs = descripcion_encuentro.objects.filter(
+                        equipo=encuentro_obj.equipo_visita, encuentro=encuentro_obj)
+                    alineacion01 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                    alineacion02 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                else:
+                    # Si no es un cambio de jugador, mantén las alineaciones actuales
+                    alineacion01 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                    alineacion02 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                    
             evento_obj = evento(
                 tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
                 alineacion_id1=alineacion_id1,

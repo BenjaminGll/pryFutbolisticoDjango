@@ -3,7 +3,6 @@
 {% block title %} Cronología {% endblock %}
 {% block content %}
 
-
 <style>
 
     .card {
@@ -52,6 +51,47 @@
     .encuentro-link:hover {
         background-color: #2d5ca9;
     }
+
+    .events {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-info {
+        color: #888;
+        font-size: 12px;
+        text-align: center;
+        margin-top: 5px;
+    }
+
+    .event-minute {
+        font-weight: bold;
+    }
+
+    .event-type {
+        color: #28a745;  /* Color verde para el tipo de evento (Gol) */
+    }
+
+    /* Nueva regla para la línea horizontal */
+    .separator-line {
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+    }
+
+    /* Alineación del icono de gol */
+    .goal-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    /* Nueva regla para separar conjuntos de eventos */
+    .event-group {
+        margin-bottom: 20px;
+    }
+
 </style>
 
 <div class="container">
@@ -92,10 +132,95 @@
                                 <p class="team-name">{{ equipo_visita.nombre }}</p>
                             </div>
                         </div>
+                        <!-- Línea horizontal como separador -->
+                        <hr class="separator-line">
+                        <!-- Agregar eventos debajo de la línea horizontal --> 
+                        <div class="card-body" style="display: flex; align-items: center; justify-content: space-around;">
+                            <div class="events">
+                                {% for evento_local in eventos_local|dictsort:"tiempo" %}
+                                {% if evento_local.tipo_evento_id.nombre == "GOL" %}
+                                    <p class="event-info">
+                                        <span class="event-player">{{ evento_local.alineacion_id1.contrato_id.persona.alias }}</span>
+                                        <span class="event-minute">{{ evento_local.tiempo }}'</span>
+                                    </p>
+                                    {% endif %} 
+                                {% endfor %}
+                            </div>
+                            <div class="goal-icon">
+                                ⚽
+                            </div>
+                            <div class="events">
+                                {% for evento_visita in eventos_visita|dictsort:"tiempo" %}
+                                {% if evento_visita.tipo_evento_id.nombre == "GOL" %}
+                                    <p class="event-info">
+                                        <span class="event-player">{{ evento_visita.alineacion_id2.contrato_id.persona.alias }}</span>
+                                        <span class="event-minute">{{ evento_visita.tiempo }}'</span>
+                                    </p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- Agregar eventos de tarjeta roja debajo de la línea horizontal --> 
+                        <div class="card-body event-group" style="display: flex; align-items: center; justify-content: space-around;">
+                            <div class="events">
+                                {% for evento_local in eventos_local|dictsort:"tiempo" %}
+                                    {% if evento_local.tipo_evento_id.nombre == "TARJETA ROJA" %}
+                                        <p class="event-info">
+                                            <span class="event-player">{{ evento_local.alineacion_id1.contrato_id.persona.alias }}</span>
+                                            <span class="event-minute">{{ evento_local.tiempo }}'</span>
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="goal-icon">
+                            🟥
+                            </div>
+                            <div class="events">
+                                {% for evento_visita in eventos_visita|dictsort:"tiempo" %}
+                                    {% if evento_visita.tipo_evento_id.nombre == "TARJETA ROJA" %}
+                                        <p class="event-info">
+                                            <span class="event-player">{{ evento_visita.alineacion_id2.contrato_id.persona.alias }}</span>
+                                            <span class="event-minute">{{ evento_visita.tiempo }}'</span>
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
                     </div>
                 </li>
             </ul>
         </div>
+    </div>
+</div>
+<!-- Mostrar eventos uno a uno en cards -->
+<div class="container">
+    <div class="recent-results results-page">
+        {% for evento in eventos_local %}
+            <div class="info-results">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="date">{{ evento.encuentro_id.competicion_id }} {{ evento.encuentro_id.fecha | date:'D h:m' }}</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="event-info">
+                            {% if evento.evento_equipo %}
+                                <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona.alias }}</span>
+                            {% else %}
+                                <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona.alias }}</span>
+                            {% endif %}
+                            <span class="event-minute">{{ evento.tiempo }}'</span>
+                            {% if evento.tipo_evento_id.nombre == "Tarjeta Roja" %}
+                                <span class="event-type">🟥 Tarjeta Roja</span>
+                            {% else %}
+                                <span class="event-type">⚽ Gol</span>
+                            {% endif %}
+                        </p>
+                        <p class="event-info">{{ evento.motivo }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 

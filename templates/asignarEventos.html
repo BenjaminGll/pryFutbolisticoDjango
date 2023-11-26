@@ -21,7 +21,7 @@
             {% endfor %}
           </select>
 
-          <label for="alineacion01">Alineación {{ equipoLocal }}:</label>
+          <label for="alineacion01">Alineación 01:</label>
           <select name="alineacion01" id="alineacion01" class="form-control">
             <option value="input" selected disabled>Seleccionar alineación 01</option>
             {% for alineacion in alineacion01 %}
@@ -29,7 +29,7 @@
             {% endfor %}
           </select>
 
-          <label for="alineacion02">Alineación {{ equipoVisita }}:</label>
+          <label for="alineacion02">Alineación 02:</label>
           <select name="alineacion02" id="alineacion02" class="form-control">
             <option value="input" selected disabled>Seleccionar alineación 02</option>
             {% for alineacion in alineacion02 %}
@@ -71,8 +71,8 @@
         <thead>
               <tr>
                   <th>Evento</th>
-                  <th>Alineacion {{ equipoLocal }}</th>
-                  <th>Alineacion {{ equipoVisita }}</th>
+                  <th>Alineacion 01</th>
+                  <th>Alineacion 02</th>
                   <th>Tiempo</th>
                   <th>Eliminar</th>
               </tr>

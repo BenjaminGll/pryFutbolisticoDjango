@@ -268,6 +268,7 @@ def asignarAlineacion(request, encuentro_id):
 
 def asignarEventos(request, encuentro_id):
     tipos_evento_relacionados = tipo_evento.objects.all()
+    tipo_evento_id = request.GET.get('tipos_evento_relacionados')
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)
     equipoVisita = equipo.objects.get(nombre=encuentro_obj.equipo_visita)
@@ -277,46 +278,72 @@ def asignarEventos(request, encuentro_id):
         equipo=encuentro_obj.equipo_local,  encuentro=encuentro_obj)
     descripcionEncuentroVisita_objs = descripcion_encuentro.objects.filter(
         equipo=encuentro_obj.equipo_visita,  encuentro=encuentro_obj)
-
     # Obtener alineaciones asociadas a los objetos obtenidos
     alineacion01 = alineacion.objects.filter(
         descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
     alineacion02 = alineacion.objects.filter(
             descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
     eventos = evento.objects.filter(encuentro_id=encuentro_id)
-    
+           
     if request.method == 'POST':
-        tipo_evento_id = request.POST.get('tipos_evento_relacionados', None)
-        alineacion011 = request.POST.get('alineacion01', None)
-        alineacion021 = request.POST.get('alineacion02', None)
-        tiempo = request.POST.get('tiempo', 0)
-        tiempo = int(tiempo) if tiempo else 0
-        motivo = request.POST.get('motivo', '')
-        encuentro_id = int(encuentro_id) if encuentro_id else 0
-        evento_equipo=request.POST.get('evento_equipo', False)
+        if 'guardar_evento' in request.POST:
+            tipos_evento_id = request.POST.get('tipos_evento_relacionados',None)
+            alineacion011 = request.POST.get('alineacion01', None)
+            alineacion021 = request.POST.get('alineacion02', None)
+            tiempo = request.POST.get('tiempo', 0)
+            tiempo = int(tiempo) if tiempo else 0
+            motivo = request.POST.get('motivo', '')
+            encuentro_id = int(encuentro_id) if encuentro_id else 0
+            evento_equipo=request.POST.get('equipo')
+            equipoSe = (evento_equipo=='Local')
 
-        evento_obj = evento(
-            tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
-            alineacion_id1=alineacion.objects.get(alineacion_id=alineacion011),
-            alineacion_id2=alineacion.objects.get(alineacion_id=alineacion021),
-            encuentro_id=encuentro_obj,
-            evento_equipo=evento_equipo,
-            motivo=motivo,
-            tiempo=tiempo
-        )
-        evento_obj.save()
+            alineacion_id1 = alineacion.objects.get(alineacion_id=alineacion011) if alineacion011 else None
+            alineacion_id2 = alineacion.objects.get(alineacion_id=alineacion021) if alineacion021 else None
+            
+            if tipos_evento_id == '3':
+                if evento_equipo == 'Local':
+                    descripcionEncuentroLocal_objs = descripcion_encuentro.objects.filter(
+                        equipo=encuentro_obj.equipo_local, encuentro=encuentro_obj)
+                    alineacion01 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                    alineacion02 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                elif evento_equipo == 'Visita':
+                    descripcionEncuentroVisita_objs = descripcion_encuentro.objects.filter(
+                        equipo=encuentro_obj.equipo_visita, encuentro=encuentro_obj)
+                    alineacion01 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                    alineacion02 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                else:
+                    # Si no es un cambio de jugador, mantén las alineaciones actuales
+                    alineacion01 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                    alineacion02 = alineacion.objects.filter(
+                        descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                    
+            evento_obj = evento(
+                tipo_evento_id=tipo_evento.objects.get(tipo_evento_id=tipo_evento_id),
+                alineacion_id1=alineacion_id1,
+                alineacion_id2=alineacion_id2,
+                encuentro_id=encuentro_obj,
+                evento_equipo=equipoSe,
+                motivo=motivo,
+                tiempo=tiempo
+            )
+            evento_obj.save()
 
-        messages.success(request, 'Eventos guardados correctamente.')
-        
-    elif 'eliminar_evento' in request.POST:
-            # Lógica para eliminar un detalle de la terna arbitral
-            evento_id = int(request.POST.get('eliminar_evento'))
-            evento_obj = get_object_or_404(evento, pk=evento_id)
-            print(f"Eliminando evento con ID {evento_id}")
-    
-            evento_obj.delete()
-            print(f"Evento eliminado correctamente")
-        
+            messages.success(request, 'Eventos guardados correctamente.')
+        elif 'eliminar_evento' in request.POST:
+                # Lógica para eliminar un detalle de la terna arbitral
+                evento_id = int(request.POST.get('eliminar_evento'))
+                evento_obj = get_object_or_404(evento, pk=evento_id)
+                print(f"Eliminando evento con ID {evento_id}")
+
+                evento_obj.delete()
+                print(f"Evento eliminado correctamente")
+            # return redirect(f'/appPartido/asignar/eventos/{evento_id}/')
+            
     return render(request, 'asignarEventos.html', {
         'fecha_encuentro': encuentro_obj.fecha,
         'encuentro_id': encuentro_id,

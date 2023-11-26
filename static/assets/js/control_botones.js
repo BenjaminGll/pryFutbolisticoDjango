@@ -55,5 +55,33 @@
                 });
             }
         });
+
+         // Agregar botón "Editar" a cada fila de la tabla
+        var editButtons = $('<input/>').attr({ type: 'button', name: '_edit', value: 'Editar' }).addClass('default');
+        
+        // Aplicar estilos al botón "Editar"
+        editButtons.css({
+            'background-color': '#337ab7', // Color de fondo
+            'border': 'none', // Sin borde
+            'border-radius': '5px', // Borde redondeado
+            'height': '35px', // Altura
+            'color': 'white', // Color del texto
+            'font-family': fontFamily, // Tipo de letra
+            'font-size': '14px', // Tamaño de fuente
+            'font-weight': 'bold', // Peso de fuente
+            'margin-right': '10px' // Margen derecho entre botones (ajusta según sea necesario)
+        });
+
+        // Manejar clic en el botón "Editar"
+        editButtons.on('click', function(){
+            // Obtener el ID de la fila actual
+            var rowId = $(this).closest('tr').attr('id');
+            
+            // Redirigir a la página de edición correspondiente
+            window.location.href = window.location.pathname + rowId + 'change/';
+        });
+
+        // Insertar el botón "Editar" después del botón "Cancelar"
+        cancelarButton.after(editButtons);
     });
 })(django.jQuery);

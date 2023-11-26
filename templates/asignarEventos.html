@@ -4,8 +4,16 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-  <div class="container mt-4">
+
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+
+  <div class="container mt-4 mb-4">
     <h1 class="mb-4">Asignar Eventos: {{ equipoLocal }} vs. {{ equipoVisita }} - {{ fecha_encuentro }}</h1>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <form method="POST" action="{% url 'asignarEventos'   encuentro_id=encuentro_id %}">
       {% csrf_token %}
 
@@ -14,31 +22,37 @@
 
           <label for="tipos_evento_relacionados">Tipo de Evento:</label>
           <select name="tipos_evento_relacionados" id="tipos_evento_relacionados" class="form-control">
-            <option value="" selected disabled>Seleccionar tipo de evento</option>
+            <option value="input" selected disabled>Seleccionar tipo de evento</option>
             {% for tipo_evento in tipos_evento_relacionados %}
               <option value="{{ tipo_evento.tipo_evento_id }}">{{ tipo_evento.nombre }}</option>
             {% endfor %}
           </select>
 
-          <label for="alineacion01">Alineación {{ equipoLocal }}:</label>
-          <select name="alineacion01" id="alineacion01" class="form-control">
-            <option value="input" selected disabled>Seleccionar alineación 01</option>
-            {% for alineacion in alineacion01 %}
-              <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
-            {% endfor %}
+          <label for="alineacion01" id="label_alineacion01" class="alineacion-label">Alineación 01:</label>
+          <select name="alineacion01" id="alineacion01" class="form-control alineacion-dropdown">
+          <option value="input" selected disabled>Seleccionar alineación 01</option>
+          {% for alineacion in alineacion01 %}
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          {% endfor %}
           </select>
 
-          <label for="alineacion02">Alineación {{ equipoVisita }}:</label>
-          <select name="alineacion02" id="alineacion02" class="form-control">
-            <option value="input" selected disabled>Seleccionar alineación 02</option>
-            {% for alineacion in alineacion02 %}
-              <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
-            {% endfor %}
+          <label for="alineacion02" id="label_alineacion02" class="alineacion-label">Alineación 02:</label>
+          <select name="alineacion02" id="alineacion02" class="form-control alineacion-dropdown">
+          <option value="input" selected disabled>Seleccionar alineación 02</option>
+          {% for alineacion in alineacion02 %}
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          {% endfor %}
           </select>
 
         </div>
 
         <div class="col-md-6">
+          <label for="equipo">Equipo:</label>
+          <select name="equipo" id="equipo" class="form-control">
+            <option value="" selected disabled>Seleccionar</option>
+            <option value="Local">Local</option>
+            <option value="Visita">Visita</option>
+          </select>
 
           <label for="tiempo">Tiempo:</label>
           <input type="text" name="tiempo" class="form-control">
@@ -50,23 +64,23 @@
       </div>
 
       <div class="text-right mt-4">
-        <button type="submit" class="btn btn-primary">Guardar Evento</button>
+        <button type="submit" name="guardar_evento"  class="btn btn-success">Guardar Evento</button>
         <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Cancelar</a>
       </div>
-    </form>
+
   </div> <br>
 
 
-  <div class="col-md-6 ">
+  <div class="container mt-4 mb-4">
     <div class="row">
-
-        <h3>Eventos Añadidos</h3>
-        <table class="table table-bordered" id="eventoTable">
-          <thead>
+      <div class="col-md-12">
+        <h3 class="text-center">Eventos Añadidos</h3>
+        <table class="table table-bordered mx-auto mr-4" id="eventoTable">
+        <thead>
               <tr>
                   <th>Evento</th>
-                  <th>Alineacion {{ equipoLocal }}</th>
-                  <th>Alineacion {{ equipoVisita }}</th>
+                  <th>Alineacion 01</th>
+                  <th>Alineacion 02</th>
                   <th>Tiempo</th>
                   <th>Eliminar</th>
               </tr>
@@ -95,9 +109,43 @@
     </div>
 
     <div class="text-right mt-4">
-        <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Volver</a>
     </div>
 </form>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $('#tipos_evento_relacionados, #equipo').change(function() {
+      var tipoEvento = $('#tipos_evento_relacionados').val();
+      var equipo = $('#equipo').val();
+      if (tipoEvento == 3) {
+        if (equipo == 'Local') {
+          $('.alineacion-label, .alineacion-dropdown').show();
+        } else if (equipo == 'Visita') {
+          console.log("Ocultando alineación 01");
+          $('.alineacion-label, .alineacion-dropdown').show();
+        } else if (equipo == 'input') {
+          // Si no se ha seleccionado un equipo, ocultar ambas alineaciones
+          console.log("Ocultando ambas alineaciones");
+          $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
+        }
+      } else {  
+        if (equipo == 'Visita') {
+          console.log("Ocultando alineación 01");
+          $('#label_alineacion01, #alineacion01').css('display', 'none');
+          $('#label_alineacion02, #alineacion02').css('display', 'block');
+        } else if (equipo == 'Local') {
+          console.log("Ocultando alineación 02");
+          $('#label_alineacion01, #alineacion01').css('display', 'block');
+          $('#label_alineacion02, #alineacion02').css('display', 'none');
+        } else if (equipo == 'input') {
+          console.log("Ocultando ambas alineaciones");
+          $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
+        }
+      }
+    });
+  });
+</script>
 
 {% endblock %}

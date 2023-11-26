@@ -294,9 +294,9 @@ def asignarEventos(request, encuentro_id):
             tiempo = int(tiempo) if tiempo else 0
             motivo = request.POST.get('motivo', '')
             encuentro_id = int(encuentro_id) if encuentro_id else 0
-            evento_equipo=request.POST.get('equipo', '')
+            evento_equipo=request.POST.get('equipo')
             equipoSe = (evento_equipo=='Local')
-                
+
             alineacion_id1 = alineacion.objects.get(alineacion_id=alineacion011) if alineacion011 else None
             alineacion_id2 = alineacion.objects.get(alineacion_id=alineacion021) if alineacion021 else None
             
@@ -334,7 +334,6 @@ def asignarEventos(request, encuentro_id):
             evento_obj.save()
 
             messages.success(request, 'Eventos guardados correctamente.')
-        
         elif 'eliminar_evento' in request.POST:
                 # Lógica para eliminar un detalle de la terna arbitral
                 evento_id = int(request.POST.get('eliminar_evento'))

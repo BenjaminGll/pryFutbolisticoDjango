@@ -54,7 +54,7 @@
     </div>--> 
     
     <div class="banner-marcadores" id="general" style="display:none">
-      <span id="cronometro">00:00</span>&nbsp;<img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">0</span> - <span id="marcador-visitante">0</span></span><span> {{equipo_b.siglas}} </span><img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%">
+      <span id="cronometro">00:00</span>&nbsp;<img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">{{goles_equipo_a}}</span> - <span id="marcador-visitante">{{goles_equipo_b}}</span></span><span> {{equipo_b.siglas}} </span><img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%">
     </div>
     <div id="banners-container" class="banners-container" style="display: none;">
       <!-- Contenido del banner -->

@@ -5,14 +5,15 @@
 
 <style>
 
-    .card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        margin: 10px 0;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 500px; /* Set the width to 100% or any desired value */
-    }
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    margin: 0; /* Agregado para eliminar el margen */
+    box-sizing: border-box; /* Agregado para incluir el borde y el relleno en el ancho total */
+}
 
     .card-header {
         background-color: #f5f5f5;
@@ -22,6 +23,7 @@
 
     .card-body {
         padding: 20px;
+        
     }
 
     .team-info {
@@ -87,13 +89,15 @@
         margin-top: 10px;
     }
 
-    /* Nueva regla para separar conjuntos de eventos */
-    .event-group {
-        margin-bottom: 20px;
+
+        /* Agrega un nuevo estilo para centrar las cards de eventos individuales */
+        .event-card {
+        margin: 0 auto;
+        max-width: 500px; /* Puedes ajustar el ancho máximo según tus preferencias */
+        
     }
-
 </style>
-
+<body data-encuentro-id="{{ encuentro.encuentro_id }}"></body>
 <div class="container">
     <div class="row">
         <div class="col-md-8">
@@ -113,7 +117,7 @@
     <div class="recent-results results-page">
         <div class="info-results">
             <ul>
-                <li class="text-center" style="max-width: 500px; margin: 0 auto;">
+                <li class="text-center" style="max-width: 500px; margin: 0 auto;left: -15px;">
                     <div class="card">
                         <div class="card-header">
                             <span class="date">{{ encuentro.competicion_id}} {{ encuentro.fecha | date:'D h:m' }}</span>
@@ -195,25 +199,27 @@
 </div>
 <!-- Mostrar eventos uno a uno en cards -->
 <div class="container">
-    <div class="recent-results results-page">
-        {% for evento in eventos_local %}
-            <div class="info-results">
+    <div class="recent-results results-page event-cards-container">
+        {% for evento in eventos_todos %}
+            <div class="info-results event-card">
                 <div class="card">
                     <div class="card-header">
                         <span class="date">{{ evento.encuentro_id.competicion_id }} {{ evento.encuentro_id.fecha | date:'D h:m' }}</span>
                     </div>
                     <div class="card-body">
                         <p class="event-info">
-                            {% if evento.evento_equipo %}
+                            {% if evento.evento_equipo == True %}
                                 <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona.alias }}</span>
                             {% else %}
                                 <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona.alias }}</span>
                             {% endif %}
                             <span class="event-minute">{{ evento.tiempo }}'</span>
-                            {% if evento.tipo_evento_id.nombre == "Tarjeta Roja" %}
+                            {% if evento.tipo_evento_id.nombre == "TARJETA ROJA" %}
                                 <span class="event-type">🟥 Tarjeta Roja</span>
-                            {% else %}
+                            {% elif evento.tipo_evento_id.nombre == "GOL" %}
                                 <span class="event-type">⚽ Gol</span>
+                            {% elif evento.tipo_evento_id.nombre == "TARJETA AMARILLA" %}
+                                <span class="event-type">🟨 Tarjeta Amarilla</span>
                             {% endif %}
                         </p>
                         <p class="event-info">{{ evento.motivo }}</p>
@@ -223,5 +229,42 @@
         {% endfor %}
     </div>
 </div>
+<!-- Agrega jQuery (puedes cambiar a una versión local si lo prefieres) -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    // Función para cargar eventos
+    function cargarEventos() {
+        // Obtiene el ID del encuentro del atributo de datos
+        var encuentroId = $('body').data('encuentro-id');
+        if (encuentroId) {
+            $.ajax({
+                url: '{% url "contextoTVhomeEncuentro" id=encuentro.encuentro_id %}',
+                type: 'GET',
+            data: { id: encuentroId },  // Pasa el ID del encuentro
+            success: function(data) {
+                // Actualiza la sección de eventos con la nueva información
+                $('#eventos-container').html(data);
+            },
+            error: function(error) {
+                console.error('Error al cargar eventos:', error);
+            },
+            complete: function() {
+                // Vuelve a cargar eventos después de un intervalo de tiempo (por ejemplo, cada 30 segundos)
+                setTimeout(cargarEventos, 3000);
+            }
+        });
+        
+    }
+}
+
+    // Inicia la carga de eventos al cargar la página
+    $(document).ready(function() {
+        cargarEventos();
+    });
+</script>
+
+</body>
+
 
 {% endblock %}

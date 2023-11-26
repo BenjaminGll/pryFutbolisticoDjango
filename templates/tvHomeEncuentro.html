@@ -193,5 +193,35 @@
         </div>
     </div>
 </div>
+<!-- Mostrar eventos uno a uno en cards -->
+<div class="container">
+    <div class="recent-results results-page">
+        {% for evento in eventos_local %}
+            <div class="info-results">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="date">{{ evento.encuentro_id.competicion_id }} {{ evento.encuentro_id.fecha | date:'D h:m' }}</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="event-info">
+                            {% if evento.evento_equipo %}
+                                <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona.alias }}</span>
+                            {% else %}
+                                <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona.alias }}</span>
+                            {% endif %}
+                            <span class="event-minute">{{ evento.tiempo }}'</span>
+                            {% if evento.tipo_evento_id.nombre == "Tarjeta Roja" %}
+                                <span class="event-type">🟥 Tarjeta Roja</span>
+                            {% else %}
+                                <span class="event-type">⚽ Gol</span>
+                            {% endif %}
+                        </p>
+                        <p class="event-info">{{ evento.motivo }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}

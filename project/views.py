@@ -504,7 +504,6 @@ def reporte_jugadores(request):
         'competicion_seleccionada': competicion_seleccionada,
         'estadistica_tipo': estadistica_tipo,
     })
-
 # def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
 #     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
 #     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
@@ -675,10 +674,6 @@ def contextoTVvivo(request, id):
     descripcion_equipo_b = descripcion_encuentro.objects.get(
         encuentro_id=id, equipo_id=equipo_b.equipo_id
     )
-    #contrato_equipo_a = contrato.objects.filter(nuevo_club=equipo_a.equipo_id)
-    #primer_contrato_equipo_a = contrato.objects.filter(nuevo_club=equipo_a.equipo_id).first()
-    alineacion_equipo_a= alineacion.objects.filter(descripcion_encuentro_id=descripcion_equipo_a.descripcion_encuentro_id,estado=True)
-    formacion_a= alineacion.objects.filter(descripcion_encuentro_id=descripcion_equipo_a.descripcion_encuentro_id,estado=True).first()
 
     data = {
         'jugar_encuentro': jugar_encuentro,
@@ -687,9 +682,6 @@ def contextoTVvivo(request, id):
         'estadio': estadio,
         'goles_equipo_a': descripcion_equipo_a.goles,
         'goles_equipo_b': descripcion_equipo_b.goles,
-        #'contrato_equipo_a':contrato_equipo_a ,
-        'alineacion_equipo_a':alineacion_equipo_a,
-        'formacion_a':formacion_a,
     }
     
     return render(request, 'tvVivo.html', data)
@@ -1134,6 +1126,7 @@ def guardar_eventos_temporales(eventos):
                         '''
                     
                         }
+
         else:    
             banner = {
                 'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>'
@@ -1151,46 +1144,8 @@ def guardar_eventos_temporales(eventos):
     default_storage.save('eventos_temporales.json', ContentFile(contenido))
 
 
-def marcador_en_vivo(request, evento_id, encuentro_id):
-    evento = evento.objects.get(pk=evento_id)
-    goles_local = evento.eventos_alineacion_id1.filter(tipo_evento_id__nombre='GOL').count()
-    goles_visita = evento.eventos_alineacion_id2.filter(tipo_evento_id__nombre='GOL').count()
-    encuentro = encuentro.objects.get(pk=encuentro_id)
 
-    mostrar_banner = request.GET.get('mostrar_banner', False)
 
-    return render(request, 'marcadorCheckbox', {
-        'goles_local': goles_local,
-        'goles_visita': goles_visita,
-        'mostrar_banner': mostrar_banner,
-    })
-
-banner = {
-    'html': f'''
-        <div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">
-            <div style="display: flex; justify-content: space-between; width: 50%;">
-                <div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;">{{ goles_local }}</div>
-                <div name="escudo-local" style="padding-right: 1%;">
-            <img src="{{ evento.equipo_local.logo.url }}" alt="{{ evento.equipo_local.siglas }}" style="width: 50px; background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">
-        </div>
-        <div name="container-equipo-informacion" style="width: 100%;">
-            <div name="Equipos" style="display: flex; font-weight: bold; justify-content: space-between; align-items: center; background-color: rgb(255,42,27); padding: 0.3%; margin-top: 1%; margin-bottom: 1%;">
-                <div name="equipo_local" style="text-align: left; padding-left: 3%;">{{ evento.equipo_local.nombre }}</div>
-                <div name="equipo_visita" style="text-align: right; padding-right: 3%;">{{ evento.equipo_visita.nombre }}</div>
-            </div>
-            <div name="Encuentros" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">
-                <div name="estadio" style="text-align: left; padding-left: 3%; color: white;">{{ equipo_local.encuentro.sede_id.nombre }}</div>
-                <div name="Resumen_Tiempo" style="text-align: right; padding-right: 3%; color: white;">Resumen 1er. Tiempo</div>
-            </div>
-        </div>
-        <div name="escudo-visita" style="padding-left: 1%;">
-            <img src="{{ evento.equipo_visita.logo.url }}" alt="{{ evento.equipo_visita.siglas }}" style="width: 50px; background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">
-        </div>
-        <div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">{{ goles_visita }}</div>
-    </div>
-</div>
-    '''
-}
 
 def obtener_eventos_ajax(request):
     eventos_temporales = []

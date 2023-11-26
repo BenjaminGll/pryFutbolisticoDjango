@@ -44,7 +44,7 @@ class detalle_grupoAdmin(admin.ModelAdmin):
     search_fields = ['equipo_id','grupo_id','competicion_id']
     ordering =['competicion_id']
     list_per_page =4
-    list_filter=['competicion_id']
+    list_filter=['competicion_id','grupo_id']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 

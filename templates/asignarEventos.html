@@ -4,9 +4,16 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
+
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+
   <div class="container mt-4 mb-4">
     <h1 class="mb-4">Asignar Eventos: {{ equipoLocal }} vs. {{ equipoVisita }} - {{ fecha_encuentro }}</h1>
-
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <form method="POST" action="{% url 'asignarEventos'   encuentro_id=encuentro_id %}">
       {% csrf_token %}
 
@@ -15,26 +22,26 @@
 
           <label for="tipos_evento_relacionados">Tipo de Evento:</label>
           <select name="tipos_evento_relacionados" id="tipos_evento_relacionados" class="form-control">
-            <option value="" selected disabled>Seleccionar tipo de evento</option>
+            <option value="input" selected disabled>Seleccionar tipo de evento</option>
             {% for tipo_evento in tipos_evento_relacionados %}
               <option value="{{ tipo_evento.tipo_evento_id }}">{{ tipo_evento.nombre }}</option>
             {% endfor %}
           </select>
 
-          <label for="alineacion01">Alineación 01:</label>
-          <select name="alineacion01" id="alineacion01" class="form-control">
-            <option value="input" selected disabled>Seleccionar alineación 01</option>
-            {% for alineacion in alineacion01 %}
-              <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
-            {% endfor %}
+          <label for="alineacion01" id="label_alineacion01" class="alineacion-label">Alineación 01:</label>
+          <select name="alineacion01" id="alineacion01" class="form-control alineacion-dropdown">
+          <option value="input" selected disabled>Seleccionar alineación 01</option>
+          {% for alineacion in alineacion01 %}
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          {% endfor %}
           </select>
 
-          <label for="alineacion02">Alineación 02:</label>
-          <select name="alineacion02" id="alineacion02" class="form-control">
-            <option value="input" selected disabled>Seleccionar alineación 02</option>
-            {% for alineacion in alineacion02 %}
-              <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
-            {% endfor %}
+          <label for="alineacion02" id="label_alineacion02" class="alineacion-label">Alineación 02:</label>
+          <select name="alineacion02" id="alineacion02" class="form-control alineacion-dropdown">
+          <option value="input" selected disabled>Seleccionar alineación 02</option>
+          {% for alineacion in alineacion02 %}
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          {% endfor %}
           </select>
 
         </div>
@@ -106,4 +113,61 @@
 </form>
 </div>
 
+<script>
+  $(document).ready(function() {
+    $('#tipos_evento_relacionados, #equipo').change(function() {
+      var tipoEvento = $('#tipos_evento_relacionados').val();
+      var equipo = $('#equipo').val();
+      if (tipoEvento == 3) {
+        if (equipo == 'Local') {
+          $('.alineacion-label, .alineacion-dropdown').show();
+        } else if (equipo == 'Visita') {
+          console.log("Ocultando alineación 01");
+          $('.alineacion-label, .alineacion-dropdown').show();
+        } else if (equipo == 'input') {
+          // Si no se ha seleccionado un equipo, ocultar ambas alineaciones
+          console.log("Ocultando ambas alineaciones");
+          $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
+        }
+      } else {  
+        if (equipo == 'Visita') {
+          console.log("Ocultando alineación 01");
+          $('#label_alineacion01, #alineacion01').css('display', 'none');
+          $('#label_alineacion02, #alineacion02').css('display', 'block');
+        } else if (equipo == 'Local') {
+          console.log("Ocultando alineación 02");
+          $('#label_alineacion01, #alineacion01').css('display', 'block');
+          $('#label_alineacion02, #alineacion02').css('display', 'none');
+        } else if (equipo == 'input') {
+          console.log("Ocultando ambas alineaciones");
+          $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
+        }
+      }
+      $.ajax({
+        url: 'asignar/eventos/<int:encuentro_id>/',  // Reemplaza esto con la URL de tu vista en Django
+        type: 'POST',
+        data: {
+          tipos_evento_relacionados: tipoEvento,
+          equipo: equipo,
+        },
+        success: function(data) {
+          // Actualizar la página con la respuesta del servidor
+          $('body').html(data);
+        },
+        error: function(error) {
+          console.error('Error en la solicitud AJAX', error);
+        }
+      });
+    }
+
+    // Escuchar el evento de cambio en los elementos relevantes
+    $('#tipos_evento_relacionados, #equipo').change(function() {
+      // Llamar a la función para actualizar la página de manera asíncrona
+      actualizarPagina();
+    });
+  });
+
+</script>
+
 {% endblock %}
+

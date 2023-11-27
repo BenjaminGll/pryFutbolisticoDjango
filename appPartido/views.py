@@ -290,15 +290,11 @@ def asignarEventos(request, encuentro_id):
         print('equipo',evento_equipo)
         if tipo_evento_id == '3':
             if evento_equipo == 'Local':
-                alineacion01 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
-                alineacion02 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                alineacion01 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs, estado=True)
+                alineacion02 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs, estado=False)
             elif evento_equipo == 'Visita':
-                alineacion01 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
-                alineacion02 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                alineacion01 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs, estado=True)
+                alineacion02 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs, estado=False)
             else:
                 alineacion01 = alineacion.objects.filter(
                 descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)

@@ -337,16 +337,14 @@ def lista_equipos_por_competicion_y_fase(request):
 #         return encuentro_persona_obj.encuentro_persona_id
 #     except encuentro_persona.DoesNotExist:
 #         return None
-# def obtener_equipo_id(encuentro_id, contrato_id):
-#     try:
-#         encuentro_persona_obj = encuentro_persona.objects.get(
-#             encuentro_id=encuentro_id, contrato_id=contrato_id
-#         )
-#         # Obtiene el ID del equipo directamente
-#         equipo_id = encuentro_persona_obj.equipo_id_id
-#     except encuentro_persona.DoesNotExist:
-#         equipo_id = None
-#     return equipo_id
+
+
+def obtener_equipo_id(encuentro_id, contrato_id):
+    try:
+        posicion = tabla_posicion.objects.get(encuentro_id=encuentro_id, equipo_id=contrato_id)
+        return posicion.equipo_id
+    except tabla_posicion.DoesNotExist:
+        return None
 
 
 def obtener_logo_equipo(equipo_id):
@@ -447,64 +445,66 @@ def contextoFixtureCompetencia(request, nombre_competicion):
 
 def reporte_jugadores(request):
     competicion_id = request.GET.get('competicion', None)
-    estadistica_tipo = request.GET.get('estadistica', 'goleadores')
+    estadistica = request.GET.get('estadistica', 'gol')
     print(f"Competicion ID: {competicion_id}")
-    print(f"estadistica ID: {estadistica_tipo}")
+    print(f"Estadistica ID: {estadistica}")
     jugadores_list = []
     competiciones = competicion.objects.all()
     competicion_seleccionada = None
 
     tipo_evento_map = {
-        'goleadores': 9,
-        'asistidores': 19,
+        'gol': 9,
+        'asistencias': 19,
         'amarillas': 1,
         'rojas': 2,
     }
-    tipo_evento_id = tipo_evento_map.get(estadistica_tipo, 9)
+    tipo_evento_id = tipo_evento_map.get(estadistica, 9)
     print(f"Tipo evento ID: {tipo_evento_id}")
-    
+
     if competicion_id:
-        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
+        try:
+            competicion_seleccionada = competicion.objects.get(pk=competicion_id)
 
-        # Agrupar eventos por jugador y contarlos
-        eventos_agrupados = evento.objects.filter(
-            tipo_evento_id=tipo_evento_id, 
-            encuentro_id__competicion_id=competicion_id
-        ).values(
-        'alineacion1_id__contrato_id__persona_id'
-        ).annotate(
-            total=Count('evento_id')
-        )
+            # Agrupar eventos por jugador y contarlos
+            eventos_agrupados = evento.objects.filter(
+                tipo_evento_id=tipo_evento_id,
+                encuentro_id__competicion_id=competicion_id
+            ).values(
+                'alineacion_id1__contrato_id',
+            ).annotate(
+                total=Count('tipo_evento_id')
+            )
 
-        for evento_agrupado in eventos_agrupados:
-            jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
-            jugador = persona.objects.get(pk=jugador_id)
-            ultimo_evento = evento.objects.filter(
-                alineacion1_id__contrato_id__persona_id=jugador_id,
-                tipo_evento_id=tipo_evento_id
-            ).order_by('-encuentro_id').first()
-            print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
-            if ultimo_evento:
-                encuentro_id = ultimo_evento.encuentro_id
-                contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
-                equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-                equipo_logo = obtener_logo_equipo(equipo_id)
-                logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
+            for evento_agrupado in eventos_agrupados:
+                jugador_id = evento_agrupado.get('alineacion_id1__contrato_id')
+                
+                # Comprobar si el jugador_id es None
+                if jugador_id is not None:
+                    try:
+                        jugador = persona.objects.get(pk=jugador_id)
+                        evento_count = evento_agrupado.get('total', 0)
+                        jugador.estadistica_valor = evento_count
+                        contrato_jugador = contrato.objects.get(pk=jugador_id)
+                        jugador.equipo_logo = contrato_jugador.nuevo_club.logo.url if contrato_jugador.nuevo_club and contrato_jugador.nuevo_club.logo else None
+                        jugadores_list.append(jugador)
+                        # Resto del código para procesar el jugador
+                        # Puedes acceder a los campos del jugador, por ejemplo, jugador.nombre, jugador.apellido, etc.
+                    except persona.DoesNotExist:
+                        print(f"La persona con ID {jugador_id} no existe.")
+                else:
+                    print("El ID del jugador es None.")
 
-
-            jugadores_list.append({
-                'alias': jugador.alias,
-                'logo_bandera': logo_bandera,
-                'equipo_logo': equipo_logo,
-                'estadistica_valor': evento_agrupado['total'],
-            })
+        except competicion.DoesNotExist:
+            # Manejar el caso donde la competición no existe
+            pass
 
     return render(request, 'ReporteJugadores.html', {
         'jugadores': jugadores_list,
         'competiciones': competiciones,
         'competicion_seleccionada': competicion_seleccionada,
-        'estadistica_tipo': estadistica_tipo,
+        'estadistica_tipo': estadistica,
     })
+
 # def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
 #     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
 #     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
@@ -573,15 +573,23 @@ def reporte_jugadores(request):
 #     return render(request, 'lista_jugadores_asistencias.html', data)
 
 def contextoTablaPosiciones(request, nombre_competicion):
+    # Obtener la competición seleccionada
     competencia_seleccionada = competicion.objects.get(
         nombre=nombre_competicion.upper()
     )
 
+    # Obtener los detalles de los grupos para la competición
+    detalles = detalle_grupo.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
+
+    # Obtener la fase de grupos
     fase_grupos = fase.objects.get(nombre="FASE DE GRUPOS")
+
+    # Obtener los equipos que participan en la fase de grupos
     listar_equipos_fase_grupos = detalle_grupo.objects.filter(
         fase_id=fase_grupos.fase_id
     ).values("equipo_id")
 
+    # Obtener la lista de grupos en la fase de grupos
     listar_grupos_fase_grupos = (
         detalle_grupo.objects.filter(fase_id=fase_grupos.fase_id)
         .values_list("grupo_id", flat=True)
@@ -589,8 +597,10 @@ def contextoTablaPosiciones(request, nombre_competicion):
         .order_by("grupo_id")
     )
 
+    # Obtener los nombres de los grupos
     nombre_grupos = grupo.objects.filter(grupo_id__in=listar_grupos_fase_grupos)
 
+    # Obtener la tabla de posiciones para la competición y la fase de grupos
     lista_tabla = (
         tabla_posicion.objects.filter(
             competicion_id=competencia_seleccionada.competicion_id,
@@ -608,11 +618,14 @@ def contextoTablaPosiciones(request, nombre_competicion):
         .order_by("-puntos")
     )
 
+    # Lista para almacenar la información de los equipos
     listaEquipos = [[]]
 
+    # Índices y posición inicial
     i = 0
     posicion = 1
 
+    # Llenar la lista de equipos con información necesaria
     for c in lista_tabla:
         li = equipo.objects.get(equipo_id=c.get("equipo_id"))
         partidos_jugados = c.get("ganado") + c.get("empatado") + c.get("perdido")
@@ -635,7 +648,37 @@ def contextoTablaPosiciones(request, nombre_competicion):
         i = i + 1
         posicion = posicion + 1
 
-    data = {"equipo": listaEquipos, "listar_grupos_fase_grupos": nombre_grupos}
+    # Crear el diccionario de contexto
+    data = {
+        "listar_grupos_fase_grupos": nombre_grupos,
+        "detalles_grupos": detalles,
+        "competicion_seleccionada": competencia_seleccionada,
+        "equipos_por_grupo": {grupo_id: [] for grupo_id in listar_grupos_fase_grupos},
+        "equipos_por_grupo_info": {},  # Nuevo diccionario para almacenar información de equipos por grupo
+    }
+
+    # Agregar información de equipos por grupo al contexto
+    for equipo_info in listaEquipos:
+        equipo_id = equipo_info[0]  # Asegúrate de que esto sea el ID correcto del equipo
+        grupo_query = detalle_grupo.objects.filter(
+            fase_id=fase_grupos.fase_id,
+            equipo_id=equipo_id,
+        )
+
+        # Verifica si hay algún detalle_grupo que cumpla con la condición
+        if grupo_query.exists():
+            grupo_id_equipo = grupo_query.first().grupo_id
+
+            # Verifica si la clave ya existe en el diccionario antes de agregar el equipo
+            if grupo_id_equipo in data["equipos_por_grupo"]:
+                data["equipos_por_grupo"][grupo_id_equipo].append(equipo_info)
+                # Agrega información del equipo al nuevo diccionario
+                data["equipos_por_grupo_info"][equipo_id] = {
+                    "nombre": equipo_info[2],
+                    "logo": equipo_info[1],
+                }
+
+    # Renderizar la plantilla con el contexto
     return render(request, "tabla-fase.html", data)
 
 
@@ -652,6 +695,7 @@ def contextoEncuentros(request, nombre_competicion):
     data = {
         "encuentros_jugados": encuentros_jugados,
         "encuentros_por_jugar": encuentros_por_jugar,
+        "competicion":competencia_seleccionada,
     }
     return render(request, "encuentros_jugados.html", data)
 def contextoContacto(request):
@@ -888,8 +932,8 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
             ).first()
         alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id)
         alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id)
-        print('Alineacion local',alineaciones_local)
-        print('Alineacion visita',alineaciones_visita)
+        # print('Alineacion local',alineaciones_local)
+        # print('Alineacion visita',alineaciones_visita)
 
     elif tipo_filtro == 'en_juego':
         eventos = evento.objects.filter(encuentro_id=idEncuentro).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales).reverse()
@@ -1153,6 +1197,7 @@ def guardar_eventos_temporales(eventos):
 
 
 
+
 def obtener_eventos_ajax(request):
     eventos_temporales = []
 
@@ -1165,6 +1210,7 @@ def obtener_eventos_ajax(request):
 
     return JsonResponse({'banners': eventos_temporales})
 
+
 def limpiar_eventos_temporales(request):
     try:
         # Intenta eliminar el archivo temporal 'eventos_temporales.json'
@@ -1173,7 +1219,28 @@ def limpiar_eventos_temporales(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+### API DE TARJETAS
+def infracciones(request,tipo, idContrato):
+    veces = alineacion.objects.filter(contrato_id=idContrato)
 
+    resultado = 0
+
+    # TARJETAS AMARILLAS
+    if tipo == 1:
+        resultado = evento.objects.filter(alineacion_id1__in=[vez.alineacion_id for vez in veces], tipo_evento_id=1).count()
+
+    # TARJETAS ROJAS
+    elif tipo == 2:
+        resultado = evento.objects.filter(alineacion_id1__in=[vez.alineacion_id for vez in veces], tipo_evento_id=2).count()
+
+    # GOLES TOTALES
+    elif tipo == 3:
+        resultado = evento.objects.filter(alineacion_id1__in=[vez.alineacion_id for vez in veces], tipo_evento_id=9).count()
+
+    return JsonResponse({'resultado': resultado})
+
+
+####
 #Esto se podria eliminar       
 def contextotablaorganizacion(request):
     

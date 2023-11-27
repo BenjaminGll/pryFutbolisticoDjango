@@ -50,6 +50,9 @@ urlpatterns = [
     path('reporte_tabla_posiciones/<str:nombre_competicion>/', contextoTablaPosiciones),
     path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
+    path('cambiar_estado_encuentro_E/', cambiar_estado_encuentro_E, name='cambiar_estado_encuentro_E'),
+    path('cambiar_estado_encuentro_F/', cambiar_estado_encuentro_F, name='cambiar_estado_encuentro_F'),
+
     path('reporte/personas/', lista_personas_por_tipo, name='lista_personas'),
     path('reporte/jugadores', reporte_jugadores, name='reporte_jugadores'),
     

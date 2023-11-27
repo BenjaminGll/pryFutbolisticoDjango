@@ -696,10 +696,15 @@ def contextoTVvivo(request, id):
     
 
 def contextoTVhome(request):
-    encuentros = encuentro.objects.filter(estado_jugado='E')  
-    
+    encuentrosEnJuego = encuentro.objects.filter(estado_jugado='E')
+
+   
+    encuentrosPorJugar = encuentro.objects.filter(estado_jugado='N')  
     data={
-          'encuentros': encuentros
+        'encuentrosE': encuentrosEnJuego,
+        'encuentrosN': encuentrosPorJugar,
+        
+
     }
     
     return render(request, 'tvHome.html', data)
@@ -779,6 +784,34 @@ def index(request):
     }
     return render(request, 'index.html', data)
 
+def cambiar_estado_encuentro_E(request):
+    if request.method == 'POST':
+        # Obtén el ID del encuentro y realiza el cambio de estado
+        encuentro_id = request.POST.get('encuentro_id')
+        # Realiza aquí el cambio de estado en tu modelo Encuentro
+        # Por ejemplo:
+        encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+        encuentro_obj.estado_jugado = 'E'
+        encuentro_obj.save()
+
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+def cambiar_estado_encuentro_F(request):
+    if request.method == 'POST':
+        # Obtén el ID del encuentro y realiza el cambio de estado
+        encuentro_id = request.POST.get('encuentro_id')
+        # Realiza aquí el cambio de estado en tu modelo Encuentro
+        # Por ejemplo:
+        encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+        encuentro_obj.estado_jugado = 'F'
+        encuentro_obj.save()
+
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
 
 
@@ -797,7 +830,12 @@ def mostrarEncuentrosEvento(request):
 
         if request.method == 'GET':
 
-            encuentros = encuentro.objects.filter(estado_jugado='E',competicion_id=idCompeticion,fase_id=idFase,grupo_id=idGrupo)
+            encuentros = encuentro.objects.filter(
+                estado_jugado__in=['N', 'E'],
+                competicion_id=idCompeticion,
+                fase_id=idFase,
+                grupo_id=idGrupo
+            )
 
     if request.method == 'POST':
         idEncuentro = request.POST.get('idEncuentro')

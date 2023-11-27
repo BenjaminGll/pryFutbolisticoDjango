@@ -64,16 +64,18 @@
         </div>
         <!-- Datos de Encuentro -->
         <div class="col-md-4">
-            <form id="enviarDatosEncuentro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
-                enctype="multipart/form-data">
-
+            <form id="enviarDatosEncuentro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}" enctype="multipart/form-data">
                 {% csrf_token %}
-
                 <div class="card">
                     <div class="card-header form-inline">
                         <h3>Datos de Encuentro</h3>
                         <div class="align-items-center">Duración (s): </div>
                         &nbsp;
+                        <div class="input-group">der
+                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="59">
+                            &nbsp;
+                        </div>
+             
                         <div class="input-group">
 
                             <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
@@ -149,6 +151,8 @@
                             <button type="button" class="btn btn-info" onclick="enviarComando('reset')">
                                 <i class="fas fa-undo"></i>
                             </button>
+                            <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn" onclick="iniciarFinalizarPartido()"><i class="fas fa-play"></i> Iniciar Partido</button>
+
                         </div>
                     </div>
 
@@ -1299,52 +1303,71 @@ var miVariable = 'None';
     }
     //
     //
-</script>
+    var partidoIniciado = false;  // Variable para rastrear el estado del partido
+    document.getElementById('iniciarFinalizarBtn').addEventListener('click', function () {
+    iniciarFinalizarPartido();
+});
+function iniciarFinalizarPartido() {
+    var btnIniciarFinalizar = document.getElementById('iniciarFinalizarBtn');
+    var tiempo = document.getElementById('tiempoCrono').value;
 
-<script>
-    var inputcrono = document.getElementById('tiempoCrono');
-    var btnlimpiar = document.getElementById('btnlimpiarplay');
-    btnlimpiar.addEventListener('click', function () {
-        console.log('entrando la funcion limpiar');
-        inputcrono.value = '';
-    });
+    if (!partidoIniciado) {
+        // Si el partido no ha iniciado, cambia el texto a "Finalizar Partido" y agrega el icono de play
+        btnIniciarFinalizar.innerHTML = '<i class="fas fa-play"></i> Iniciar Partido ';
+        partidoIniciado = true;
+        // Realiza aquí las acciones adicionales que desees al iniciar el partido
+        
+    } else {
+        // Si el partido ya ha iniciado, cambia el texto a "Iniciar Partido" y agrega el icono de finalizar
+        btnIniciarFinalizar.innerHTML = ' <i class="fas fa-stop"></i> Finalizar Partido ';
+        partidoIniciado = false;
+        // Realiza aquí las acciones adicionales que desees al finalizar el partido
 
-    function enviarComando(accion) {
-        var tiempo = document.getElementById('tiempoCrono').value;
+        // Obtén el token CSRF del formulario
+        var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
+        // Obtén la URL actual
+        var urlActual = window.location.href;
 
-        fetch('/actualizar_cronometro/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': obtenerCSRFToken()  // Asegúrate de definir esta función para obtener el token CSRF
-            },
-            body: JSON.stringify({ accion: accion, tiempo: tiempo })
+        // Encuentra la última barra en la URL
+        var ultimaBarraIndex = urlActual.lastIndexOf('/');
 
-        })
-            .then(function (response) {
-                if (!response.ok) {
-                    throw new Error('Error en la solicitud AJAX');
+        // Obtén la parte de la URL después de la última barra
+        var encuentroId = urlActual.substring(ultimaBarraIndex - 1);
+
+        // Elimina caracteres no numéricos del encuentroId
+        encuentroId = encuentroId.replace(/\D/g, '');
+
+        // Prepara los datos para enviar
+        var datos = 'encuentro_id=' + encuentroId;
+
+        // Inicia la solicitud AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/cambiar_estado_encuentro_E/', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        
+        // Agrega el token CSRF a la cabecera de la solicitud
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var respuesta = JSON.parse(xhr.responseText);
+                if (respuesta.success) {
+                    console.log('Estado cambiado exitosamente');
+                } else {
+                    console.error('Error al cambiar el estado:', respuesta.error);
                 }
-                return response.json();
-            })
-            .then(function (data) {
-                console.log('respuesta correcta')
+            }
+        };
 
-
-            })
-            .catch(function (error) {
-                console.error('Error en la solicitud AJAX', error);
-            });
+        // Envía la solicitud con los datos
+        xhr.send(datos);
     }
-
-    // Función para obtener el token CSRF del formulario
-    function obtenerCSRFToken() {
-        var csrfTokenElement = document.getElementsByName('csrfmiddlewaretoken')[0];
-        return csrfTokenElement.value;
-    }
+}
 
 </script>
+
+ 
 
 <textarea id="miTextarea" name="miTextarea" style="display: none;"></textarea>
 

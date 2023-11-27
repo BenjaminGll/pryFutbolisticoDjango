@@ -8,7 +8,7 @@ class ciudadAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
     list_per_page=5
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 
 class sedeAdmin(admin.ModelAdmin):
     list_display=['nombre','alias','capacidad','fecha_inauguracion','ciudad_id', 'imagen','estado']
@@ -16,7 +16,7 @@ class sedeAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
     list_per_page=5
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 ##
 class descripcionEncuentroAdmin(admin.ModelAdmin):
     list_display=['encuentro','equipo','goles','goles_ronda_penales']
@@ -24,7 +24,7 @@ class descripcionEncuentroAdmin(admin.ModelAdmin):
     search_fields = ['encuentro','equipo__nombre', 'encuentro__encuentro_id']
     list_per_page=5
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 class encuentroAdmin(admin.ModelAdmin):
     list_display=['competicion_id','equipo_local','equipo_visita','sede_id','fase','grupo','fecha','clima','estado_jugado','resultado']
     ordering=['competicion_id']
@@ -32,7 +32,7 @@ class encuentroAdmin(admin.ModelAdmin):
     list_per_page=5
     list_filter=['competicion_id']
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 
 # class detalleEncuentroAdmin(admin.ModelAdmin):
 #     list_display=['detalle_encuentro_id','encuentro_id','equipo_id','formacion_id','tipo_equipo','resultado']
@@ -45,18 +45,18 @@ class tipo_eventoAdmin(admin.ModelAdmin):
     search_fields = ['nombre','tipo_evento_id']
     list_per_page=5
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 
 
 
 class eventoAdmin(admin.ModelAdmin):
-    list_display = ['competicion_id', 'tipo_evento_id', 'encuentro_id', 'tiempo','alineacion1_id','alineacion2_id']
+    list_display = [ 'tipo_evento_id', 'encuentro_id', 'tiempo','alineacion_id1','alineacion_id2']
     ordering = ['tipo_evento_id']
     search_fields = ['encuentro_id__equipo_local__nombre', 'encuentro_id__equipo_visita__nombre']
-    list_filter = ['competicion_id']
+    list_filter = ['encuentro_id__competicion_id']
   
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js','assets/js/control_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 
 
 admin.site.register(ciudad,ciudadAdmin)

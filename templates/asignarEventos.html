@@ -4,107 +4,169 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-  <div class="container mt-4">
-    <h1 class="mb-4">Asignar Eventos: {{ equipoLocal.0.nuevo_club.nombre }} vs {{ equipoVisita.0.nuevo_club.nombre }} - {{ encuentro.fecha }} </h1>
 
-    <form method="post" action="{% url 'asignarEventos' encuentro_id=encuentro.encuentro_id %}">
-      {% csrf_token %}
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+
+<div  id="actualizar" class="container mt-4 mb-4">
+  <h1 class="mb-4">Asignar Eventos: {{ equipoLocal }} vs. {{ equipoVisita }} - {{ fecha_encuentro }}</h1>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <form id="eventoForm" method="POST" action="{% url 'asignarEventos' encuentro_id=encuentro_id %}">
+    {% csrf_token %}
 
       <div class="row">
         <div class="col-md-6">
-          <label for="tipo_evento">Tipo de Evento:</label>
-          <select name="tipo_evento" id="tipo_evento" class="form-control">
+
+          <label for="tipos_evento_relacionados">Tipo de Evento:</label>
+          <select name="tipos_evento_relacionados" id="tipos_evento_relacionados" class="form-control">
+            <option value="input" selected disabled>Seleccionar tipo de evento</option>
             {% for tipo_evento in tipos_evento_relacionados %}
-              <option value="{{ tipo_evento.tipo_evento_id }}">
-                {{ tipo_evento.nombre }}
-              </option>
+              <option value="{{ tipo_evento.tipo_evento_id }}">{{ tipo_evento.nombre }}</option>
             {% endfor %}
           </select>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <label for="tiempo_reglamentario">Tiempo:</label>
-          <input name="tiempo_reglamentario" id="tiempo_reglamentario" class="form-control" type="time" step="1">
-        </div>
-      </div>
+          <label for="alineacion01" id="label_alineacion01" class="alineacion-label">Alineación 01:</label>
+          <select name="alineacion01" id="alineacion01" class="form-control alineacion-dropdown">
+          <option value="input" selected disabled>Seleccionar alineación 01</option>
+          {% for alineacion in alineacion01 %}
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          {% endfor %}
+          </select>
 
-      <div class="row">
+          <label for="alineacion02" id="label_alineacion02" class="alineacion-label">Alineación 02:</label>
+          <select name="alineacion02" id="alineacion02" class="form-control alineacion-dropdown">
+          <option value="input" selected disabled>Seleccionar alineación 02</option>
+          {% for alineacion in alineacion02 %}
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          {% endfor %}
+          </select>
+
+        </div>
+
         <div class="col-md-6">
+          <label for="equipo">Equipo:</label>
+          <select name="equipo" id="equipo" class="form-control">
+            <option value="" selected disabled>Seleccionar</option>
+            <option value="Local">Local</option>
+            <option value="Visita">Visita</option>
+          </select>
+
+          <label for="tiempo">Tiempo:</label>
+          <input type="text" name="tiempo" class="form-control">
+
           <label for="motivo">Motivo:</label>
-          <input type="text" name="motivo" id="motivo" class="form-control">
-        </div>
-      </div>
+          <textarea name="motivo" class="form-control"></textarea>
 
-
-      <div class="row">
-        <div class="col-md-6">
-          <div>
-            <label for="equipoLocal">Alineación 01:</label>
-            <select name="equipoLocal[]" id="equipoLocal" multiple>
-              {% for jugador in equipoLocal %}
-                {% if tipo_evento_id == 3 %}
-                  <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }} - local local</option>
-                {% else %}
-                  <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }}</option>
-                {% endif %}
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-      </div>
-      
-      <div class="row">
-        <div class="col-md-6">
-          <div>
-            <label for="equipoVisita">Alineación 02:</label>
-            <select name="equipoVisita[]" id="equipoVisita" multiple>
-              {% for jugador in equipoVisita %}
-                {% if tipo_evento_id == 37 %}
-                  <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }} - visitante visitante</option>
-                {% else %}
-                  <option value="{{ jugador.persona.persona_id }}">{{ jugador.persona.nombre }} - {{ jugador.posicion_jugador }} - Dorsal: {{ jugador.dorsal }}</option>
-                {% endif %}
-              {% endfor %}
-            </select>
-          </div>
         </div>
       </div>
 
       <div class="text-right mt-4">
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" name="guardar_evento"  class="btn btn-success">Guardar Evento</button>
         <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Cancelar</a>
       </div>
-    </form>
 
-    <h2>Eventos Guardados</h2>
-    <table class="table" id="eventTable">
-      <thead>
-        <tr>
-          <th>Tipo de Evento</th>
-          <th>Tiempo Reglamentario</th>
-          <th>Local</th>
-          <th>Visitante</th>
-          <th>Motivo</th>
-          <th>Cantidad</th>
+  </div> <br>
 
 
-        </tr>
-      </thead>
-      <tbody>
-        {% for evento in eventos_obj %}
-          <tr>
-            <td>{{ evento.tipo_evento_id.nombre }}</td>
-            <td>{{ evento.tiempo_reglamentario }}</td>
-            <td>{{ evento.motivo }}</td>
-            <td>{{ evento.cantidad }}</td>
-            <td>{{ evento.alineacion1_id.contrato_id.persona.nombre }}</td>
-            <td>{{ evento.alineacion2_id.contrato_id.persona.nombre }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <div class="container mt-4 mb-4">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Eventos Añadidos -->
+        <h3 class="text-center">Eventos Añadidos</h3>
+        <table class="table table-bordered mx-auto mr-4" id="eventoTable">
+        <thead>
+              <tr>
+                  <th>Evento</th>
+                  <th>Alineacion 01</th>
+                  <th>Alineacion 02</th>
+                  <th>Tiempo</th>
+                  <th>Eliminar</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for evento in eventos %}
+              <tr>
+                  <td>{{ evento.tipo_evento_id }}</td>
+                  <td>{{ evento.alineacion_id1}}</td>
+                  <td>{{ evento.alineacion_id2}}</td>
+                  <td>{{ evento.tiempo}}</td>
+                  <td>
+                      <!-- Botón de eliminar con confirmación -->
+                      <button type="submit" class="btn btn-danger btn-sm" name="eliminar_evento" value="{{evento.evento_id }}">
+                        <i class="fas fa-trash-alt"></i>
+                     </button>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+
+        <div class="row">
+        </div>
+
+    </div>
+
+    <div class="text-right mt-4">
+      <a href="{% url 'lista_encuentros' %}?tipo=eventos" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#tipos_evento_relacionados, #equipo').change(function() {
+      var tipoEvento = $('#tipos_evento_relacionados').val();
+      var equipo = $('#equipo').val();
+      if (tipoEvento == 3) {
+        if (equipo == 'Local') {
+          $('.alineacion-label, .alineacion-dropdown').show();
+        } else if (equipo == 'Visita') {
+          console.log("Ocultando alineación 01");
+          $('.alineacion-label, .alineacion-dropdown').show();
+        } else if (equipo == 'input') {
+          // Si no se ha seleccionado un equipo, ocultar ambas alineaciones
+          console.log("Ocultando ambas alineaciones");
+          $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
+        }
+      } else {  
+        if (equipo == 'Visita') {
+          console.log("Ocultando alineación 01");
+          $('#label_alineacion01, #alineacion01').css('display', 'none');
+          $('#label_alineacion02, #alineacion02').css('display', 'block');
+        } else if (equipo == 'Local') {
+          console.log("Ocultando alineación 02");
+          $('#label_alineacion01, #alineacion01').css('display', 'block');
+          $('#label_alineacion02, #alineacion02').css('display', 'none');
+        } else if (equipo == 'input') {
+          console.log("Ocultando ambas alineaciones");
+          $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
+        }
+      }
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#tipos_evento_relacionados, #equipo').change(function () {
+      // Realizar una petición AJAX al servidor para actualizar dinámicamente el contenido
+      $.ajax({
+        type: 'POST',
+        url: $('#eventoForm').attr('action'),
+        data: $('#eventoForm').serialize(),
+        success: function (data) {
+          // Actualizar el contenido de la tabla y otras partes de la página según sea necesario
+          $('#alineacion01').html($(data).find('#alineacion01').html());
+          $('#alineacion02').html($(data).find('#alineacion02').html());
+          // Puedes agregar más actualizaciones aquí según sea necesario
+
+
+        }
+      });
+    });
+  });
+</script>
 
 {% endblock %}

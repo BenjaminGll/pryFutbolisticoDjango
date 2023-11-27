@@ -30,7 +30,8 @@ urlpatterns = [
     path('competencias/futbol/<str:nombre_competicion>', contextoCompetenciasFutbol),
     path('contacto', contextoContacto),
     path('tvVivo/<int:id>', contextoTVvivo),
-    path('tvHome/', contextoTVhome),
+    path('tvHome/', contextoTVhome, name='contextoTVhome'),
+    path('tvHome/<int:id>/', contextoTVhomeEncuentro, name='contextoTVhomeEncuentro'),
     path('datostv/', obtener_eventos_ajax),
     path('admintv/<int:idEncuentro>/',mostrarEvento , name='mostrar_evento'),
     path('admintv/encuentros', mostrarEncuentrosEvento, name='mostrar_encuentro_evento'),
@@ -42,10 +43,11 @@ urlpatterns = [
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_rojas',contextoListaJugadoresPorRojas),
-    path("tabla-posiciones/<str:nombre_competicion>", contextoTablaPosiciones),
+    path("tabla-posiciones/<str:nombre_competicion>",contextoTablaPosiciones),
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     path("reporte/organizaciones", contextoOrganizaciones, name="filtrar/organizaciones"),
     path("reporte/grupos", contextoGrupos, name="filtrar/grupos"),
+    path('reporte_tabla_posiciones/<str:nombre_competicion>/', contextoTablaPosiciones),
     path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
     path('reporte/personas/', lista_personas_por_tipo, name='lista_personas'),
@@ -60,6 +62,8 @@ urlpatterns = [
     path('apitarjetas/<int:tipo>/<int:idContrato>/', infracciones, name='apitarjetas'),
 
 
+    path('actualizar_cronometro/', actualizar_cronometro, name='actualizar_cronometro'),
+    path('obtener_cronometro/', obtener_hora_actual, name='obtener_cronometro'),
 
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),

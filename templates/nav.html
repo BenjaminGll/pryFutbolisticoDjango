@@ -89,6 +89,14 @@
                 <li><a href="/reporte/organizacion"> Organización</a></li>
             </ul>
         </li>
+        <li class="current">
+          <a href="#">Tabla De Posiciones</a>
+          <ul class="sub-current">
+            {% for c_n in competencias_nav %}
+              <li><a href="/reporte_tabla_posiciones/{{c_n.nombre.lower}}" value="Copa Mundial Qatar 2022">{{c_n.nombre.lower}}</a></li>
+              {% endfor %}
+          </ul>
+      </li>
         </ul>
     </li>
     

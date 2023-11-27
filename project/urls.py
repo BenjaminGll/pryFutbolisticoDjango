@@ -56,6 +56,9 @@ urlpatterns = [
     #
     path('reporte/organizacion/<int:orga_id>', contextotablaorganizacionindi, name='lista_organizacion_indi'),
     path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
+    
+    path('apitarjetas/<int:tipo>/<int:idContrato>/', infracciones, name='apitarjetas'),
+
 
 
     # path('futbol/tv/<int:id>',contextoTv),

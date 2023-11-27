@@ -121,7 +121,7 @@ def asignar(request, tipo, encuentro_id):
     elif tipo == 'estadisticas':
         return render(request, 'asignarEstadisticas.html', {'encuentro_id': encuentro_id})
     else:
-        # Manejo de error o redirección predeterminada
+# Manejo de error o redirección predeterminada
         return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
 
 
@@ -287,18 +287,19 @@ def asignarEventos(request, encuentro_id):
         tipo_evento_id = request.POST.get('tipos_evento_relacionados')
         evento_equipo = request.POST.get('equipo')
         print('tipo',tipo_evento_id)
+        print('equipo',evento_equipo)
         if tipo_evento_id == '3':
             if evento_equipo == 'Local':
-                alineacion01 = alineacion.objects.filter(
-                    descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
-                alineacion02 = alineacion.objects.none()
+                alineacion01 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs, estado=True)
+                alineacion02 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs, estado=False)
             elif evento_equipo == 'Visita':
-                alineacion01 = alineacion.objects.none()
-                alineacion02 = alineacion.objects.filter(
-                    descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                alineacion01 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs, estado=True)
+                alineacion02 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs, estado=False)
             else:
-                alineacion01 = alineacion.objects.none()
-                alineacion02 = alineacion.objects.none()
+                alineacion01 = alineacion.objects.filter(
+                descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                alineacion02 = alineacion.objects.filter(
+                descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
         else:
             alineacion01 = alineacion.objects.filter(
                 descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
@@ -344,17 +345,6 @@ def asignarEventos(request, encuentro_id):
                 print(f"Evento eliminado correctamente")
             # return redirect(f'/appPartido/asignar/eventos/{evento_id}/')
             
-    # Obtén la información del equipo seleccionado
-    equipo_seleccionado = request.POST.get('equipo')
-
-    if tipo_evento_id == '3':
-        # Filtra la lista de jugadores según el equipo seleccionado
-        if equipo_seleccionado == 'Local':
-            alineacion01 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
-        elif equipo_seleccionado == 'Visita':
-            alineacion02 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
 
     return render(request, 'asignarEventos.html', {
         'fecha_encuentro': encuentro_obj.fecha,

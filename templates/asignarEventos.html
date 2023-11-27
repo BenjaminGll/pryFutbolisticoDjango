@@ -11,11 +11,11 @@
   }
 </style>
 
-  <div class="container mt-4 mb-4">
-    <h1 class="mb-4">Asignar Eventos: {{ equipoLocal }} vs. {{ equipoVisita }} - {{ fecha_encuentro }}</h1>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <form method="POST" action="{% url 'asignarEventos'   encuentro_id=encuentro_id %}">
-      {% csrf_token %}
+<div  id="actualizar" class="container mt-4 mb-4">
+  <h1 class="mb-4">Asignar Eventos: {{ equipoLocal }} vs. {{ equipoVisita }} - {{ fecha_encuentro }}</h1>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <form id="eventoForm" method="POST" action="{% url 'asignarEventos' encuentro_id=encuentro_id %}">
+    {% csrf_token %}
 
       <div class="row">
         <div class="col-md-6">
@@ -74,6 +74,7 @@
   <div class="container mt-4 mb-4">
     <div class="row">
       <div class="col-md-12">
+        <!-- Eventos Añadidos -->
         <h3 class="text-center">Eventos Añadidos</h3>
         <table class="table table-bordered mx-auto mr-4" id="eventoTable">
         <thead>
@@ -144,6 +145,26 @@
           $('.alineacion-label, .alineacion-dropdown').css('display', 'none');
         }
       }
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#tipos_evento_relacionados, #equipo').change(function () {
+      // Realizar una petición AJAX al servidor para actualizar dinámicamente el contenido
+      $.ajax({
+        type: 'POST',
+        url: $('#eventoForm').attr('action'),
+        data: $('#eventoForm').serialize(),
+        success: function (data) {
+          // Actualizar el contenido de la tabla y otras partes de la página según sea necesario
+          $('#alineacion01').html($(data).find('#alineacion01').html());
+          $('#alineacion02').html($(data).find('#alineacion02').html());
+          // Puedes agregar más actualizaciones aquí según sea necesario
+
+
+        }
+      });
     });
   });
 </script>

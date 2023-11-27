@@ -1,6 +1,9 @@
+
 {% extends 'base.html' %}
 {% load i18n static %}
+
 {% block title %} Cronología {% endblock %}
+
 {% block content %}
 
 <style>
@@ -96,8 +99,14 @@
         max-width: 500px; /* Puedes ajustar el ancho máximo según tus preferencias */
         
     }
+    img.logo-equipo {
+    width: 100%;
+    height: auto;
+} 
 </style>
-<body data-encuentro-id="{{ encuentro.encuentro_id }}"></body>
+
+<body  data-encuentro-id="{{ encuentro.encuentro_id }}">
+
 <div class="container">
     <div class="row">
         <div class="col-md-8">
@@ -198,73 +207,80 @@
     </div>
 </div>
 <!-- Mostrar eventos uno a uno en cards -->
+<!-- Agrega un contenedor para los eventos con el ID "eventos-container" -->
+
+
 <div class="container">
     <div class="recent-results results-page event-cards-container">
-        {% for evento in eventos_todos %}
+        {% for evento in eventos_todos reversed %}
             <div class="info-results event-card">
                 <div class="card">
                     <div class="card-header">
-                        <span class="date">{{ evento.encuentro_id.competicion_id }} {{ evento.encuentro_id.fecha | date:'D h:m' }}</span>
+                        {% if evento.tipo_evento_id.nombre == "TARJETA ROJA" %}
+                        <span class="date"> 🟥 TARJETA ROJA 🟥</span>
+                            {% elif evento.tipo_evento_id.nombre == "GOL" %}
+                            <span class="date">  ⚽ ¡GOOOOOOL! ⚽ </span>
+                            {% elif evento.tipo_evento_id.nombre == "TARJETA AMARILLA" %}
+                            <span class="date">🟨 TARJETA AMARILLA 🟨</span>
+                            {% endif %}
+                       
                     </div>
                     <div class="card-body">
                         <p class="event-info">
                             {% if evento.evento_equipo == True %}
-                                <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona.alias }}</span>
+                                <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona }}</span>
+                                <span class="event-minute">{{ evento.tiempo }}'</span>
+                                <span class="event-minute"> <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;"></span>
                             {% else %}
-                                <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona.alias }}</span>
+                                <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona }}</span>
+                                <span class="event-minute">{{ evento.tiempo }}'</span>
+                                <span class="event-minute"><img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;"></span>
+
                             {% endif %}
-                            <span class="event-minute">{{ evento.tiempo }}'</span>
-                            {% if evento.tipo_evento_id.nombre == "TARJETA ROJA" %}
-                                <span class="event-type">🟥 Tarjeta Roja</span>
-                            {% elif evento.tipo_evento_id.nombre == "GOL" %}
-                                <span class="event-type">⚽ Gol</span>
-                            {% elif evento.tipo_evento_id.nombre == "TARJETA AMARILLA" %}
-                                <span class="event-type">🟨 Tarjeta Amarilla</span>
-                            {% endif %}
+                         
+                          
                         </p>
-                        <p class="event-info">{{ evento.motivo }}</p>
+               
                     </div>
+                   
                 </div>
+                <BR></BR>
             </div>
         {% endfor %}
     </div>
+
 </div>
-<!-- Agrega jQuery (puedes cambiar a una versión local si lo prefieres) -->
+<BR></BR>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
 <script>
-    // Función para cargar eventos
-    function cargarEventos() {
-        // Obtiene el ID del encuentro del atributo de datos
-        var encuentroId = $('body').data('encuentro-id');
-        if (encuentroId) {
+    $(document).ready(function () {
+        function actualizarPagina() {
+            // Cargar la página actual sin caché
             $.ajax({
-                url: '{% url "contextoTVhomeEncuentro" id=encuentro.encuentro_id %}',
+                url: window.location.href,
                 type: 'GET',
-            data: { id: encuentroId },  // Pasa el ID del encuentro
-            success: function(data) {
-                // Actualiza la sección de eventos con la nueva información
-                $('#eventos-container').html(data);
-            },
-            error: function(error) {
-                console.error('Error al cargar eventos:', error);
-            },
-            complete: function() {
-                // Vuelve a cargar eventos después de un intervalo de tiempo (por ejemplo, cada 30 segundos)
-                setTimeout(cargarEventos, 3000);
-            }
-        });
-        
-    }
-}
+                cache: false,
+                success: function (data) {
+                    // Actualizar el contenido de la página con la respuesta
+                    var nuevoContenido = $(data);
 
-    // Inicia la carga de eventos al cargar la página
-    $(document).ready(function() {
-        cargarEventos();
+                    // Actualizar contenedor principal
+                    var contenedorPrincipal = nuevoContenido.find('.recent-results.results-page');
+                    $('.recent-results.results-page').html(contenedorPrincipal.html());
+
+                    // Actualizar contenedor de eventos individuales
+                    var contenedorEventos = nuevoContenido.find('.event-cards-container');
+                    $('.event-cards-container').html(contenedorEventos.html());
+                },
+            });
+        }
+
+        // Actualizar la página cada 3 segundos
+        setInterval(actualizarPagina, 2000);
     });
 </script>
 
+
+
 </body>
-
-
 {% endblock %}

@@ -882,8 +882,8 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
             ).first()
         alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id)
         alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id)
-        print('Alineacion local',alineaciones_local)
-        print('Alineacion visita',alineaciones_visita)
+        # print('Alineacion local',alineaciones_local)
+        # print('Alineacion visita',alineaciones_visita)
 
     elif tipo_filtro == 'en_juego':
         eventos = evento.objects.filter(encuentro_id=idEncuentro).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales).reverse()
@@ -1147,6 +1147,7 @@ def guardar_eventos_temporales(eventos):
 
 
 
+
 def obtener_eventos_ajax(request):
     eventos_temporales = []
 
@@ -1159,6 +1160,7 @@ def obtener_eventos_ajax(request):
 
     return JsonResponse({'banners': eventos_temporales})
 
+
 def limpiar_eventos_temporales(request):
     try:
         # Intenta eliminar el archivo temporal 'eventos_temporales.json'
@@ -1167,7 +1169,28 @@ def limpiar_eventos_temporales(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+### API DE TARJETAS
+def infracciones(request,tipo, idContrato):
+    veces = alineacion.objects.filter(contrato_id=idContrato)
 
+    resultado = 0
+
+    # TARJETAS AMARILLAS
+    if tipo == 1:
+        resultado = evento.objects.filter(alineacion1_id__in=[vez.alineacion_id for vez in veces], tipo_evento_id=1).count()
+
+    # TARJETAS ROJAS
+    elif tipo == 2:
+        resultado = evento.objects.filter(alineacion1_id__in=[vez.alineacion_id for vez in veces], tipo_evento_id=2).count()
+
+    # GOLES TOTALES
+    elif tipo == 3:
+        resultado = evento.objects.filter(alineacion1_id__in=[vez.alineacion_id for vez in veces], tipo_evento_id=9).count()
+
+    return JsonResponse({'resultado': resultado})
+
+
+####
 #Esto se podria eliminar       
 def contextotablaorganizacion(request):
     

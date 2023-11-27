@@ -121,7 +121,7 @@ def asignar(request, tipo, encuentro_id):
     elif tipo == 'estadisticas':
         return render(request, 'asignarEstadisticas.html', {'encuentro_id': encuentro_id})
     else:
-        # Manejo de error o redirección predeterminada
+# Manejo de error o redirección predeterminada
         return render(request, 'asignarAlineaciones.html', {'encuentro_id': encuentro_id})
 
 

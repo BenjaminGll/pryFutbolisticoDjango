@@ -65,7 +65,7 @@
                         {% endif %}
                     </th>
                     <th>Equipo</th>
-                    <th>País</th>
+                    <!-- Eliminar la columna País -->
                 </tr>
             </thead>
             <tbody>
@@ -73,7 +73,13 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ jugador.alias }}</td>
-                        <td>{{ jugador.estadistica_valor }}</td>
+                        <td>
+                            {% if jugador.estadistica_valor is not None and jugador.estadistica_valor != 0 %}
+                                {{ jugador.estadistica_valor }}
+                            {% else %}
+                                <span>No disponible</span>
+                            {% endif %}
+                        </td>
                         <td>
                             {% if jugador.equipo_logo %}
                                 <img src="{% static jugador.equipo_logo %}" alt="Logo del Equipo" style="height:50px;">
@@ -81,15 +87,15 @@
                                 <span>No disponible</span>
                             {% endif %}
                         </td>
-                        <td><img src="{% static jugador.logo_bandera %}" alt="Bandera" style="height:30px;"></td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5">No hay datos disponibles.</td>
+                        <td colspan="4">No hay datos disponibles.</td>
                     </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table>     
+        
     </div>
 </section>
 {% endblock %}

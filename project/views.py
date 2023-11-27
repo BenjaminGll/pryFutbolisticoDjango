@@ -470,9 +470,9 @@ def reporte_jugadores(request):
                 tipo_evento_id=tipo_evento_id,
                 encuentro_id__competicion_id=competicion_id
             ).values(
-                'alineacion_id1__contrato_id'
+                'alineacion_id1__contrato_id',
             ).annotate(
-                total=Count('evento_id')
+                total=Count('tipo_evento_id')
             )
 
             for evento_agrupado in eventos_agrupados:
@@ -482,6 +482,11 @@ def reporte_jugadores(request):
                 if jugador_id is not None:
                     try:
                         jugador = persona.objects.get(pk=jugador_id)
+                        evento_count = evento_agrupado.get('total', 0)
+                        jugador.estadistica_valor = evento_count
+                        contrato_jugador = contrato.objects.get(pk=jugador_id)
+                        jugador.equipo_logo = contrato_jugador.nuevo_club.logo.url if contrato_jugador.nuevo_club and contrato_jugador.nuevo_club.logo else None
+                        jugadores_list.append(jugador)
                         # Resto del código para procesar el jugador
                         # Puedes acceder a los campos del jugador, por ejemplo, jugador.nombre, jugador.apellido, etc.
                     except persona.DoesNotExist:
@@ -499,6 +504,7 @@ def reporte_jugadores(request):
         'competicion_seleccionada': competicion_seleccionada,
         'estadistica_tipo': estadistica,
     })
+
 # def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
 #     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
 #     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)

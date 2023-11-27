@@ -1137,34 +1137,22 @@ def guardar_eventos_temporales(eventos):
              banner = {
 
                         'html': f'''
-                                <div class="banner-container"   style="position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; z-index: 1;">
-                                    <div class="row" style="display: flex;">
-    
-                                        <div class="col-md-3" style="position: relative; display: flex; flex-direction: column; align-items: center;">
-                                            <div class="alias-box" style="background-color: black; color: white; padding: 10px; text-align: center;">
-                                                {evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}
-                                            </div>
-                                            <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo.url}"
-                                                alt="{evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}"
-                                                style="max-width: 100%; height: auto;">
-                                            <div class="formation-box"
-                                                style="background-color: black; color: white; padding: 10px; text-align: center;">
-                                                {evento.alineacion1_id.descripcion_encuentro_id.formacion}
-                                            </div>
+                                <div class="banner-container"   style="display: flex;justify-content: center; align-items: center; height: 100vh; background-size: cover;>
+                                    <div class="banner" style="color: white;border-radius: 5px;font-family: 'Arial', sans-serif; display: flex;width: 45%;">
+                                        <div class="left-side" style="padding: 20px;display: flex;flex-direction: column; align-items: center;background: rgba(0, 0, 0, 0.8);">
+                                            <span class="team-name" style="font-size: 24px;font-weight: bold;background: rgba(0, 0, 0, 0.8);margin-bottom: 10px; width: 100%; text-align: center;">{evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}</span>
+                                                <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo.url}" alt="Team Logo" class="team-logo" style="width: 150px;height: auto;margin-bottom: 20px;">
+                                                    <div class="formation" style="font-size: 18px;font-weight: bold;background: rgba(0, 0, 0, 0.8);padding: 5px;border-radius: 5px;width: 100%;text-align: center;">{evento.alineacion1_id.descripcion_encuentro_id.formacion}</div>
+                                                <img src="{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo.url}"
+                                                    alt="{evento.alineacion1_id.descripcion_encuentro_id.equipo.siglas}"
+                                                    style="max-width: 100%; height: auto;">
+                                                </div>
+                                        <div class="middle-side" style="display: flex;align-items: center;background: rgba(50, 50, 50, 0.8);padding: 0 2%;">
+                                            <span class="title" style="font-size: 100%;font-weight: bold;color: white;writing-mode: vertical-lr;transform: rotate(180deg);">TITULARES</span>
                                         </div>
-
-                                        <div class="col-md-9" style="position: relative; display: flex; align-items: center;">
-                                            <div class="title-box"
-                                                style="background-color: black; color: white; padding: 10px; text-align: center; transform: rotate(-90deg);align-items: left;">
-                                                Titulares
-                                            </div>
-                                            <div class="alignments-info" style="text-align: center;">
-                                                <!-- Aquí colocas la información de cada jugador -->
-                                                <!-- Aquí iria el bucle de jugadores_ali -->
-                                                {jugadores_html}
-                                            </div>
-                                        </div>
-
+                                        <div class="right-side" style="padding: 20px;display: flex;flex-direction: column;align-items: flex-start;">
+                                            <div class="player-list" style="display: flex;flex-direction: column;">
+                                            {jugadores_html}
                                     </div>
                                 </div>
                         '''

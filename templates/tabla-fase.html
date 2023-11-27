@@ -31,8 +31,8 @@
         <div class="container paddings-mini">
             <div class="row">
                 <div class="col-lg-12">
-                    {% for grupo in listar_grupos_fase_grupos %}
-                        <h1>{{ grupo }}</h1>
+                    {% for grupo_id, equipos_info in equipos_por_grupo_info.items %}
+                        <h1>{{ grupo_id }}</h1>
                         <table class="table-striped table-responsive table-hover result-point">
                             <thead class="point-table-head">
                                 <tr>
@@ -50,23 +50,21 @@
                             </thead>
 
                             <tbody class="text-center">
-                                {% for equipo_id, equipo_info_list in equipos_por_grupo_info.items %}
-                                    {% for equipo_info in equipo_info_list %}
-                                        <tr>
-                                            <td class="text-left number">{{ equipo_info.0 }}</td>
-                                            <td class="text-left">
-                                                <img src="{{ equipo_info.1 }}" alt=""><span>{{ equipo_info.2 }}</span>
-                                            </td>
-                                            <td>{{ equipo_info.3 }}</td>
-                                            <td>{{ equipo_info.4 }}</td>
-                                            <td>{{ equipo_info.5 }}</td>
-                                            <td>{{ equipo_info.6 }}</td>
-                                            <td>{{ equipo_info.7 }}</td>
-                                            <td>{{ equipo_info.8 }}</td>
-                                            <td>{{ equipo_info.9 }}</td>
-                                            <td>{{ equipo_info.10 }}</td>
-                                        </tr>
-                                    {% endfor %}
+                                {% for equipo_info in equipos_info %}
+                                    <tr>
+                                        <td class="text-left number">{{ equipo_info.posicion }}</td>
+                                        <td class="text-left">
+                                            <img src="{{ equipo_info.logo }}" alt=""><span>{{ equipo_info.nombre }}</span>
+                                        </td>
+                                        <td>{{ equipo_info.partidos_jugados }}</td>
+                                        <td>{{ equipo_info.ganados }}</td>
+                                        <td>{{ equipo_info.empatados }}</td>
+                                        <td>{{ equipo_info.perdidos }}</td>
+                                        <td>{{ equipo_info.goles_favor }}</td>
+                                        <td>{{ equipo_info.goles_contra }}</td>
+                                        <td>{{ equipo_info.diferencia_goles }}</td>
+                                        <td>{{ equipo_info.puntos }}</td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                             

@@ -188,3 +188,4 @@ class tabla_posicion(models.Model):
     
     class Meta: 
         verbose_name_plural='tabla_posicion'
+        

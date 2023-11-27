@@ -5,6 +5,7 @@
 {% block title %} Cronología {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-xxx..." crossorigin="anonymous" />
 
 <style>
 
@@ -217,13 +218,16 @@
                 <div class="card">
                     <div class="card-header">
                         {% if evento.tipo_evento_id.nombre == "TARJETA ROJA" %}
-                        <span class="date"> 🟥 TARJETA ROJA 🟥</span>
-                            {% elif evento.tipo_evento_id.nombre == "GOL" %}
-                            <span class="date">  ⚽ ¡GOOOOOOL! ⚽ </span>
-                            {% elif evento.tipo_evento_id.nombre == "TARJETA AMARILLA" %}
-                            <span class="date">🟨 TARJETA AMARILLA 🟨</span>
-                            {% endif %}
-                       
+                        <span class="date"><i class="fas fa-square text-danger"></i> TARJETA ROJA</span>
+                      {% elif evento.tipo_evento_id.nombre == "GOL" %}
+                        <span class="date"><i class="fas fa-futbol text-success"></i> ¡GOOOOOOL!</span>
+                      {% elif evento.tipo_evento_id.nombre == "TARJETA AMARILLA" %}
+                        <span class="date"><i class="fas fa-square text-warning"></i> TARJETA AMARILLA</span>
+                      {% elif evento.tipo_evento_id.nombre == "CAMBIO DE JUGADOR" %}
+                        <span class="date"><i class="fas fa-exchange-alt text-primary"></i> CAMBIO</span>
+                      {% endif %}
+                      
+                    
                     </div>
                     <div class="card-body">
                         <p class="event-info">

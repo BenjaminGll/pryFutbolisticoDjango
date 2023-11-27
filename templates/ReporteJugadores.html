@@ -13,9 +13,9 @@
             {% elif estadistica_tipo == 'asistidores' %}
                 Estadística jugadores con más Asistencias
             {% elif estadistica_tipo == 'amarillas' %}
-                Estadística jugadores con más tarjetas Amarillas
+                Estadística jugadores con más Tarjetas Amarillas
             {% elif estadistica_tipo == 'rojas' %}
-                Estadística jugadores con más tarjetas Rojas
+                Estadística jugadores con más Tarjetas Rojas
             {% else %}
                 Estadística de Jugadores
             {% endif %}
@@ -26,8 +26,8 @@
                 <label for="competicion">Competición:</label>
                 <select name="competicion" id="competicion" class="form-control" onchange="this.form.submit()">
                     <option value="">--- Selecciona Competición ---</option>
-                    {% for competicion in competiciones %}
-                    <option value="{{ competicion.competicion_id }}" {% if competicion.competicion_id|stringformat:"s" == request.GET.competicion %}selected{% endif %}>{{ competicion.nombre }}</option>
+                    {% for comp in competiciones %}
+                        <option value="{{ comp.competicion_id }}" {% if comp.competicion_id|stringformat:"s" == request.GET.competicion %}selected{% endif %}>{{ comp.nombre }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -70,23 +70,23 @@
             </thead>
             <tbody>
                 {% for jugador in jugadores %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ jugador.alias }}</td>
-                    <td>{{ jugador.estadistica_valor }}</td>
-                    <td>
-                        {% if jugador.equipo_logo %}
-                            <img src="{% static jugador.equipo_logo %}" alt="Logo del Equipo" style="height:50px;">
-                        {% else %}
-                            <span>No disponible</span>
-                        {% endif %}
-                    </td>
-                    <td><img src="{% static jugador.logo_bandera %}" alt="Bandera" style="height:30px;"></td>
-                </tr>
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ jugador.alias }}</td>
+                        <td>{{ jugador.estadistica_valor }}</td>
+                        <td>
+                            {% if jugador.equipo_logo %}
+                                <img src="{% static jugador.equipo_logo %}" alt="Logo del Equipo" style="height:50px;">
+                            {% else %}
+                                <span>No disponible</span>
+                            {% endif %}
+                        </td>
+                        <td><img src="{% static jugador.logo_bandera %}" alt="Bandera" style="height:30px;"></td>
+                    </tr>
                 {% empty %}
-                <tr>
-                    <td colspan="5">No hay datos disponibles.</td>
-                </tr>
+                    <tr>
+                        <td colspan="5">No hay datos disponibles.</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>

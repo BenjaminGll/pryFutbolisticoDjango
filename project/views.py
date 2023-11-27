@@ -337,16 +337,14 @@ def lista_equipos_por_competicion_y_fase(request):
 #         return encuentro_persona_obj.encuentro_persona_id
 #     except encuentro_persona.DoesNotExist:
 #         return None
-# def obtener_equipo_id(encuentro_id, contrato_id):
-#     try:
-#         encuentro_persona_obj = encuentro_persona.objects.get(
-#             encuentro_id=encuentro_id, contrato_id=contrato_id
-#         )
-#         # Obtiene el ID del equipo directamente
-#         equipo_id = encuentro_persona_obj.equipo_id_id
-#     except encuentro_persona.DoesNotExist:
-#         equipo_id = None
-#     return equipo_id
+
+
+def obtener_equipo_id(encuentro_id, contrato_id):
+    try:
+        posicion = tabla_posicion.objects.get(encuentro_id=encuentro_id, equipo_id=contrato_id)
+        return posicion.equipo_id
+    except tabla_posicion.DoesNotExist:
+        return None
 
 
 def obtener_logo_equipo(equipo_id):
@@ -447,63 +445,59 @@ def contextoFixtureCompetencia(request, nombre_competicion):
 
 def reporte_jugadores(request):
     competicion_id = request.GET.get('competicion', None)
-    estadistica_tipo = request.GET.get('estadistica', 'goleadores')
+    estadistica = request.GET.get('estadistica', 'gol')
     print(f"Competicion ID: {competicion_id}")
-    print(f"estadistica ID: {estadistica_tipo}")
+    print(f"Estadistica ID: {estadistica}")
     jugadores_list = []
     competiciones = competicion.objects.all()
     competicion_seleccionada = None
 
     tipo_evento_map = {
-        'goleadores': 9,
-        'asistidores': 19,
+        'gol': 9,
+        'asistencias': 19,
         'amarillas': 1,
         'rojas': 2,
     }
-    tipo_evento_id = tipo_evento_map.get(estadistica_tipo, 9)
+    tipo_evento_id = tipo_evento_map.get(estadistica, 9)
     print(f"Tipo evento ID: {tipo_evento_id}")
-    
+
     if competicion_id:
-        competicion_seleccionada = competicion.objects.get(pk=competicion_id)
+        try:
+            competicion_seleccionada = competicion.objects.get(pk=competicion_id)
 
-        # Agrupar eventos por jugador y contarlos
-        eventos_agrupados = evento.objects.filter(
-            tipo_evento_id=tipo_evento_id, 
-            encuentro_id__competicion_id=competicion_id
-        ).values(
-        'alineacion1_id__contrato_id__persona_id'
-        ).annotate(
-            total=Count('evento_id')
-        )
+            # Agrupar eventos por jugador y contarlos
+            eventos_agrupados = evento.objects.filter(
+                tipo_evento_id=tipo_evento_id,
+                encuentro_id__competicion_id=competicion_id
+            ).values(
+                'alineacion_id1__contrato_id'
+            ).annotate(
+                total=Count('evento_id')
+            )
 
-        for evento_agrupado in eventos_agrupados:
-            jugador_id = evento_agrupado['alineacion1_id__contrato_id__persona_id']
-            jugador = persona.objects.get(pk=jugador_id)
-            ultimo_evento = evento.objects.filter(
-                alineacion1_id__contrato_id__persona_id=jugador_id,
-                tipo_evento_id=tipo_evento_id
-            ).order_by('-encuentro_id').first()
-            print(f"Tipo evento ID: {ultimo_evento.alineacion1_id}")
-            if ultimo_evento:
-                encuentro_id = ultimo_evento.encuentro_id
-                contrato_id = ultimo_evento.alineacion1_id.contrato_id.contrato_id
-                equipo_id = obtener_equipo_id(encuentro_id, contrato_id)
-                equipo_logo = obtener_logo_equipo(equipo_id)
-                logo_bandera = jugador.ciudad_id.pais_id.logo_bandera.url if jugador.ciudad_id.pais_id.logo_bandera else None
+            for evento_agrupado in eventos_agrupados:
+                jugador_id = evento_agrupado.get('alineacion_id1__contrato_id')
+                
+                # Comprobar si el jugador_id es None
+                if jugador_id is not None:
+                    try:
+                        jugador = persona.objects.get(pk=jugador_id)
+                        # Resto del código para procesar el jugador
+                        # Puedes acceder a los campos del jugador, por ejemplo, jugador.nombre, jugador.apellido, etc.
+                    except persona.DoesNotExist:
+                        print(f"La persona con ID {jugador_id} no existe.")
+                else:
+                    print("El ID del jugador es None.")
 
-
-            jugadores_list.append({
-                'alias': jugador.alias,
-                'logo_bandera': logo_bandera,
-                'equipo_logo': equipo_logo,
-                'estadistica_valor': evento_agrupado['total'],
-            })
+        except competicion.DoesNotExist:
+            # Manejar el caso donde la competición no existe
+            pass
 
     return render(request, 'ReporteJugadores.html', {
         'jugadores': jugadores_list,
         'competiciones': competiciones,
         'competicion_seleccionada': competicion_seleccionada,
-        'estadistica_tipo': estadistica_tipo,
+        'estadistica_tipo': estadistica,
     })
 # def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
 #     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP

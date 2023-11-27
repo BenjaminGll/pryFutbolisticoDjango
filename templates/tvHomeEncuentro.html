@@ -232,15 +232,33 @@
                     <div class="card-body">
                         <p class="event-info">
                             {% if evento.evento_equipo == True %}
+                            {% if evento.tipo_evento_id.nombre == "CAMBIO DE JUGADOR" %}
+                                <span class="event-minute"><img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px; margin-top: -25px;" ></span><br>
+                                <span style="color: green;"> ENTRA: <i class="fas fa-arrow-up" style="color: green;"></i></span>
+                                <span class="event-player"> {{ evento.alineacion_id2.contrato_id.persona }}</span><br>
+                                <span style="color: red;"> SALE: <i class="fas fa-arrow-down" style="color: red;"></i></span>
+                                <span class="event-player"> {{ evento.alineacion_id1.contrato_id.persona }}</span>
+                               
+                            {% else %}
                                 <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona }}</span>
                                 <span class="event-minute">{{ evento.tiempo }}'</span>
-                                <span class="event-minute"> <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;"></span>
+                                <span class="event-minute"><img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;"></span>
+                            {% endif %}
+                        {% else %}
+                            {% if evento.tipo_evento_id.nombre == "CAMBIO DE JUGADOR" %}
+                            <span class="event-minute"><img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;" ></span><br>
+                                <span style="color: green;"> ENTRA: <i class="fas fa-arrow-up" style="color: green;"></i></span>
+                                <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona }}</span><br>
+                                <span style="color: red;"> SALE: <i class="fas fa-arrow-down" style="color: red;"></i></span>
+                                <span class="event-player">{{ evento.alineacion_id1.contrato_id.persona }}</span><br>
+                                
                             {% else %}
                                 <span class="event-player">{{ evento.alineacion_id2.contrato_id.persona }}</span>
                                 <span class="event-minute">{{ evento.tiempo }}'</span>
                                 <span class="event-minute"><img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px;"></span>
-
                             {% endif %}
+                        {% endif %}
+                        
                          
                           
                         </p>
@@ -279,7 +297,7 @@
             });
         }
 
-        // Actualizar la página cada 3 segundos
+        // Actualizar la página cada 2 segundos
         setInterval(actualizarPagina, 2000);
     });
 </script>

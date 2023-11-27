@@ -7,6 +7,7 @@ class ciudadAdmin(admin.ModelAdmin):
     ordering=['nombre']
     search_fields = ['nombre']
     list_per_page=5
+    delete_selected_confirmation_template = None
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 

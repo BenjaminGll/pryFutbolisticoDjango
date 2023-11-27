@@ -470,9 +470,9 @@ def reporte_jugadores(request):
                 tipo_evento_id=tipo_evento_id,
                 encuentro_id__competicion_id=competicion_id
             ).values(
-                'alineacion_id1__contrato_id'
+                'alineacion_id1__contrato_id',
             ).annotate(
-                total=Count('evento_id')
+                total=Count('tipo_evento_id')
             )
 
             for evento_agrupado in eventos_agrupados:
@@ -482,6 +482,11 @@ def reporte_jugadores(request):
                 if jugador_id is not None:
                     try:
                         jugador = persona.objects.get(pk=jugador_id)
+                        evento_count = evento_agrupado.get('total', 0)
+                        jugador.estadistica_valor = evento_count
+                        contrato_jugador = contrato.objects.get(pk=jugador_id)
+                        jugador.equipo_logo = contrato_jugador.nuevo_club.logo.url if contrato_jugador.nuevo_club and contrato_jugador.nuevo_club.logo else None
+                        jugadores_list.append(jugador)
                         # Resto del código para procesar el jugador
                         # Puedes acceder a los campos del jugador, por ejemplo, jugador.nombre, jugador.apellido, etc.
                     except persona.DoesNotExist:
@@ -499,6 +504,7 @@ def reporte_jugadores(request):
         'competicion_seleccionada': competicion_seleccionada,
         'estadistica_tipo': estadistica,
     })
+
 # def contextoListaJugadoresPorAmarillas(request,nombre_competicion):
 #     competencia_seleccionada = competicion.objects.get(nombre=nombre_competicion.upper()) #FIFA WORLD CUP
 #     encuentros_competencias = encuentro.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
@@ -567,23 +573,15 @@ def reporte_jugadores(request):
 #     return render(request, 'lista_jugadores_asistencias.html', data)
 
 def contextoTablaPosiciones(request, nombre_competicion):
-    # Obtener la competición seleccionada
     competencia_seleccionada = competicion.objects.get(
         nombre=nombre_competicion.upper()
     )
 
-    # Obtener los detalles de los grupos para la competición
-    detalles = detalle_grupo.objects.filter(competicion_id=competencia_seleccionada.competicion_id)
-
-    # Obtener la fase de grupos
     fase_grupos = fase.objects.get(nombre="FASE DE GRUPOS")
-
-    # Obtener los equipos que participan en la fase de grupos
     listar_equipos_fase_grupos = detalle_grupo.objects.filter(
         fase_id=fase_grupos.fase_id
     ).values("equipo_id")
 
-    # Obtener la lista de grupos en la fase de grupos
     listar_grupos_fase_grupos = (
         detalle_grupo.objects.filter(fase_id=fase_grupos.fase_id)
         .values_list("grupo_id", flat=True)
@@ -591,88 +589,57 @@ def contextoTablaPosiciones(request, nombre_competicion):
         .order_by("grupo_id")
     )
 
-    # Obtener los nombres de los grupos
     nombre_grupos = grupo.objects.filter(grupo_id__in=listar_grupos_fase_grupos)
 
-    # Obtener la tabla de posiciones para la competición y la fase de grupos
-    lista_tabla = (
-        tabla_posicion.objects.filter(
-            competicion_id=competencia_seleccionada.competicion_id,
-            equipo_id__in=listar_equipos_fase_grupos,
-        )
-        .values(
-            "equipo_id",
-            "ganado",
-            "empatado",
-            "perdido",
-            "goles_favor",
-            "goles_contra",
-            "puntos",
-        )
-        .order_by("-puntos")
-    )
+    # Crear un diccionario para almacenar la información por fase y grupo
+    equipos_por_grupo_info = {}
 
-    # Lista para almacenar la información de los equipos
-    listaEquipos = [[]]
-
-    # Índices y posición inicial
-    i = 0
-    posicion = 1
-
-    # Llenar la lista de equipos con información necesaria
-    for c in lista_tabla:
-        li = equipo.objects.get(equipo_id=c.get("equipo_id"))
-        partidos_jugados = c.get("ganado") + c.get("empatado") + c.get("perdido")
-        diferencia_goles = c.get("goles_favor") - c.get("goles_contra")
-
-        listaEquipos[i].append(posicion)  # 0
-        listaEquipos[i].append(li.logo)  # 1
-        listaEquipos[i].append(li.nombre)  # 2
-        listaEquipos[i].append(partidos_jugados)  # 3
-        listaEquipos[i].append(c.get("ganado"))  # 4
-        listaEquipos[i].append(c.get("empatado"))  # 5
-        listaEquipos[i].append(c.get("perdido"))  # 6
-        listaEquipos[i].append(c.get("goles_favor"))  # 7
-        listaEquipos[i].append(c.get("goles_contra"))  # 8
-        listaEquipos[i].append(diferencia_goles)  # 9
-        listaEquipos[i].append(c.get("puntos"))  # 10
-
-        if i < len(lista_tabla) - 1:
-            listaEquipos.append([])
-        i = i + 1
-        posicion = posicion + 1
-
-    # Crear el diccionario de contexto
-    data = {
-        "listar_grupos_fase_grupos": nombre_grupos,
-        "detalles_grupos": detalles,
-        "competicion_seleccionada": competencia_seleccionada,
-        "equipos_por_grupo": {grupo_id: [] for grupo_id in listar_grupos_fase_grupos},
-        "equipos_por_grupo_info": {},  # Nuevo diccionario para almacenar información de equipos por grupo
-    }
-
-    # Agregar información de equipos por grupo al contexto
-    for equipo_info in listaEquipos:
-        equipo_id = equipo_info[0]  # Asegúrate de que esto sea el ID correcto del equipo
-        grupo_query = detalle_grupo.objects.filter(
-            fase_id=fase_grupos.fase_id,
-            equipo_id=equipo_id,
+    for grupo_id in listar_grupos_fase_grupos:
+        equipos_grupo = listar_equipos_fase_grupos.filter(grupo_id=grupo_id)
+        equipos_tabla = (
+            tabla_posicion.objects.filter(
+                competicion_id=competencia_seleccionada.competicion_id,
+                equipo_id__in=equipos_grupo.values_list("equipo_id", flat=True),
+            )
+            .values(
+                "equipo_id",
+                "ganado",
+                "empatado",
+                "perdido",
+                "goles_favor",
+                "goles_contra",
+                "puntos",
+            )
+            .order_by("-puntos")
         )
 
-        # Verifica si hay algún detalle_grupo que cumpla con la condición
-        if grupo_query.exists():
-            grupo_id_equipo = grupo_query.first().grupo_id
+        equipos_por_grupo_info[grupo_id] = []
 
-            # Verifica si la clave ya existe en el diccionario antes de agregar el equipo
-            if grupo_id_equipo in data["equipos_por_grupo"]:
-                data["equipos_por_grupo"][grupo_id_equipo].append(equipo_info)
-                # Agrega información del equipo al nuevo diccionario
-                data["equipos_por_grupo_info"][equipo_id] = {
-                    "nombre": equipo_info[2],
-                    "logo": equipo_info[1],
-                }
+        for i, equipo_tabla in enumerate(equipos_tabla, start=1):
+            equipo_tabla_id = equipo_tabla["equipo_id"]
+            equipo_modelo = equipo.objects.get(equipo_id=equipo_tabla_id)
 
-    # Renderizar la plantilla con el contexto
+            partidos_jugados = (
+                equipo_tabla["ganado"] + equipo_tabla["empatado"] + equipo_tabla["perdido"]
+            )
+            diferencia_goles = equipo_tabla["goles_favor"] - equipo_tabla["goles_contra"]
+
+            equipos_por_grupo_info[grupo_id].append({
+                "posicion": i,
+                "logo": equipo_modelo.logo.url,
+                "nombre": equipo_modelo.nombre,
+                "partidos_jugados": partidos_jugados,
+                "ganados": equipo_tabla["ganado"],
+                "empatados": equipo_tabla["empatado"],
+                "perdidos": equipo_tabla["perdido"],
+                "goles_favor": equipo_tabla["goles_favor"],
+                "goles_contra": equipo_tabla["goles_contra"],
+                "diferencia_goles": diferencia_goles,
+                "puntos": equipo_tabla["puntos"],
+            })
+
+    data = {"equipos_por_grupo_info": equipos_por_grupo_info, "listar_grupos_fase_grupos": nombre_grupos}
+    
     return render(request, "tabla-fase.html", data)
 
 
@@ -689,7 +656,6 @@ def contextoEncuentros(request, nombre_competicion):
     data = {
         "encuentros_jugados": encuentros_jugados,
         "encuentros_por_jugar": encuentros_por_jugar,
-        "competicion":competencia_seleccionada,
     }
     return render(request, "encuentros_jugados.html", data)
 def contextoContacto(request):

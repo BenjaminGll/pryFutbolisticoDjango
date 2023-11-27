@@ -1183,15 +1183,15 @@ def infracciones(request,tipo, idContrato):
 
     # TARJETAS AMARILLAS
     if tipo == 1:
-        resultado = evento.objects.filter(alineacion1_id__in=[vez.alineacion_id for vez in veces], tipo_evento_id=1).count()
+        resultado = evento.objects.filter(alineacion_id1__in=[vez.alineacion_id for vez in veces], tipo_evento_id=1).count()
 
     # TARJETAS ROJAS
     elif tipo == 2:
-        resultado = evento.objects.filter(alineacion1_id__in=[vez.alineacion_id for vez in veces], tipo_evento_id=2).count()
+        resultado = evento.objects.filter(alineacion_id1__in=[vez.alineacion_id for vez in veces], tipo_evento_id=2).count()
 
     # GOLES TOTALES
     elif tipo == 3:
-        resultado = evento.objects.filter(alineacion1_id__in=[vez.alineacion_id for vez in veces], tipo_evento_id=9).count()
+        resultado = evento.objects.filter(alineacion_id1__in=[vez.alineacion_id for vez in veces], tipo_evento_id=9).count()
 
     return JsonResponse({'resultado': resultado})
 

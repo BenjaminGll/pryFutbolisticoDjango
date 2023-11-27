@@ -132,7 +132,8 @@
                         <div class="input-group">
                             <input type="text" class="form-control" id="tiempoCrono" name="tiempoCrono"
                                 pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                            <button type="button" class="btn btn-success" id="btnlimpiarplay" onclick="enviarComando('play')">
+                            <button type="button" class="btn btn-success" id="btnlimpiarplay"
+                                onclick="enviarComando('play')">
                                 <i class="fas fa-play"></i>
                             </button>
                             <button type="button" class="btn btn-warning" onclick="enviarComando('pausa')">
@@ -347,7 +348,8 @@
 
                         <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="59">
                         &nbsp;
-                        <button type="submit" id="generarBannerMarcador" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+                        <button type="submit" id="generarBannerMarcador" class="btn btn-primary"><i
+                                class="fas fa-eye"></i> Mostrar</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -664,7 +666,7 @@ enviarButton.addEventListener('click', enviarHTML);
 <!-- <textarea id="miTextarea" name="miTextarea"></textarea> -->
 
 <script>
-
+var miVariable = 'None';
 
     // Función para generar el HTML dinámico
     function generarHTML() {
@@ -750,8 +752,8 @@ enviarButton.addEventListener('click', enviarHTML);
     }
 
 
- 
-    
+
+
     document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
         // Evita que el formulario se envíe automáticamente
         // event.preventDefault();
@@ -872,7 +874,17 @@ enviarButton.addEventListener('click', enviarHTML);
             const checkbox2 = document.getElementById('LtarjetasRojasCheckbox');
             const checkbox3 = document.getElementById('LgolesTotalesCheckbox');
             const checkbox4 = document.getElementById('LpatrocinadorCheckbox');
-   
+
+
+            if (checkbox1.checked){
+                obtenerResultado(1, datos.idContrato);
+            } else if (checkbox2.checked){
+                obtenerResultado(2, datos.idContrato);
+            }else {
+                obtenerResultado(3, datos.idContrato);
+            }
+            
+            console.log("Variable final",miVariable);
 
             html = '<div class="banner" style="display: flex;' +
                 'align-items: center;' +
@@ -910,7 +922,7 @@ enviarButton.addEventListener('click', enviarHTML);
                 '<div class="user-text" style="font-size: 16px; text-align: center;' +
                 'background-color: rgba(0, 0, 0, 0.7); color: white; ">' +
 
-                'Jugador del momento </div>' +
+                'Jugador del momento '+miVariable+' </div>' +
                 '</div>' +
                 '</div>' +
 
@@ -1064,12 +1076,39 @@ enviarButton.addEventListener('click', enviarHTML);
         return datos_coleccion;
     }
     //fin tablas
+    // SOLICITUD AJAX
+    function obtenerResultado(tipo, idContrato) {
+        // Hacer la solicitud AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/apitarjetas/' + tipo + '/' + idContrato + '/');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // Manejar la respuesta del servidor
+                var respuesta = JSON.parse(xhr.responseText);
+                var resultado = respuesta.resultado;
+
+                // Hacer lo que quieras con el resultado
+                console.log("El resultado es:", resultado);
+
+                // Almacenar el resultado en una variable
+                miVariable = resultado;
+                console.log("La variable es",miVariable);
+
+                // Hacer más cosas con miVariable si es necesario
+            } else {
+                console.error('Error en la solicitud AJAX');
+            }
+        };
+        xhr.send();
+    }
+    //
+    //
 </script>
 
 <script>
     var inputcrono = document.getElementById('tiempoCrono');
     var btnlimpiar = document.getElementById('btnlimpiarplay');
-    btnlimpiar.addEventListener('click',function(){
+    btnlimpiar.addEventListener('click', function () {
         console.log('entrando la funcion limpiar');
         inputcrono.value = '';
     });
@@ -1077,7 +1116,7 @@ enviarButton.addEventListener('click', enviarHTML);
     function enviarComando(accion) {
         var tiempo = document.getElementById('tiempoCrono').value;
 
-    
+
         fetch('/actualizar_cronometro/', {
             method: 'POST',
             headers: {
@@ -1085,7 +1124,7 @@ enviarButton.addEventListener('click', enviarHTML);
                 'X-CSRFToken': obtenerCSRFToken()  // Asegúrate de definir esta función para obtener el token CSRF
             },
             body: JSON.stringify({ accion: accion, tiempo: tiempo })
-           
+
         })
             .then(function (response) {
                 if (!response.ok) {
@@ -1095,7 +1134,7 @@ enviarButton.addEventListener('click', enviarHTML);
             })
             .then(function (data) {
                 console.log('respuesta correcta')
-               
+
 
             })
             .catch(function (error) {

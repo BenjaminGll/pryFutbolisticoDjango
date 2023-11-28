@@ -228,18 +228,26 @@
                                         <th style="padding: 10px;">Dorsal</th>
                                         <th style="padding: 10px;">Jugador</th>
                                         <th style="padding: 10px;">Posicion</th>
+                                        <th style="padding: 10px;">Titular</th>
                                         <th style="padding: 10px;">Seleccionar</th>
                                     </tr>
                                 </thead>
                                 <tbody style="border-collapse: collapse; margin-top: 20px; text-align: center;">
                                     <!-- Aquí se llenarán dinámicamente los datos -->
                                     {% for a_l in alineacion_local %}
+
                                     <tr style="border-bottom: 1px solid #ddd;">
                                         <td style="padding: 10px;">{{ a_l.dorsal }}</td>
                                         <td style="padding: 10px;">{{ a_l.contrato_id.persona.alias }}</td>
                                         <td style="padding: 10px;">{{ a_l.posicion_jugador_id }}</td>
                                         <td style="padding: 10px; display: none;">{{ a_l.estado }}</td>
                                         <td style="padding: 10px; display: none;">{{ a_l.contrato_id.contrato_id }}</td>
+                                        <td> {% if a_l.estado %}
+                                            Si
+                                        {% else %}
+                                            No
+                                        {% endif %}
+                                        </td>
 
                                         <td style="padding: 10px;">
                                             <input type="radio" class="form-check-input" data-radio="true"
@@ -311,6 +319,7 @@
                                     <th style="padding: 10px;">Dorsal</th>
                                     <th style="padding: 10px;">Jugador</th>
                                     <th style="padding: 10px;">Posicion</th>
+                                    <th style="padding: 10px;">Titular</th>
                                     <th style="padding: 10px;">Seleccionar</th>
                                 </tr>
                             </thead>
@@ -322,6 +331,13 @@
                                     <td style="padding: 10px;">{{ a_l.contrato_id.persona.alias }}</td>
                                     <td style="padding: 10px;">{{ a_l.posicion_jugador_id }}</td>
                                     <td style="padding: 10px; display: none;">{{ a_l.estado }}</td>
+                                    <td style="padding: 10px; display: none;">{{ a_l.contrato_id.contrato_id }}</td>
+                                    <td> {% if a_l.estado %}
+                                        Si
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                    </td>
                                     <td style="padding: 10px;">
                                         <input type="radio" class="form-check-input"
                                             id="alineacionVisita{{ forloop.counter }}" name="alineacion" value="visita"

@@ -928,8 +928,8 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
                 encuentro_id=idEncuentro,
                 equipo_id__in=[encuentro_obj.equipo_visita, encuentro_obj.equipo_visita],tipo_equipo__in=['V','Visita','VISITA']
             ).first()
-        alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id)
-        alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id)
+        alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id).order_by('-estado', 'dorsal')
+        alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id).order_by('-estado', 'dorsal')
         # print('Alineacion local',alineaciones_local)
         # print('Alineacion visita',alineaciones_visita)
 

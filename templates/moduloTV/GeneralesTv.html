@@ -791,96 +791,81 @@ enviarButton.addEventListener('click', enviarHTML);
     }
 
     function generarHTMLMarcadorCompleto() {
+        var tiemp_banner='';
+        const radioboton = document.getElementById('f1Checkbox'); //1er tiempo
+        const radioboton2 = document.getElementById('f2Checkbox'); ///2do tiempo
+        const radioboton3 = document.getElementById('feCheckbox'); //Tiempo extra
+        const radioboton4 = document.getElementById('fpCheckbox'); //penales
 
-        const radioboton = document.getElementById('f1Checkbox');
-        const radioboton2 = document.getElementById('f2Checkbox');
-        const radioboton3 = document.getElementById('feCheckbox');
-        const radioboton4 = document.getElementById('fpCheckbox');
+        const casilla = document.getElementById('estadioMarcadorCompleto'); //estadio
+        const casilla2 = document.getElementById('ieCheckbox'); //insiginia
 
-        const casilla = document.getElementById('estadioMarcadorCompleto');
-        const casilla2 = document.getElementById('ieCheckbox')
+        if (radioboton.checked){
+            tiemp_banner='1er. Tiempo';
+        }else if (radioboton2.checked){
+            tiemp_banner='2do. Tiempo';
+        }else if(radioboton3.checked){
+            tiemp_banner='Tiempo extra';
+        }else if(radioboton4.checked){
+            tiemp_banner='Ronda de penales';
+        }else {
+            tiemp_banner='';
+        }
+
 
         let html = '';
+            
+     html+='<div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">'+
 
-        // Construye dinámicamente el HTML del banner
-        html = '<div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">' +
-            '  <div style="display: flex; justify-content: space-between; width: 50%;">' +
-            '    <div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;">' + document.getElementById('golesLocal').value + '</div>' +
-            '    <div name="escudo1" id="equipo1" style="padding-right: 1%;">' +
-            +'    </div>' +
-            '    <div name="container-equipo-informacion" style="width: 100%;">' +
-            '      <div name="Equipos" style="display: flex; font-weight: bold; justify-content: space-between; align-items: center; background-color: rgb(255,42,27);padding: 0.3%;margin-top: 1%;margin-bottom: 1%;">' +
-            '        <div name="equipo_local" style="text-align: left; padding-left: 3%;">' + document.getElementById('nombreLocal').value + '</div>' +
-            '        <div name="equipo_visita" style="text-align: right; padding-right: 3%;">' + document.getElementById('nombreVisita').value + '</div>' +
-            '      </div>' +
-            '      <div name="juego" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">' +
-            '        <div name="estadio" style="text-align: left; padding-left: 3%; color: white;">' + document.getElementById('estadioMarcadorCompleto').value + '</div>' +
-            '        <div name="Resumen_Tiempo" id="resumenTiempo" style="text-align: right; padding-right: 3%; color: white;"></div>' +
-            '      </div>' +
-            '    </div>' +
-            '    <div name="escudo2" id="equipo2" style="padding-left: 1%;">' +
-            +'    </div>' +
-            '    <div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">' + document.getElementById('golesVisita').value + '</div>' +
-            '  </div>' +
+                    '<div style="display: flex;justify-content: space-between;width: 50%;">'+
+
+                        '<div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;"> '+ document.getElementById('golesLocal').value +' </div>';
+
+                        if(casilla2.checked){
+                  html+='<div name="escudo" style="padding-right: 1%;">'+
+                            '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Team 1 Logo" style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
+                        
+                        '</div>';
+                        }
+                        
+                  html+='<div name="container-equipo-informacion" style="width: 100%;">'+
+
+                            '<div name="Equipos" style="display: flex; font-weight: bold; justify-content: space-between; align-items: center; background-color: rgb(255,42,27);padding: 0.3%;margin-top: 1%;margin-bottom: 1%;">'+
+                                '<div name="equipo_local" style="text-align: left; padding-left: 3%;">' + document.getElementById('nombreLocal').value + '</div>'+
+                                '<div name="equipo_visita" style="text-align: right; padding-right: 3%;">' + document.getElementById('nombreVisita').value + '</div>'+
+                            '</div>'+
+
+                            '<div name="juego" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">';
+                                if(casilla.checked){
+                                
+                          html+='<div name="estadio" style="text-align: left; padding-left: 3%; color: white;">'+
+
+                                    document.getElementById('estadioMarcadorCompleto').value + 
+                                '</div>';
+                                }
+                                
+                          html+='<div name="Resumen_Tiempo" style="text-align: right; padding-right: 3%; color: white;">'+
+                                     tiemp_banner +
+                                '</div>'+
+
+                            '</div>'+
+
+                        '</div>';
+
+                if(casilla2.checked){
+                           
+                  html+='<div name="escudo" style="padding-left: 1%;">'+
+
+                            '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team 1 Logo" style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
+                        
+                        '</div>';
+                    }
+                        
+                  html+='<div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">'+ document.getElementById('golesVisita').value +' </div>'+
+
+                    '</div>'+
+
             '</div>';
-
-
-        var resumenTiempoElement = document.getElementById('resumenTiempo')
-
-        function actualizarLogo(id, rutaLogo) {
-            // Obtiene el elemento div por su ID
-            var divLogo = document.getElementById(id);
-
-            // Verifica si el div existe antes de intentar cambiar la imagen
-            if (divLogo) {
-                // Cambia la imagen del div
-                divLogo.innerHTML = '<img src="' + rutaLogo + '" alt="Team Logo" style="width: 50px; background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">';
-            }
-        }
-
-        function actualizarResumenTiempo(valor) {
-            resumenTiempoElement.innerText = valor;
-        }
-
-
-        // Verifica si se seleccionó el Final 1º Tiempo
-        if (radioboton.checked) {
-            actualizarResumenTiempo(document.getElementById('f1Checkbox').value);
-        }
-        else if (radioboton2.checked) {
-            actualizarResumenTiempo(document.getElementById('f2Checkbox').value);
-        }
-
-        // Verifica si se seleccionó el Final Tiempo Extra
-        else if (radioboton3.checked) {
-            actualizarResumenTiempo(document.getElementById('feCheckbox').value);
-        }
-
-        // Verifica si se seleccionó el Final + Penales
-        else if (radioboton4.checked) {
-            actualizarResumenTiempo(document.getElementById('fpCheckbox').value);
-        }
-
-        // Verifica si se seleccionó el Estadio
-        if (casilla.checked) {
-            html += '<div class="stadium-info" name="estadio" style="text-align: left; padding-left: 10px;">' + document.getElementById('estadioMarcadorCompleto').value + '</div>';
-        }
-
-        html += '</div>';
-
-        // Verifica si se seleccionó la Insignia de Equipo 
-        if (casilla2.checked) {
-            // Llamada para actualizar el logo local
-            actualizarLogo('equipo1', '/static/images/' + document.getElementById('logoLocal').value);
-
-            // Llamada para actualizar el logo de visita
-            actualizarLogo('equipo2', '/static/images/' + document.getElementById('logoVisita').value);
-        }
-
-        html += '</div>';
-
-        // Cierre de la etiqueta principal
-        html += '</div>';
 
         // Devuelve el HTML generado
         return html;

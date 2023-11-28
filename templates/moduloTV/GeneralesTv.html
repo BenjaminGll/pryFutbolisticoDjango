@@ -64,7 +64,8 @@
         </div>
         <!-- Datos de Encuentro -->
         <div class="col-md-4">
-            <form id="enviarDatosEncuentro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}" enctype="multipart/form-data">
+            <form id="enviarDatosEncuentro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
+                enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="card">
                     <div class="card-header form-inline">
@@ -72,10 +73,11 @@
                         <div class="align-items-center">Duración (s): </div>
                         &nbsp;
                         <div class="input-group">der
-                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="59">
+                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
+                                max="59">
                             &nbsp;
                         </div>
-             
+
                         <div class="input-group">
 
                             <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
@@ -151,7 +153,8 @@
                             <button type="button" class="btn btn-info" onclick="enviarComando('reset')">
                                 <i class="fas fa-undo"></i>
                             </button>
-                            <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn" onclick="iniciarFinalizarPartido()"><i class="fas fa-play"></i> Iniciar Partido</button>
+                            <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn"
+                                onclick="iniciarFinalizarPartido()"><i class="fas fa-play"></i> Iniciar Partido</button>
 
                         </div>
                     </div>
@@ -343,63 +346,65 @@
     <div class="row mt-4">
         <!--Marcador-->
         <div class="col-md-6">
-            <form id="enviarDatosMarcadorCompleto" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
-                enctype="multipart/form-data">
+            <form id="enviarDatosMarcadorCompleto" method="post"
+                action="{% url 'mostrar_eventos_generales' idEncuentro %}" enctype="multipart/form-data">
                 {% csrf_token %}
-            <div class="card">
-                <div class="card-header">
-                    <h3>Marcador completo</h3>
-                    <div class="input-group align-items-center">
-                        <div class="align-items-center">Duración (s):</div>
-                        &nbsp;
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Marcador completo</h3>
+                        <div class="input-group align-items-center">
+                            <div class="align-items-center">Duración (s):</div>
+                            &nbsp;
 
-                        <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="59">
-                        &nbsp;
-                        <button type="submit" id="generarBannerMarcador" class="btn btn-primary"><i
-                                class="fas fa-eye"></i> Mostrar</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <!-- Primera columna -->
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" id="f1Checkbox" name="finalType"
-                                    value="1er. Tiempo">
-                                <label class="form-check-label" for="f1Checkbox">Final 1° Tiempo</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" id="f2Checkbox" name="finalType"
-                                    value="2do. Tiempo">
-                                <label class="form-check-label" for="f2Checkbox">Final 2° Tiempo</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" id="feCheckbox" name="finalType"
-                                    value="Tiempo extra">
-                                <label class="form-check-label" for="feCheckbox">Final Tiempo Extra</label>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <!-- Segunda columna -->
-                            <div class="form-check">
-                                <input type="radio" class="form-check-input" id="fpCheckbox" name="finalType"
-                                    value="Penales">
-                                <label class="form-check-label" for="fpCheckbox">Final + Penales</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="estadioMarcadorCompleto" name="eCheckbox"
-                                    value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.sede_id }}{% endwith %}">
-                                <label class="form-check-label" for="eCheckbox">Estadio</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="ieCheckbox" name="ieCheckbox">
-                                <label class="form-check-label" for="ieCheckbox">Insignia de Equipo</label>
-                            </div>
+                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
+                                max="59">
+                            &nbsp;
+                            <button type="submit" id="generarBannerMarcador" class="btn btn-primary"><i
+                                    class="fas fa-eye"></i> Mostrar</button>
                         </div>
                     </div>
-                </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <!-- Primera columna -->
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="f1Checkbox" name="finalType"
+                                        value="1er. Tiempo">
+                                    <label class="form-check-label" for="f1Checkbox">Final 1° Tiempo</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="f2Checkbox" name="finalType"
+                                        value="2do. Tiempo">
+                                    <label class="form-check-label" for="f2Checkbox">Final 2° Tiempo</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="feCheckbox" name="finalType"
+                                        value="Tiempo extra">
+                                    <label class="form-check-label" for="feCheckbox">Final Tiempo Extra</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- Segunda columna -->
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="fpCheckbox" name="finalType"
+                                        value="Penales">
+                                    <label class="form-check-label" for="fpCheckbox">Final + Penales</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="estadioMarcadorCompleto"
+                                        name="eCheckbox"
+                                        value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.sede_id }}{% endwith %}">
+                                    <label class="form-check-label" for="eCheckbox">Estadio</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="ieCheckbox" name="ieCheckbox">
+                                    <label class="form-check-label" for="ieCheckbox">Insignia de Equipo</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            </div>
+                </div>
         </div>
     </div>
 </div>
@@ -673,7 +678,40 @@ enviarButton.addEventListener('click', enviarHTML);
 <!-- <textarea id="miTextarea" name="miTextarea"></textarea> -->
 
 <script>
-var miVariable = 'None';
+    var miVariable = 'None';
+    var inputcrono = document.getElementById('tiempoCrono');
+    var btnlimpiar = document.getElementById('btnlimpiarplay');
+    btnlimpiar.addEventListener('click', function () {
+        console.log('entrando la funcion limpiar');
+        inputcrono.value = '';
+    });
+    function obtenerCSRFToken() {
+        var csrfTokenElement = document.getElementsByName('csrfmiddlewaretoken')[0];
+        return csrfTokenElement.value;
+    }
+    function enviarComando(accion) {
+        var tiempo = document.getElementById('tiempoCrono').value;
+        fetch('/actualizar_cronometro/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': obtenerCSRFToken()  // Asegúrate de definir esta función para obtener el token CSRF
+            },
+            body: JSON.stringify({ accion: accion, tiempo: tiempo })
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud AJAX');
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                console.log('respuesta correcta')
+            })
+            .catch(function (error) {
+                console.error('Error en la solicitud AJAX', error);
+            });
+    }
 
     // Función para generar el HTML dinámico
     function generarHTML() {
@@ -771,44 +809,44 @@ var miVariable = 'None';
         let html = '';
 
         // Construye dinámicamente el HTML del banner
-            html =       '<div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">' +
-                        '  <div style="display: flex; justify-content: space-between; width: 50%;">' +
-                        '    <div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;">' + document.getElementById('golesLocal').value + '</div>' +
-                        '    <div name="escudo1" id="equipo1" style="padding-right: 1%;">' +
-                        +'    </div>' +
-                        '    <div name="container-equipo-informacion" style="width: 100%;">' +
-                        '      <div name="Equipos" style="display: flex; font-weight: bold; justify-content: space-between; align-items: center; background-color: rgb(255,42,27);padding: 0.3%;margin-top: 1%;margin-bottom: 1%;">' +
-                        '        <div name="equipo_local" style="text-align: left; padding-left: 3%;">' + document.getElementById('nombreLocal').value + '</div>' +
-                        '        <div name="equipo_visita" style="text-align: right; padding-right: 3%;">' + document.getElementById('nombreVisita').value + '</div>' +
-                        '      </div>' +
-                        '      <div name="juego" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">' +
-                        '        <div name="estadio" style="text-align: left; padding-left: 3%; color: white;">' + document.getElementById('estadioMarcadorCompleto').value + '</div>' +
-                        '        <div name="Resumen_Tiempo" id="resumenTiempo" style="text-align: right; padding-right: 3%; color: white;"></div>' +
-                        '      </div>' +
-                        '    </div>' +
-                        '    <div name="escudo2" id="equipo2" style="padding-left: 1%;">' +
-                        +'    </div>' +
-                        '    <div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">' + document.getElementById('golesVisita').value + '</div>' +
-                        '  </div>' +
-                        '</div>';
+        html = '<div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">' +
+            '  <div style="display: flex; justify-content: space-between; width: 50%;">' +
+            '    <div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;">' + document.getElementById('golesLocal').value + '</div>' +
+            '    <div name="escudo1" id="equipo1" style="padding-right: 1%;">' +
+            +'    </div>' +
+            '    <div name="container-equipo-informacion" style="width: 100%;">' +
+            '      <div name="Equipos" style="display: flex; font-weight: bold; justify-content: space-between; align-items: center; background-color: rgb(255,42,27);padding: 0.3%;margin-top: 1%;margin-bottom: 1%;">' +
+            '        <div name="equipo_local" style="text-align: left; padding-left: 3%;">' + document.getElementById('nombreLocal').value + '</div>' +
+            '        <div name="equipo_visita" style="text-align: right; padding-right: 3%;">' + document.getElementById('nombreVisita').value + '</div>' +
+            '      </div>' +
+            '      <div name="juego" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">' +
+            '        <div name="estadio" style="text-align: left; padding-left: 3%; color: white;">' + document.getElementById('estadioMarcadorCompleto').value + '</div>' +
+            '        <div name="Resumen_Tiempo" id="resumenTiempo" style="text-align: right; padding-right: 3%; color: white;"></div>' +
+            '      </div>' +
+            '    </div>' +
+            '    <div name="escudo2" id="equipo2" style="padding-left: 1%;">' +
+            +'    </div>' +
+            '    <div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">' + document.getElementById('golesVisita').value + '</div>' +
+            '  </div>' +
+            '</div>';
 
-        
-                var resumenTiempoElement = document.getElementById('resumenTiempo')
-                
-                function actualizarLogo(id, rutaLogo) {
-                    // Obtiene el elemento div por su ID
-                    var divLogo = document.getElementById(id);
 
-                    // Verifica si el div existe antes de intentar cambiar la imagen
-                    if (divLogo) {
-                        // Cambia la imagen del div
-                        divLogo.innerHTML = '<img src="' + rutaLogo + '" alt="Team Logo" style="width: 50px; background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">';
-                    }
-                }
+        var resumenTiempoElement = document.getElementById('resumenTiempo')
 
-                function actualizarResumenTiempo(valor) {
-                    resumenTiempoElement.innerText = valor;
-                }
+        function actualizarLogo(id, rutaLogo) {
+            // Obtiene el elemento div por su ID
+            var divLogo = document.getElementById(id);
+
+            // Verifica si el div existe antes de intentar cambiar la imagen
+            if (divLogo) {
+                // Cambia la imagen del div
+                divLogo.innerHTML = '<img src="' + rutaLogo + '" alt="Team Logo" style="width: 50px; background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">';
+            }
+        }
+
+        function actualizarResumenTiempo(valor) {
+            resumenTiempoElement.innerText = valor;
+        }
 
 
         // Verifica si se seleccionó el Final 1º Tiempo
@@ -936,8 +974,8 @@ var miVariable = 'None';
 
         // Devuelve el HTML generado
         return html;
-    }    
-    
+    }
+
     document.getElementById('generarBannerEncuentro').addEventListener('click', function (event) {
         // Evita que el formulario se envíe automáticamente
         // event.preventDefault();
@@ -1076,15 +1114,15 @@ var miVariable = 'None';
             const checkbox4 = document.getElementById('LpatrocinadorCheckbox');
 
 
-            if (checkbox1.checked){
+            if (checkbox1.checked) {
                 obtenerResultado(1, datos.idContrato);
-            } else if (checkbox2.checked){
+            } else if (checkbox2.checked) {
                 obtenerResultado(2, datos.idContrato);
-            }else {
+            } else {
                 obtenerResultado(3, datos.idContrato);
             }
-            
-            console.log("Variable final",miVariable);
+
+            console.log("Variable final", miVariable);
 
             html = '<div class="banner" style="display: flex;' +
                 'align-items: center;' +
@@ -1122,7 +1160,7 @@ var miVariable = 'None';
                 '<div class="user-text" style="font-size: 16px; text-align: center;' +
                 'background-color: rgba(0, 0, 0, 0.7); color: white; ">' +
 
-                'Jugador del momento '+miVariable+' </div>' +
+                'Jugador del momento ' + miVariable + ' </div>' +
                 '</div>' +
                 '</div>' +
 
@@ -1292,7 +1330,7 @@ var miVariable = 'None';
 
                 // Almacenar el resultado en una variable
                 miVariable = resultado;
-                console.log("La variable es",miVariable);
+                console.log("La variable es", miVariable);
 
                 // Hacer más cosas con miVariable si es necesario
             } else {
@@ -1301,73 +1339,73 @@ var miVariable = 'None';
         };
         xhr.send();
     }
-    //
-    //
+
     var partidoIniciado = false;  // Variable para rastrear el estado del partido
     document.getElementById('iniciarFinalizarBtn').addEventListener('click', function () {
-    iniciarFinalizarPartido();
-});
-function iniciarFinalizarPartido() {
-    var btnIniciarFinalizar = document.getElementById('iniciarFinalizarBtn');
-    var tiempo = document.getElementById('tiempoCrono').value;
+        iniciarFinalizarPartido();
+    });
+    function iniciarFinalizarPartido() {
+        var btnIniciarFinalizar = document.getElementById('iniciarFinalizarBtn');
+        var tiempo = document.getElementById('tiempoCrono').value;
 
-    if (!partidoIniciado) {
-        // Si el partido no ha iniciado, cambia el texto a "Finalizar Partido" y agrega el icono de play
-        btnIniciarFinalizar.innerHTML = '<i class="fas fa-play"></i> Iniciar Partido ';
-        partidoIniciado = true;
-        // Realiza aquí las acciones adicionales que desees al iniciar el partido
-        
-    } else {
-        // Si el partido ya ha iniciado, cambia el texto a "Iniciar Partido" y agrega el icono de finalizar
-        btnIniciarFinalizar.innerHTML = ' <i class="fas fa-stop"></i> Finalizar Partido ';
-        partidoIniciado = false;
-        // Realiza aquí las acciones adicionales que desees al finalizar el partido
+        if (!partidoIniciado) {
+            // Si el partido no ha iniciado, cambia el texto a "Finalizar Partido" y agrega el icono de play
+            btnIniciarFinalizar.innerHTML = '<i class="fas fa-play"></i> Iniciar Partido ';
+            partidoIniciado = true;
+            // Realiza aquí las acciones adicionales que desees al iniciar el partido
 
-        // Obtén el token CSRF del formulario
-        var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        } else {
+            // Si el partido ya ha iniciado, cambia el texto a "Iniciar Partido" y agrega el icono de finalizar
+            btnIniciarFinalizar.innerHTML = ' <i class="fas fa-stop"></i> Finalizar Partido ';
+            partidoIniciado = false;
+            // Realiza aquí las acciones adicionales que desees al finalizar el partido
 
-        // Obtén la URL actual
-        var urlActual = window.location.href;
+            // Obtén el token CSRF del formulario
+            var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
-        // Encuentra la última barra en la URL
-        var ultimaBarraIndex = urlActual.lastIndexOf('/');
+            // Obtén la URL actual
+            var urlActual = window.location.href;
 
-        // Obtén la parte de la URL después de la última barra
-        var encuentroId = urlActual.substring(ultimaBarraIndex - 1);
+            // Encuentra la última barra en la URL
+            var ultimaBarraIndex = urlActual.lastIndexOf('/');
 
-        // Elimina caracteres no numéricos del encuentroId
-        encuentroId = encuentroId.replace(/\D/g, '');
+            // Obtén la parte de la URL después de la última barra
+            var encuentroId = urlActual.substring(ultimaBarraIndex - 1);
 
-        // Prepara los datos para enviar
-        var datos = 'encuentro_id=' + encuentroId;
+            // Elimina caracteres no numéricos del encuentroId
+            encuentroId = encuentroId.replace(/\D/g, '');
 
-        // Inicia la solicitud AJAX
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/cambiar_estado_encuentro_E/', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        
-        // Agrega el token CSRF a la cabecera de la solicitud
-        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+            // Prepara los datos para enviar
+            var datos = 'encuentro_id=' + encuentroId;
 
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var respuesta = JSON.parse(xhr.responseText);
-                if (respuesta.success) {
-                    console.log('Estado cambiado exitosamente');
-                } else {
-                    console.error('Error al cambiar el estado:', respuesta.error);
+            // Inicia la solicitud AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cambiar_estado_encuentro_E/', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+            // Agrega el token CSRF a la cabecera de la solicitud
+            xhr.setRequestHeader('X-CSRFToken', csrfToken);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var respuesta = JSON.parse(xhr.responseText);
+                    if (respuesta.success) {
+                        console.log('Estado cambiado exitosamente');
+                    } else {
+                        console.error('Error al cambiar el estado:', respuesta.error);
+                    }
                 }
-            }
-        };
+            };
 
-        // Envía la solicitud con los datos
-        xhr.send(datos);
+            // Envía la solicitud con los datos
+            xhr.send(datos);
+        }
     }
-}
+
 
 </script>
 
- 
+
 
 <textarea id="miTextarea" name="miTextarea" style="display: none;"></textarea>
 

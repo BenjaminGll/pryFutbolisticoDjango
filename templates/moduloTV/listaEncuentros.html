@@ -146,25 +146,19 @@
             </thead>
             <tbody>
                 {% for encuentro in encuentros %}
-                <form
-                    action="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}"
-                    method="post">
-                    {% csrf_token %}
                     <tr>
-                        <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{ encuentro.equipo_visita }} </td>
-                        <td>{{ encuentro.fecha }}</td>
-
-                        <td>
-                            <input type="hidden" name="idEncuentro" id="idEncuentro"
-                                value="{{ encuentro.encuentro_id }}"></input>
-
-                            <button type="submit" class="btn btn-submit">Mostrar Eventos</button>
-                        </td>
+                        <form action="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}" method="post">
+                            {% csrf_token %}
+                            <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{ encuentro.equipo_visita }} </td>
+                            <td>{{ encuentro.fecha }}</td>
+                            <td>
+                                <input type="hidden" name="idEncuentro" value="{{ encuentro.encuentro_id }}">
+                                <button type="submit" class="btn btn-submit">Mostrar Eventos</button>
+                            </td>
+                        </form>
                     </tr>
-                    {% endfor %}
-                </form>
-
-            </tbody>
+                {% endfor %}
+                </tbody>
         </table>
     </div>
 </body>

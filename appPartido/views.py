@@ -295,22 +295,13 @@ def asignarEventos(request, encuentro_id):
             elif evento_equipo == 'Visita':
                 alineacion01 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs, estado=True)
                 alineacion02 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroVisita_objs, estado=False)
-            else:
-                alineacion01 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
-                alineacion02 = alineacion.objects.filter(
-                descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
         else:
             if evento_equipo == 'Local':
-                alineacion01 = alineacion.objects.filter(
-                    descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
-                alineacion02 = alineacion.objects.filter(
-                    descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
-            elif evento_equipo == 'Local':
-                alineacion01 = alineacion.objects.filter(
-                    descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
-                alineacion02 = alineacion.objects.filter(
-                    descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                alineacion01 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
+                alineacion02 = alineacion.objects.filter( descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+            elif evento_equipo == 'Visita':
+                alineacion01 = alineacion.objects.filter( descripcion_encuentro_id__in=descripcionEncuentroVisita_objs)
+                alineacion02 = alineacion.objects.filter(descripcion_encuentro_id__in=descripcionEncuentroLocal_objs)
 
         if 'guardar_evento' in request.POST:
             # tipo_evento_id = request.POST.get('tipo_evento_seleccionado', None)

@@ -888,9 +888,9 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
     if request.method == 'POST'and filtro_default=='en_juego':
         eventos_seleccionados = request.POST.getlist('idEvento')
         eventos_para_actualizar = evento.objects.filter(evento_id__in=eventos_seleccionados)
-
+        tiempo = request.POST.get('tiempo')
         # Lógica específica para cada vista hija
-        guardar_eventos_temporales(eventos_para_actualizar)
+        guardar_eventos_temporales(eventos_para_actualizar,tiempo)
 
         for evento_seleccionado in eventos_para_actualizar:
             evento_seleccionado.estado_evento = False
@@ -978,7 +978,7 @@ def mostrarEventosGenerales(request, idEncuentro):
 
 
 
-def guardar_eventos_temporales(eventos):
+def guardar_eventos_temporales(eventos,tiempo):
     default_storage.delete('eventos_temporales.json')
     
     banners = []
@@ -1165,7 +1165,7 @@ def guardar_eventos_temporales(eventos):
 
         else:    
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>'
+                'html': f'<div class="banner-container">{evento.tipo_evento_id} </div>','tiempo':tiempo
             }
         banners.append(banner)
 

@@ -1,8 +1,12 @@
 {% extends 'moduloTV/base.html' %}
-{% block content %}
-<hr>
+{% load i18n static %}
 
-<!--  -->
+{% block content %}
+
+<body>
+    
+<div class="container"> 
+    <hr>
 <div class="form-inline mb-4 table"
     style="background-color: #2d2d2d; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,.1);">
     <div class="col-md-3 mb-2 text-center">
@@ -24,7 +28,7 @@
 
 <!--  -->
 
-<div id="eventos-container">
+<div class="recent-results results-page event-cards-container">
 {% for e in eventos %}
 <div class="card mb-4">
     <div class="card-body">
@@ -67,7 +71,7 @@
         </form>
     </div>
 </div>
-</div>
+
 <!-- Modal para ver detalles -->
 <!-- Modal para ver detalles -->
 <!-- <div class="modal fade" id="verDetallesModal{{ e.evento_id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -117,35 +121,43 @@
 
 
 {% endfor %}
+</div>
+</div>
 <!-- Agrega esto en el head de tu HTML -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 <script>
-    $(document).ready(function () {
-        function actualizarPagina() {
-            // Cargar la página actual sin caché
-            $.ajax({
-                url: window.location.href,
-                type: 'GET',
-                cache: false,
-                success: function (data) {
-                    // Actualizar el contenido de la página con la respuesta
-                    var nuevoContenido = $(data);
+jQuery(document).ready(function () {
+    function actualizarPagina() {
+        // Cargar la página actual sin caché
+        jQuery.ajax({
+            url: window.location.href,
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                // Actualizar el contenido de la página con la respuesta
+                var nuevoContenido = jQuery(data);
+                // Actualizar contenedor principal
+                var contenedorPrincipal = nuevoContenido.find('.recent-results.results-page');
+                jQuery('.recent-results.results-page').html(contenedorPrincipal.html());
 
-                    // Actualizar contenedor principal
-                    var contenedorPrincipal = nuevoContenido.find('#eventos-container');
-                    $('.eventos-container').html(contenedorPrincipal.html());
+                // Actualizar contenedor de eventos individuales
+                var contenedorEventos = nuevoContenido.find('.event-cards-container');
+                jQuery('.event-cards-container').html(contenedorEventos.html());
+            },
+            error: function (xhr, status, error) {
+                console.error('Error en la solicitud AJAX:', error);
+            }
+        });
+    }
 
-                },
-            });
-        }
-
-        // Actualizar la página cada 2 segundos
-        setInterval(actualizarPagina, 2000);
-    });
-
+    // Actualizar la página cada 2 segundos
+    setInterval(actualizarPagina, 2000);
+});
 
 
 </script>
 
-
+</body>
 {% endblock %}

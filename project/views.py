@@ -896,17 +896,6 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
             evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
 
-        #return redirect('mostrar_evento', id_encuentro=idEncuentro)
-
-    # if request.method == 'POST'and filtro_default=='generales':
-    #     dynamic_html = request.POST.get('miTextarea')
-    #     print("El valor del html es", dynamic_html)
-
-
-
-
-    
-
 
     tipo_filtro = request.GET.get('filtro', filtro_default)
     nombres_eventos_generales = ["CRONOMETRO", "PARTIDO SUSPENDIDO"]

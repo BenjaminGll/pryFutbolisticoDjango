@@ -880,11 +880,11 @@ enviarButton.addEventListener('click', enviarHTML);
 
                     '<div style="display: flex;justify-content: space-between;width: 650px;">'+
 
-                        '<div name="marcador-local" style="background-color: white;color:black;width:110px; font-size: 2.8em;border-radius: 10%; margin-left: 1%;"> '+ document.getElementById('golesLocal').value +' </div>';
+                        '<div name="marcador-local" style="background-color: white;color:black;width:110px; font-size: 2.8em;border-radius: 10%; margin-left: 5px;"> '+ document.getElementById('golesLocal').value +' </div>';
 
                         if(casilla2.checked){
-                  html+='<div name="escudo" style="padding-right: 1%; width: 140px">';
-                  html+='<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Equipo Local" style="width: 140px; height: 90px; margin-right: 1px;">';
+                  html+='<div name="escudo" style="padding-right: 1%; width: 140px;margin-left: 5px;" >';
+                  html+='<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Equipo Local" style="width: 140px; height: 90px; margin-right: 1px;background-color: rgb(199, 199, 199);">';
                   html+='</div>';
                         
                         }

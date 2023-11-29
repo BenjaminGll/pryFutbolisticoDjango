@@ -91,15 +91,12 @@
         </li>
         <li class="current">
           <a href="#">Tabla De Posiciones</a>
-            <ul class="sub-current">
-              <ul class="scrollable-list">
-                {% for c_nn in competencias_nav %}
-                    <li>
-                        <a href="/competencias/{{c_nn.deporte_id.nombre.lower}}/{{c_nn.nombre.lower}}">{{ c_nn.nombre | title }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-            </ul>
+          <ul class="sub-current">
+            {% for c_n in competencias_nav %}
+              <li><a href="/reporte_tabla_posiciones/{{c_n.nombre.lower}}" value="Copa Mundial Qatar 2022">{{c_n.nombre.lower}}</a></li>
+              {% endfor %}
+          </ul>
+      </li>
             
       </li>
         </ul>

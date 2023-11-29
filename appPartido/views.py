@@ -197,8 +197,8 @@ def asignarAlineacion(request, encuentro_id):
         descripcion_encuentro_visita = descripcion_encuentro.objects.filter(
             equipo=equipoVisita, encuentro=encuentro_obj).first()
         # Guardar jugadores del equipo local
-        alineaciones_local.delete()
-        alineaciones_visita.delete()
+        alineacion.objects.filter(descripcion_encuentro_id__encuentro=encuentro_obj).delete()
+    
         for jugador_id_local in jugadoresLocales[:40]:
             if jugador_id_local:
                 contrato_local = contrato.objects.filter(
@@ -223,7 +223,7 @@ def asignarAlineacion(request, encuentro_id):
                     formacion=formacion_local
                 )
                 alineacion_local.save()
-
+       
         # Guardar jugadores del equipo visitante
         for jugador_id_visita in jugadoresVisitas[:40]:
                 if jugador_id_visita:

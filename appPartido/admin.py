@@ -22,14 +22,14 @@ class sedeAdmin(admin.ModelAdmin):
 class descripcionEncuentroAdmin(admin.ModelAdmin):
     list_display=['encuentro','equipo','goles','goles_ronda_penales']
     ordering=['encuentro']
-    search_fields = ['encuentro','equipo__nombre', 'encuentro__encuentro_id']
+    search_fields = ['equipo_id__nombre']
     list_per_page=5
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 class encuentroAdmin(admin.ModelAdmin):
     list_display=['competicion_id','equipo_local','equipo_visita','sede_id','fase','grupo','fecha','clima','estado_jugado','resultado']
     ordering=['competicion_id']
-    search_fields = ['sede_id__nombre','competicion_id__nombre']
+    search_fields = ['sede_id__nombre','competicion_id__nombre', 'equipo_local__nombre', 'equipo_visita__nombre']
     list_per_page=5
     list_filter=['competicion_id']
     class Media:

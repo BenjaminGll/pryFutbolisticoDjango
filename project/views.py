@@ -1042,10 +1042,7 @@ def guardar_eventos_temporales(eventos,tiempo):
 
         elif evento.tipo_evento_id.nombre == 'TARJETA AMARILLA':
              banner = {
-<<<<<<< HEAD
-=======
                'html': f'<div class="banner-container">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/tarjeta_amarilla.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
->>>>>>> 248b77d640f65691b9a3a9cd51f36c8747738b55
             }
 
         elif evento.tipo_evento_id.nombre == 'GOL':

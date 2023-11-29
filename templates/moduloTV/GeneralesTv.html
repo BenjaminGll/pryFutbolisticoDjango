@@ -1719,7 +1719,31 @@ enviarButton.addEventListener('click', enviarHTML);
     });
     function iniciarFinalizarPartido() {
         var btnIniciarFinalizar = document.getElementById('iniciarFinalizarBtn');
-        var tiempo = document.getElementById('tiempoCrono').value;
+        // Realiza aquí las acciones adicionales que desees al finalizar el partido
+
+        // Obtén el token CSRF del formulario
+        var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+        // Obtén la URL actual
+        var urlActual = window.location.href;
+
+        // Encuentra la última barra en la URL
+        var ultimaBarraIndex = urlActual.lastIndexOf('/');
+
+        // Encuentra la penúltima barra en la URL
+        var penultimaBarraIndex = urlActual.lastIndexOf('/', ultimaBarraIndex - 1);
+
+        // Obtén la parte de la URL entre la penúltima y última barra (excluyendo las barras)
+        var encuentroId = urlActual.substring(penultimaBarraIndex + 1, ultimaBarraIndex);
+
+        // Elimina cualquier carácter no numérico del encuentroId
+        encuentroId = encuentroId.replace(/\D/g, '');
+
+        // Ahora tienes el encuentroId correctamente
+        console.log('Encuentro ID:', encuentroId);
+    
+        // Prepara los datos para enviar
+        var datos = 'encuentro_id=' + encuentroId;
 
         if (!partidoIniciado) {
             // Si el partido no ha iniciado, cambia el texto a "Finalizar Partido" y agrega el icono de play
@@ -1731,26 +1755,6 @@ enviarButton.addEventListener('click', enviarHTML);
             // Si el partido ya ha iniciado, cambia el texto a "Iniciar Partido" y agrega el icono de finalizar
             btnIniciarFinalizar.innerHTML = ' <i class="fas fa-stop"></i> Finalizar Partido ';
             partidoIniciado = false;
-            // Realiza aquí las acciones adicionales que desees al finalizar el partido
-
-            // Obtén el token CSRF del formulario
-            var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-
-            // Obtén la URL actual
-            var urlActual = window.location.href;
-
-            // Encuentra la última barra en la URL
-            var ultimaBarraIndex = urlActual.lastIndexOf('/');
-
-            // Obtén la parte de la URL después de la última barra
-            var encuentroId = urlActual.substring(ultimaBarraIndex - 1);
-
-            // Elimina caracteres no numéricos del encuentroId
-            encuentroId = encuentroId.replace(/\D/g, '');
-
-            // Prepara los datos para enviar
-            var datos = 'encuentro_id=' + encuentroId;
-
             // Inicia la solicitud AJAX
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/cambiar_estado_encuentro_E/', true);
@@ -1772,6 +1776,8 @@ enviarButton.addEventListener('click', enviarHTML);
 
             // Envía la solicitud con los datos
             xhr.send(datos);
+            console.log('Partido finalizado:', partidoIniciado);
+
         }
     }
 

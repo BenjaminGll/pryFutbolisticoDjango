@@ -23,10 +23,11 @@
           <label for="tipos_evento_relacionados">Tipo de Evento:</label>
           <select name="tipos_evento_relacionados" id="tipos_evento_relacionados" class="form-control">
             <option value="input" selected disabled>Seleccionar tipo de evento</option>
-            {% for tipo_evento in tipos_evento_relacionados %}
+            {% for tipo_evento in tipos_evento_relacionados|dictsort:"nombre" %}
               <option value="{{ tipo_evento.tipo_evento_id }}">{{ tipo_evento.nombre }}</option>
             {% endfor %}
           </select>
+
 
           <label for="alineacion01" id="label_alineacion01" class="alineacion-label">Alineación 01:</label>
           <select name="alineacion01" id="alineacion01" class="form-control alineacion-dropdown">

@@ -171,13 +171,10 @@
 <script>
   function validarTiempo(input) {
       var valor = input.value;
-  
       var numero = parseInt(valor);
-
       if (numero < 0) {
           input.value = 1;
       }
-  
       if (numero > 220) {
           input.value = 220;
       }

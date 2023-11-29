@@ -232,46 +232,10 @@ def contextoOrganizaciones(request):
             "organizaciones": organizaciones,
         },
     )
+    
 def obtener_tipos_organizacion():
     tipos = organizacion.CHOICE_TIPO
     return tipos
-
-
-def obtener_grupos_por_competicion(competicion_id):
-    detalles_grupos = detalle_grupo.objects.filter(competicion_id=competicion_id)
-
-    # Obtén los valores de las foráneas (grupo_id, fase_id y equipo_id)
-    grupo_ids = detalles_grupos.values_list("grupo_id", flat=True)
-    fase_ids = detalles_grupos.values_list("fase_id", flat=True)
-    equipo_ids = detalles_grupos.values_list("equipo_id", flat=True)
-
-    # Utiliza los valores para obtener los objetos de grupo, fase y equipo
-    grupos = grupo.objects.filter(grupo_id__in=grupo_ids)
-    fases = fase.objects.filter(fase_id__in=fase_ids)
-    equipos = equipo.objects.filter(equipo_id__in=equipo_ids)
-
-    return grupos, fases, equipos
-
-def contextoGrupos(request):
-    # Obtener todas las competiciones
-    competiciones = competicion.objects.all()
-    competicion_id = request.GET.get("competicion_id")
-
-    # Verificar si competicion_id es un número válido
-    if competicion_id and competicion_id.isdigit():
-        grupos, _, _ = obtener_grupos_por_competicion(int(competicion_id))
-    else:
-        grupos = []
-
-    return render(
-        request,
-        "Reportegrupos.html",  # Reemplaza con la plantilla que estás utilizando
-        {
-            "competiciones": competiciones,
-            "detalles_grupos": grupos,  # Cambia el nombre de la variable
-        },
-    )
-
 
 def lista_personas_por_tipo(request):
     tipo_personas = tipo_persona.objects.values('descripcion').annotate(min_id=models.Min('tipo_persona_id')).order_by('descripcion')
@@ -581,14 +545,15 @@ def contextoTablaPosiciones(request, nombre_competicion):
     listar_equipos_fase_grupos = detalle_grupo.objects.filter(
         fase_id=fase_grupos.fase_id
     ).values("equipo_id")
-
+   
     listar_grupos_fase_grupos = (
-        detalle_grupo.objects.filter(fase_id=fase_grupos.fase_id)
-        .values_list("grupo_id", flat=True)
-        .distinct()
-        .order_by("grupo_id")
+    detalle_grupo.objects.filter(fase_id=fase_grupos.fase_id)
+    .select_related('grupo')  # Optimización para evitar consultas adicionales
+    .order_by("grupo_id")
+    .values_list("grupo_id", flat=True)
+    .distinct()
     )
-
+    
     nombre_grupos = grupo.objects.filter(grupo_id__in=listar_grupos_fase_grupos)
 
     # Crear un diccionario para almacenar la información por fase y grupo
@@ -897,17 +862,6 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
             evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
 
-        #return redirect('mostrar_evento', id_encuentro=idEncuentro)
-
-    # if request.method == 'POST'and filtro_default=='generales':
-    #     dynamic_html = request.POST.get('miTextarea')
-    #     print("El valor del html es", dynamic_html)
-
-
-
-
-    
-
 
     tipo_filtro = request.GET.get('filtro', filtro_default)
     nombres_eventos_generales = ["CRONOMETRO", "PARTIDO SUSPENDIDO"]
@@ -915,6 +869,8 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
     equipo_visita=''
     alineaciones_local = ''
     alineaciones_visita=''
+    formacion_local=''
+    formacion_visita=''
 
     if tipo_filtro == 'generales':
 
@@ -931,8 +887,10 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
             ).first()
         alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id).order_by('-estado', 'dorsal')
         alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id).order_by('-estado', 'dorsal')
-        # print('Alineacion local',alineaciones_local)
-        # print('Alineacion visita',alineaciones_visita)
+        formacion_local =  alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id).first().formacion
+        formacion_visita =  alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id).first().formacion
+        print('Alineacion local',formacion_local.formacion)
+        print('Alineacion visita',formacion_visita.formacion)
 
     elif tipo_filtro == 'en_juego':
         eventos = evento.objects.filter(encuentro_id=idEncuentro).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales).reverse()
@@ -940,7 +898,7 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
         print('Template name evento:', template_name)
         eventos = evento.objects.none()
 
-    return render(request, template_name, {'eventos': eventos, 'tipo_filtro': tipo_filtro,'idEncuentro': idEncuentro, 'equipo_local':equipo_local,'equipo_visita':equipo_visita,'alineacion_local':alineaciones_local,'alineacion_visita':alineaciones_visita})
+    return render(request, template_name, {'eventos': eventos, 'tipo_filtro': tipo_filtro,'idEncuentro': idEncuentro, 'equipo_local':equipo_local,'equipo_visita':equipo_visita,'alineacion_local':alineaciones_local,'alineacion_visita':alineaciones_visita, 'formacion_local':formacion_local, 'formacion_visita':formacion_visita})
 
 def mostrarEvento(request, idEncuentro):
     return base_evento_view(request, idEncuentro, 'moduloTV/evento.html',filtro_default='en_juego')
@@ -1085,6 +1043,7 @@ def guardar_eventos_temporales(eventos,tiempo):
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
+
         elif evento.tipo_evento_id.nombre == 'TARJETA AMARILLA':
              banner = {
                'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_amarilla.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo

@@ -24,7 +24,7 @@
 
 <!--  -->
 
-
+<div id="eventos-container">
 {% for e in eventos %}
 <div class="card mb-4">
     <div class="card-body">
@@ -49,12 +49,14 @@
             <div class="col-md-2 mb-2">
                 <input type="hidden" name="idEvento" value="{{ e.evento_id }}">
 
-                <h5> {{ e.tiempo_reglamentario }}</h5>
+                <h5> {{ e.tiempo }}</h5>
 
 
             </div>
             <div class="col-md-2 mb-2">
-                <input type="time" class="form-control" id="tiempo" name="tiempo">
+                <!-- <input type="time" class="form-control" id="tiempo" name="tiempo"> -->
+                <input type="number" class="form-control"  value="10" name="tiempo" min="1"
+                max="36000">
             </div>
             <div class="col-md-1 mb-2">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-eye"> Mostrar</i> </button>
@@ -65,7 +67,7 @@
         </form>
     </div>
 </div>
-
+</div>
 <!-- Modal para ver detalles -->
 <!-- Modal para ver detalles -->
 <!-- <div class="modal fade" id="verDetallesModal{{ e.evento_id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -115,12 +117,35 @@
 
 
 {% endfor %}
+<!-- Agrega esto en el head de tu HTML -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    function actualizarPagina() {
-      location.reload();
-    }
-    
-    setInterval(actualizarPagina, 10000);
-    </script>
+    $(document).ready(function () {
+        function actualizarPagina() {
+            // Cargar la página actual sin caché
+            $.ajax({
+                url: window.location.href,
+                type: 'GET',
+                cache: false,
+                success: function (data) {
+                    // Actualizar el contenido de la página con la respuesta
+                    var nuevoContenido = $(data);
+
+                    // Actualizar contenedor principal
+                    var contenedorPrincipal = nuevoContenido.find('#eventos-container');
+                    $('.eventos-container').html(contenedorPrincipal.html());
+
+                },
+            });
+        }
+
+        // Actualizar la página cada 2 segundos
+        setInterval(actualizarPagina, 2000);
+    });
+
+
+
+</script>
+
 
 {% endblock %}

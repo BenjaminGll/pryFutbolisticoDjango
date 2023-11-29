@@ -42,6 +42,31 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .banners-container {
+    position: absolute;
+    top: 50%;
+    right: 3%;
+    color: white;
+    text-align: center;
+    width: 600px;
+    font-size: 20px;
+    border-radius: 5px;
+    z-index: 1;
+  }
+  .banner-marcadores {
+    position: absolute;
+    top: 230px;
+    right: 1050px;
+    background-color: rgb(210, 210, 210);
+    color: black;
+    text-align: center;
+    height: 30px;
+    width: 280px;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 1;
+  }
 </style>
 
 <div class="container">
@@ -1248,15 +1273,15 @@ enviarButton.addEventListener('click', enviarHTML);
                 'background-color: rgba(0, 0, 0, 0.7);' +
                 'border: 1px solid #ddd;' +
                 'border-radius: 5px;' +
-                'box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); position: absolute;top: -80px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px;"     >' +
+                'box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); position: absolute;top: -80px; left: 20%;margin-top: 60%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 400px; font-size: 13px; border-radius: 5px;"     >' +
 
                 '<!-- Primera fila -->' +
                 '<div class="row" style="display: flex;' +
                 'align-items: center;' +
                 'margin-bottom: 10px;">' +
 
-                '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Logo 1" class="logo" style="width: 50px;' +
-                'height: 50px;' +
+                '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Logo 1" class="logo" style="width: 80px;' +
+                'height: 80px;' +
                 'object-fit: cover;' +
                 'border-radius: 50%;' +
                 'margin-right: 10px;">' +
@@ -1265,18 +1290,18 @@ enviarButton.addEventListener('click', enviarHTML);
 
                 '<!-- Segunda fila -->' +
                 '<div class="col">' +
-                '<div class="row" style="display: flex;">' +
-                '<div class="player-info" style="font-size: 16px; font-weight: bold; text-align: center;' +
-                'background-color: red; color: white;">' +
-                '<div class="player-dorsal" style="display: inline-block;">' + datos.dorsal + '</div>' +
+                '<div class="row" style="display: flex;margin-left: 5px;">' +
+                '<div class="player-info" style="font-size: 16px; font-weight: bold; text-align: left;' +
+                'background-color: red; color: white;width: 90%;margin-bottom: 10px;padding-left: 20px;">' +
+                '<div class="player-dorsal" style="display: inline-block; ">' + datos.dorsal + '.</div>' +
                 '&nbsp;' +
                 '<div class="player-name" style="display: inline-block;"> ' + datos.jugador + ' </div>' +
                 '</div>' +
                 '</div>' +
 
-                '<div class="row">' +
-                '<div class="user-text" style="font-size: 16px; text-align: center;' +
-                'background-color: rgba(0, 0, 0, 0.7); color: white; ">' +
+                '<div class="row" style="display: flex;margin-left: 5px; ">' +
+                '<div class="user-text" style="font-size: 16px; text-align: left;' +
+                'background-color: rgba(0, 0, 0, 0.7); color: white;width: 90%;padding-left: 20px;">' +
 
                 '' + resultado + ' </div>' +
                 '</div>' +
@@ -1368,15 +1393,15 @@ enviarButton.addEventListener('click', enviarHTML);
                 'background-color: rgba(0, 0, 0, 0.7);' +
                 'border: 1px solid #ddd;' +
                 'border-radius: 5px;' +
-                'box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); position: absolute;top: -80px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px;"     >' +
-
+                'box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); position: absolute;top: -80px; left: 20%;margin-top: 60%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 400px; font-size: 13px; border-radius: 5px;"     >' +
+-
                 '<!-- Primera fila -->' +
                 '<div class="row" style="display: flex;' +
                 'align-items: center;' +
                 'margin-bottom: 10px;">' +
 
-                '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Logo 1" class="logo" style="width: 50px;' +
-                'height: 50px;' +
+                '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Logo 1" class="logo" style="width: 80px;' +
+                'height: 80px;' +
                 'object-fit: cover;' +
                 'border-radius: 50%;' +
                 'margin-right: 10px;">' +
@@ -1385,18 +1410,18 @@ enviarButton.addEventListener('click', enviarHTML);
 
                 '<!-- Segunda fila -->' +
                 '<div class="col">' +
-                '<div class="row" style="display: flex;">' +
-                '<div class="player-info" style="font-size: 16px; font-weight: bold; text-align: center;' +
-                'background-color: red; color: white;">' +
+                '<div class="row" style="display: flex;margin-left: 5px;">' +
+                '<div class="player-info" style="font-size: 16px; font-weight: bold; text-align: left;' +
+                'background-color: red; color: white;width: 90%;margin-bottom: 10px;padding-left: 20px;">' +
                 '<div class="player-dorsal" style="display: inline-block;">' + datos.dorsal + '</div>' +
                 '&nbsp;' +
                 '<div class="player-name" style="display: inline-block;"> ' + datos.jugador + ' </div>' +
                 '</div>' +
                 '</div>' +
 
-                '<div class="row">' +
-                '<div class="user-text" style="font-size: 16px; text-align: center;' +
-                'background-color: rgba(0, 0, 0, 0.7); color: white; ">' +
+                '<div class="row" style="display: flex;margin-left: 5px;">' +
+                '<div class="user-text" style="font-size: 16px; text-align: LEFT;' +
+                'background-color: rgba(0, 0, 0, 0.7); color: white; width: 90%;padding-left: 20px;">' +
 
                 '' + resultado + ' </div>' +
                 '</div>' +

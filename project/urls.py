@@ -51,7 +51,6 @@ urlpatterns = [
     path('cambiar_estado_encuentro_F/', cambiar_estado_encuentro_F, name='cambiar_estado_encuentro_F'),
     path('reporte/personas/', lista_personas_por_tipo, name='lista_personas'),
     path('reporte/jugadores', reporte_jugadores, name='reporte_jugadores'),
-    path('lista/jugadores', repojugadores, name='repojugadores'),
     #Esta si se puede eliminar
     path('reporte/organizacion', contextotablaorganizacion, name='lista_organizacion'),
     #

@@ -47,8 +47,13 @@ class equipo(models.Model):
     tipo_equipo_id = models.ForeignKey('tipo_equipo', on_delete=models.CASCADE, db_column='tipo_equipo_id')
     sede_id = models.ForeignKey("appPartido.sede", on_delete=models.CASCADE, db_column='sede_id')
     deporte_id = models.ForeignKey("appCompeticion.deporte", on_delete=models.CASCADE, db_column='deporte_id', default=1)
-    entrenador_id = models.ForeignKey("appContrato.contrato",on_delete=models.CASCADE,db_column='contrato_id',null=True)
-
+    entrenador_id = models.ForeignKey(
+        "appContrato.contrato",
+        on_delete=models.CASCADE,
+        db_column='contrato_id',
+        null=True,
+        limit_choices_to={'persona__tipo_persona_id': 2}
+    )
 
     def save(self, *args, **kwargs):
         self.nombre = self.nombre.upper()

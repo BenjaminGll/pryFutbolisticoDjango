@@ -977,7 +977,7 @@ def guardar_eventos_temporales(eventos,tiempo):
             }
         elif evento.tipo_evento_id.nombre == 'REMATE':
             banner = {
-                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);  margin-top: 50%;">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="width: 13%;margin-top: -5%;"> <span style="padding-right: 5px;padding-left: 5px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/remate.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);  margin-top: 50%;">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="width: 13%;margin-top: -5%;"> <span style="padding-right: 5px;padding-left: 5px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/remate.png")}" alt="" style="width: 13%;margin-top: -5%;"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'REMATE AL ARCO':
             banner = {

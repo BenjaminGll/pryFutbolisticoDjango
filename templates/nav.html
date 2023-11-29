@@ -1,4 +1,12 @@
 <!-- mainmenu-->
+<style>
+  .scrollable-list {
+    max-height: 150px; 
+    overflow-y: auto; 
+  }
+</style>
+
+</style>
 <nav class="mainmenu" style="position: revert !important;">
   <div class="container">
     <!-- Menu-->
@@ -86,7 +94,7 @@
         </li>
         <li class="current">
           <a href="#">Tabla De Posiciones</a>
-          <ul class="sub-current">
+          <ul class="sub-current scrollable-list">
             {% for c_n in competencias_nav %}
               <li><a href="/reporte_tabla_posiciones/{{c_n.nombre.lower}}" value="Copa Mundial Qatar 2022">{{c_n.nombre.lower}}</a></li>
               {% endfor %}

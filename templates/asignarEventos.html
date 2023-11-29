@@ -23,25 +23,30 @@
           <label for="tipos_evento_relacionados">Tipo de Evento:</label>
           <select name="tipos_evento_relacionados" id="tipos_evento_relacionados" class="form-control">
             <option value="input" selected disabled>Seleccionar tipo de evento</option>
-            {% for tipo_evento in tipos_evento_relacionados %}
+            {% for tipo_evento in tipos_evento_relacionados|dictsort:"nombre" %}
               <option value="{{ tipo_evento.tipo_evento_id }}">{{ tipo_evento.nombre }}</option>
             {% endfor %}
           </select>
 
+
           <label for="alineacion01" id="label_alineacion01" class="alineacion-label">Alineación 01:</label>
           <select name="alineacion01" id="alineacion01" class="form-control alineacion-dropdown">
-          <option value="input" selected disabled>Seleccionar alineación 01</option>
-          {% for alineacion in alineacion01 %}
-          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
-          {% endfor %}
+            <option value="input" selected disabled>Seleccionar alineación 01</option>
+            {% for alineacion in alineacion01 %}
+              <option value="{{ alineacion.alineacion_id }}" style="color: {% if alineacion.estado %}black{% else %}darkred{% endif %};">
+                {{ alineacion.contrato_id }}-{{ alineacion.posicion_jugador_id.descripcion}}
+              </option>
+            {% endfor %}
           </select>
-
+          
           <label for="alineacion02" id="label_alineacion02" class="alineacion-label">Alineación 02:</label>
           <select name="alineacion02" id="alineacion02" class="form-control alineacion-dropdown">
-          <option value="input" selected disabled>Seleccionar alineación 02</option>
-          {% for alineacion in alineacion02 %}
-          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
-          {% endfor %}
+            <option value="input" selected disabled>Seleccionar alineación 02</option>
+            {% for alineacion in alineacion02 %}
+              <option value="{{ alineacion.alineacion_id }}" style="color: {% if alineacion.estado %}black{% else %}darkred{% endif %};">
+                {{ alineacion.contrato_id }}-{{ alineacion.posicion_jugador_id.descripcion}}
+              </option>
+            {% endfor %}
           </select>
 
         </div>
@@ -171,17 +176,16 @@
 <script>
   function validarTiempo(input) {
       var valor = input.value;
-  
       var numero = parseInt(valor);
-
       if (numero < 0) {
           input.value = 1;
       }
-  
       if (numero > 220) {
           input.value = 220;
       }
   }
   </script>
+
+  
 
 {% endblock %}

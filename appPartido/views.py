@@ -282,7 +282,8 @@ def asignarEventos(request, encuentro_id):
     eventos = evento.objects.filter(encuentro_id=encuentro_id)
 
     tipo_evento_id = None  # Inicializar la variable fuera del bloque condicional
-
+   
+        
     if request.method == 'POST':
         tipo_evento_id = request.POST.get('tipos_evento_relacionados')
         evento_equipo = request.POST.get('equipo')
@@ -353,6 +354,8 @@ def asignarEventos(request, encuentro_id):
         'alineacion01': alineacion01,
         'alineacion02': alineacion02,
     })
+    
+    
 def asignarEstadisticas(request, encuentro_id):
     encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
     equipoLocal = equipo.objects.get(nombre=encuentro_obj.equipo_local)

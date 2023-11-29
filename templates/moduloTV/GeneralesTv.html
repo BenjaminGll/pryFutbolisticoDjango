@@ -42,6 +42,31 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .banners-container {
+    position: absolute;
+    top: 50%;
+    right: 3%;
+    color: white;
+    text-align: center;
+    width: 600px;
+    font-size: 20px;
+    border-radius: 5px;
+    z-index: 1;
+  }
+  .banner-marcadores {
+    position: absolute;
+    top: 230px;
+    right: 1050px;
+    background-color: rgb(210, 210, 210);
+    color: black;
+    text-align: center;
+    height: 30px;
+    width: 280px;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 1;
+  }
 </style>
 
 <div class="container">
@@ -68,12 +93,12 @@
 
             {% endwith %}
 
-            {% with alineacion_local=alineacion_local %} 
-            <input type="text" id="formacionLocal" name="formacionLocal" value="{{ alineacion_local.formacion }}">
+            {% with formacion_local=formacion_local %} 
+            <input type="text" id="formacionLocal" name="formacionLocal" value="{{ formacion_local.formacion }}">
             {% endwith %}
 
-            {% with alineacion_visita=alineacion_visita %} 
-            <input type="text" id="formacionVisita" name="formacionVisita" value="{{ alineacion_visita.formacion }}">
+            {% with formacion_visita=formacion_visita %} 
+            <input type="text" id="formacionVisita" name="formacionVisita" value="{{ formacion_visita.formacion }}">
             {% endwith %}
 
         </div>
@@ -137,12 +162,12 @@
 
         <!-- Cronómetro -->
         <div class="col-md-4">
-            <form id="cronometroForm">
-                {% csrf_token %}
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Cronómetro</h3>
-                        <div class="input-group">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Cronómetro</h3>
+                    <div class="input-group">
+                        <form id="cronometroForm">
+                            {% csrf_token %}
                             <input type="text" class="form-control" id="tiempoCrono" name="tiempoCrono"
                                 pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
                             <button type="button" class="btn btn-success" id="btnlimpiarplay"
@@ -164,12 +189,23 @@
                             </button>
                             <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn"
                                 onclick="iniciarFinalizarPartido()"><i class="fas fa-play"></i> Iniciar Partido</button>
-
-                        </div>
+                        </form>
                     </div>
-
                 </div>
-            </form>
+                <div class="card-body">
+                    <form>
+                        {% csrf_token %}
+
+                        <input type="number" class="form-control" id="tExtra" name="tExtra" placeholder="T.Extra: MM"
+                            title="Formato válido: MM" required>
+
+                        <button type="button" class="btn btn-info" onclick="enviarComando('tiempoExtra')">
+                            <i class="fas fa-eye">Mostrar</i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
         </div>
 
         <!-- Himnos -->
@@ -291,7 +327,7 @@
                                 <label class="form-check-label" for="LtarjetasRojasCheckbox">Tarjetas rojas</label>
                             </div>
                             <div class="form-check">
-                                <input type="radio" name="finalType" class="form-check-input" id="LgolesTotalesCheckbox"
+                                <input type="radio" name="finalType" class="form-check-input" id="LgolesTotalesCheckbox"vscode-file://vscode-app/c:/Users/Usuario/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html
                                     value=3>
                                 <label class="form-check-label" for="LgolesTotalesCheckbox">Goles totales</label>
                             </div>
@@ -746,6 +782,11 @@ enviarButton.addEventListener('click', enviarHTML);
     }
     function enviarComando(accion) {
         var tiempo = document.getElementById('tiempoCrono').value;
+
+        if (accion == "tiempoExtra") {
+            var tiempo = document.getElementById('tExtra').value;
+        }
+
         fetch('/actualizar_cronometro/', {
             method: 'POST',
             headers: {
@@ -767,6 +808,7 @@ enviarButton.addEventListener('click', enviarHTML);
                 console.error('Error en la solicitud AJAX', error);
             });
     }
+    
 
     // // Función para generar el HTML dinámico
     // function generarHTML() {
@@ -876,17 +918,17 @@ enviarButton.addEventListener('click', enviarHTML);
 
         let html = '';
             
-     html+='<div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">'+
+     html+='<div style="display: flex;padding-left -100px;width: 800px; height: 40%; margin-top: 330px;">'+
 
-                    '<div style="display: flex;justify-content: space-between;width: 50%;">'+
+                    '<div style="display: flex;justify-content: space-between;width: 650px;">'+
 
-                        '<div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;"> '+ document.getElementById('golesLocal').value +' </div>';
+                        '<div name="marcador-local" style="background-color: white;color:black;width:110px; font-size: 2.8em;border-radius: 10%; margin-left: 5px;"> '+ document.getElementById('golesLocal').value +' </div>';
 
                         if(casilla2.checked){
-                  html+='<div name="escudo" style="padding-right: 1%;">'+
-                            '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Team 1 Logo" style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
+                  html+='<div name="escudo" style="padding-right: 1%; width: 140px;margin-left: 5px;" >';
+                  html+='<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Equipo Local" style="width: 140px; height: 90px; margin-right: 1px;background-color: rgb(199, 199, 199);">';
+                  html+='</div>';
                         
-                        '</div>';
                         }
                         
                   html+='<div name="container-equipo-informacion" style="width: 100%;">'+
@@ -899,13 +941,13 @@ enviarButton.addEventListener('click', enviarHTML);
                             '<div name="juego" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">';
                                 if(casilla.checked){
                                 
-                          html+='<div name="estadio" style="text-align: left; padding-left: 3%; color: white;">'+
+                          html+='<div name="estadio" style="text-align: left; padding-left: 20px; color: white;">'+
 
                                     document.getElementById('estadioMarcadorCompleto').value + 
                                 '</div>';
                                 }
                                 
-                          html+='<div name="Resumen_Tiempo" style="text-align: right; padding-right: 3%; color: white;">'+
+                          html+='<div name="Resumen_Tiempo" style="text-align: right; padding-right: 20px; color: white;">'+
                                      tiemp_banner +
                                 '</div>'+
 
@@ -915,14 +957,14 @@ enviarButton.addEventListener('click', enviarHTML);
 
                 if(casilla2.checked){
                            
-                  html+='<div name="escudo" style="padding-left: 1%;">'+
+                  html+='<div name="escudo" style="padding-left: 1%; width: 140px;">'+
 
-                            '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team 1 Logo" style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
+                            '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team 1 Logo" style="width: 140px;background-color: rgb(199, 199, 199); height: 90px; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
                         
                         '</div>';
                     }
                         
-                  html+='<div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">'+ document.getElementById('golesVisita').value +' </div>'+
+                  html+='<div name="marcador-visita" style="background-color: white;color:black;width:110px; font-size: 2.8em;border-radius: 10%; margin-left: 1%;">'+ document.getElementById('golesVisita').value +' </div>'+
 
                     '</div>'+
 
@@ -1177,9 +1219,9 @@ enviarButton.addEventListener('click', enviarHTML);
                 '<div class="left-side" style="padding: 20px; display: flex; flex-direction: column; align-items: center; background: rgba(0, 0, 0, 0.8);">' +
                 '<span class="team-name" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">' + document.getElementById('nombreLocal').value + '</span>' +
                 '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Team Logo" class="team-logo" style="width: 150px; height: auto; margin-bottom: 20px;">' +
-                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">4-2-3-1</div>' +
+                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">'+ document.getElementById('formacionLocal').value +'</div>' +
                 '</div>' +
-                '<div class="middle-side" style="display: flex; align-items: center; background: rgba(50, 50, 50, 0.8); padding: 0 10px;">' +
+                '<div class="middle-side" style="display: flex; align-items: center; background: rgba(50, 50, 50, 0.8); padding: 0 10px;">' +                
                 '<span class="title" style="font-size: 16px; font-weight: bold; color: white; writing-mode: vertical-lr; transform: rotate(180deg);">TITULARES</span>' +
                 '</div>' +
                 '<div class="right-side" style="padding: 20px; display: flex; flex-direction: column; align-items: flex-start;">' +
@@ -1297,7 +1339,7 @@ enviarButton.addEventListener('click', enviarHTML);
                 '<div class="left-side" style="padding: 20px; display: flex; flex-direction: column; align-items: center; background: rgba(0, 0, 0, 0.8);">' +
                 '<span class="team-name" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">' + document.getElementById('nombreVisita').value + '</span>' +
                 '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team Logo" class="team-logo" style="width: 150px; height: auto; margin-bottom: 20px;">' +
-                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">4-2-3-1</div>' +
+                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">'+ document.getElementById('formacionVisita').value +'</div>' +
                 '</div>' +
                 '<div class="middle-side" style="display: flex; align-items: center; background: rgba(50, 50, 50, 0.8); padding: 0 10px;">' +
                 '<span class="title" style="font-size: 16px; font-weight: bold; color: white; writing-mode: vertical-lr; transform: rotate(180deg);">TITULARES</span>' +

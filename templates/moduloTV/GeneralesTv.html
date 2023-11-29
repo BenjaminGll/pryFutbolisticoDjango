@@ -69,11 +69,11 @@
             {% endwith %}
 
             {% with formacion_local=formacion_local %} 
-            <input type="text" id="formacionLocal" name="formacionLocal" value="{{ formacion_local }}">
+            <input type="text" id="formacionLocal" name="formacionLocal" value="{{ formacion_local.formacion }}">
             {% endwith %}
 
             {% with formacion_visita=formacion_visita %} 
-            <input type="text" id="formacionVisita" name="formacionVisita" value="{{ formacion_visita }}">
+            <input type="text" id="formacionVisita" name="formacionVisita" value="{{ formacion_visita.formacion }}">
             {% endwith %}
 
         </div>
@@ -1177,9 +1177,9 @@ enviarButton.addEventListener('click', enviarHTML);
                 '<div class="left-side" style="padding: 20px; display: flex; flex-direction: column; align-items: center; background: rgba(0, 0, 0, 0.8);">' +
                 '<span class="team-name" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">' + document.getElementById('nombreLocal').value + '</span>' +
                 '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Team Logo" class="team-logo" style="width: 150px; height: auto; margin-bottom: 20px;">' +
-                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">4-2-3-1</div>' +
+                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">'+ document.getElementById('formacionLocal').value +'</div>' +
                 '</div>' +
-                '<div class="middle-side" style="display: flex; align-items: center; background: rgba(50, 50, 50, 0.8); padding: 0 10px;">' +
+                '<div class="middle-side" style="display: flex; align-items: center; background: rgba(50, 50, 50, 0.8); padding: 0 10px;">' +                
                 '<span class="title" style="font-size: 16px; font-weight: bold; color: white; writing-mode: vertical-lr; transform: rotate(180deg);">TITULARES</span>' +
                 '</div>' +
                 '<div class="right-side" style="padding: 20px; display: flex; flex-direction: column; align-items: flex-start;">' +
@@ -1297,7 +1297,7 @@ enviarButton.addEventListener('click', enviarHTML);
                 '<div class="left-side" style="padding: 20px; display: flex; flex-direction: column; align-items: center; background: rgba(0, 0, 0, 0.8);">' +
                 '<span class="team-name" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">' + document.getElementById('nombreVisita').value + '</span>' +
                 '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team Logo" class="team-logo" style="width: 150px; height: auto; margin-bottom: 20px;">' +
-                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">4-2-3-1</div>' +
+                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">'+ document.getElementById('formacionVisita').value +'</div>' +
                 '</div>' +
                 '<div class="middle-side" style="display: flex; align-items: center; background: rgba(50, 50, 50, 0.8); padding: 0 10px;">' +
                 '<span class="title" style="font-size: 16px; font-weight: bold; color: white; writing-mode: vertical-lr; transform: rotate(180deg);">TITULARES</span>' +

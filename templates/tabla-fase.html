@@ -33,7 +33,7 @@
                 <div class="col-lg-12">
                     {% for grupo_id, equipos_info in equipos_por_grupo_info.items %}
                         {% for grupo_nombre in listar_grupos_fase_grupos %}
-                                {% if forloop.counter0 == grupo_id%}
+                                {% if forloop.counter == grupo_id%}
                                     <h1>{{ grupo_nombre }}</h1>
                                 {% endif %}
                         {% endfor %}

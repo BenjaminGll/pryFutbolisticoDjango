@@ -232,46 +232,10 @@ def contextoOrganizaciones(request):
             "organizaciones": organizaciones,
         },
     )
+    
 def obtener_tipos_organizacion():
     tipos = organizacion.CHOICE_TIPO
     return tipos
-
-
-def obtener_grupos_por_competicion(competicion_id):
-    detalles_grupos = detalle_grupo.objects.filter(competicion_id=competicion_id)
-
-    # Obtén los valores de las foráneas (grupo_id, fase_id y equipo_id)
-    grupo_ids = detalles_grupos.values_list("grupo_id", flat=True)
-    fase_ids = detalles_grupos.values_list("fase_id", flat=True)
-    equipo_ids = detalles_grupos.values_list("equipo_id", flat=True)
-
-    # Utiliza los valores para obtener los objetos de grupo, fase y equipo
-    grupos = grupo.objects.filter(grupo_id__in=grupo_ids)
-    fases = fase.objects.filter(fase_id__in=fase_ids)
-    equipos = equipo.objects.filter(equipo_id__in=equipo_ids)
-
-    return grupos, fases, equipos
-
-def contextoGrupos(request):
-    # Obtener todas las competiciones
-    competiciones = competicion.objects.all()
-    competicion_id = request.GET.get("competicion_id")
-
-    # Verificar si competicion_id es un número válido
-    if competicion_id and competicion_id.isdigit():
-        grupos, _, _ = obtener_grupos_por_competicion(int(competicion_id))
-    else:
-        grupos = []
-
-    return render(
-        request,
-        "Reportegrupos.html",  # Reemplaza con la plantilla que estás utilizando
-        {
-            "competiciones": competiciones,
-            "detalles_grupos": grupos,  # Cambia el nombre de la variable
-        },
-    )
-
 
 def lista_personas_por_tipo(request):
     tipo_personas = tipo_persona.objects.values('descripcion').annotate(min_id=models.Min('tipo_persona_id')).order_by('descripcion')
@@ -581,14 +545,15 @@ def contextoTablaPosiciones(request, nombre_competicion):
     listar_equipos_fase_grupos = detalle_grupo.objects.filter(
         fase_id=fase_grupos.fase_id
     ).values("equipo_id")
-
+   
     listar_grupos_fase_grupos = (
-        detalle_grupo.objects.filter(fase_id=fase_grupos.fase_id)
-        .values_list("grupo_id", flat=True)
-        .distinct()
-        .order_by("grupo_id")
+    detalle_grupo.objects.filter(fase_id=fase_grupos.fase_id)
+    .select_related('grupo')  # Optimización para evitar consultas adicionales
+    .order_by("grupo_id")
+    .values_list("grupo_id", flat=True)
+    .distinct()
     )
-
+    
     nombre_grupos = grupo.objects.filter(grupo_id__in=listar_grupos_fase_grupos)
 
     # Crear un diccionario para almacenar la información por fase y grupo

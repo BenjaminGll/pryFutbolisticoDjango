@@ -37,8 +37,6 @@ urlpatterns = [
     path('admintv/encuentros', mostrarEncuentrosEvento, name='mostrar_encuentro_evento'),
     path('limpiar-eventos-temporales/', limpiar_eventos_temporales, name='limpiar_eventos_temporales'),
     path('admintv/generales/<int:idEncuentro>/',mostrarEventosGenerales , name='mostrar_eventos_generales'),
-
-
     path('competencias/<str:nombre_competicion>/fixture',contextoFixtureCompetencia),
     path('competencias/<str:nombre_competicion>/encuentros',contextoEncuentros),
     # path('competencias/<str:nombre_competicion>/lista_jugadores_amarillas',contextoListaJugadoresPorAmarillas),
@@ -46,28 +44,21 @@ urlpatterns = [
     path("tabla-posiciones/<str:nombre_competicion>",contextoTablaPosiciones),
     path("reporte/sedes", contextoSedes, name="sedes/filtrar"),
     path("reporte/organizaciones", contextoOrganizaciones, name="filtrar/organizaciones"),
-    path("reporte/grupos", contextoGrupos, name="filtrar/grupos"),
     path('reporte_tabla_posiciones/<str:nombre_competicion>/', contextoTablaPosiciones),
     path('sede/detalle/<int:sede_id>/', detalle_sede, name='detalle_sede'),
     path('reporte/equipos/', lista_equipos_por_competicion_y_fase, name='lista_equipos'),
     path('cambiar_estado_encuentro_E/', cambiar_estado_encuentro_E, name='cambiar_estado_encuentro_E'),
     path('cambiar_estado_encuentro_F/', cambiar_estado_encuentro_F, name='cambiar_estado_encuentro_F'),
-
     path('reporte/personas/', lista_personas_por_tipo, name='lista_personas'),
     path('reporte/jugadores', reporte_jugadores, name='reporte_jugadores'),
-    
     #Esta si se puede eliminar
     path('reporte/organizacion', contextotablaorganizacion, name='lista_organizacion'),
     #
     path('reporte/organizacion/<int:orga_id>', contextotablaorganizacionindi, name='lista_organizacion_indi'),
     path('apicompetenciasequipo/<str:nombre_competicion>/', apicompetenciasequipo, name='apicompetenciasequipo'),
-    
     path('apitarjetas/<int:tipo>/<int:idContrato>/', infracciones, name='apitarjetas'),
-
-
     path('actualizar_cronometro/', actualizar_cronometro, name='actualizar_cronometro'),
     path('obtener_cronometro/', obtener_hora_actual, name='obtener_cronometro'),
-
     # path('futbol/tv/<int:id>',contextoTv),
     path("futbol/sedes", contextoSedes),
     # path("futbol/tv/<int:id>", contextoTv),

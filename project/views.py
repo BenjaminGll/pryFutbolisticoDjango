@@ -945,91 +945,91 @@ def guardar_eventos_temporales(eventos,tiempo):
     for evento in eventos:
         if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR ':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br><img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/cambio_visita.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/cambio_visita.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br><img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/cambio_visita.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/cambio_visita.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'CORNER':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/corner.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/corner.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'POSICION':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/posicion.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/posicion.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'TIRO LIBRE DIRECTO':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/tiro_libre.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/tiro_libre.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'TIRO LIBRE INDIRECTO':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/tiro_libre.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/tiro_libre.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'PENALTY':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/penalty.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/penalty.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'LESIÓN':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/lesion.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/lesion.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'ATAJADAS':
             banner = {
-                'html': f'<div class="banner-container; style="background-color: rgba(0, 0, 0, 0.7)">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/atajada.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/atajada.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'REMATE':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/remate.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/remate.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'REMATE AL ARCO':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'REMATE AL DESVIADO':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'SAQUE DE BANDA':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'SAQUE DE META':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'ASISTENCIA':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'ATAQUE':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'ATAQUE PELIGROSO':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'DISPARO AL PALO':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'RECUPERACION DE BALON':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'INTERSECCION':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'DESPEJE':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'TEST':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'ESTADISTICAS FINALES':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
         # elif evento.tipo_evento_id.nombre == 'CARA A CARA':
         #     banner = {
@@ -1037,7 +1037,7 @@ def guardar_eventos_temporales(eventos,tiempo):
         #     }
         elif evento.tipo_evento_id.nombre == 'TARJETA ROJA':
             banner = {
-                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);  >{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);"  >{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             }
 
         elif evento.tipo_evento_id.nombre == 'TARJETA AMARILLA':
@@ -1051,7 +1051,7 @@ def guardar_eventos_temporales(eventos,tiempo):
             }
         elif evento.tipo_evento_id.descripcion == 'TIEMPO EXTRA':
             banner = {
-                'html': f'<div class="banner-container" position: absolute;top: -450px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px; z-index: 1;"> +{evento.cantidad} </div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);"> +{evento.cantidad} </div>','tiempo':tiempo
             }
         elif evento.tipo_evento_id.nombre == 'PARTIDO SUSPENDIDO':
             banner = {
@@ -1063,11 +1063,11 @@ def guardar_eventos_temporales(eventos,tiempo):
             };tiempo
         elif evento.tipo_evento_id.nombre == 'FALTA':
             banner = {
-                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/falta.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/falta.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             };tiempo
         elif evento.tipo_evento_id.nombre == 'ENTRENADOR':
             banner = {
-                'html': f'<div class="banner-container"><img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/entrenador.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);"><img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/entrenador.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             };tiempo
         elif evento.tipo_evento_id.descripcion == 'ALINEACION DE EQUIPO':
              jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion_id1.descripcion_encuentro_id.descripcion_encuentro_id)

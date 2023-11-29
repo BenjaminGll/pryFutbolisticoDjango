@@ -90,4 +90,5 @@ admin.site.register(categoria_equipo,categoriaEquipo)
 admin.site.register(tipo_equipo,tipoEquipoAdmin)
 admin.site.register(equipo,equipoAdmin)
 admin.site.register(posicion_jugador,posicionJugadorAdmin)
-admin.site.register(alineacion,AlineacionEquipoAdmin)
+# admin.site.register(alineacion,AlineacionEquipoAdmin)
+

@@ -16,6 +16,8 @@ from django.templatetags.static import static
 from django.forms.models import model_to_dict
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.http import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
 import json
 from operator import attrgetter
 def contextoNav():
@@ -753,17 +755,15 @@ def cambiar_estado_encuentro_E(request):
     if request.method == 'POST':
         # Obtén el ID del encuentro y realiza el cambio de estado
         encuentro_id = request.POST.get('encuentro_id')
-        # Realiza aquí el cambio de estado en tu modelo Encuentro
-        # Por ejemplo:
-        encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
-        encuentro_obj.estado_jugado = 'E'
-        encuentro_obj.save()
-
-        return JsonResponse({'success': True})
+        try:
+            encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
+            encuentro_obj.estado_jugado = 'E'
+            encuentro_obj.save()
+            return JsonResponse({'success': True})
+        except ObjectDoesNotExist:
+            return JsonResponse({'success': False, 'error': 'No se encontró el encuentro'})
     else:
         return JsonResponse({'success': False, 'error': 'Método no permitido'})
-
-
 def cambiar_estado_encuentro_F(request):
     if request.method == 'POST':
         # Obtén el ID del encuentro y realiza el cambio de estado

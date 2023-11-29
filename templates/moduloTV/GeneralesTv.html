@@ -68,12 +68,12 @@
 
             {% endwith %}
 
-            {% with alineacion_local=alineacion_local %} 
-            <input type="text" id="formacionLocal" name="formacionLocal" value="{{ alineacion_local.formacion }}">
+            {% with formacion_local=formacion_local %} 
+            <input type="text" id="formacionLocal" name="formacionLocal" value="{{ formacion_local }}">
             {% endwith %}
 
-            {% with alineacion_visita=alineacion_visita %} 
-            <input type="text" id="formacionVisita" name="formacionVisita" value="{{ alineacion_visita.formacion }}">
+            {% with formacion_visita=formacion_visita %} 
+            <input type="text" id="formacionVisita" name="formacionVisita" value="{{ formacion_visita }}">
             {% endwith %}
 
         </div>

@@ -78,8 +78,8 @@ class posicionJugadorAdmin(admin.ModelAdmin):
 class AlineacionEquipoAdmin(admin.ModelAdmin):
     list_display=['posicion_jugador_id','dorsal','contrato_id','capitan','estado']
     ordering=['posicion_jugador_id']
-    search_fields = ['descripcion_encuentro_id']
-    list_filter = ['descripcion_encuentro_id__encuentro','descripcion_encuentro_id__equipo']
+    search_fields = ['posicion_jugador_id__descripcion','dorsal']
+    list_filter = ['descripcion_encuentro_id__encuentro','descripcion_encuentro_id__equipo','capitan']
 
 
     class Media:

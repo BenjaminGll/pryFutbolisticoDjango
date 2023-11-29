@@ -52,7 +52,13 @@
             <input type="text" id="nombreLocal" name="nombreLocal" value="{{ equipo_local.equipo.nombre }}">
             <input type="text" id="golesLocal" name="golesLocal" value="{{ equipo_local.goles|default:'0' }}">
 
+
+
             {% endwith %}
+
+            <!-- {% with patro=patrocinador %}
+            <input type="text" id="logoPatrocinador" name="logoPatrocinador" value="{{ patro.logo_1 }}">
+            {% endwith %} -->
 
             {% with equipo_visita=equipo_visita %}
 
@@ -61,6 +67,15 @@
             <input type="text" id="golesVisita" name="golesVisita" value="{{ equipo_visita.goles|default:'0' }}">
 
             {% endwith %}
+
+            {% with alineacion_local=alineacion_local %} 
+            <input type="text" id="formacionLocal" name="formacionLocal" value="{{ alineacion_local.formacion }}">
+            {% endwith %}
+
+            {% with alineacion_visita=alineacion_visita %} 
+            <input type="text" id="formacionVisita" name="formacionVisita" value="{{ alineacion_visita.formacion }}">
+            {% endwith %}
+
         </div>
         <!-- Datos de Encuentro -->
         <div class="col-md-4">
@@ -280,7 +295,7 @@
                                     value=3>
                                 <label class="form-check-label" for="LgolesTotalesCheckbox">Goles totales</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check" style="display: none;">
                                 <input type="checkbox" class="form-check-input" id="LpatrocinadorCheckbox" value=4>
                                 <label class="form-check-label" for="LpatrocinadorCheckbox">Patrocinador</label>
                             </div>
@@ -293,65 +308,95 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Alineación Visita</h3>
-                    <div class="input-group align-items-center">
-                        <div class="align-items-center">Duración (s): </div>
+            <form id="enviarDatosAlineacionVisita" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Alineación Visita</h3>
+                        <div class="input-group align-items-center">
+                            <div class="align-items-center">Duración (s): </div>
+                            &nbsp;
+        
+                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="36000">
+                            &nbsp;
+                            <button type="submit" id="generarBannerAlineacionVisita" class="btn btn-primary"><i
+                                    class="fas fa-eye"></i> Mostrar</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check" style="display: block;">
+                            <input type="checkbox" class="form-check-input" id="mostrarAlineacionVisitaCheckbox">
+                            <h5 class="form-check-label" for="mostrarAlineacionVisitaCheckbox">Mostrar alineacion</h5>
+                        </div>
+        
+                        <div id="contenedorTabla" style="display: flex; justify-content: center;">
+        
+                            <table id="tablaVisita" style="width: 80%;">
+                                <thead>
+                                    <tr style="text-align: center;">
+                                        <th style="padding: 10px;">Dorsal</th>
+                                        <th style="padding: 10px;">Jugador</th>
+                                        <th style="padding: 10px;">Posicion</th>
+                                        <th style="padding: 10px;">Titular</th>
+                                        <th style="padding: 10px;">Seleccionar</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="border-collapse: collapse; margin-top: 20px; text-align: center;">
+                                    <!-- Aquí se llenarán dinámicamente los datos -->
+                                    {% for a_l in alineacion_visita %}
+                                    <tr style="border-bottom: 1px solid #ddd;">
+                                        <td style="padding: 10px;">{{ a_l.dorsal }}</td>
+                                        <td style="padding: 10px;">{{ a_l.contrato_id.persona.alias }}</td>
+                                        <td style="padding: 10px;">{{ a_l.posicion_jugador_id }}</td>
+                                        <td style="padding: 10px; display: none;">{{ a_l.estado }}</td>
+                                        <td style="padding: 10px; display: none;">{{ a_l.contrato_id.contrato_id }}</td>
+                                        <td> {% if a_l.estado %}
+                                            Si
+                                            {% else %}
+                                            No
+                                            {% endif %}
+                                        </td>
+                                        <td style="padding: 10px;">
+                                            <input type="radio" class="form-check-input"
+                                                id="alineacionVisita{{ forloop.counter }}" name="alineacion" value="visita"
+                                                onclick="capturarDatos('alineacionVisita',{{ forloop.counter }})">
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Probar -->
                         &nbsp;
-
-                        <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1" max="36000">
-                        &nbsp;
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-eye"></i> Mostrar</button>
+                        <div>
+                            <div class="form-check">
+                                <input type="radio" name="finalType" class="form-check-input" id="VtarjetasAmarillasCheckbox"
+                                    value=1>
+                                <label name="finalType" class="form-check-label" for="VtarjetasAmarillasCheckbox">Tarjetas
+                                    amarillas</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" name="finalType" class="form-check-input" id="VtarjetasRojasCheckbox"
+                                    value=2>
+                                <label class="form-check-label" for="VtarjetasRojasCheckbox">Tarjetas rojas</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" name="finalType" class="form-check-input" id="VgolesTotalesCheckbox"
+                                    value=3>
+                                <label class="form-check-label" for="VgolesTotalesCheckbox">Goles totales</label>
+                            </div>
+                            <div class="form-check" style="display: none;">
+                                <input type="checkbox" class="form-check-input" id="VpatrocinadorCheckbox" value=4>
+                                <label class="form-check-label" for="VpatrocinadorCheckbox">Patrocinador</label>
+                            </div>
+                        </div>
+                        <!-- Probar fin -->
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="form-check" style="display: block;">
-                        <input type="checkbox" class="form-check-input" id="patrocinadorCheckbox">
-                        <h5 class="form-check-label" for="alineacionVisitaCheckbox">Mostrar alineacion</h5>
-                    </div>
-
-                    <div id="contenedorTabla" style="display: flex; justify-content: center;">
-
-                        <table style="width: 80%;">
-                            <thead>
-                                <tr style="text-align: center;">
-                                    <th style="padding: 10px;">Dorsal</th>
-                                    <th style="padding: 10px;">Jugador</th>
-                                    <th style="padding: 10px;">Posicion</th>
-                                    <th style="padding: 10px;">Titular</th>
-                                    <th style="padding: 10px;">Seleccionar</th>
-                                </tr>
-                            </thead>
-                            <tbody style="border-collapse: collapse; margin-top: 20px; text-align: center;">
-                                <!-- Aquí se llenarán dinámicamente los datos -->
-                                {% for a_l in alineacion_visita %}
-                                <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 10px;">{{ a_l.dorsal }}</td>
-                                    <td style="padding: 10px;">{{ a_l.contrato_id.persona.alias }}</td>
-                                    <td style="padding: 10px;">{{ a_l.posicion_jugador_id }}</td>
-                                    <td style="padding: 10px; display: none;">{{ a_l.estado }}</td>
-                                    <td style="padding: 10px; display: none;">{{ a_l.contrato_id.contrato_id }}</td>
-                                    <td> {% if a_l.estado %}
-                                        Si
-                                    {% else %}
-                                        No
-                                    {% endif %}
-                                    </td>
-                                    <td style="padding: 10px;">
-                                        <input type="radio" class="form-check-input"
-                                            id="alineacionVisita{{ forloop.counter }}" name="alineacion" value="visita"
-                                            onclick="capturarDatos('alineacionVisita',{{ forloop.counter }})">
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
-    </div>
+        </div>
     <!--  -->
     <div class="row mt-4">
         <!--Marcador-->
@@ -1141,11 +1186,6 @@ enviarButton.addEventListener('click', enviarHTML);
                 '<div class="player-list" style="display: flex; flex-direction: column;">';
 
 
-
-
-
-            //
-
             for (var i = 0; i < datos.length; i++) {
                 var fila = datos[i];
                 console.log("El estado es", fila.estado);
@@ -1174,16 +1214,16 @@ enviarButton.addEventListener('click', enviarHTML);
             const checkbox3 = document.getElementById('LgolesTotalesCheckbox');
             const checkbox4 = document.getElementById('LpatrocinadorCheckbox');
 
-
+            resultado=-1;
             if (checkbox1.checked) {
-                obtenerResultado(1, datos.idContrato);
+                resultado="Tarjetas amarillas: "+esta_amarrillas;
             } else if (checkbox2.checked) {
-                obtenerResultado(2, datos.idContrato);
-            } else {
-                obtenerResultado(3, datos.idContrato);
-            }
+                resultado="Tarjetas rojas: "+esta_rojas;
+            } else if (checkbox3.checked) {
+                resultado="Total de goles: "+esta_goles;
+            }else { resultado='';}
 
-            console.log("Variable final", miVariable);
+            console.log("Variable final", resultado);
 
             html = '<div class="banner" style="display: flex;' +
                 'align-items: center;' +
@@ -1221,17 +1261,17 @@ enviarButton.addEventListener('click', enviarHTML);
                 '<div class="user-text" style="font-size: 16px; text-align: center;' +
                 'background-color: rgba(0, 0, 0, 0.7); color: white; ">' +
 
-                'Jugador del momento ' + miVariable + ' </div>' +
+                '' + resultado + ' </div>' +
                 '</div>' +
                 '</div>' +
 
                 '<!-- Tercera fila -->' +
                 '<div class="row">' +
-                '<img src="sponsor2.png" alt="Sponsor 2" class="sponsor-logo" style="width: 50px;' +
-                'height: 50px;' +
-                'object-fit: cover;' +
-                'border-radius: 50%;' +
-                'margin-right: 10px;">' +
+                // '<img src="sponsor2.png" alt="Sponsor 2" class="sponsor-logo" style="width: 50px;' +
+                // 'height: 50px;' +
+                // 'object-fit: cover;' +
+                // 'border-radius: 50%;' +
+                // 'margin-right: 10px;">' +
                 '</div>' +
                 '</div>';
 
@@ -1244,6 +1284,126 @@ enviarButton.addEventListener('click', enviarHTML);
         return html;
     }
 
+    //Alineacion visita
+    
+    function generarHTMLAlieacionVisita(tipo, datos) {
+        let html = '';
+
+        if (tipo) {
+
+            //
+            html = '<div class="banner-container" style="display: absolute;top: -380px; left:20%; justify-content: center; align-items: center; height: 100vh; background-size: cover;">' +
+                '<div class="banner" style="background: rgba(0, 0, 0, 0.7); color: white; border-radius: 5px; font-family: \'Arial\', sans-serif; display: flex; width: 500px; ">' +
+                '<div class="left-side" style="padding: 20px; display: flex; flex-direction: column; align-items: center; background: rgba(0, 0, 0, 0.8);">' +
+                '<span class="team-name" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">' + document.getElementById('nombreVisita').value + '</span>' +
+                '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team Logo" class="team-logo" style="width: 150px; height: auto; margin-bottom: 20px;">' +
+                '<div class="formation" style="font-size: 18px; font-weight: bold; background: rgba(0, 0, 0, 0.8); padding: 5px; border-radius: 5px; width: 100%; text-align: center;">4-2-3-1</div>' +
+                '</div>' +
+                '<div class="middle-side" style="display: flex; align-items: center; background: rgba(50, 50, 50, 0.8); padding: 0 10px;">' +
+                '<span class="title" style="font-size: 16px; font-weight: bold; color: white; writing-mode: vertical-lr; transform: rotate(180deg);">TITULARES</span>' +
+                '</div>' +
+                '<div class="right-side" style="padding: 20px; display: flex; flex-direction: column; align-items: flex-start;">' +
+                '<div class="player-list" style="display: flex; flex-direction: column;">';
+
+
+            for (var i = 0; i < datos.length; i++) {
+                var fila = datos[i];
+                console.log("El estado es", fila.estado);
+                if (fila.estado == 'True') {
+
+                    html += '<div class="player" style="font-size: 12px; line-height: 1.4; text-align: left;">' +
+                        '<span class="dorsal" style="font-weight: bold; margin-right: 5px;">' + fila.dorsal + '</span>' +
+                        '<span class="name" style="font-weight: normal;">' + fila.jugador + ' ' + fila.posicion + '</span>' +
+                        '</div>';
+                }
+
+            }
+
+
+            html += '<!-- Puedes replicar este bloque para cada jugador en tu lista -->' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+        } else {
+
+
+            const checkbox1 = document.getElementById('VtarjetasAmarillasCheckbox');
+            const checkbox2 = document.getElementById('VtarjetasRojasCheckbox');
+            const checkbox3 = document.getElementById('VgolesTotalesCheckbox');
+            const checkbox4 = document.getElementById('VpatrocinadorCheckbox');
+
+            resultado=-1;
+            if (checkbox1.checked) {
+                resultado="Tarjetas amarillas: "+esta_amarrillas_V;
+            } else if (checkbox2.checked) {
+                resultado="Tarjetas rojas: "+esta_rojas_V;
+            } else if (checkbox3.checked) {
+                resultado="Total de goles: "+esta_goles_v;
+            }else { resultado='';}
+
+            console.log("Variable final", resultado);
+
+            html = '<div class="banner" style="display: flex;' +
+                'align-items: center;' +
+                'padding: 20px;' +
+                'background-color: rgba(0, 0, 0, 0.7);' +
+                'border: 1px solid #ddd;' +
+                'border-radius: 5px;' +
+                'box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); position: absolute;top: -80px; left: 20%; background-color: rgba(0, 0, 0, 0.7); color: white; text-align: center; width: 70%; max-width: 500px; font-size: 13px; border-radius: 5px;"     >' +
+
+                '<!-- Primera fila -->' +
+                '<div class="row" style="display: flex;' +
+                'align-items: center;' +
+                'margin-bottom: 10px;">' +
+
+                '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Logo 1" class="logo" style="width: 50px;' +
+                'height: 50px;' +
+                'object-fit: cover;' +
+                'border-radius: 50%;' +
+                'margin-right: 10px;">' +
+
+                '</div>' +
+
+                '<!-- Segunda fila -->' +
+                '<div class="col">' +
+                '<div class="row" style="display: flex;">' +
+                '<div class="player-info" style="font-size: 16px; font-weight: bold; text-align: center;' +
+                'background-color: red; color: white;">' +
+                '<div class="player-dorsal" style="display: inline-block;">' + datos.dorsal + '</div>' +
+                '&nbsp;' +
+                '<div class="player-name" style="display: inline-block;"> ' + datos.jugador + ' </div>' +
+                '</div>' +
+                '</div>' +
+
+                '<div class="row">' +
+                '<div class="user-text" style="font-size: 16px; text-align: center;' +
+                'background-color: rgba(0, 0, 0, 0.7); color: white; ">' +
+
+                '' + resultado + ' </div>' +
+                '</div>' +
+                '</div>' +
+
+                '<!-- Tercera fila -->' +
+                '<div class="row">' +
+                // '<img src="sponsor2.png" alt="Sponsor 2" class="sponsor-logo" style="width: 50px;' +
+                // 'height: 50px;' +
+                // 'object-fit: cover;' +
+                // 'border-radius: 50%;' +
+                // 'margin-right: 10px;">' +
+                '</div>' +
+                '</div>';
+
+            // Ahora puedes utilizar la variable `html` como desees, por ejemplo, insertarla en el cuerpo de un documento HTML.
+            console.log(html);
+
+        }
+
+        // Devuelve el HTML generado
+        return html;
+    }
+    //////fin alineacion visita
 
     ///Aqui lo demás
 
@@ -1278,8 +1438,53 @@ enviarButton.addEventListener('click', enviarHTML);
         }
     });
 
+    //Boton visita
+    
+    document.getElementById('generarBannerAlineacionVisita').addEventListener('click', function () {
+
+        const checkbox1 = document.getElementById('mostrarAlineacionVisitaCheckbox');
+
+
+        if (checkbox1.checked) {
+
+            const textarea = document.getElementById('miTextarea');
+            let contenido = '';
+            contenido += generarHTMLAlieacionVisita(true, extraerDatosTabla('tablaVisita'));
+            textarea.value = contenido;
+            console.log(contenido);
+            escribirDatos(contenido, 'enviarDatosAlineacionVisita')
+
+
+        } else {
+
+
+            // console.log("Dorsal: " + datos_local);
+
+            const textarea = document.getElementById('miTextarea');
+            let contenido = '';
+            contenido += generarHTMLAlieacionVisita(false, datos_visita);
+            textarea.value = contenido;
+
+            console.log(contenido);
+
+            escribirDatos(contenido, 'enviarDatosAlineacionVisita')
+        }
+        });
+            ////
     var datos_local = '';
     var datos_visita = '';
+
+    var promiseAmarilla;
+    var promiseRojas;
+    var promiseGoles;
+
+    var esta_amarrillas;
+    var esta_rojas;
+    var esta_goles;
+
+    var esta_amarrillas_V;
+    var esta_rojas_V;
+    var esta_goles_V;
 
     function capturarDatos(tipo_alineacion, indice) {
         console.log("Capturar datos para índice: " + indice);
@@ -1304,7 +1509,42 @@ enviarButton.addEventListener('click', enviarHTML);
                 idContrato: obtenerValorCelda(fila, 5)
 
             };
+            // Uso de promesas
+            promiseAmarillas = obtenerResultado(1, obtenerValorCelda(fila, 5));
+            promiseRojas = obtenerResultado(2, obtenerValorCelda(fila, 5));
+            promiseGoles = obtenerResultado(3, obtenerValorCelda(fila, 5));
 
+            promiseAmarillas
+                .then(function (resultado) {
+                    esta_amarrillas = resultado;
+                    console.log("El resultado de amarillas es:", esta_amarrillas);
+                    // Realiza más operaciones con esta_amarrillas si es necesario
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+
+            promiseRojas
+                .then(function (resultado) {
+                    esta_rojas = resultado;
+                    console.log("El resultado de rojas es:", esta_rojas);
+                    // Realiza más operaciones con esta_rojas si es necesario
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+
+            promiseGoles
+                .then(function (resultado) {
+                    esta_goles = resultado;
+                    console.log("El resultado de goles es:", esta_goles);
+                    // Realiza más operaciones con esta_goles si es necesario
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+
+            console.log("Amarillas"+esta_amarrillas+"Rojas"+esta_rojas+"Goles"+esta_goles);
             console.log("Dorsal: " + datos_local.dorsal);
             console.log("Jugador: " + datos_local.jugador);
             console.log("Posicion: " + datos_local.posicion);
@@ -1321,13 +1561,51 @@ enviarButton.addEventListener('click', enviarHTML);
                 dorsal: obtenerValorCelda(fila, 1),
                 jugador: obtenerValorCelda(fila, 2),
                 posicion: obtenerValorCelda(fila, 3),
-                estado: obtenerValorCelda(fila, 4)
+                estado: obtenerValorCelda(fila, 4),
+                idContrato: obtenerValorCelda(fila, 5)
+
             };
+
+            // Uso de promesas
+            promiseAmarillas = obtenerResultado(1, obtenerValorCelda(fila, 5));
+            promiseRojas = obtenerResultado(2, obtenerValorCelda(fila, 5));
+            promiseGoles = obtenerResultado(3, obtenerValorCelda(fila, 5));
+
+            promiseAmarillas
+                .then(function (resultado) {
+                    esta_amarrillas_V = resultado;
+                    console.log("El resultado de amarillas es:", esta_amarrillas);
+                    // Realiza más operaciones con esta_amarrillas si es necesario
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+
+            promiseRojas
+                .then(function (resultado) {
+                    esta_rojas_V = resultado;
+                    console.log("El resultado de rojas es:", esta_rojas);
+                    // Realiza más operaciones con esta_rojas si es necesario
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+
+            promiseGoles
+                .then(function (resultado) {
+                    esta_goles_V = resultado;
+                    console.log("El resultado de goles es:", esta_goles);
+                    // Realiza más operaciones con esta_goles si es necesario
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
 
             console.log("Dorsal: " + datos_visita.dorsal);
             console.log("Jugador: " + datos_visita.jugador);
             console.log("Posicion: " + datos_visita.posicion);
             console.log("Estado: " + datos_visita.estado);
+            console.log("Contrato: " + datos_visita.idContrato);
 
 
             return datos_visita;
@@ -1375,30 +1653,22 @@ enviarButton.addEventListener('click', enviarHTML);
         return datos_coleccion;
     }
     //fin tablas
-    // SOLICITUD AJAX
+    // SOLICITUD AJAX// SOLICITUD AJAX con promesa
     function obtenerResultado(tipo, idContrato) {
-        // Hacer la solicitud AJAX
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/apitarjetas/' + tipo + '/' + idContrato + '/');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                // Manejar la respuesta del servidor
-                var respuesta = JSON.parse(xhr.responseText);
-                var resultado = respuesta.resultado;
-
-                // Hacer lo que quieras con el resultado
-                console.log("El resultado es:", resultado);
-
-                // Almacenar el resultado en una variable
-                miVariable = resultado;
-                console.log("La variable es", miVariable);
-
-                // Hacer más cosas con miVariable si es necesario
-            } else {
-                console.error('Error en la solicitud AJAX');
-            }
-        };
-        xhr.send();
+        return new Promise(function (resolve, reject) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/apitarjetas/' + tipo + '/' + idContrato + '/');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var respuesta = JSON.parse(xhr.responseText);
+                    var resultado = respuesta.resultado;
+                    resolve(resultado);
+                } else {
+                    reject('Error en la solicitud AJAX');
+                }
+            };
+            xhr.send();
+        });
     }
 
     var partidoIniciado = false;  // Variable para rastrear el estado del partido

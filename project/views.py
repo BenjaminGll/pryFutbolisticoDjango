@@ -683,7 +683,7 @@ def contextoTVhomeEncuentro(request,id):
     descripcion_local = descripcion_encuentro.objects.get(equipo=equipo_a.equipo_id, encuentro_id=id)
     descripcion_visita = descripcion_encuentro.objects.get(equipo=equipo_b.equipo_id, encuentro_id=id)
     eventos_local = evento.objects.filter(alineacion_id1__contrato_id__nuevo_club=equipo_a, encuentro_id=id)
-    eventos_visita = evento.objects.filter(alineacion_id2__contrato_id__nuevo_club=equipo_b, encuentro_id=id)
+    eventos_visita = evento.objects.filter(alineacion_id1__contrato_id__nuevo_club=equipo_b, encuentro_id=id)
     eventos_todos = evento.objects.filter( encuentro_id=id)
     # Ordena los eventos por tiempo en orden ascendente
     eventos_todos = sorted(eventos_todos, key=attrgetter('tiempo'))

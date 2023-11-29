@@ -41,17 +41,17 @@ class faseAdmin(admin.ModelAdmin):
 
 class detalle_grupoAdmin(admin.ModelAdmin):
     list_display=['competicion_id','fase_id','grupo_id','equipo_id']
-    search_fields = ['equipo_id','grupo_id','competicion_id']
+    search_fields = ['equipo_id__nombre','grupo_id__nombre','competicion_id__nombre']
     ordering =['competicion_id']
     list_per_page =4
-    list_filter=['competicion_id','grupo_id']
+    list_filter=['competicion_id','fase_id','grupo_id']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 
 class tablaAdmin(admin.ModelAdmin):
     list_display=['competicion_id','equipo_id','ganado','perdido','empatado','goles_favor','goles_contra','tarjetas_amarillas','tarjetas_rojas','puntos']
     ordering=['-puntos']
-    search_fields = ['competicion_id','equipo_id']
+    search_fields = ['equipo_id__nombre']
     list_filter=['competicion_id']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)

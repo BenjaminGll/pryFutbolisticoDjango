@@ -26,8 +26,8 @@ class personaAdmin(admin.ModelAdmin):
 class contratoAdmin(admin.ModelAdmin):
     list_display=['tipo_contrato','persona','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
     ordering = ['persona']
-    search_fields = ['tipo_contrato','persona','fecha_inicio', 'fecha_fin', 'valor','nuevo_club','posicion_jugador','dorsal','estado']
-    list_filter=['tipo_contrato', 'nuevo_club']
+    search_fields = ['persona_id__nombre']
+    list_filter=['tipo_contrato', 'nuevo_club','estado']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)   
 
@@ -40,9 +40,9 @@ class tipoArbitroAdmin(admin.ModelAdmin):
 class detalleTernaArbitralAdmin(admin.ModelAdmin):
     list_display=['tipo_arbitro_id', 'persona_id','encuentro_id']
     ordering=['encuentro_id']
-    search_fields = ['persona_id','tipo_arbitro_id','encuentro_id']
+    search_fields = ['tipo_arbitro_id__nombre']
     list_per_page=5
-    list_filter=['tipo_arbitro_id']
+    list_filter=['tipo_arbitro_id','encuentro_id']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)   
 

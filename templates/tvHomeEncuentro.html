@@ -230,7 +230,7 @@
                     </div>
                     <div class="card-body">
                         <p class="event-info">
-                            {% if evento.evento_equipo == True %}
+                        {% if evento.evento_equipo == True %}
                             {% if evento.tipo_evento_id.nombre == "CAMBIO DE JUGADOR" %}
                                 <span class="event-minute"><img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 40px; margin-top: -25px;" ></span><br>
                                 <span style="color: green;"> ENTRA: <i class="fas fa-arrow-up" style="color: green;"></i></span>

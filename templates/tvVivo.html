@@ -26,7 +26,7 @@
     font-size: 20px;
     border-radius: 5px;
     z-index: 1;
-  } 
+  }
 
 
   .banner-marcadores {
@@ -50,24 +50,32 @@
     <br>
     <img class="fondo" src="/static/images/fondoFut.jpg" alt="">
     <div class="banner-marcadores" id="general" style="display:none">
-      <span id="cronometro">00:00</span>&nbsp;<img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span id="marcador-local">{{goles_equipo_a}}</span> - <span id="marcador-visitante">{{goles_equipo_b}}</span></span><span> {{equipo_b.siglas}} </span><img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 13%">
+      <span id="cronometro">00:00</span>&nbsp;<img
+        src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
+        style="margin-top:0px; width: 13%"><span> {{equipo_a.siglas}} </span><span
+        id="marcador-local">{{goles_equipo_a}}</span> - <span
+        id="marcador-visitante">{{goles_equipo_b}}</span></span><span> {{equipo_b.siglas}} </span><img
+        src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""
+        style="margin-top:0px; width: 13%">
+        <span id="banner-tExtra" style="display: none;">T. Extra: <span id="tiempoExtra">+0</span></span>
     </div>
 
-    
-  
+
+
 
 
     <div id="banners-container" class="banners-container" style="display: none;">
       <!-- Contenido del banner -->
-    
-    
+
+
       <p></p>
     </div>
-    <div class="banner-container" style="display: flex;justify-content: center; align-items: center;position: absolute;left:30%;top:60%; background-size: cover;">
-      
+    <div class="banner-container"
+      style="display: flex;justify-content: center; align-items: center;position: absolute;left:30%;top:60%; background-size: cover;">
+
     </div>
 
-    
+
   </div>
   <br>
   <br>
@@ -180,9 +188,9 @@
     cronometroDisplay.innerHTML = formattedTime;
   }
 
- //cronometro = setInterval(Cronometro, 1000);
+  //cronometro = setInterval(Cronometro, 1000);
 
-  
+
   var estadoAccion = '';
   function actualizarCronometro() {
     // Realizar la solicitud AJAX para obtener la información del cronómetro
@@ -207,27 +215,33 @@
           clearInterval(cronometro);
         } else if (data.accion == 'play' && estadoAccion != 'play') {
           console.log('play');
-            if(data.tiempo){
-              const tiempoArray = data.tiempo.split(':');
-              const minutos = parseInt(tiempoArray[0],10);
-              const segundos = parseInt(tiempoArray[1],10);
+          if (data.tiempo) {
+            const tiempoArray = data.tiempo.split(':');
+            const minutos = parseInt(tiempoArray[0], 10);
+            const segundos = parseInt(tiempoArray[1], 10);
 
-              elapsedTime = minutos * 60 + segundos;
-            }
+            elapsedTime = minutos * 60 + segundos;
+          }
           clearInterval(cronometro);  // Detener el intervalo existente antes de configurar uno nuevo
           cronometro = setInterval(Cronometro, 1000);  // Configurar un nuevo intervalo
-        }else if (data.accion == 'reset' && estadoAccion != 'reset') {
+        } else if (data.accion == 'reset' && estadoAccion != 'reset') {
           console.log('reset');
           var tiemporeset = '00:00';
-            if(tiemporeset){
-              const tiempoArray = tiemporeset.split(':');
-              const minutos = parseInt(tiempoArray[0],10);
-              const segundos = parseInt(tiempoArray[1],10);
+          if (tiemporeset) {
+            const tiempoArray = tiemporeset.split(':');
+            const minutos = parseInt(tiempoArray[0], 10);
+            const segundos = parseInt(tiempoArray[1], 10);
 
-              elapsedTime = minutos * 60 + segundos;
-            }
+            elapsedTime = minutos * 60 + segundos;
+          }
           clearInterval(cronometro);  // Detener el intervalo existente antes de configurar uno nuevo
           cronometro = setInterval(Cronometro, 1000);  // Configurar un nuevo intervalo
+        } else if (data.accion == 'tiempoExtra' && estadoAccion != 'tiempoExtra') {
+          var elementTExtra = document.getElementById('tiempoExtra')
+          elementTExtra.innerHTML = '+' + data.tiempo;
+
+          var extralDisplay = document.getElementById('banner-tExtra');
+          extralDisplay.style.display = 'inline-block';
         }
 
         // Actualizar el estado de la acción
@@ -237,8 +251,6 @@
         console.error('Error en la solicitud AJAX', error);
       });
   }
-
-  // Llamar a la función para actualizar el cronómetro cada cierto tiempo
   setInterval(actualizarCronometro, 2000);
 
   //   function obtenerBanners() {

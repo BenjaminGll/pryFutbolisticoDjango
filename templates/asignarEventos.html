@@ -32,7 +32,7 @@
           <select name="alineacion01" id="alineacion01" class="form-control alineacion-dropdown">
           <option value="input" selected disabled>Seleccionar alineación 01</option>
           {% for alineacion in alineacion01 %}
-          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}-{{ alineacion.posicion_jugador_id.descripcion}}</option>
           {% endfor %}
           </select>
 
@@ -40,7 +40,7 @@
           <select name="alineacion02" id="alineacion02" class="form-control alineacion-dropdown">
           <option value="input" selected disabled>Seleccionar alineación 02</option>
           {% for alineacion in alineacion02 %}
-          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}</option>
+          <option value="{{ alineacion.alineacion_id }}">{{ alineacion.contrato_id }}-{{ alineacion.posicion_jugador_id.descripcion}}</option>
           {% endfor %}
           </select>
 
@@ -180,5 +180,7 @@
       }
   }
   </script>
+
+  
 
 {% endblock %}

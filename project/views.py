@@ -1040,10 +1040,24 @@ def guardar_eventos_temporales(eventos,tiempo):
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
-        elif evento.tipo_evento_id.nombre == 'TARJETA AMARILLA':
-             banner = {
-               'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_amarilla.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
-            }
+        elif evento.tipo_evento_id.nombre == 'TARJETA AMARILLA' and evento.alineacion_id1:
+            jugador = evento.alineacion_id1.contrato_id.persona if evento.alineacion_id1.contrato_id else None
+            equipo_logo_url = evento.alineacion_id1.contrato_id.nuevo_club.logo.url if evento.alineacion_id1.contrato_id and evento.alineacion_id1.contrato_id.nuevo_club.logo else None
+            tipo_evento_logo_url = evento.tipo_evento_id.logo_tipo_evento.url if evento.tipo_evento_id.logo_tipo_evento else None
+
+            if jugador and evento.alineacion_id1.descripcion_encuentro_id and equipo_logo_url and tipo_evento_logo_url:
+                banner = {
+                    'html': f'<div class="banner-container" style="background-color: black; padding: 10px; border-radius: 10px;">'
+                            f'{evento.motivo}: <br>'
+                            f'<img src="{equipo_logo_url}" alt="" style="margin-top: 0px; width: 6%">'
+                            f'<span style="padding-right: 20px; color: white;">{jugador.alias}</span>'
+                            f'<img src="{tipo_evento_logo_url}" alt="" style="background-color: black; margin-top: 0px; width: 6%">'
+                            '</div>'
+                }
+                print("Banner created successfully")
+            else:
+                print("Conditions not met. Banner not created.")
+
 
         elif evento.tipo_evento_id.nombre == 'HIMNO LOCAL':
             banner = {

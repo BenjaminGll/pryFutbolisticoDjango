@@ -861,17 +861,6 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
             evento_seleccionado.estado_evento = False
             evento_seleccionado.save()
 
-        #return redirect('mostrar_evento', id_encuentro=idEncuentro)
-
-    # if request.method == 'POST'and filtro_default=='generales':
-    #     dynamic_html = request.POST.get('miTextarea')
-    #     print("El valor del html es", dynamic_html)
-
-
-
-
-    
-
 
     tipo_filtro = request.GET.get('filtro', filtro_default)
     nombres_eventos_generales = ["CRONOMETRO", "PARTIDO SUSPENDIDO"]
@@ -893,8 +882,8 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
                 encuentro_id=idEncuentro,
                 equipo_id__in=[encuentro_obj.equipo_visita, encuentro_obj.equipo_visita],tipo_equipo__in=['V','Visita','VISITA']
             ).first()
-        alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id)
-        alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id)
+        alineaciones_local = alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id).order_by('-estado', 'dorsal')
+        alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id).order_by('-estado', 'dorsal')
         # print('Alineacion local',alineaciones_local)
         # print('Alineacion visita',alineaciones_visita)
 
@@ -949,13 +938,9 @@ def guardar_eventos_temporales(eventos,tiempo):
     banners = []
 
     for evento in eventos:
-        if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR LOCAL':
+        if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR ':
             banner = {
                 'html': f'<div class="banner-container">{evento.motivo}: <br><img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion1_id} </span><img src="{static("img/entrada.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion1_id} </span><img src="{static("img/salida.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
-            }
-        elif evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR VISITA':
-            banner = {
-                'html': f'<div class="banner-container">{evento.motivo}: <br><img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"><span> {evento.alineacion2_id} </span><img src="{static("img/entrada.png")}" alt="" style="margin-top:0px; width: 6%"><br> <img src="/static/images/{evento.alineacion2_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion2_id} </span><img src="{static("img/salida.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
         elif evento.tipo_evento_id.nombre == 'CORNER':
             banner = {
@@ -1054,9 +1039,10 @@ def guardar_eventos_temporales(eventos,tiempo):
                 'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_roja.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
         elif evento.tipo_evento_id.nombre == 'TARJETA AMARILLA':
-            banner = {
-                'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_amarilla.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
+             banner = {
+               'html': f'<div class="banner-container">{evento.motivo}: <br> <img src="/static/images/{evento.alineacion1_id.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion1_id} </span><img src="{static("img/tarjeta_amarilla.png")}" alt="" style="margin-top:0px; width: 6%"></div>'
             }
+
         elif evento.tipo_evento_id.nombre == 'HIMNO LOCAL':
             banner = {
                 'html': f'<div class="banner-container" style="font-size: 30px; display: flex; align-items: center; justify-content: center;"><img src="/static/images/{evento.encuentro_id.equipo_local.logo}" alt="" style="margin-top: 0px; width: 6%"> {evento.tipo_evento_id.descripcion} DE {evento.encuentro_id.equipo_local} <img src="/static/images/{evento.encuentro_id.equipo_local.logo}" alt="" style="margin-top: 0px; width: 6%"></div>'

@@ -55,7 +55,8 @@
           </select>
 
           <label for="tiempo">Tiempo:</label>
-          <input type="text" name="tiempo" class="form-control">
+          <input type="number" name="tiempo" class="form-control" min='1' max='200' oninput="validarTiempo(this)">
+
 
           <label for="motivo">Motivo:</label>
           <textarea name="motivo" class="form-control"></textarea>
@@ -166,5 +167,21 @@
     });
   });
 </script>
+
+<script>
+  function validarTiempo(input) {
+      var valor = input.value;
+  
+      var numero = parseInt(valor);
+
+      if (numero < 0) {
+          input.value = 1;
+      }
+  
+      if (numero > 220) {
+          input.value = 220;
+      }
+  }
+  </script>
 
 {% endblock %}

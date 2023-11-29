@@ -898,7 +898,7 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
         print('Template name evento:', template_name)
         eventos = evento.objects.none()
 
-    return render(request, template_name, {'eventos': eventos, 'tipo_filtro': tipo_filtro,'idEncuentro': idEncuentro, 'equipo_local':equipo_local,'equipo_visita':equipo_visita,'alineacion_local':alineaciones_local,'alineacion_visita':alineaciones_visita, 'formacion_local':formacion_local.formacion, 'formacion_visita':formacion_visita.formacion})
+    return render(request, template_name, {'eventos': eventos, 'tipo_filtro': tipo_filtro,'idEncuentro': idEncuentro, 'equipo_local':equipo_local,'equipo_visita':equipo_visita,'alineacion_local':alineaciones_local,'alineacion_visita':alineaciones_visita, 'formacion_local':formacion_local, 'formacion_visita':formacion_visita})
 
 def mostrarEvento(request, idEncuentro):
     return base_evento_view(request, idEncuentro, 'moduloTV/evento.html',filtro_default='en_juego')
@@ -1042,7 +1042,11 @@ def guardar_eventos_temporales(eventos,tiempo):
 
         elif evento.tipo_evento_id.nombre == 'TARJETA AMARILLA':
              banner = {
+<<<<<<< HEAD
                'html': f'<div class="banner-container">{evento.tipo_evento.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/tarjeta_amarilla.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+=======
+               'html': f'<div class="banner-container">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("images/evento/tarjeta_amarilla.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+>>>>>>> 248b77d640f65691b9a3a9cd51f36c8747738b55
             }
 
         elif evento.tipo_evento_id.nombre == 'GOL':

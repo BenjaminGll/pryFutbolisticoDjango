@@ -54,7 +54,7 @@ class equipoAdmin(admin.ModelAdmin):
     ordering = ['nombre']
     search_fields = ['nombre']
     list_per_page=5
-    list_filter=['categoria_equipo','tipo_equipo_id']
+    list_filter=['categoria_equipo','tipo_equipo_id','entrenador_id']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 class tipoEquipoAdmin(admin.ModelAdmin):

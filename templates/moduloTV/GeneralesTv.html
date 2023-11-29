@@ -876,17 +876,17 @@ enviarButton.addEventListener('click', enviarHTML);
 
         let html = '';
             
-     html+='<div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">'+
+     html+='<div style="display: flex;padding-left -100px;width: 800px; height: 40%; margin-top: 330px;">'+
 
-                    '<div style="display: flex;justify-content: space-between;width: 50%;">'+
+                    '<div style="display: flex;justify-content: space-between;width: 650px;">'+
 
-                        '<div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;"> '+ document.getElementById('golesLocal').value +' </div>';
+                        '<div name="marcador-local" style="background-color: white;color:black;width:110px; font-size: 2.8em;border-radius: 10%; margin-left: 1%;"> '+ document.getElementById('golesLocal').value +' </div>';
 
                         if(casilla2.checked){
-                  html+='<div name="escudo" style="padding-right: 1%;">'+
-                            '<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Team 1 Logo" style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
+                  html+='<div name="escudo" style="padding-right: 1%; width: 140px">';
+                  html+='<img src="/static/images/' + document.getElementById('logoLocal').value + '" alt="Equipo Local" style="width: 140px; height: 90px; margin-right: 1px;">';
+                  html+='</div>';
                         
-                        '</div>';
                         }
                         
                   html+='<div name="container-equipo-informacion" style="width: 100%;">'+
@@ -899,13 +899,13 @@ enviarButton.addEventListener('click', enviarHTML);
                             '<div name="juego" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">';
                                 if(casilla.checked){
                                 
-                          html+='<div name="estadio" style="text-align: left; padding-left: 3%; color: white;">'+
+                          html+='<div name="estadio" style="text-align: left; padding-left: 20px; color: white;">'+
 
                                     document.getElementById('estadioMarcadorCompleto').value + 
                                 '</div>';
                                 }
                                 
-                          html+='<div name="Resumen_Tiempo" style="text-align: right; padding-right: 3%; color: white;">'+
+                          html+='<div name="Resumen_Tiempo" style="text-align: right; padding-right: 20px; color: white;">'+
                                      tiemp_banner +
                                 '</div>'+
 
@@ -915,14 +915,14 @@ enviarButton.addEventListener('click', enviarHTML);
 
                 if(casilla2.checked){
                            
-                  html+='<div name="escudo" style="padding-left: 1%;">'+
+                  html+='<div name="escudo" style="padding-left: 1%; width: 140px;">'+
 
-                            '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team 1 Logo" style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
+                            '<img src="/static/images/' + document.getElementById('logoVisita').value + '" alt="Team 1 Logo" style="width: 140px;background-color: rgb(199, 199, 199); height: 90px; object-fit: cover; border-radius: 10%; margin-right: 1px;">'+
                         
                         '</div>';
                     }
                         
-                  html+='<div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">'+ document.getElementById('golesVisita').value +' </div>'+
+                  html+='<div name="marcador-visita" style="background-color: white;color:black;width:110px; font-size: 2.8em;border-radius: 10%; margin-left: 1%;">'+ document.getElementById('golesVisita').value +' </div>'+
 
                     '</div>'+
 

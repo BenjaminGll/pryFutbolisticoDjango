@@ -13,64 +13,54 @@
     <!-- flex-direction: row; -->
 
 
-    <div style="display: flex; justify-content: center; opacity: 0.8;">
-        <div style="width: 30%;">
-            <div style="display: flex; justify-content: center;">
+    <div style="display: flex; justify-content: center; align-items: flex-end; height: 80%;">
+
+        <div style="display: flex;justify-content: space-between;width: 50%;">
+
+            <div name="marcador-local" style="background-color: white; font-size: 2.8em; margin-right: 1%;"> 0 </div>
+
+            <div name="escudo" style="padding-right: 1%;">
+                <img src="escudo2.png" alt="Team 1 Logo"
+                    style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">
             
-                <div style="background-color: rgb(255,42,27); color: #FFF; text-align: left; padding: 5px; width: 50%;">
-                    ARGENTINA <!-- Nombre Equipo Local-->
+            </div>
+
+            <div name="container-equipo-informacion" style="width: 100%;">
+
+                <div name="Equipos" style="display: flex; font-weight: bold; justify-content: space-between; align-items: center; background-color: rgb(255,42,27);padding: 0.3%;margin-top: 1%;margin-bottom: 1%;">
+                    <div name="equipo_local" style="text-align: left; padding-left: 3%;"> equipo1 </div>
+                    <div name="equipo_visita" style="text-align: right; padding-right: 3%;"> equipo2 </div>
                 </div>
 
-                <div
-                    style="background-color: rgb(255,42,27); color: #FFF; text-align: right; padding: 5px; width: 50%;">
-                    PERÚ <!-- Nombre Equipo Visita-->
+                <div name="juego" style="display: flex; justify-content: space-between; opacity: 0.8; background-color: rgb(0,0,0);">
+
+                    <div name="estadio" style="text-align: left; padding-left: 3%; color: white;">
+
+                        Estadio Alejandro
+                        Villanueva
+
+                    </div>
+
+                    <div name="Resumen_Tiempo" style="text-align: right; padding-right: 3%; color: white;">
+                        Resumen 1er.
+                        Tiempo
+                    </div>
+
                 </div>
 
             </div>
-        </div>
-    </div>
 
-    <div id="bannerContainer" style="display: block;opacity: 0.9; margin: auto; background: rgba(0, 0, 0, 0.9); color: black; font-family: Arial, sans-serif; width: 39%; max-width: 700px; border-radius: 4px; overflow: hidden;">
-        <div style="display: flex; align-items: flex-start; justify-content: center; padding: 5px ;">
+            <div name="escudo" style="padding-left: 1%;">
+
+                <img src="escudo.png" alt="Team 1 Logo"
+                    style="width: 50px;background-color: rgb(199, 199, 199); height: auto; object-fit: cover; border-radius: 10%; margin-right: 1px;">
             
-            <div style="background-color: #FFF; color: #000; padding: 5px 15px; font-size: 2.5em; font-weight: bold; border-radius: 4px; align-self: top; margin-right: 5px;">
-                0 <!-- Goles local-->
-            </div>
-           
-            <!-- Escudo Equipo Local -->
-            <div
-                style="display: flex; flex-direction: column; background-color: rgba(169, 169, 169, 0.9); border-radius: 4px; margin-right: 1px;opacity: 0.8;">
-                <img src="escudo.png" style="width: 200px; height: auto; margin-top: 1px;"> <!-- Escudo Local-->
             </div>
 
-            <!-- Escudo Equipo Visitante -->
-            <div
-                style="display: flex; flex-direction: column; background-color: rgba(169, 169, 169, 0.9); border-radius: 4px; margin-left: 1px;">
-                <img src="escudo2.png" style="width: 200px; height: auto; margin-top: 1px;"> <!-- Escudo Visita-->
-            </div>
-            
-            <!-- Marcador Equipo Visitante -->
-            <div
-                style="background-color: #FFF; color: #000; padding: 5px 15px; font-size: 2.5em; font-weight: bold; border-radius: 4px; align-self: top; margin-left: 5px;">
-                1 <!-- Goles Visita-->
-            </div>
-        
+            <div name="marcador-visita" style="background-color: white; font-size: 2.8em; margin-left: 1%;">0</div>
+
         </div>
 
-    </div>
-
-    <!-- Detalles del partido (Ubicado en la parte inferior) -->
-    <div style="display: flex; justify-content: center;">
-        <div style="width: 30%;">
-
-            <div style="background-color: #E6E6E6; padding: 5px 10px; display: flex; justify-content: space-between; font-size: 0.8em; color: #000;">
-               
-                <div>ESTADIO ALEJANDRO VILLANUEVA</div> <!-- Nombre Estadio-->
-
-                <div>Liga1 Betsson - Final - Vuelta</div> <!-- Partido y liga-->
-
-            </div>
-        </div>
     </div>
 
 

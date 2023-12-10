@@ -107,6 +107,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'BDFUT',
+#         'USER': 'postgres',
+#         'PASSWORD': 'frank2003',
+#         'HOST': 'localhost',  # si tienes otra dirección host debes remplazar esta
+#         'PORT': '5432',  # si lo dejas vacío tomará el puerto por default
+#     }
+# }
+
 
 
 # Password validation

@@ -30,8 +30,8 @@ class encuentroAdmin(admin.ModelAdmin):
     list_display=['competicion_id','equipo_local','equipo_visita','sede_id','fase','grupo','fecha','clima','estado_jugado','resultado']
     ordering=['competicion_id']
     search_fields = ['sede_id__nombre','competicion_id__nombre', 'equipo_local__nombre', 'equipo_visita__nombre']
-    list_per_page=5
-    list_filter=['competicion_id']
+    list_per_page=6
+    list_filter=['competicion_id','grupo']
     class Media:
         js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 

@@ -4,69 +4,85 @@
 {% block title %} Competencias - Sistema de Gestion de Futbol {% endblock %}
             
 {% block content %}     
-            <!-- Section Title -->
-            <div class="section-title" style="background:url(/static/img/background-competencias.webp)">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h1>Competencias de {{ deporte.nombre.lower }}</h1>
-                        </div>
+<!-- <style>
+    /* Estilos para centrar y dar estilo a la lista de competiciones */
+.groups-list {
+    text-align: center;
+}
 
-                        <div class="col-md-4">
-                            <div class="breadcrumbs">
-                                <ul>
-                                    <li><a href="index.html">Inicio</a></li>
-                                    <li>Competencias/{{ deporte.nombre.lower }}</li>
-                                </ul>
-                            </div>
-                        </div>
+.competitions-list {
+    list-style: none;
+    padding: 0;
+}
+
+.competitions-list li {
+    margin-bottom: 20px;
+}
+
+.competitions-list a {
+    text-decoration: none;
+    color: #333;
+}
+
+.competitions-list img {
+    max-width: 100%;
+    border-radius: 8px; /* Añade bordes redondeados a las imágenes */
+}
+
+.competition-name {
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+</style> -->
+    <!-- Section Title -->
+    <div class="section-title" style="background:url(/static/img/background-competencias.webp)">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>Competencias</h1>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="breadcrumbs">
+                        <ul>
+                            <li><a href="index.html">Inicio</a></li>
+                            <li>Competencias</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <!-- End Section Title -->
+        </div>
+    </div>
+    <!-- End Section Title -->
 
-            <!-- Section Area - Content Central -->
-            <section class="content-info">
+    <!-- Section Area - Content Central -->
+    <section class="content-info">
+        <div class="container padding-top">
+            <div class="groups-list page-group">
+                <div class="row justify-content-center align-items-center"> <!-- Alinea y centra el contenido -->
 
-                <div class="container padding-top">
-                    <div class="groups-list page-group">
-                        <h1> {{ deporte.nombre }}</h1>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6">
-                               <h5><a>Competencias de Selecciones</a></h5>
-                                <div class="item-group">
-                                    <ul>
-                                        {% for cs in competencia_seleccion %}
-                                        <li>
-                                           <a href="/competencias/{{deporte.nombre | lower}}/{{ cs.nombre.lower}}">
-                                                <img src="{{ cs.logo_competicion.url }}" alt="">
-                                                {{ cs.nombre }}
-                                            </a>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6">
-                               <h5><a>Competencias de Clubes</a></h5>
-                                <div class="item-group">
-                                    <ul>
-                                        {% for cc in competencia_club %}
-                                        <li>
-                                           <a href="/competencias/{{deporte.nombre | lower}}/{{ cc.nombre.lower}}">
-                                                <img src="{{ cc.logo_competicion.url }}" alt="">
-                                                {{ cc.nombre }}
-                                            </a>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
+                    <div class="col-lg-6 col-md-6">
+         
+                        <div class="item-group">
+                            <ul class="competitions-list">
+                                {% for cs in competencia_seleccion %}
+                                    <li>
+                                        <a href="{% url 'encuentros_por_jugar' idCompeticion=cs.competicion_id %}">
+                                            <img src="{{ cs.logo_competicion.url }}" alt="{{ cs.nombre }}">
+                                            <span class="competition-name">{{ cs.nombre }}</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
-                </div>
-            </section>
-            <!-- End Section Area -  Content Central -->
 
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Section Area -  Content Central -->
 {% endblock %}

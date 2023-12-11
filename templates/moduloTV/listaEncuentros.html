@@ -116,24 +116,7 @@
 
     <div class="container">
         <br>
-        {% if encuentros %}
-        {% with primer_encuentro=encuentros.0 %}
-        <div class="row align-items-center col-12">
-            <div class="col-md-5">
-                <h5>Competicion: {{ primer_encuentro.competicion_id }}</h5>
-            </div>
-            <div class="col-md-4">
-                <h5>Fase: {{ primer_encuentro.fase.nombre }}</h5>
-            </div>
-            <div class="col-md-3">
-                <h5>Grupo: {{ primer_encuentro.grupo.nombre }}</h5>
-            </div>
-        </div>
-        {% endwith %}
-        {% endif %}
-
-        <br>
-
+       
 
 
 

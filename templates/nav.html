@@ -16,16 +16,7 @@
    
       </li>
 
-      <li class="current">
-        <a href="/">Deportes</a>
-        <ul class="sub-current">
-          {% for d_n in deportes_nav %}
-          <li>
-            <a href="/competencias/{{d_n.nombre.lower}}">{{ d_n.nombre | title }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </li>
+
 
       <li class="current">
         <a href="/">Competencias</a>
@@ -105,8 +96,8 @@
       <li class="current">
         <a href="/contacto">Contacto</a>
       </li>
-     <li class="current">
-        <a href="/tvHome">Tv en vivo</a>
+     <li class="current"> 
+        <a href="/competencias">Tv en vivo</a>
       </li>
 
       {% comment %} <li class="current">

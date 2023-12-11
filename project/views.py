@@ -85,22 +85,21 @@ def contadoresAdmin(request):
     return render(request, 'admin/index.html', data)
 
 
-# def contextoCompetencias(request, nombre_deporte):
+def contextoCompetencias(request):
 
-#     deportes = deporte.objects.get(nombre=nombre_deporte.upper() ,estado=True)
     
 
-#     competencia_seleccion = competicion.objects.filter(deporte_id=deportes.deporte_id,tipo_competicion_id=nombre_seleccion, estado=True)
+    competencia_seleccion = competicion.objects.filter(estado=True)
 
-#     competencia_club = competicion.objects.filter(deporte_id=deportes.deporte_id,tipo_competicion_id=nombre_club, estado=True)
+    competencia_club = competicion.objects.filter(estado=True)
 
-#     data= {
-#         'deporte' : deportes,
-#         'competencia_seleccion' : competencia_seleccion,
-#         'competencia_club' : competencia_club
-#     }
+    data= {
 
-    # return render(request, 'competencias.html', data)
+        'competencia_seleccion' : competencia_seleccion,
+        'competencia_club' : competencia_club
+    }
+
+    return render(request, 'competencias.html', data)
 
 
 def contextoCompetenciasFutbol(request, nombre_competicion):
@@ -662,15 +661,15 @@ def contextoTVvivo(request, id):
 
     
 
-def contextoTVhome(request):
-    encuentrosEnJuego = encuentro.objects.filter(estado_jugado='E')
-
+def contextoTVhome(request, idCompeticion):
+    encuentrosEnJuego = encuentro.objects.filter(estado_jugado='E', competicion_id=idCompeticion)
+    competiciones = competicion.objects.get(competicion_id=idCompeticion)
    
-    encuentrosPorJugar = encuentro.objects.filter(estado_jugado='N')  
+    encuentrosPorJugar = encuentro.objects.filter(estado_jugado='N', competicion_id=idCompeticion)  
     data={
         'encuentrosE': encuentrosEnJuego,
         'encuentrosN': encuentrosPorJugar,
-        
+        'competiciones':competiciones,
 
     }
     

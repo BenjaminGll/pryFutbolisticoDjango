@@ -3,19 +3,24 @@
 {% block title %} TV en Vivo - Partido de Fútbol {% endblock %}
 {% block content %}
 <style>
-  .fondo {
-    width: 100%;
-    /* Hace que el fondo ocupe el 100% del ancho del contenedor */
-    height: 100%;
-    /* Hace que el fondo ocupe el 100% de la altura de la ventana */
-    background-size: cover;
-    /* Escala la imagen de fondo para cubrir todo el elemento */
-    background-position: center;
-    /* Centra la imagen de fondo horizontalmente */
-
+    body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
 
-
+  .container {
+    min-height: 100vh; /* Establece un alto mínimo para el contenedor principal */
+  }
+  .fondo {
+    width: 100vw; /* Utiliza el 100% del ancho de la ventana */
+    height: 100vh; /* Utiliza el 100% de la altura de la ventana */
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
   .banners-container {
     position: absolute;
     top: 50%;

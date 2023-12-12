@@ -44,19 +44,24 @@
         margin: 15px 0;
     }
 
-    .encuentro-link {
-        background-color: #4285f4;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 7px 20px;
-        text-decoration: none;
-        transition: background-color 0.2s;
-    }
-    
-    .encuentro-link:hover {
-        background-color: #2d5ca9;
-    }
+/* Estilo mejorado para el botón "Ver" */
+.encuentro-link {
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 7px 20px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    display: inline-block; /* Agregado para alinear con el texto */
+    cursor: pointer; /* Agregado para indicar que es un enlace */
+}
+
+.encuentro-link:hover {
+    background-color: #7dafff;
+    text-decoration: none; /* Quita la línea subrayada al pasar el cursor */
+}
+
 
     .events {
         display: flex;
@@ -137,7 +142,10 @@
                     <div class="card">
                         <div class="card-header">
                             <span class="date">{{ encuentro.competicion_id}} {{ encuentro.fecha | date:'D h:m' }}</span>
-                            <a href="/tvVivo/{{encuentro.encuentro_id}}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
+                            <a href="/tvVivo/{{encuentro.encuentro_id}}" class="encuentro-link" style="font-size: 12px">
+                                <i class="fas fa-play-circle"></i> Ver
+                            </a>
+                            
                         </div>
                         <div class="card-body" style="display: flex; align-items: center; justify-content: space-around;">
                             <div class="team-info">

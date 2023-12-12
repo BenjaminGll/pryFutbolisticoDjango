@@ -32,33 +32,31 @@
         <div class="recent-results results-page">
             <div class="info-results">
                 <ul>
-                    {% for ej in encuentrosE %}
+                    {% for item in encuentrosE %}
                     <li>
                         <div class="head">
-                            <span class="date">{{ ej.fecha | date:'d-m-Y h:m' }}</span>
-                            <a href="{% url 'contextoTVhomeEncuentro' id=ej.encuentro_id %}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
-
+                            <span class="date">{{ item.encuentro.fecha | date:'d-m-Y h:m' }}</span>
+                            <a href="{% url 'contextoTVhomeEncuentro' id=item.encuentro.encuentro_id %}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
                         </div>
                         <div class="goals-result" style="align-items: center">
                             <a href="single-team.html" style="margin-top:0px; width: 40%">
-                                <img src="{{ej.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt=""  loading="lazy">
-                                {{ ej.equipo_local.nombre }}
+                                <img src="{{ item.encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt=""  loading="lazy">
+                                {{ item.encuentro.equipo_local.nombre }}
                             </a>
                             <span class="goals">
-                                <b>{{ goles_equipo_a }}</b> - <b>{{ goles_equipo_b }}</b>
+                                <b>{{ item.golesLocal }}</b> - <b>{{ item.golesVisita }}</b>
                             </span>
                             <a href="single-team.html" style="margin-top:0px; width: 40%">
-                                <img src="{{ej.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy"> 
-                                {{ ej.equipo_visita.nombre }}
+                                <img src="{{ item.encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt="" loading="lazy"> 
+                                {{ item.encuentro.equipo_visita.nombre }}
                             </a>
                         </div>
-                       
                     </li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
-
+        
         <h1>Partidos Por Jugar</h1>
         <hr>
         <div class="recent-results results-page">

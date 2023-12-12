@@ -658,23 +658,37 @@ def contextoTVvivo(request, id):
     return render(request, 'tvVivo.html', data)
 
 
-
-    
-
 def contextoTVhome(request, idCompeticion):
+    # Obtener encuentros en juego
     encuentrosEnJuego = encuentro.objects.filter(estado_jugado='E', competicion_id=idCompeticion)
+
+    # Crear el diccionario de datos
+    data = {'encuentrosE': []}
+
+    # Iterar sobre los encuentros en juego para obtener los goles
+    for encuentroEnJuego in encuentrosEnJuego:
+        # Obtener los goles locales y visitantes directamente
+        golesLocal = descripcion_encuentro.objects.filter(tipo_equipo='LOCAL', encuentro_id=encuentroEnJuego.encuentro_id).values_list('goles', flat=True).first()
+        golesVisita = descripcion_encuentro.objects.filter(tipo_equipo='VISITA', encuentro_id=encuentroEnJuego.encuentro_id).values_list('goles', flat=True).first()
+
+        # Agregar el encuentro y sus goles al diccionario
+        data['encuentrosE'].append({
+            'encuentro': encuentroEnJuego,
+            'golesLocal': golesLocal,
+            'golesVisita': golesVisita,
+        })
+
+    # Obtener información de la competición
     competiciones = competicion.objects.get(competicion_id=idCompeticion)
-   
-    encuentrosPorJugar = encuentro.objects.filter(estado_jugado='N', competicion_id=idCompeticion)  
-    data={
-        'encuentrosE': encuentrosEnJuego,
-        'encuentrosN': encuentrosPorJugar,
-        'competiciones':competiciones,
 
-    }
-    
+    # Obtener encuentros por jugar
+    encuentrosPorJugar = encuentro.objects.filter(estado_jugado='N', competicion_id=idCompeticion)
+
+    # Agregar al diccionario de datos
+    data['encuentrosN'] = encuentrosPorJugar
+    data['competiciones'] = competiciones
+
     return render(request, 'tvHome.html', data)
-
 
 
 def contextoTVhomeEncuentro(request,id):

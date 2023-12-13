@@ -4,40 +4,66 @@
 {% block title %} Competencias - Sistema de Gestion de Futbol {% endblock %}
             
 {% block content %}     
-<!-- <style>
-    /* Estilos para centrar y dar estilo a la lista de competiciones */
-.groups-list {
-    text-align: center;
+<style>
+    .logo-competencia {
+        width: 50%;
+        height: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .card {
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 157, 255, 0.5);
+        transition: box-shadow 0.3s ease-in-out;
+
+       
+        overflow: hidden;
+        position: relative;
+    }
+
+    .card:hover {
+        box-shadow: 0 0 20px rgba(0, 157, 255, 1);
+        animation: pulse 2s infinite; /* Puedes ajustar la velocidad de la animación según tus preferencias */
+
+    }
+
+    .card::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
 }
 
-.competitions-list {
-    list-style: none;
-    padding: 0;
+.card:hover::before {
+    opacity: 1;
 }
 
-.competitions-list li {
-    margin-bottom: 20px;
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
 }
+</style>
 
-.competitions-list a {
-    text-decoration: none;
-    color: #333;
-}
 
-.competitions-list img {
-    max-width: 100%;
-    border-radius: 8px; /* Añade bordes redondeados a las imágenes */
-}
 
-.competition-name {
-    display: block;
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-</style> -->
-    <!-- Section Title -->
     <div class="section-title" style="background:url(/static/img/background-competencias.webp)">
         <div class="container">
             <div class="row">
@@ -64,25 +90,24 @@
             <div class="groups-list page-group">
                 <div class="row justify-content-center align-items-center"> <!-- Alinea y centra el contenido -->
 
-                    <div class="col-lg-6 col-md-6">
-         
-                        <div class="item-group">
-                            <ul class="competitions-list">
-                                {% for cs in competencia_seleccion %}
-                                    <li>
-                                        <a href="{% url 'encuentros_por_jugar' idCompeticion=cs.competicion_id %}">
-                                            <img src="{{ cs.logo_competicion.url }}" alt="{{ cs.nombre }}">
-                                            <span class="competition-name">{{ cs.nombre }}</span>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                    {% for cs in competencia_seleccion %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <a href="{% url 'encuentros_por_jugar' idCompeticion=cs.competicion_id %}">
+                                
+                                <div class="card">
+                                    <br>
+                                <img src="{{ cs.logo_competicion.url }}" class="card-img-top img-fluid logo-competencia" alt="{{ cs.nombre }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ cs.nombre }}</h5>
+                                </div>
+                            </div>
+                         </a>
                         </div>
-                    </div>
+                    {% endfor %}
 
                 </div>
             </div>
         </div>
     </section>
-    <!-- End Section Area -  Content Central -->
+    <!-- End Section Area - Content Central -->
 {% endblock %}

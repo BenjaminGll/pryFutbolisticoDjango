@@ -8,6 +8,8 @@
 <!-- Material Icons -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+
+
 <div class="section-title" style="background:url(/static/img/portada_encuentro.webp)">
     <div class="container">
         <div class="row">
@@ -34,10 +36,13 @@
                 <ul>
                     {% for item in encuentrosE %}
                     <li>
-                        <div class="head">
-                            <span class="date">{{ item.encuentro.fecha | date:'d-m-Y h:m' }}</span>
-                            <a href="{% url 'contextoTVhomeEncuentro' id=item.encuentro.encuentro_id %}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
+                        <div class="head" style="display: flex; align-items: center; justify-content: space-between;">
+                            <a href="{% url 'contextoTVhomeEncuentro' id=item.encuentro.encuentro_id %}" class="encuentro-link" style="font-size: 12px;">▶ Ver</a>
+                            <span class="grupo" >{{ item.encuentro.fase }}  {{ item.encuentro.grupo }}</span>
+                            <span class="date">En vivo</span>
+
                         </div>
+                        
                         <div class="goals-result" style="align-items: center">
                             <a href="single-team.html" style="margin-top:0px; width: 40%">
                                 <img src="{{ item.encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt=""  loading="lazy">
@@ -64,10 +69,10 @@
                 <ul>
                     {% for ej in encuentrosN %}
                     <li>
-                        <div class="head">
-                            <span class="date">{{ ej.fecha | date:'d-m-Y h:m' }}</span>
-                            <!-- <a href="/tvVivo/{{ej.encuentro_id}}" class="encuentro-link" style="font-size: 12px">▶ Ver</a> -->
+                        <div class="head" style="display: flex; align-items: center; justify-content: space-between;">                            
                             <a href="/tvHome/{{ej.encuentro_id}}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
+                            <span class="grupo">{{ ej.fase }}  {{ ej.grupo }}</span> <!-- Agregar el grupo aquí -->
+                            <span class="date">{{ ej.fecha | date:'d/m/Y' }}</span>
 
                         </div>
                         <div class="goals-result" style="align-items: center">

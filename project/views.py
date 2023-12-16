@@ -807,13 +807,21 @@ def mostrarEncuentrosEvento(request):
     if idCompeticion and idFase and idGrupo:
 
         if request.method == 'GET':
-
-            encuentros = encuentro.objects.filter(
-                estado_jugado__in=['N', 'E'],
-                competicion_id=idCompeticion,
-                fase_id=idFase,
-                grupo_id=idGrupo
-            )
+            if idFase==1:
+                
+                encuentros = encuentro.objects.filter(
+                    estado_jugado__in=['N', 'E'],
+                    competicion_id=idCompeticion,
+                    fase_id=idFase,
+                    grupo_id=idGrupo
+                )
+            else:
+                encuentros = encuentro.objects.filter(
+                    estado_jugado__in=['N', 'E'],
+                    competicion_id=idCompeticion,
+                    fase_id=idFase,
+                 
+                )
 
     if request.method == 'POST':
         idEncuentro = request.POST.get('idEncuentro')

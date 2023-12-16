@@ -66,6 +66,16 @@
             /* Reducir el padding del botón */
             cursor: pointer;
         }
+        #grupoContainer label,
+    #grupoContainer select {
+        display: inline-block;
+        margin-bottom: 0; /* Elimina el margen inferior en el label */
+    }
+
+    #grupoContainer select {
+        width: auto; /* Ajusta el ancho del select al contenido */
+    }
+
     </style>
 </head>
 
@@ -97,7 +107,7 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="grupoContainer" style="display: none;">
                 <label for="grupo">&nbsp Grupo &nbsp</label>
                 <select class="form-control" id="grupo" name="grupo">
                     <option value="">Seleccionar...</option>
@@ -116,10 +126,6 @@
 
     <div class="container">
         <br>
-       
-
-
-
         <table>
             <thead>
                 <tr>
@@ -150,7 +156,6 @@
 </body>
 
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Restaurar los valores seleccionados al cargar la página
@@ -172,8 +177,28 @@
                 alert('Por favor, selecciona competición, grupo y fase.');
             }
         });
+
+        // Manejar la visibilidad del combo de grupo al cargar la página
+        handleGrupoVisibility();
+
+        // Manejar la visibilidad del combo de grupo cuando se selecciona la fase
+        document.getElementById('fase').addEventListener('change', handleGrupoVisibility);
     });
 
+    function handleGrupoVisibility() {
+        var faseElement = document.getElementById('fase');
+        var faseText = faseElement.options[faseElement.selectedIndex].text; // Obtener el texto de la opción seleccionada
+        var grupoContainer = document.getElementById('grupoContainer');
+
+        console.log(faseText); // Mostrar el texto de la opción seleccionada
+
+        // Mostrar el combo de grupo solo si la fase es "FASE DE GRUPOS"
+        if (faseText === 'FASE DE GRUPOS') {
+            grupoContainer.style.display = 'block';
+        } else {
+            grupoContainer.style.display = 'none';
+        }
+    }
     function saveSelectedValues(competicion, grupo, fase) {
         // Almacena los valores en el almacenamiento local
         localStorage.setItem('competicion', competicion);

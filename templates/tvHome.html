@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <h1 style="font-size: 50px; font-family: 'Font Awesome 6 Free Solid', 'Material Icons';">  <img src="{{competiciones.logo_competicion.url }}" alt=""  loading="lazy" style="height: 20%; width: 20%;">{{ competiciones.nombre }}</h1>
+                <h1 style="font-size: 50px; font-family: 'Font Awesome 6 Free Solid';">  <img src="{{competiciones.logo_competicion.url }}" alt=""  loading="lazy" style="height: 20%; width: 20%;">{{ competiciones.nombre }}</h1>
             </div>
             <div class="col-md-4">
                 <div class="breadcrumbs">
@@ -45,14 +45,27 @@
                         
                         <div class="goals-result" style="align-items: center">
                             <a href="single-team.html" style="margin-top:0px; width: 40%">
-                                <img src="{{ item.encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt=""  loading="lazy">
+                                {% if item.encuentro.equipo_local.tipo_equipo_id.descripcion == 'CLUB' %}
+                                    <img src="{{ item.encuentro.equipo_local.logo.url }}" alt=""  loading="lazy">
+                                    
+                                {% else %}
+                                    <img src="{{ item.encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt=""  loading="lazy">
+                                   
+                                {% endif %}
                                 {{ item.encuentro.equipo_local.nombre }}
                             </a>
                             <span class="goals">
                                 <b>{{ item.golesLocal }}</b> - <b>{{ item.golesVisita }}</b>
                             </span>
                             <a href="single-team.html" style="margin-top:0px; width: 40%">
-                                <img src="{{ item.encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt="" loading="lazy"> 
+                                {% if item.encuentro.equipo_visita.tipo_equipo_id.descripcion == 'CLUB' %}
+                                    <img src="{{ item.encuentro.equipo_visita.logo.url }}" alt="" 
+                                    loading="lazy"> 
+                                   
+                                {% else %}
+                                    <img src="{{ item.encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url }}" alt="" loading="lazy"> 
+                                    
+                                {% endif %}
                                 {{ item.encuentro.equipo_visita.nombre }}
                             </a>
                         </div>

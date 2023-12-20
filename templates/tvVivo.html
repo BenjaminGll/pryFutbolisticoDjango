@@ -56,14 +56,21 @@
     <img class="fondo" src="/static/images/fondoFut.jpg" alt="">
     <div class="banner-marcadores" id="general" style="display:none">
       <span id="cronometro" style="margin-right: 20px;">00:00</span>
-      &nbsp;
+      {% if jugar_encuentro.equipo_local.tipo_equipo_id.descripcion == 'CLUB' %}
+      <img src="{{jugar_encuentro.equipo_local.logo.url}}" alt="" style="margin-top:0px; width: 10%">
+      {% else %}
       <img src="{{jugar_encuentro.equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 10%">
+      {% endif %}
+
       <span> {{equipo_a.siglas}} </span>
       <span id="marcador-local">{{goles_equipo_a}}</span> -
       <span id="marcador-visitante">{{goles_equipo_b}}</span>
       <span> {{equipo_b.siglas}} </span>
+      {% if jugar_encuentro.equipo_visita.tipo_equipo_id.descripcion == 'CLUB' %}
+      <img src="{{jugar_encuentro.equipo_visita.logo.url}}" alt="" style="margin-top:0px; width: 10%">
+      {% else %}
       <img src="{{jugar_encuentro.equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" style="margin-top:0px; width: 10%">
-      <span id="banner-tExtra" style="display: none;"><span id="tiempoExtra">+0</span></span>
+      {% endif %}      <span id="banner-tExtra" style="display: none;"><span id="tiempoExtra">+0</span></span>
   </div>
   
 

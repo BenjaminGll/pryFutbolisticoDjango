@@ -140,24 +140,35 @@
             <ul>
                 <li class="text-center" style="max-width: 500px; margin: 0 auto;left: -15px;">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header" style="display: flex; justify-content: space-between;">
                             <span class="date">{{ encuentro.competicion_id}} {{ encuentro.fecha | date:'D h:m' }}</span>
-                            <a href="/tvVivo/{{encuentro.encuentro_id}}" class="encuentro-link" style="font-size: 12px">
+                            <a href="/tvVivo/{{encuentro.encuentro_id}}" class="encuentro-link" style="font-size: 12px; margin-left: auto;">
                                 <i class="fas fa-play-circle"></i> Ver
                             </a>
                             
                         </div>
                         <div class="card-body" style="display: flex; align-items: center; justify-content: space-around;">
                             <div class="team-info">
-                                <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
-                                <p class="team-name">{{ equipo_local.nombre }}</p>
-                            </div>
+                                {% if encuentro.equipo_local.tipo_equipo_id.descripcion == 'CLUB' %}
+                                    <img src="{{equipo_local.logo.url}}" alt="" loading="lazy" style="width: 50px;">
+                                    <p class="team-name">{{ equipo_local.nombre }}</p>
+                                {% else %}
+                                    <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                                    <p class="team-name">{{ equipo_local.nombre }}</p>
+                                {% endif %}
+                                </div>
                             <span class="score">
                                 <b>{{ descripcion_local.goles }}</b> - <b>{{ descripcion_visita.goles }}</b>
                             </span>
                             <div class="team-info">
-                                <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
-                                <p class="team-name">{{ equipo_visita.nombre }}</p>
+                                {% if encuentro.equipo_visita.tipo_equipo_id.descripcion == 'CLUB' %}
+                                    <img src="{{equipo_visita.logo.url}}" alt="" loading="lazy" style="width: 50px;">
+                                    <p class="team-name">{{ equipo_visita.nombre }}</p>
+                                {% else %}
+                                    <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                                    <p class="team-name">{{ equipo_visita.nombre }}</p>
+                                {% endif %}
+
                             </div>
                         </div>
                         <!-- Línea horizontal como separador -->
@@ -253,7 +264,6 @@
                     {% endif %}
                     
                     
-                    
                     </td>
 
                     <td>
@@ -277,10 +287,19 @@
                     </td>
                     
                     <td>
+
                         {% if evento.evento_equipo == True %}
-                        <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                            {% if equipo_local.tipo_equipo_id.descripcion == 'CLUB' %}
+                                <img src="{{equipo_local.logo.url}}" alt="" loading="lazy" style="width: 50px;">
+                            {% else %}
+                                <img src="{{equipo_local.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                            {% endif %}
                         {% else %}
-                        <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                            {% if equipo_local.tipo_equipo_id.descripcion == 'CLUB' %}
+                                <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                            {% else %}
+                                <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                            {% endif %}
                         {% endif %}
                     </td>
                 </tr>

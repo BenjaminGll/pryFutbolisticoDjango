@@ -34,7 +34,7 @@ CSRF_TRUSTED_ORIGINS = ['https://pryfutbolisticodjango-production.up.railway.app
 INSTALLED_APPS = [
     'admin_interface',
     'colorfield',
-    'admin_volt',
+    'admin_volt.apps.AdminVoltConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

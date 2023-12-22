@@ -17,7 +17,7 @@
             {% endfor %}
         </select>
     </div>
-        <!-- Nuevo combo para la fase -->
+
         <div class="form-group mr-2">
             <label for="fase">Fase</label>
             <select name="fase" id="fase" class="form-control filtro">
@@ -27,7 +27,15 @@
                 {% endfor %}            
             </select>
         </div>
-
+        <div class="form-group mr-2" id="grupoContainer" style="display: none;">
+            <label for="grupo">&nbsp Grupo &nbsp</label>
+            <select name="grupo" id="grupo" class="form-control filtro" >
+                <option value="todas">Todo</option>
+                {% for grupo in grupos %}
+                <option value="{{ grupo.grupo_id }}">{{ grupo.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
 </form>
 <br>
 {% csrf_token %}
@@ -68,18 +76,36 @@
         element.addEventListener('change', function () {
             var competicion = document.getElementById('competicion').value;
             var fase = document.getElementById('fase').value;
+            var grupo = document.getElementById('grupo').value;
+
                 // Almacena los valores seleccionados en el almacenamiento local
-                saveSelectedValues(competicion,fase);
+                saveSelectedValues(competicion,fase,grupo);
                 // Envía el formulario
                 document.getElementById('filtroForm').submit(); // Enviar el formulario al cambiar
                 
         });
     });
+    
+    function handleGrupoVisibility() {
+        var faseElement = document.getElementById('fase');
+        var faseText = faseElement.options[faseElement.selectedIndex].text; // Obtener el texto de la opción seleccionada
+        var grupoContainer = document.getElementById('grupoContainer');
 
-    function saveSelectedValues(competicion, fase) {
+        console.log(faseText); // Mostrar el texto de la opción seleccionada
+
+        // Mostrar el combo de grupo solo si la fase es "FASE DE GRUPOS"
+        if (faseText === 'FASE DE GRUPOS') {
+            grupoContainer.style.display = 'block';
+        } else {
+            grupoContainer.style.display = 'none';
+        }
+    }
+
+    function saveSelectedValues(competicion, fase, grupo) {
         // Almacena los valores en el almacenamiento local
         localStorage.setItem('competicion', competicion);
         localStorage.setItem('fase', fase);
+        localStorage.setItem('grupo', grupo);
 
     }
 
@@ -87,6 +113,7 @@
         // Restaura los valores desde el almacenamiento local solo si competicion_id es diferente de "todas"
         var competicionId = "{{ competicion_id }}";
         var faseId = "{{ fase_id }}";
+        var grupoId = "{{ grupo_id }}";
   // Obtener el valor de competicion_id desde el contexto de Django
         if (competicionId !== "todas" ) {
             var competicion = localStorage.getItem('competicion');
@@ -100,11 +127,21 @@
             if (fase) document.getElementById('fase').value = fase;
 
         }
+        if (grupoId !== "todas") {
+            var grupo = localStorage.getItem('grupo');
+            // Aplica los valores restaurados a los elementos del formulario
+            if (grupo) document.getElementById('grupo').value = grupo;
+
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         // Restaurar los valores seleccionados al cargar la página
         restoreSelectedValues();
+        handleGrupoVisibility();
+
+// Manejar la visibilidad del combo de grupo cuando se selecciona la fase
+document.getElementById('fase').addEventListener('change', handleGrupoVisibility);
     });
 </script>
 

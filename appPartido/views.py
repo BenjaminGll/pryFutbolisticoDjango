@@ -59,7 +59,7 @@ def mostrarEncuentros(request):
     tipo = request.GET.get('tipo')
     competicion_id = request.GET.get('competicion')
     fase_id = request.GET.get('fase')
-
+    grupo_id = request.GET.get('grupo') 
 
     if tipo == 'alineaciones' or tipo == 'terna_arbitral':
         estado_filter = 'N'
@@ -78,19 +78,24 @@ def mostrarEncuentros(request):
     elif competicion_id == 'todas' and fase_id != 'todas':
         encuentros = encuentro.objects.filter(estado_jugado=estado_filter, fase_id=fase_id)
         encuentrosParaFase = encuentro.objects.all()
+        if fase_id == '1' and grupo_id != 'todas':
+            encuentros = encuentros.filter(grupo_id=grupo_id)
     else:
         encuentros = encuentro.objects.filter(estado_jugado=estado_filter, competicion_id=competicion_id, fase_id=fase_id)
         encuentrosParaFase = encuentro.objects.filter(competicion_id=competicion_id)
+        if fase_id == '1' and grupo_id != 'todas':
+            encuentros = encuentros.filter(grupo_id=grupo_id)
 
     fases = fase.objects.filter(fase_id__in=encuentrosParaFase.values('fase_id')).distinct()
     print(fase_id)
     print(competicion_id)
+    print(grupo_id)
 
 
 
     # Obtén las opciones para los combobox de filtro
     competiciones = competicion.objects.all()
-
+    grupos = grupo.objects.all
     return render(
         request,
         'listarEncuentros.html',
@@ -101,6 +106,8 @@ def mostrarEncuentros(request):
             'competiciones': competiciones,
             'competicion_id':competicion_id,
             'fase_id':fase_id,
+            'grupos':grupos,
+            'grupo_id':grupo_id,
         }
     )
 

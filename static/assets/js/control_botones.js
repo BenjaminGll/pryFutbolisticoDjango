@@ -8,6 +8,17 @@
         // Obtener el tipo de letra del botón "Guardar"
         var fontFamily = guardarButton.css('font-family');
 
+        var modalContainer = $('.related-widget-wrapper-link').closest('.related-widget-wrapper').find('.related-modal-iframe-container');
+
+        // Ajustar el tamaño después de que se carga el iframe
+        var iframe = modalContainer.find('iframe');
+        iframe.on('load', function() {
+            modalContainer.css({
+                'width': '800px', // Ajusta el ancho según tus necesidades
+                'height': '600px' // Ajusta la altura según tus necesidades
+            });
+        });
+
         cancelarButton.css({
             'background-color': '#e61610', 
             'border-radius': '5px',
@@ -75,5 +86,6 @@ $('form').find('input, select, textarea').each(function(){
         });
     }
 });
+
 });
 })(django.jQuery);

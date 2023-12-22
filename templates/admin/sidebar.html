@@ -38,6 +38,7 @@
                 </a>
             </div>
         </div>
+
         <ul class="nav flex-column pt-3 pt-md-0">
             <li class="nav-item" style="margin-top: 20px; margin-bottom: 30px">
                     <span class="sidebar-icon">
@@ -46,62 +47,57 @@
                     <span class="mt-1 ms-1 sidebar-text">{% trans 'Panel de Administración' %}</span>
             </li>
 
-            <li class="nav-item {% if 'dashboard' in segment %} active {% endif %}">
+            <li class="nav-item ">
                 <a href="{% url 'admin:index' %}" class="nav-link">
                     <span class="sidebar-icon fa fa-home"></span>
                     <span class="sidebar-text">{% trans 'Inicio' %}</span>
                 </a>
             </li>
-            <li class="nav-item {% if 'dashboard' in segment %} active {% endif %}">
+            <li class="nav-item ">
                 <a href="/admintv/encuentros" class="nav-link" target="_blank">
                     <span class="sidebar-icon fa fa-tv"></span>
                     <span class="sidebar-text">{% trans 'Modulo Tv' %}</span>
                 </a>
             </li>
             
-            <style>
-                .submenu {
-                    display: none; /* Oculta los submenús inicialmente */
-                }
+            <li class="nav-item">
+                <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-transacciones">
+                    <span>
+                        <span class="sidebar-icon fa fa-exchange"></span>
+                        <span class="sidebar-text">{% trans 'Transacciones' %}</span>   
+                    </span>
+                    <span class="link-arrow">
+                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </span>
+                </span>
 
-                .nav-item.active .submenu {
-                    display: block; /* Muestra los submenús cuando su elemento principal está activo */
-                }
-                /* Estilo para el hover en las opciones de transacciones */
-/* Estilo para el hover en las opciones de transacciones */
-.transacciones > a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    border-radius: 5px;
-}
-
-
-
-            </style>
-<li class="nav-item {% if 'dashboard' in segment %} active {% endif %}">
-    <a class="nav-link">
-        <span class="sidebar-icon fa fa-exchange"></span>
-        <span class="sidebar-text">{% trans 'Transacciones' %}</span>   
-        <span class="arrow-icon fa fa-chevron-right" style="left: 45px;"></span>
-    </a>
-    <ul class="submenu transacciones">
-        <a href="{% url 'lista_encuentros' %}?tipo=alineaciones">Asignar Alineaciones</a><br><br>
-        <a href="{% url 'lista_encuentros' %}?tipo=terna_arbitral">Asignar Terna arbitral</a><br><br>
-        <a href="{% url 'lista_encuentros' %}?tipo=eventos">Asignar Eventos</a><br><br>
-        <a href="{% url 'lista_encuentros' %}?tipo=estadisticas">Asignar Estadisticas</a>
-    </ul>
+                <div class="multi-level collapse {% if 'transacciones' in segment or 'lista_encuentros' in request.path|urlencode%}show{% endif %}" role="list" id="submenu-transacciones" aria-expanded="{% if 'transacciones' in segment %}true{% else %}false{% endif %}">
+                    <ul class="flex-column nav submenu transacciones">
+                        <li class="nav-item{% if tipo == 'alineaciones' %} active{% endif %}">
+                            <a class="nav-link" href="{% url 'lista_encuentros' %}?tipo=alineaciones&competicion=todas&fase=todas">
+                                <span class="sidebar-text">{% trans 'Asignar Alineaciones' %}</span>
+                            </a>
+                        </li>
+                    
+                        <li class="nav-item{% if tipo == 'terna_arbitral' %} active{% endif %}">
+                            <a class="nav-link" href="{% url 'lista_encuentros' %}?tipo=terna_arbitral&competicion=todas&fase=todas">
+                                <span class="sidebar-text">{% trans 'Asignar Terna arbitral' %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item{% if tipo == 'eventos' %} active{% endif %}">
+                            <a class="nav-link" href="{% url 'lista_encuentros' %}?tipo=eventos&competicion=todas&fase=todas"><span class="sidebar-text">Asignar Eventos</span></a>
+                        </li>
+                        <li class="nav-item{% if tipo == 'estadisticas' %} active{% endif %}">
+                            <a class="nav-link" href="{% url 'lista_encuentros' %}?tipo=estadisticas&competicion=todas&fase=todas"><span class="sidebar-text">Asignar Estadisticas</span></a>
+                        </li>
+        </ul>
+    </div>
 </li>
 
+
             
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-            <script>
-                $(document).ready(function () {
-                    $('.nav-item').click(function () {
-                        // Alternar la visibilidad de los submenús al hacer clic en la flecha
-                        $(this).find('.submenu').toggle();
-                    });
-                });
-            </script>
             {% admin_get_menu as app_list %}
             {% if app_list %}
                 {% for app in app_list %}

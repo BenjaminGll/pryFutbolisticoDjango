@@ -51,7 +51,7 @@ class equipo(models.Model):
         "appContrato.contrato",
         on_delete=models.CASCADE,
         db_column='contrato_id',
-        null=True,
+        null=True,blank=True,
         limit_choices_to={'persona__tipo_persona_id': 2}
     )
 

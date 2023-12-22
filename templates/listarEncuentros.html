@@ -7,15 +7,26 @@
 
 <H1>Asignar {{ tipo|title }}</H1>
 <form method="get" action="{% url 'lista_encuentros' %}" class="d-flex" id="filtroForm">
+    <input type="hidden" name="tipo" value="{{ tipo }}">
     <div class="form-group mr-2">
         <label for="competicion">Competición</label>
         <select name="competicion" id="competicion" class="form-control filtro">
-            <option value="">Todas</option>
+            <option value="todas">Todo</option>
             {% for competicion in competiciones %}
-                <option value="{{ competicion.id }}" {% if selected_competicion == competicion.id %}selected{% endif %}>{{ competicion.nombre }}</option>
+                <option value="{{ competicion.competicion_id }}">{{ competicion.nombre }}</option>
             {% endfor %}
         </select>
     </div>
+        <!-- Nuevo combo para la fase -->
+        <div class="form-group mr-2">
+            <label for="fase">Fase</label>
+            <select name="fase" id="fase" class="form-control filtro">
+                <option value="todas">Todo</option>
+                {% for fase in fases %}
+                <option value="{{ fase.fase_id }}">{{ fase.nombre }}</option>
+                {% endfor %}            
+            </select>
+        </div>
 
 </form>
 <br>
@@ -55,8 +66,45 @@
     // Agregar un evento change a todos los elementos con la clase 'filtro'
     document.querySelectorAll('.filtro').forEach(function (element) {
         element.addEventListener('change', function () {
-            document.getElementById('filtroForm').submit(); // Enviar el formulario al cambiar
+            var competicion = document.getElementById('competicion').value;
+            var fase = document.getElementById('fase').value;
+                // Almacena los valores seleccionados en el almacenamiento local
+                saveSelectedValues(competicion,fase);
+                // Envía el formulario
+                document.getElementById('filtroForm').submit(); // Enviar el formulario al cambiar
+                
         });
+    });
+
+    function saveSelectedValues(competicion, fase) {
+        // Almacena los valores en el almacenamiento local
+        localStorage.setItem('competicion', competicion);
+        localStorage.setItem('fase', fase);
+
+    }
+
+    function restoreSelectedValues() {
+        // Restaura los valores desde el almacenamiento local solo si competicion_id es diferente de "todas"
+        var competicionId = "{{ competicion_id }}";
+        var faseId = "{{ fase_id }}";
+  // Obtener el valor de competicion_id desde el contexto de Django
+        if (competicionId !== "todas" ) {
+            var competicion = localStorage.getItem('competicion');
+            // Aplica los valores restaurados a los elementos del formulario
+            if (competicion) document.getElementById('competicion').value = competicion;
+
+        }
+        if (faseId !== "todas") {
+            var fase = localStorage.getItem('fase');
+            // Aplica los valores restaurados a los elementos del formulario
+            if (fase) document.getElementById('fase').value = fase;
+
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Restaurar los valores seleccionados al cargar la página
+        restoreSelectedValues();
     });
 </script>
 

@@ -56,44 +56,40 @@ class ObtenerAlineacionesView(View):
         return JsonResponse(data)
 
 def mostrarEncuentros(request):
-    tipo = request.GET.get('tipo', 'alineaciones')
+    tipo = request.GET.get('tipo')
+    competicion_id = request.GET.get('competicion')
+    fase_id = request.GET.get('fase')
 
-    if request.method == 'POST':
-        competicion_id = request.POST.get('competicion')
-        fase_id = request.POST.get('fase')
-        grupo_id = request.POST.get('grupo')
-        # Procesa los filtros y redirige a la misma vista con los parámetros aplicados
-        return redirect('lista_encuentros', tipo=tipo, competicion_id=competicion_id, fase_id=fase_id, grupo_id=grupo_id)
 
-    # Obtén los encuentros según el tipo
-    if tipo == 'alineaciones':
-        encuentros = encuentro.objects.filter(estado_jugado='N')
-    elif tipo == 'terna_arbitral':
-        encuentros = encuentro.objects.filter(estado_jugado='N')
-    elif tipo == 'eventos':
-        encuentros = encuentro.objects.filter(estado_jugado='E')
-    elif tipo == 'estadisticas':
-        encuentros = encuentro.objects.filter(estado_jugado='E')
+    if tipo == 'alineaciones' or tipo == 'terna_arbitral':
+        estado_filter = 'N'
+    elif tipo == 'eventos' or tipo == 'estadisticas':
+        estado_filter = 'E'
     else:
-        encuentros = encuentro.objects.all()
+        estado_filter = ''
 
-    # Aplica filtros adicionales si se proporcionan
-    if 'competicion_id' in locals():
-        encuentros = encuentros.filter(competicion_id=competicion_id)
-    if 'fase_id' in locals():
-        encuentros = encuentros.filter(fase_id=fase_id)
-    if 'grupo_id' in locals():
-        encuentros = encuentros.filter(grupo_id=grupo_id)
+    if competicion_id == 'todas' and fase_id == 'todas':
+        encuentros = encuentro.objects.filter(estado_jugado=estado_filter)
+        encuentrosParaFase = encuentro.objects.all()
+    elif competicion_id != 'todas' and fase_id == 'todas':
+        encuentros = encuentro.objects.filter(estado_jugado=estado_filter, competicion_id=competicion_id)
+        encuentrosParaFase = encuentro.objects.filter(competicion_id=competicion_id)
+
+    elif competicion_id == 'todas' and fase_id != 'todas':
+        encuentros = encuentro.objects.filter(estado_jugado=estado_filter, fase_id=fase_id)
+        encuentrosParaFase = encuentro.objects.all()
+    else:
+        encuentros = encuentro.objects.filter(estado_jugado=estado_filter, competicion_id=competicion_id, fase_id=fase_id)
+        encuentrosParaFase = encuentro.objects.filter(competicion_id=competicion_id)
+
+    fases = fase.objects.filter(fase_id__in=encuentrosParaFase.values('fase_id')).distinct()
+    print(fase_id)
+    print(competicion_id)
+
+
 
     # Obtén las opciones para los combobox de filtro
     competiciones = competicion.objects.all()
-    fases = fase.objects.all()
-    grupos = grupo.objects.all()
-
-    # Obtén las opciones seleccionadas para los filtros
-    selected_competicion = int(competicion_id) if 'competicion_id' in locals() else None
-    selected_fase = int(fase_id) if 'fase_id' in locals() else None
-    selected_grupo = int(grupo_id) if 'grupo_id' in locals() else None
 
     return render(
         request,
@@ -101,12 +97,10 @@ def mostrarEncuentros(request):
         {
             'encuentros': encuentros,
             'tipo': tipo,
+            'fases':fases,
             'competiciones': competiciones,
-            'fases': fases,
-            'grupos': grupos,
-            'selected_competicion': selected_competicion,
-            'selected_fase': selected_fase,
-            'selected_grupo': selected_grupo,
+            'competicion_id':competicion_id,
+            'fase_id':fase_id,
         }
     )
 

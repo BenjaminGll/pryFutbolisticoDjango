@@ -798,7 +798,7 @@ def mostrarEncuentrosEvento(request):
     encuentros = encuentro.objects.filter(estado_jugado=' ')
     fases = fase.objects.all
     grupos = grupo.objects.all
-    idEncuentro =None
+    idEncuentro = None
 
     idCompeticion = request.GET.get('competicion') 
     idFase = request.GET.get('fase') 

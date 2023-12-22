@@ -90,11 +90,12 @@
         var faseElement = document.getElementById('fase');
         var faseText = faseElement.options[faseElement.selectedIndex].text; // Obtener el texto de la opción seleccionada
         var grupoContainer = document.getElementById('grupoContainer');
-
+        var competicionElement = document.getElementById('competicion');
+        var competicionText = competicionElement.options[competicionElement.selectedIndex].text;
         console.log(faseText); // Mostrar el texto de la opción seleccionada
 
         // Mostrar el combo de grupo solo si la fase es "FASE DE GRUPOS"
-        if (faseText === 'FASE DE GRUPOS') {
+        if (faseText === 'FASE DE GRUPOS' || (competicionText === 'LIGA 1- 2023' && faseText !== 'FINAL' && faseText !== 'Todo')) {
             grupoContainer.style.display = 'block';
         } else {
             grupoContainer.style.display = 'none';

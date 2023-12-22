@@ -70,32 +70,33 @@ def mostrarEncuentros(request):
 
     if competicion_id == 'todas' and fase_id == 'todas':
         encuentros = encuentro.objects.filter(estado_jugado=estado_filter)
-        encuentrosParaFase = encuentro.objects.all()
+        encuentrosParaFiltro = encuentro.objects.all()
     elif competicion_id != 'todas' and fase_id == 'todas':
         encuentros = encuentro.objects.filter(estado_jugado=estado_filter, competicion_id=competicion_id)
-        encuentrosParaFase = encuentro.objects.filter(competicion_id=competicion_id)
+        encuentrosParaFiltro = encuentro.objects.filter(competicion_id=competicion_id)
 
     elif competicion_id == 'todas' and fase_id != 'todas':
         encuentros = encuentro.objects.filter(estado_jugado=estado_filter, fase_id=fase_id)
-        encuentrosParaFase = encuentro.objects.all()
+        encuentrosParaFiltro = encuentro.objects.all()
         if fase_id == '1' and grupo_id != 'todas':
             encuentros = encuentros.filter(grupo_id=grupo_id)
     else:
         encuentros = encuentro.objects.filter(estado_jugado=estado_filter, competicion_id=competicion_id, fase_id=fase_id)
-        encuentrosParaFase = encuentro.objects.filter(competicion_id=competicion_id)
+        encuentrosParaFiltro = encuentro.objects.filter(competicion_id=competicion_id)
+       
         if fase_id == '1' and grupo_id != 'todas':
             encuentros = encuentros.filter(grupo_id=grupo_id)
 
-    fases = fase.objects.filter(fase_id__in=encuentrosParaFase.values('fase_id')).distinct()
+    fases = fase.objects.filter(fase_id__in=encuentrosParaFiltro.values('fase_id')).distinct()
+    grupos = grupo.objects.filter(grupo_id__in=encuentrosParaFiltro.values('grupo_id')).distinct().order_by('grupo_id')
     print(fase_id)
     print(competicion_id)
-    print(grupo_id)
-
-
+    print(grupos)
+    print(encuentros.values('grupo'))
 
     # Obtén las opciones para los combobox de filtro
     competiciones = competicion.objects.all()
-    grupos = grupo.objects.all
+    
     return render(
         request,
         'listarEncuentros.html',

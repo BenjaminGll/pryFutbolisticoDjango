@@ -63,18 +63,32 @@
 }
 
 
-    .events {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 
-    .event-info {
-        color: #888;
-        font-size: 12px;
-        text-align: center;
-        margin-top: 5px;
-    }
+
+
+.events {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.event-info {
+    color: #888;
+    font-size: 12px;
+    position: relative; /* Agregado para posicionar de forma relativa */
+    white-space: nowrap; /* Impide que el texto se divida en múltiples líneas */
+}
+
+.event-info .event-player,
+.event-info .event-minute {
+    display: inline-block; /* Mantiene el nombre del jugador y el minuto en la misma línea */
+}
+
+.event-info .event-minute {
+    font-weight: bold;
+    margin-left: 5px; /* Agregado un margen entre el nombre del jugador y el minuto */
+}
+
 
     .event-minute {
         font-weight: bold;
@@ -87,16 +101,9 @@
     /* Nueva regla para la línea horizontal */
     .separator-line {
         border-top: 1px solid #ddd;
-        margin: 20px 0;
+
     }
 
-    /* Alineación del icono de gol */
-    .goal-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 10px;
-    }
 
 
         /* Agrega un nuevo estilo para centrar las cards de eventos individuales */
@@ -115,6 +122,13 @@
 .table th {
     border: none;
 }
+/* Alinea el contenedor en el centro y lo mantiene fijo */
+.goal-icon-container {
+        position: absolute;
+        
+    }
+
+    
 </style>
 
 <body  data-encuentro-id="{{ encuentro.encuentro_id }}">
@@ -141,7 +155,8 @@
                 <li class="text-center" style="max-width: 500px; margin: 0 auto;left: -15px;">
                     <div class="card">
                         <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <span class="date">{{ encuentro.competicion_id}} {{ encuentro.fecha | date:'D h:m' }}</span>
+                            <span class="date">{{ encuentro.competicion_id }} {{ encuentro.fecha | date:'D, d/m, g:i a' }}</span>
+
                             <a href="/tvVivo/{{encuentro.encuentro_id}}" class="encuentro-link" style="font-size: 12px; margin-left: auto;">
                                 <i class="fas fa-play-circle"></i> Ver
                             </a>
@@ -171,53 +186,63 @@
 
                             </div>
                         </div>
+                        {% if eventos_local %}
                         <!-- Línea horizontal como separador -->
                         <hr class="separator-line">
                         <!-- Agregar eventos debajo de la línea horizontal --> 
-                        <div class="card-body" style="display: flex; align-items: center; justify-content: space-around;">
+                        <div class="card-body" style="display: flex; justify-content: space-around;">
                             <div class="events">
                                 {% for evento_local in eventos_local|dictsort:"tiempo" %}
-                                {% if evento_local.tipo_evento_id.nombre == "GOL"  %}
-                                
-                                    <p class="event-info">
-                                        <span class="event-player">{{ evento_local.alineacion_id1.contrato_id.persona.alias }}</span>
-                                        <span class="event-minute">{{ evento_local.tiempo }}'</span>
-                                    </p>
-                                    
-                                    {% endif %} 
-                                {% endfor %}
-                            </div>
-                            <div class="goal-icon">
-                                ⚽
-                            </div>
-                            <div class="events">
-                                {% for evento_visita in eventos_visita|dictsort:"tiempo" %}
-                                {% if evento_visita.tipo_evento_id.nombre == "GOL"  %}
-                             
-                                    <p class="event-info">
-                                        <span class="event-player">{{ evento_visita.alineacion_id1.contrato_id.persona.alias }}</span>
-                                        <span class="event-minute">{{ evento_visita.tiempo }}'</span>
-                                    </p>
-                               
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <!-- Agregar eventos de tarjeta roja debajo de la línea horizontal --> 
-                        <div class="card-body event-group" style="display: flex; align-items: center; justify-content: space-around;">
-                            <div class="events">
-                                {% for evento_local in eventos_local|dictsort:"tiempo" %}
-                                    {% if evento_local.tipo_evento_id.nombre == "TARJETA ROJA" %}
-                                        <p class="event-info">
+                                    {% if evento_local.tipo_evento_id.nombre == "GOL"  %}
+                                        <p class="event-info" style="margin-right: 150px;">
                                             <span class="event-player">{{ evento_local.alineacion_id1.contrato_id.persona.alias }}</span>
                                             <span class="event-minute">{{ evento_local.tiempo }}'</span>
                                         </p>
                                     {% endif %}
                                 {% endfor %}
                             </div>
-                            <div class="goal-icon">
-                            🟥
+                            
+                           
+                            {% if estado_gol == True%}
+                            <div class="goal-icon-container">
+                                <i class="fas fa-futbol text-black"></i>
                             </div>
+                            {% endif %}
+                        
+                        
+                         
+                     
+                            <div class="events">
+                                {% for evento_visita in eventos_visita|dictsort:"tiempo" %}
+                                {% if evento_visita.tipo_evento_id.nombre == "GOL"  %}
+                                <p class="event-info">
+                                    <span class="event-player">{{ evento_visita.alineacion_id1.contrato_id.persona.alias }}</span>
+                                    <span class="event-minute">{{ evento_visita.tiempo }}'</span>
+                                </p>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Agregar eventos de tarjeta roja debajo de la línea horizontal --> 
+                        <div class="card-body event-group" style="display: flex; align-items: center; justify-content: space-around;">
+                            <div class="events">
+                                {% for evento_local in eventos_local|dictsort:"tiempo" %}
+                                    {% if evento_local.tipo_evento_id.nombre == "TARJETA ROJA" %}
+                                        <p class="event-info"style="margin-right: 150px; ">
+                                            <span class="event-player">{{ evento_local.alineacion_id1.contrato_id.persona.alias }}</span>
+                                            <span class="event-minute">{{ evento_local.tiempo }}'</span>
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if estado_tarjeta == True%}
+
+                            <div class="goal-icon-container">
+                                <i class="fas fa-square text-danger"></i>
+                            </div>
+                            {% endif %}
+
                             <div class="events">
                                 {% for evento_visita in eventos_visita|dictsort:"tiempo" %}
                                     {% if evento_visita.tipo_evento_id.nombre == "TARJETA ROJA" %}
@@ -229,7 +254,7 @@
                                 {% endfor %}
                             </div>
                         </div>
-
+                        {% endif %}
                     </div>
                 </li>
             </ul>
@@ -296,7 +321,7 @@
                             {% endif %}
                         {% else %}
                             {% if equipo_local.tipo_equipo_id.descripcion == 'CLUB' %}
-                                <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
+                                <img src="{{equipo_visita.logo.url}}" alt="" loading="lazy" style="width: 50px;">
                             {% else %}
                                 <img src="{{equipo_visita.sede_id.ciudad_id.pais_id.logo_bandera.url}}" alt="" loading="lazy" style="width: 50px;">
                             {% endif %}

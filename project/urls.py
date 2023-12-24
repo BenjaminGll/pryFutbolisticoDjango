@@ -33,7 +33,7 @@ urlpatterns = [
     path('tvHome/encuentros/<int:idCompeticion>/', contextoTVhome, name='encuentros_por_jugar'),
     path('tvHome/<int:id>/', contextoTVhomeEncuentro, name='contextoTVhomeEncuentro'),
     path('datostv/', obtener_eventos_ajax),
-    path('admintv/<int:idEncuentro>/',mostrarEvento , name='mostrar_evento'),
+    path('admintv/EnJuego/<int:idEncuentro>/',mostrarEvento , name='mostrar_evento'),
     path('admintv/encuentros', mostrarEncuentrosEvento, name='mostrar_encuentro_evento'),
     path('limpiar-eventos-temporales/', limpiar_eventos_temporales, name='limpiar_eventos_temporales'),
     path('admintv/generales/<int:idEncuentro>/',mostrarEventosGenerales , name='mostrar_eventos_generales'),

@@ -1,225 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar encuentros para mostrar eventos</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
+{% block breadcrumbs %}{% endblock %}
 
-        h1 {
-            margin-bottom: 20px;
-            text-align: center;
-            /* Centrar el título */
-        }
+{% block content %}
 
-        .form-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            text-align: center;
-            /* Centrar elementos en la fila */
-        }
-
-        .form-container select {
-            width: 70%;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            border: 1px solid #dee2e6;
-            margin-bottom: 20px;
-        }
-
-        th,
-        td {
-            padding: 8px;
-            text-align: center;
-            /* Centrar texto en las celdas */
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        th {
-            background-color: #f8f9fa;
-        }
-
-        td {
-            vertical-align: middle;
-        }
-
-        .btn-submit {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            /* Reducir el padding del botón */
-            cursor: pointer;
-        }
-        #grupoContainer label,
-    #grupoContainer select {
-        display: inline-block;
-        margin-bottom: 0; /* Elimina el margen inferior en el label */
-    }
-
-    #grupoContainer select {
-        width: auto; /* Ajusta el ancho del select al contenido */
-    }
-
-    </style>
-</head>
-
-<body>
-    <h1>Seleccionar encuentro para mostrar evento</h1>
-
-    <div class="form-container">
-        <form class="form-inline" method="GET" action="{% url 'mostrar_encuentro_evento' %}" id="filterForm">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="competicion">Competición &nbsp</label>
-                <select class="form-control" id="competicion" name="competicion">
-                    <option value="">Seleccionar...</option>
-                    {% for competicion in competiciones %}
-                    <option value="{{ competicion.competicion_id }}">{{ competicion.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-
-
-            <div class="form-group">
-                <label for="fase">&nbsp Fase &nbsp</label>
-                <select class="form-control" id="fase" name="fase">
-                    <option value="">Seleccionar...</option>
-                    {% for fase in fases %}
-                    <option value="{{ fase.fase_id }}">{{ fase.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group" id="grupoContainer" style="display: none;">
-                <label for="grupo">&nbsp Grupo &nbsp</label>
-                <select class="form-control" id="grupo" name="grupo">
-                    <option value="">Seleccionar...</option>
-                    {% for grupo in grupos %}
-                    <option value="{{ grupo.grupo_id }}">{{ grupo.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Botón para enviar manualmente el formulario -->
-            <button type="button" class="btn btn-submit" id="filterButton">Filtrar</button>
-        </form>
+<H1>TV - MOSTRAR ENCUENTROS </H1>
+<form  method="GET" action="{% url 'mostrar_encuentro_evento' %}"  class="d-flex"  id="filtroForm">
+    <div class="form-group mr-2">
+        <label for="competicion">Competición</label>
+        <select name="competicion" id="competicion" class="form-control filtro">
+            <option value="todas">Todo</option>
+            {% for competicion in competiciones %}
+                <option value="{{ competicion.competicion_id }}">{{ competicion.nombre }}</option>
+            {% endfor %}
+        </select>
     </div>
 
-
-
-    <div class="container">
-        <br>
-        <table>
-            <thead>
-                <tr>
-                    <!-- <th>Encuentro ID</th> -->
-                    <th>Encuentro</th>
-                    <th>Fecha</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for encuentro in encuentros %}
-                    <tr>
-                        <form action="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}" method="post">
-                            {% csrf_token %}
-                            <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{ encuentro.equipo_visita }} </td>
-                            <td>{{ encuentro.fecha }}</td>
-                            <td>
-                                <input type="hidden" name="idEncuentro" value="{{ encuentro.encuentro_id }}">
-                                <button type="submit" class="btn btn-submit">Mostrar Eventos</button>
-                            </td>
-                        </form>
-                    </tr>
+        <div class="form-group mr-2">
+            <label for="fase">Fase</label>
+            <select name="fase" id="fase" class="form-control filtro">
+                <option value="todas">Todo</option>
+                {% for fase in fases %}
+                <option value="{{ fase.fase_id }}">{{ fase.nombre }}</option>
+                {% endfor %}            
+            </select>
+        </div>
+        <div class="form-group mr-2" id="grupoContainer" style="display: none;">
+            <label for="grupo">&nbsp Grupo &nbsp</label>
+            <select name="grupo" id="grupo" class="form-control filtro" >
+                <option value="todas">Todo</option>
+                {% for grupo in grupos %}
+                <option value="{{ grupo.grupo_id }}">{{ grupo.nombre }}</option>
                 {% endfor %}
-                </tbody>
-        </table>
-    </div>
-    
-</body>
+            </select>
+        </div>
+</form>
 
+{% csrf_token %}
+<div class="table-responsive">
+    <br>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <!-- <th>Encuentro ID</th> -->
+                <th>Encuentro</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for encuentro in encuentros %}
+                <tr>
+                    <form action="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}" method="post">
+                        {% csrf_token %}
+                        <td name="nombreEncuentro" id="nombreEncuentro"> {{ encuentro.equipo_local }} vs {{ encuentro.equipo_visita }} </td>
+                        <td>{{ encuentro.fecha }}</td>
+                        <td>
+                            <input type="hidden" name="idEncuentro" value="{{ encuentro.encuentro_id }}">
+                            <button type="submit" class="btn btn-primary">Mostrar Eventos</button>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+</div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Restaurar los valores seleccionados al cargar la página
-        restoreSelectedValues();
-
-        document.getElementById('filterButton').addEventListener('click', function () {
+    // Agregar un evento change a todos los elementos con la clase 'filtro'
+    document.querySelectorAll('.filtro').forEach(function (element) {
+        element.addEventListener('change', function () {
             var competicion = document.getElementById('competicion').value;
-            var grupo = document.getElementById('grupo').value;
             var fase = document.getElementById('fase').value;
+            var grupo = document.getElementById('grupo').value;
 
-            // Verifica si se han seleccionado los tres valores
-            if (competicion && grupo && fase) {
                 // Almacena los valores seleccionados en el almacenamiento local
-                saveSelectedValues(competicion, grupo, fase);
+                saveSelectedValues(competicion,fase,grupo);
                 // Envía el formulario
-                document.getElementById('filterForm').submit();
-            } else {
-                // Muestra un mensaje o toma otra acción si no se han seleccionado los tres valores
-                alert('Por favor, selecciona competición, grupo y fase.');
-            }
+                document.getElementById('filtroForm').submit(); // Enviar el formulario al cambiar
+                
         });
-
-        // Manejar la visibilidad del combo de grupo al cargar la página
-        handleGrupoVisibility();
-
-        // Manejar la visibilidad del combo de grupo cuando se selecciona la fase
-        document.getElementById('fase').addEventListener('change', handleGrupoVisibility);
     });
-
+    
     function handleGrupoVisibility() {
         var faseElement = document.getElementById('fase');
         var faseText = faseElement.options[faseElement.selectedIndex].text; // Obtener el texto de la opción seleccionada
         var grupoContainer = document.getElementById('grupoContainer');
-
+        var competicionElement = document.getElementById('competicion');
+        var competicionText = competicionElement.options[competicionElement.selectedIndex].text;
         console.log(faseText); // Mostrar el texto de la opción seleccionada
 
         // Mostrar el combo de grupo solo si la fase es "FASE DE GRUPOS"
-        if (faseText === 'FASE DE GRUPOS') {
+        if (faseText === 'FASE DE GRUPOS' || (competicionText === 'LIGA 1- 2023' && faseText !== 'FINAL' && faseText !== 'Todo'&& faseText !== 'FINAL [DIRECTO]'&& faseText !== 'FINAL [VUELTA]')) {
             grupoContainer.style.display = 'block';
         } else {
             grupoContainer.style.display = 'none';
         }
     }
-    function saveSelectedValues(competicion, grupo, fase) {
+
+    function saveSelectedValues(competicion, fase, grupo) {
         // Almacena los valores en el almacenamiento local
         localStorage.setItem('competicion', competicion);
-        localStorage.setItem('grupo', grupo);
         localStorage.setItem('fase', fase);
+        localStorage.setItem('grupo', grupo);
+
     }
 
     function restoreSelectedValues() {
-        // Restaura los valores desde el almacenamiento local
-        var competicion = localStorage.getItem('competicion');
-        var grupo = localStorage.getItem('grupo');
-        var fase = localStorage.getItem('fase');
+        // Restaura los valores desde el almacenamiento local solo si competicion_id es diferente de "todas"
+        var competicionId = "{{ competicion_id }}";
+        var faseId = "{{ fase_id }}";
+        var grupoId = "{{ grupo_id }}";
+  // Obtener el valor de competicion_id desde el contexto de Django
+        if (competicionId !== "todas" ) {
+            var competicion = localStorage.getItem('competicion');
+            // Aplica los valores restaurados a los elementos del formulario
+            if (competicion) document.getElementById('competicion').value = competicion;
 
-        // Aplica los valores restaurados a los elementos del formulario
-        if (competicion) document.getElementById('competicion').value = competicion;
-        if (grupo) document.getElementById('grupo').value = grupo;
-        if (fase) document.getElementById('fase').value = fase;
+        }
+        if (faseId !== "todas") {
+            var fase = localStorage.getItem('fase');
+            // Aplica los valores restaurados a los elementos del formulario
+            if (fase) document.getElementById('fase').value = fase;
+
+        }
+        if (grupoId !== "todas") {
+            var grupo = localStorage.getItem('grupo');
+            // Aplica los valores restaurados a los elementos del formulario
+            if (grupo) document.getElementById('grupo').value = grupo;
+
+        }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Restaurar los valores seleccionados al cargar la página
+        restoreSelectedValues();
+        handleGrupoVisibility();
+
+// Manejar la visibilidad del combo de grupo cuando se selecciona la fase
+document.getElementById('fase').addEventListener('change', handleGrupoVisibility);
+    });
 </script>
 
-
-
-
-</html>
+{% endblock %}

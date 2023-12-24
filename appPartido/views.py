@@ -68,7 +68,7 @@ def mostrarEncuentros(request):
     else:
         estado_filter = ''
 
-    if competicion_id == 'todas' and fase_id == 'todas':
+    if competicion_id == 'todas' and fase_id == 'todas' or competicion_id == None and fase_id == None:
         encuentros = encuentro.objects.filter(estado_jugado=estado_filter)
         encuentrosParaFiltro = encuentro.objects.all()
     elif competicion_id != 'todas' and fase_id == 'todas':

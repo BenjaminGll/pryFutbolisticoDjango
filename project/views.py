@@ -702,7 +702,15 @@ def contextoTVhomeEncuentro(request,id):
     eventos_todos = evento.objects.filter( encuentro_id=id)
     # Ordena los eventos por tiempo en orden ascendente
     eventos_todos = sorted(eventos_todos, key=attrgetter('tiempo'))
-    
+    estado_gol = False
+    for i in eventos_todos:
+        if i.tipo_evento_id.nombre == 'GOL':
+            estado_gol = True
+    estado_tarjeta = False
+    for i in eventos_todos:
+        if i.tipo_evento_id.nombre == 'TARJETA ROJA':
+            estado_tarjeta = True
+            
     data={
           'equipo_local': equipo_a,
           'equipo_visita': equipo_b,
@@ -712,6 +720,8 @@ def contextoTVhomeEncuentro(request,id):
           'eventos_local':eventos_local,
           'eventos_visita':eventos_visita,
           'eventos_todos': eventos_todos,
+          'estado_gol':estado_gol,
+          'estado_tarjeta':estado_tarjeta,
     }
     
     return render(request, 'tvHomeEncuentro.html', data)
@@ -794,41 +804,58 @@ def cambiar_estado_encuentro_F(request):
 
 
 def mostrarEncuentrosEvento(request):
-    competiciones = competicion.objects.all
-    encuentros = encuentro.objects.filter(estado_jugado=' ')
-    fases = fase.objects.all
-    grupos = grupo.objects.all
-    idEncuentro = None
+    competicion_id = request.GET.get('competicion')
+    fase_id = request.GET.get('fase')
+    grupo_id = request.GET.get('grupo') 
 
-    idCompeticion = request.GET.get('competicion') 
-    idFase = request.GET.get('fase') 
-    idGrupo = request.GET.get('grupo') 
-    print(idCompeticion,idFase,idGrupo)
-    if idCompeticion and idFase and idGrupo:
+    if competicion_id == 'todas' and fase_id == 'todas':
+        encuentros = encuentro.objects.filter(estado_jugado__in=['N', 'E'],)
+        encuentrosParaFiltro = encuentro.objects.all()
+    elif competicion_id != 'todas' and fase_id == 'todas':
+        encuentros = encuentro.objects.filter(estado_jugado__in=['N', 'E'], competicion_id=competicion_id)
+        encuentrosParaFiltro = encuentro.objects.filter(competicion_id=competicion_id)
 
-        if request.method == 'GET':
-            if idFase==1:
-                
-                encuentros = encuentro.objects.filter(
-                    estado_jugado__in=['N', 'E'],
-                    competicion_id=idCompeticion,
-                    fase_id=idFase,
-                    grupo_id=idGrupo
-                )
-            else:
-                encuentros = encuentro.objects.filter(
-                    estado_jugado__in=['N', 'E'],
-                    competicion_id=idCompeticion,
-                    fase_id=idFase,
-                 
-                )
+    elif competicion_id == 'todas' and fase_id != 'todas':
+        encuentros = encuentro.objects.filter(estado_jugado__in=['N', 'E'], fase_id=fase_id)
+        encuentrosParaFiltro = encuentro.objects.all()
+        if fase_id == '1' and grupo_id != 'todas':
+            encuentros = encuentros.filter(grupo_id=grupo_id)
+    else:
+        encuentros = encuentro.objects.filter(estado_jugado__in=['N', 'E'], competicion_id=competicion_id, fase_id=fase_id)
+        encuentrosParaFiltro = encuentro.objects.filter(competicion_id=competicion_id)
+       
+        if fase_id == '1' and grupo_id != 'todas':
+            encuentros = encuentros.filter(grupo_id=grupo_id)
 
+    fases = fase.objects.filter(fase_id__in=encuentrosParaFiltro.values('fase_id')).distinct()
+    grupos = grupo.objects.filter(grupo_id__in=encuentrosParaFiltro.values('grupo_id')).distinct().order_by('grupo_id')
+    print(fase_id)
+    print(competicion_id)
+    print(grupos)
+    print(encuentros)
+
+    # Obtén las opciones para los combobox de filtro
+    competiciones = competicion.objects.all()
     if request.method == 'POST':
         idEncuentro = request.POST.get('idEncuentro')
         print("El encuentro id es: ",idEncuentro)
         return redirect('mostrar_eventos_generales', idEncuentro=idEncuentro)         
-            
-    return render(request, 'moduloTV/listaEncuentros.html', {'competiciones':competiciones,'grupos':grupos,'fases':fases,'encuentros': encuentros,'idEncuentro':idEncuentro})
+        
+    return render(
+        request,
+        'moduloTV/listaEncuentros.html',
+        {
+            'encuentros': encuentros,
+            'fases':fases,
+            'competiciones': competiciones,
+            'competicion_id':competicion_id,
+            'fase_id':fase_id,
+            'grupos':grupos,
+            'grupo_id':grupo_id,
+        }
+    )
+
+
 
 def mostrarEventos(request, idEncuentro):
     # Manejo de la solicitud POST
@@ -910,11 +937,21 @@ def base_evento_view(request, idEncuentro, template_name, filtro_default):
         alineaciones_visita = alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id).order_by('-estado', 'dorsal')
         formacion_local =  alineacion.objects.filter(descripcion_encuentro_id=equipo_local.descripcion_encuentro_id).first()
         formacion_visita =  alineacion.objects.filter(descripcion_encuentro_id=equipo_visita.descripcion_encuentro_id).first()
-        print('Alineacion local',formacion_local.formacion)
+        print('Alineacion local',equipo_local)
         print('Alineacion visita',formacion_visita.formacion)
 
     elif tipo_filtro == 'en_juego':
         eventos = evento.objects.filter(encuentro_id=idEncuentro).exclude(tipo_evento_id__nombre__in=nombres_eventos_generales).reverse()
+        encuentro_obj = encuentro.objects.filter(encuentro_id=idEncuentro).first()
+
+        equipo_local = descripcion_encuentro.objects.filter( 
+                encuentro_id=idEncuentro,
+                equipo_id__in=[encuentro_obj.equipo_local, encuentro_obj.equipo_visita],tipo_equipo__in=['L','Local','LOCAL']
+            ).first()
+        equipo_visita = descripcion_encuentro.objects.filter( 
+                encuentro_id=idEncuentro,
+                equipo_id__in=[encuentro_obj.equipo_visita, encuentro_obj.equipo_visita],tipo_equipo__in=['V','Visita','VISITA']
+            ).first()
     else:
         print('Template name evento:', template_name)
         eventos = evento.objects.none()

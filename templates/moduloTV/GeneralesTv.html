@@ -1,7 +1,28 @@
-{% extends 'moduloTV/base.html' %}
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}{% endblock %}
+
 {% block content %}
+<div class="text-center">
+    <h1 style="position: relative;">
+        <img class="logo-equipo" src="{% static '/images/' %}{{ equipo_local.equipo.logo }}" alt="{{ equipo_local.equipo }}">
+        {{ equipo_local.equipo }}
+        VS
+        {{ equipo_visita.equipo }}
+        <img class="logo-equipo" src="{% static '/images/' %}{{ equipo_visita.equipo.logo }}" alt="{{ equipo_visita.equipo }}">
+        <a class="btn btn-secondary" href="{% url 'mostrar_encuentro_evento' %}?competicion=todas&fase=todas" style="position: absolute; right: 10px; top: 0; margin-top: 20px;">Volver</a>
+    </h1>
+</div>
+
+
 <hr>
 <style>
+      img.logo-equipo {
+    width: 100px;
+    height: auto;
+} 
+
     .banner {
         display: flex;
         justify-content: space-between;
@@ -67,10 +88,53 @@
     border-radius: 5px;
     z-index: 1;
   }
+
+
+  .item {
+        margin-right: 10px;
+    }
+
+    .item.active a {
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .item .link:hover {
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    img.logo-equipo {
+        width: 100px;
+        height: auto;
+    }
+
+    /* Estilo personalizado para los botones */
+    .link.btn {
+        width: 100%; /* Ancho completo */
+        margin-bottom: 10px; /* Espaciado inferior para alineación vertical */
+    }
+
+    .table-responsive {
+        margin-top: 10px; /* Espaciado superior para alineación vertical */
+    }
+
 </style>
 
 <div class="container">
+    <!-- Navigation Bar -->
+    <div class="item {% if 'generales' in request.path|urlencode%}active{% endif %}">
+        <a class="link {% if 'generales' in request.path|urlencode%}btn btn-primary {% else %}btn {% endif %} btn-block" href="{% if idEncuentro %}{% url 'mostrar_eventos_generales' idEncuentro=idEncuentro %}{% endif %}?filtro=generales">
+            Generales
+        </a>
+    </div>
+    <div class="item {% if 'EnJuego' in request.path|urlencode%}active{% endif %}">
+        <a class="link {% if 'EnJuego' in request.path|urlencode%}btn btn-primary{% else %}btn {% endif %} btn-block" href="{% if idEncuentro %}{% url 'mostrar_evento' idEncuentro=idEncuentro %}{% endif %}?filtro=en_juego">
+            En juego
+        </a>
+    </div>
     <div class="row">
+        
         <div style="display: none;">
             {% with equipo_local=equipo_local %}
             <input type="text" id="logoLocal" name="logoLocal" value="{{ equipo_local.equipo.logo  }}">
@@ -1783,7 +1847,22 @@ enviarButton.addEventListener('click', enviarHTML);
 
 
 </script>
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Agregar el estilo btn-primary al hacer hover en nav-link que no está en active
+        $('.item:not(.active) .link').hover(
+            function () {
+                $(this).addClass('btn btn-primary');
+            },
+            function () {
+                // Al salir del hover, remover el estilo btn-primary
+                $(this).removeClass('btn btn-primary');
+                $(this).addClass('btn');
+            }
+        );
+    });
+</script>
 
 
 <textarea id="miTextarea" name="miTextarea" style="display: none;"></textarea>

@@ -95,45 +95,40 @@ if (typeof(django) !== 'undefined' && typeof(django.jQuery) !== 'undefined')
                         iframeWindow.opener = window;
                     });
                 }
-// la clase CSS del modal
-var iframeInternalModalClass = 'related-modal';
 
-// si la ventana actual está dentro de un iframe, significa que ya está en un modal,
-// agrega una clase CSS adicional al modal para ofrecer más personalización
-if (window.top !== window.self) {
-    iframeInternalModalClass += ' related-modal__nested';
-}
+                // the modal css class
+                var iframeInternalModalClass = 'related-modal';
 
-// open the popup using magnific popup
-$.magnificPopup.open({
-    mainClass: iframeInternalModalClass,
-    fixedContentPos: false,
-    showCloseBtn: true,
-    closeBtnInside: true,
-    items: {
-        src: modalEl,
-        type: 'inline'
-    },
-    callbacks: {
-        open: function () {
-            // Center the modal both vertically and horizontally
-            var iframe = this.content.find('#related-modal-iframe');
+                // if the current window is inside an iframe, it means that it is already in a modal,
+                // append an additional css class to the modal to offer more customization
+                if (window.top !== window.self) {
+                    iframeInternalModalClass += ' related-modal__nested';
+                }
 
-            var windowwidth = $(window).width();
-            var windowHeight = $(window).height();
-            var modalWidth = windowwidth/1.1;
-            var modalHeight = windowHeight/1.1;
-            iframe.css({
-                'width': modalWidth,
-                'height': modalHeight,
-                'margin-left': (windowwidth-modalWidth)/2.2
-            });
-
-
-        }
-    }
-});
-
+                // open the popup using magnific popup
+                $.magnificPopup.open({
+                    mainClass: iframeInternalModalClass,
+                    fixedContentPos: false,
+                    showCloseBtn: true,
+                    closeBtnInside: true,
+                    items: {
+                        src: modalEl,
+                        type: 'inline'
+                    },
+                    callbacks: {
+                        open: function () {
+                            // Set the size and center the modal
+                            var iframe = this.content.find('#related-modal-iframe');
+                            iframe.css({
+                                'width': '900px',
+                                'height': '600px',
+                                'margin-left': '-' + (iframe.width() / 2) + 'px',
+                                'margin-top': '-' + (iframe.height() / 2) + 'px'
+                            });
+                        }
+                    }
+                    
+                });
 
                 return false;
             }

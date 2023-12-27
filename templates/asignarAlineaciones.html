@@ -39,7 +39,7 @@
 
       <div class="row">
         <div class="col-md-6">
-          <h2>{{ equipoLocal.0.nuevo_club.nombre }} <img class="logo-equipo" src="{% static '/images/' %}{{ equipoLocal.0.nuevo_club.logo }}" ></h2>
+          <h2>{{ equipoLocal.0.nuevo_club.nombre }} <img class="logo-equipo" src="{% static '/images/' %}{{ equipoLocal.0.nuevo_club.logo }}" style="width: auto; height: 80px;" ></h2>
 
           <!-- Agrega el campo de selección para la formación -->
           <label for="formacion_local">Formación:</label>
@@ -94,7 +94,7 @@
   </div>
 
         <div class="col-md-6">
-          <h2>{{ equipoVisita.0.nuevo_club.nombre }} <img class="logo-equipo" src="{% static '/images/' %}{{ equipoVisita.0.nuevo_club.logo }}"></h2>
+          <h2>{{ equipoVisita.0.nuevo_club.nombre }} <img class="logo-equipo" src="{% static '/images/' %}{{ equipoVisita.0.nuevo_club.logo }}"  style="width: auto; height: 80px;"></h2>
  
         <label for="formacion_visita">Formación:</label>
         <select name="formacion_visita" id="formacion_visita" class="form-control">
@@ -143,7 +143,7 @@
       
       <div class="text-right mt-4">
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="{% url 'lista_encuentros' %}?tipo=alineaciones&competicion=todas&fase=todas" class="btn btn-secondary">Cancelar</a>
+        <a class="btn btn-secondary" href="javascript:history.back()">Cancelar</a>
       </div>
     </form>
   </div>

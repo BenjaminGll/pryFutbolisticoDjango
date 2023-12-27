@@ -20,6 +20,7 @@ from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 import json
 from operator import attrgetter
+from django.contrib import messages
 def contextoNav():
     
     deportes = deporte.objects.all()
@@ -963,6 +964,14 @@ def mostrarEvento(request, idEncuentro):
 def mostrarEventosGenerales(request, idEncuentro):
     banners = []
     html_dinamico = request.POST.getlist('miTextarea')
+    alineaciones_existen = alineacion.objects.filter(descripcion_encuentro_id__encuentro_id=idEncuentro).exists()
+
+    if not alineaciones_existen:
+            # Si no hay alineaciones registradas, muestra un mensaje de advertencia
+        messages.success(
+            request, 'El ecuentro no tiene alineaciones registradas')
+        return redirect(f"/admintv/encuentros?competicion=todas&fase=todas")
+
     print(html_dinamico)
     if request.method == 'POST':
         print("POST request recibido")
@@ -973,6 +982,7 @@ def mostrarEventosGenerales(request, idEncuentro):
 
         if not tiempo:
             tiempo=10
+            # Verificar si hay alineaciones registradas para el encuentro
 
         print("El tiempo es",tiempo)
         html_dinamico = {'html': request.POST.get('miTextarea'),'tiempo':tiempo}

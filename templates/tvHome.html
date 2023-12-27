@@ -38,7 +38,7 @@
                     <li>
                         <div class="head" style="display: flex; align-items: center; justify-content: space-between;">
                             <a href="{% url 'contextoTVhomeEncuentro' id=item.encuentro.encuentro_id %}" class="encuentro-link" style="font-size: 12px;">▶ Ver</a>
-                            <span class="grupo" >{{ item.encuentro.fase }}  {{ item.encuentro.grupo }}</span>
+                            <span class="grupo" >{{ item.encuentro.fase }}  {% if item.encuentro.grupo %} [{{ item.encuentro.grupo }}]{% endif %}</span>
                             <span class="date">En vivo</span>
 
                         </div>
@@ -84,7 +84,7 @@
                     <li>
                         <div class="head" style="display: flex; align-items: center; justify-content: space-between;">                            
                             <a href="/tvHome/{{ej.encuentro_id}}" class="encuentro-link" style="font-size: 12px">▶ Ver</a>
-                            <span class="grupo">{{ ej.fase }}  {{ ej.grupo }}</span> <!-- Agregar el grupo aquí -->
+                            <span class="grupo">{{ ej.fase }} {% if ej.grupo %} [{{ ej.grupo }}]{% endif %} </span> <!-- Agregar el grupo aquí -->
                             <span class="date">{{ ej.fecha | date:'d/m/Y' }}</span>
 
                         </div>

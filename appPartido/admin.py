@@ -2,14 +2,6 @@ from django.contrib import admin
 from appPartido.models import *
 
 
-class ciudadAdmin(admin.ModelAdmin):
-    list_display=['nombre','norma','pais_id']
-    ordering=['nombre']
-    search_fields = ['nombre']
-    list_per_page=5
-    delete_selected_confirmation_template = None
-    class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 
 class sedeAdmin(admin.ModelAdmin):
     list_display=['nombre','alias','capacidad','fecha_inauguracion','ciudad_id', 'imagen','estado']
@@ -60,7 +52,6 @@ class eventoAdmin(admin.ModelAdmin):
         js = ('https://code.jquery.com/jquery-3.6.4.min.js', 'assets/js/evento_admin.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 
 
-admin.site.register(ciudad,ciudadAdmin)
 admin.site.register(sede,sedeAdmin)
 admin.site.register(descripcion_encuentro,descripcionEncuentroAdmin)
 admin.site.register(encuentro,encuentroAdmin)

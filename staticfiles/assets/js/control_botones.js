@@ -1,5 +1,13 @@
 (function($){
     $(document).ready(function(){
+                // Verificar si la URL contiene "add" o "change"
+                var urlContainsAddOrChange = window.location.href.indexOf('add') !== -1 || window.location.href.indexOf('change') !== -1;
+
+                // Salir del script si la URL no contiene "add" o "change"
+                if (!urlContainsAddOrChange) {
+                    return;
+                }
+        
         $(':submit[name="_continue"]').remove();
         $(':submit[name="_addanother"]').css('display', 'none');
 
@@ -31,7 +39,7 @@
         // Utiliza display: inline-block y vertical-align: top para alinear correctamente los botones
         guardarButton.css({
             'vertical-align': 'top',
-            'margin-right': '5.2px' // Ajusta el margen entre los botones "Guardar" y "Cancelar"
+            'margin-right': '4.6px' // Ajusta el margen entre los botones "Guardar" y "Cancelar"
         });
         cancelarContainer.css({
             'display': 'inline-block',

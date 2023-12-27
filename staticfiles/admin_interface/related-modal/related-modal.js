@@ -114,9 +114,15 @@ if (typeof(django) !== 'undefined' && typeof(django.jQuery) !== 'undefined')
                     items: {
                         src: modalEl,
                         type: 'inline'
+                    },
+                    callbacks: {
+                        open: function () {
+                            // Establecer el tamaño del modal
+                            this.content.find('#related-modal-iframe').css({ 'width': '900px', 'height': '600px' });
+                        }
                     }
                 });
-
+                
                 return false;
             }
 

@@ -11239,11 +11239,6 @@ html.mm-opening .mm-slideout {
   display: none;
 }
 
-/* Slider */
-/* line 109, ../sass/_partials/_slick.scss */
-.slick-loading .slick-list {
-  background: #fff url("../../../img/img-theme/ajax-loader.gif") center center no-repeat;
-}
 
 /* Icons */
 @font-face {
@@ -11779,10 +11774,6 @@ html.swipebox-html.swipebox-touch {
   top: 0;
   left: 0;
 }
-/* line 106, ../sass/_partials/_swipebox.scss */
-#swipebox-slider .slide-loading {
-  background: url(../../../img/img-theme/ajax-loader.gif) no-repeat center center;
-}
 
 /* line 112, ../sass/_partials/_swipebox.scss */
 #swipebox-bottom-bar,
@@ -11824,7 +11815,6 @@ html.swipebox-html.swipebox-touch {
 #swipebox-prev,
 #swipebox-next,
 #swipebox-close {
-  background-image: url(../../../img/img-theme/icons.svg);
   background-repeat: no-repeat;
   border: none !important;
   text-decoration: none !important;
@@ -16962,7 +16952,6 @@ footer {
 }
 /* line 1666, ../sass/main.scss */
 footer.footer-2 {
-  background: url("../../img/slide/3.jpg");
   background-size: cover;
   background-position: top center;
   position: relative;
@@ -17198,12 +17187,10 @@ footer .links-footer ul.columns {
   border: none;
   text-indent: 100%;
   z-index: 9999;
-  background: url("../../img/img-theme/ui.totop.png") no-repeat left top;
 }
 
 /* line 1873, ../sass/main.scss */
 #toTopHover {
-  background: url("../../img/img-theme/ui.totop.png") no-repeat left -51px;
   width: 51px;
   height: 51px;
   display: block;
@@ -17233,7 +17220,6 @@ footer .links-footer ul.columns {
 
 /* line 1891, ../sass/main.scss */
 .acc-trigger a {
-  background: url("../../img/img-theme/accordion-ico.png") no-repeat 14px 13px;
   display: block;
   padding: 11px 20px 11px 44px;
   text-decoration: none;
@@ -17536,7 +17522,6 @@ footer .links-footer ul.columns {
   margin-right: 2px;
   font-size: 14px;
   padding: 10px 0 0 0;
-  background: url("../../img/img-theme/line_tree1.gif") left repeat-y;
 }
 @media (max-width: 991px) {
   /* line 2120, ../sass/main.scss */
@@ -17551,7 +17536,6 @@ footer .links-footer ul.columns {
   width: 347px;
   padding-left: 25px;
   line-height: 35px;
-  background: url("../../img/img-theme/line_tree2.gif") 0 center no-repeat;
 }
 @media (max-width: 991px) {
   /* line 2132, ../sass/main.scss */
@@ -17562,7 +17546,6 @@ footer .links-footer ul.columns {
 
 /* line 2142, ../sass/main.scss */
 .sitemap li.has_sub {
-  background: url("../../img/img-theme/line_tree2.gif") 0 17px no-repeat;
 }
 
 /* line 2145, ../sass/main.scss */
@@ -17610,7 +17593,6 @@ footer .links-footer ul.columns {
 .post-item {
   margin-bottom: 40px;
   padding: 0 10px 40px 10px;
-  background: url("../../img/img-theme/border-pattern.gif") bottom left repeat-x;
 }
 /* line 2183, ../sass/main.scss */
 .post-item:last-child {
@@ -19132,7 +19114,6 @@ table.career tr td img {
 /* line 3471, ../sass/main.scss */
 .item-price:after {
   content: "";
-  background: url(../../img/img-theme/plan-shadow.png) no-repeat center top;
   background-size: 100% 38px;
   position: absolute;
   left: 0;

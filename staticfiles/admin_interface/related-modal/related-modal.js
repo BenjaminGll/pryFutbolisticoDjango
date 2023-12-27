@@ -113,11 +113,11 @@ if (typeof(django) !== 'undefined' && typeof(django.jQuery) !== 'undefined')
                     closeBtnInside: true,
                     items: {
                         src: modalEl,
-                        type: 'inline'
+                        type : 'inline'
                     },
                     callbacks: {
                         open: function () {
-                            // Establecer el tamaño del modal
+                            // Set the size of the modal
                             this.content.find('#related-modal-iframe').css({ 'width': '900px', 'height': '600px' });
                         }
                     }

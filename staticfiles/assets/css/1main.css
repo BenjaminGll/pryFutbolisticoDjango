@@ -10147,7 +10147,7 @@ a.text-dark:focus, a.text-dark:hover {
 /* line 159, ../sass/_partials/_main_nav.scss */
 .sf-arrows .sf-with-ul {
   padding-right: 1.5em;
-  padding-right: 1em;
+  *padding-right: 1em;
   /* no CSS arrows for IE7 (lack pseudo-elements) */
 }
 
@@ -11240,9 +11240,6 @@ html.mm-opening .mm-slideout {
 
 /* Slider */
 /* line 109, ../sass/_partials/_slick.scss */
-.slick-loading .slick-list {
-  background: #fff url("../../../img/img-theme/ajax-loader.gif") center center no-repeat;
-}
 
 /* Icons */
 @font-face {
@@ -11566,10 +11563,7 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
   background-color: #01d099;
 }
 
-/* line 37, ../sass/_partials/_skins.scss */
-.footer-down {
-  background: #0088cc url("../../../img/img-theme/footer-down.png") repeat-x left 1px;
-}
+
 
 /* line 40, ../sass/_partials/_skins.scss */
 .events-carousel li .header-post .date {
@@ -13095,7 +13089,6 @@ footer {
 }
 /* line 1166, ../sass/main.scss */
 footer.footer-2 {
-  background: url("../../img/slide/3.jpg");
   background-size: cover;
   background-position: top center;
   position: relative;
@@ -13331,12 +13324,10 @@ footer .links-footer ul.columns {
   border: none;
   text-indent: 100%;
   z-index: 9999;
-  background: url("../../img/img-theme/ui.totop.png") no-repeat left top;
 }
 
 /* line 1373, ../sass/main.scss */
 #toTopHover {
-  background: url("../../img/img-theme/ui.totop.png") no-repeat left -51px;
   width: 51px;
   height: 51px;
   display: block;
@@ -13366,7 +13357,6 @@ footer .links-footer ul.columns {
 
 /* line 1391, ../sass/main.scss */
 .acc-trigger a {
-  background: url("../../img/img-theme/accordion-ico.png") no-repeat 14px 13px;
   display: block;
   padding: 11px 20px 11px 44px;
   text-decoration: none;
@@ -13669,7 +13659,6 @@ footer .links-footer ul.columns {
   margin-right: 2px;
   font-size: 14px;
   padding: 10px 0 0 0;
-  background: url("../../img/img-theme/line_tree1.gif") left repeat-y;
 }
 @media (max-width: 991px) {
   /* line 1620, ../sass/main.scss */
@@ -13684,7 +13673,6 @@ footer .links-footer ul.columns {
   width: 347px;
   padding-left: 25px;
   line-height: 35px;
-  background: url("../../img/img-theme/line_tree2.gif") 0 center no-repeat;
 }
 @media (max-width: 991px) {
   /* line 1632, ../sass/main.scss */
@@ -13695,7 +13683,6 @@ footer .links-footer ul.columns {
 
 /* line 1642, ../sass/main.scss */
 .sitemap li.has_sub {
-  background: url("../../img/img-theme/line_tree2.gif") 0 17px no-repeat;
 }
 
 /* line 1645, ../sass/main.scss */
@@ -13743,7 +13730,6 @@ footer .links-footer ul.columns {
 .post-item {
   margin-bottom: 40px;
   padding: 0 10px 40px 10px;
-  background: url("../../img/img-theme/border-pattern.gif") bottom left repeat-x;
 }
 /* line 1683, ../sass/main.scss */
 .post-item:last-child {

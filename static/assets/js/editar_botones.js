@@ -6,6 +6,10 @@
         // Almacena el estado de la condición
         var deleteUrlModified = '';
 
+
+        // $('form').find('input, select, textarea').addClass('form-control');
+
+    
         // Agregar los botones de editar y eliminar a cada fila
         table.find('tbody tr').each(function () {
             var row = $(this);
@@ -41,8 +45,6 @@
 
         // Traducir el texto en el elemento con la clase "card-header"
         translateCardHeader();
-
-        console.log(window.location.pathname);
 
         // Función para traducir el texto en el elemento con la clase "card-header"
         function translateCardHeader() {

@@ -29,7 +29,17 @@ def contextoNav():
         'deportes' : deportes
     }
 
-    return render ('nav.html', data)
+    return render ('header.html', data)
+def contextoHeader():
+    
+    deportes = deporte.objects.all()
+    
+    data ={
+        'deportes' : deportes,
+        'competencias_nav': competicion.objects.all(),
+    }
+
+    return render ('header.html', data)
 
 ##
 # def mostrarEvento(request):

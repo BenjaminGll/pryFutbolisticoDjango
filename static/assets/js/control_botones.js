@@ -37,30 +37,36 @@
        // Restricciones al tamaño máximo
        var maxWidth = $('.card-body').width(); // Obtener el ancho del card body
 
-       // Ajustar anchos de campos de formulario, excluyendo los checkboxes
-       $('form').find('input, select, textarea').each(function(){
-           // Si es un campo de entrada o textarea, ajusta su ancho
-           if ($(this).is('input[type!="button"][type!="submit"][type!="checkbox"], textarea')) {
-               $(this).css({
-                   'width': maxWidth + 'px', // Establecer el ancho al máximo del card body
-                   'box-sizing': 'border-box' // Considerar el padding y el borde en el ancho total
-               });
-           }
-
-           // Si es un combobox (elemento select), también ajusta su ancho
-           if ($(this).is('select')) {
-               // Aplicar estilos directamente al elemento select
-               $(this).css({
-                   'width': maxWidth + 'px', // Establecer el ancho al máximo del card body
-                   'box-sizing': 'border-b  ox' // Considerar el padding y el borde en el ancho total
-               });
-           }
-       });
-
-       
-});
-})
-(django.jQuery);
+              // Restricciones al tamaño máximo
+              function adjustStyles() {
+                var maxWidth = $('.card-body').width(); // Obtener el ancho del card body
+    
+                // Ajustar anchos de campos de formulario, excluyendo los checkboxes
+                $('form').find('input, select, textarea').each(function () {
+                    // Si es un campo de entrada o textarea, ajusta su ancho
+                    if ($(this).is('input[type!="button"][type!="submit"][type!="checkbox"], textarea')) {
+                        $(this).css({
+                            'width': maxWidth + 'px', // Establecer el ancho al máximo del card body
+                            'box-sizing': 'border-box' // Considerar el padding y el borde en el ancho total
+                        });
+                    }
+    
+                    // Si es un combobox (elemento select), también ajusta su ancho
+                    if ($(this).is('select')) {
+                        // Aplicar estilos directamente al elemento select
+                        $(this).css({
+                            'width': maxWidth + 'px', // Establecer el ancho al máximo del card body
+                            'box-sizing': 'border-box' // Considerar el padding y el borde en el ancho total
+                        });
+                    }
+                });
+            }
+    
+            // Llamar a la función de ajuste de estilos al cargar la página y al cambiar el tamaño de la ventana
+            adjustStyles();
+            $(window).on('resize', adjustStyles);
+        });
+    })(django.jQuery);
 
 $(document).ready(function () {
     $('a.related-widget-wrapper-link').on('click', function (e) {

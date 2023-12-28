@@ -9,7 +9,7 @@ class competicionAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
     list_filter=['nombre']
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js','assets/js/custom-related-modal.js')   
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)   
 class paisAdmin(admin.ModelAdmin):
     list_display = ['nombre','sigla','logo_bandera']
     ordering = ['nombre']
@@ -61,7 +61,7 @@ class organizacionAdmin(admin.ModelAdmin):
     search_fields = ['nombre_oficial']
     list_per_page=4
     class Media:
-        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/custom-related-modal.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
+        js = ('https://code.jquery.com/jquery-3.6.4.min.js','assets/js/control_botones.js','assets/js/editar_botones.js',)
 class patrocinadorAdmin(admin.ModelAdmin):
     list_display=['nombre_patrocinador','nombre_abreviado','descripcion','estado','logo_1','logo_2']
     ordering=['nombre_patrocinador']

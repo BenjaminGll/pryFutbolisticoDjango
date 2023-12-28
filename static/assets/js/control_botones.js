@@ -82,6 +82,15 @@ $(document).ready(function () {
                 });
                 console.log('si ejecuta 2');
             });
+
+            // Agregar estilo al botón de cerrar (color blanco)
+            $('.mfp-close').css({
+                'color': 'white', // Cambiar a tu color deseado
+                'background-color': 'transparent', // Cambiar a tu color deseado
+                'border': 'none'
+            });
+
         }, 1); // Ajusta el tiempo de espera según sea necesario
     });
 });
+

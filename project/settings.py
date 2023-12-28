@@ -95,28 +95,28 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
-# }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pryFutbolisticoV4',
-        'USER': 'administrador',
-        'PASSWORD': 'administrador',
-        'HOST': 'containers-us-west-205.railway.app',  # si tienes otra dirección host debes remplazar esta
-        'PORT': '5977',  # si lo dejas vacío tomará el puerto por default
-    }
-}
-
+# # }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'BDFUT',
-#         'USER': 'postgres',
-#         'PASSWORD': '123456',
-#         'HOST': 'localhost',  # si tienes otra dirección host debes remplazar esta
-#         'PORT': '5432',  # si lo dejas vacío tomará el puerto por default
+#         'NAME': 'pryFutbolisticoV4',
+#         'USER': 'administrador',
+#         'PASSWORD': 'administrador',
+#         'HOST': 'containers-us-west-205.railway.app',  # si tienes otra dirección host debes remplazar esta
+#         'PORT': '5977',  # si lo dejas vacío tomará el puerto por default
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'BDFUT',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',  # si tienes otra dirección host debes remplazar esta
+        'PORT': '5432',  # si lo dejas vacío tomará el puerto por default
+    }
+}
 
 
 

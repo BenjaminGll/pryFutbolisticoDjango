@@ -13,19 +13,7 @@
 
         var cancelarButton = $('<input/>').attr({ type: 'button', name: '_cancel', value: 'Cancelar' }).addClass('btn btn-sm btn-warning');
         var guardarButton = $(':submit[name="_save"]');
-
-        var modalContainer = $('.related-widget-wrapper-link').closest('.related-widget-wrapper').find('.related-modal-iframe-container');
-
-        // Ajustar el tamaño después de que se carga el iframe
-        var iframe = modalContainer.find('iframe');
-        iframe.on('load', function() {
-            modalContainer.css({
-                'width': '800px', // Ajusta el ancho según tus necesidades
-                'height': '600px' // Ajusta la altura según tus necesidades
-            });
-        });
-
-
+       
 
         cancelarButton.on('click', function(){
             history.back();
@@ -64,7 +52,7 @@
                // Aplicar estilos directamente al elemento select
                $(this).css({
                    'width': maxWidth + 'px', // Establecer el ancho al máximo del card body
-                   'box-sizing': 'border-box' // Considerar el padding y el borde en el ancho total
+                   'box-sizing': 'border-b  ox' // Considerar el padding y el borde en el ancho total
                });
            }
        });

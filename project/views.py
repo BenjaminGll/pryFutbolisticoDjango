@@ -1020,10 +1020,13 @@ def guardar_eventos_temporales(eventos,tiempo):
     banners = []
 
     for evento in eventos:
-        if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR ':
+        if evento.tipo_evento_id.nombre == 'CAMBIO DE JUGADOR':
             banner = {
-                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);  margin-top: 50%;">{evento.tipo_evento_id.nombre}: <br><img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="width: 13%;margin-top: -5%;"><span> {evento.alineacion_id1.contrato_id} </span><img src="{static("imagenes/evento/cambio_visita.png")}" alt="" style="width: 13%;margin-top: -5%;"><br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/cambio_visita.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
+                'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7); margin-top: 43%; text-align: justify; padding-left: 20%;"><div style="display: flex; align-items: center;"><img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="width: 15%; position: relative; margin-right: 10px;">'
+                        f'<div style="flex-grow: 1;">{evento.tipo_evento_id.nombre}: <br><img src="/static/images/evento/entra.png" alt="" style="width: 5%;"><span> {evento.alineacion_id2} </span><br> <img src="/static/images/evento/sale.png" alt="" style="width: 5%;"> <span> {evento.alineacion_id1} </span></div></div></div>',
+                'tiempo': tiempo
             }
+
         elif evento.tipo_evento_id.nombre == 'CORNER':
             banner = {
                 'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);  margin-top: 50%;">{evento.tipo_evento_id.nombre}: <br> <img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="width: 13%;margin-top: -5%;"> <span style="padding-right: 5px;padding-left: 5px;"> {evento.alineacion_id1} </span><img src="{static("imagenes/evento/corner.png")}" alt="" style="width: 13%;margin-top: -5%;"></div>','tiempo':tiempo

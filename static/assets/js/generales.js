@@ -68,11 +68,11 @@
     // Función para cambiar entre mostrar y ocultar
     function toggleMostrarOcultar() {
         isVisible = !isVisible;
-        console.log('que fue',isVisible)
+        console.log('que fueeee', isVisible)
         var mostrarOcultarIcon = document.getElementById('mostrarOcultarIcon');
 
         // Cambiar el icono y el color del botón según el estado de visibilidad
-        if (isVisible) {
+        if (!isVisible) {
             mostrarOcultarIcon.className = 'fas fa-eye-slash';
             document.getElementById('mostrarOcultarBtn').classList.remove('btn-primary');
             document.getElementById('mostrarOcultarBtn').classList.add('btn-danger');
@@ -83,7 +83,7 @@
         }
 
         // Llamar a la función original con el comando correspondiente
-        enviarComando(isVisible ? 'mostrar' : 'ocultar');
+        enviarComando(isVisible ? 'ocultar': 'mostrar');
     }
 
     function generarHTMLHimno() {

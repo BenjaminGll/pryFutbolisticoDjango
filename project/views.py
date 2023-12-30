@@ -805,7 +805,7 @@ def cambiar_estado_encuentro_F(request):
         # Por ejemplo:
         encuentro_obj = encuentro.objects.get(encuentro_id=encuentro_id)
         encuentro_obj.estado_jugado = 'F'
-        encuentro_obj.save()
+        encuentro_obj.save() 
 
         return JsonResponse({'success': True})
     else:

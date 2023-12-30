@@ -17,7 +17,7 @@
             var tiempo = document.getElementById('tExtra').value;
         }
 
-        fetch('/actualizar_cronometro/', {
+        fetch('/actualizar_cronometro/', {  
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,53 @@
                 console.error('Error en la solicitud AJAX', error);
             });
     }
-    
+            // Variable para controlar el estado de reproducción
+        var isPlaying = false;
+
+        // Función para cambiar entre play y pausa
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+
+            var playPauseIcon = document.getElementById('playPauseIcon');
+
+            // Cambiar el icono y el color del botón según el estado de reproducción
+            if (isPlaying) {
+                playPauseIcon.className = 'fas fa-pause';
+                document.getElementById('btnlimpiarplay').classList.remove('btn-success');
+                document.getElementById('btnlimpiarplay').classList.add('btn-warning');
+            } else {
+                playPauseIcon.className = 'fas fa-play';
+                document.getElementById('btnlimpiarplay').classList.remove('btn-warning');
+                document.getElementById('btnlimpiarplay').classList.add('btn-success');
+            }
+
+            // Llamar a la función original con el comando correspondiente
+            enviarComando(isPlaying ? 'play' : 'pausa');
+        }
+
+    // Variable para controlar el estado de visibilidad
+    var isVisible = true;
+
+    // Función para cambiar entre mostrar y ocultar
+    function toggleMostrarOcultar() {
+        isVisible = !isVisible;
+        console.log('que fue',isVisible)
+        var mostrarOcultarIcon = document.getElementById('mostrarOcultarIcon');
+
+        // Cambiar el icono y el color del botón según el estado de visibilidad
+        if (isVisible) {
+            mostrarOcultarIcon.className = 'fas fa-eye-slash';
+            document.getElementById('mostrarOcultarBtn').classList.remove('btn-primary');
+            document.getElementById('mostrarOcultarBtn').classList.add('btn-danger');
+        } else {
+            mostrarOcultarIcon.className = 'fas fa-eye';
+            document.getElementById('mostrarOcultarBtn').classList.remove('btn-danger');
+            document.getElementById('mostrarOcultarBtn').classList.add('btn-primary');
+        }
+
+        // Llamar a la función original con el comando correspondiente
+        enviarComando(isVisible ? 'mostrar' : 'ocultar');
+    }
 
     function generarHTMLHimno() {
         const radioLocal = document.getElementById('localHimno');
@@ -820,57 +866,54 @@
             xhr.send();
         });
     }
-
-    var partidoIniciado = false;  // Variable para rastrear el estado del partido
     document.getElementById('iniciarFinalizarBtn').addEventListener('click', function () {
+       
         iniciarFinalizarPartido();
+       
+   
     });
+
     function iniciarFinalizarPartido() {
-        var btnIniciarFinalizar = document.getElementById('iniciarFinalizarBtn');
-        // Realiza aquí las acciones adicionales que desees al finalizar el partido
+        // Variable para rastrear el estado del partido
+     
+       var btnIniciarFinalizar = document.getElementById('iniciarFinalizarBtn');
+       // Realiza aquí las acciones adicionales que desees al finalizar el partido
 
-        // Obtén el token CSRF del formulario
-        var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+       // Obtén el token CSRF del formulario
+       var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
-        // Obtén la URL actual
-        var urlActual = window.location.href;
+       // Obtén la URL actual
+       var urlActual = window.location.href;
 
-        // Encuentra la última barra en la URL
-        var ultimaBarraIndex = urlActual.lastIndexOf('/');
+       // Encuentra la última barra en la URL
+       var ultimaBarraIndex = urlActual.lastIndexOf('/');
 
-        // Encuentra la penúltima barra en la URL
-        var penultimaBarraIndex = urlActual.lastIndexOf('/', ultimaBarraIndex - 1);
+       // Encuentra la penúltima barra en la URL
+       var penultimaBarraIndex = urlActual.lastIndexOf('/', ultimaBarraIndex - 1);
 
-        // Obtén la parte de la URL entre la penúltima y última barra (excluyendo las barras)
-        var encuentroId = urlActual.substring(penultimaBarraIndex + 1, ultimaBarraIndex);
+       // Obtén la parte de la URL entre la penúltima y última barra (excluyendo las barras)
+       var encuentroId = urlActual.substring(penultimaBarraIndex + 1, ultimaBarraIndex);
 
-        // Elimina cualquier carácter no numérico del encuentroId
-        encuentroId = encuentroId.replace(/\D/g, '');
+       // Elimina cualquier carácter no numérico del encuentroId
+       encuentroId = encuentroId.replace(/\D/g, '');
+   
+       // Prepara los datos para enviar
+       var datos = 'encuentro_id=' + encuentroId;
 
-        // Ahora tienes el encuentroId correctamente
-        console.log('Encuentro ID:', encuentroId);
-    
-        // Prepara los datos para enviar
-        var datos = 'encuentro_id=' + encuentroId;
-
-        if (!partidoIniciado) {
-            // Si el partido no ha iniciado, cambia el texto a "Finalizar Partido" y agrega el icono de play
-            btnIniciarFinalizar.innerHTML = '<i class="fas fa-play"></i> Iniciar Partido ';
-            partidoIniciado = true;
-            // Realiza aquí las acciones adicionales que desees al iniciar el partido
-
-        } else {
-            // Si el partido ya ha iniciado, cambia el texto a "Iniciar Partido" y agrega el icono de finalizar
-            btnIniciarFinalizar.innerHTML = ' <i class="fas fa-stop"></i> Finalizar Partido ';
-            partidoIniciado = false;
+       if (!partidoIniciado) {
+           // Si el partido no ha iniciado, cambia el texto a "Finalizar Partido" y agrega el icono de play
+           btnIniciarFinalizar.innerHTML = '<i class="fas fa-stop"></i> Finalizar Partido';
+      
+           // Realiza aquí las acciones adicionales que desees al iniciar el partido
+           partidoIniciado = true;
             // Inicia la solicitud AJAX
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/cambiar_estado_encuentro_E/', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-
+ 
             // Agrega el token CSRF a la cabecera de la solicitud
             xhr.setRequestHeader('X-CSRFToken', csrfToken);
-
+ 
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     var respuesta = JSON.parse(xhr.responseText);
@@ -881,15 +924,39 @@
                     }
                 }
             };
-
+ 
             // Envía la solicitud con los datos
             xhr.send(datos);
-            console.log('Partido finalizado:', partidoIniciado);
+           console.log('Estado:', partidoIniciado);
+       } else {
+           // Si el partido ya ha iniciado, cambia el texto a "Iniciar Partido" y agrega el icono de finalizar
+           btnIniciarFinalizar.innerHTML = ' <i class="fas fa-play"></i> Iniciar Partido';
+           partidoIniciado = false;
+           // Inicia la solicitud AJAX
+           var xhr = new XMLHttpRequest();
+           xhr.open('POST', '/cambiar_estado_encuentro_F/', true);
+           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
-        }
-    }
+           // Agrega el token CSRF a la cabecera de la solicitud
+           xhr.setRequestHeader('X-CSRFToken', csrfToken);
 
+           xhr.onload = function () {
+               if (xhr.status === 200) {
+                   var respuesta = JSON.parse(xhr.responseText);
+                   if (respuesta.success) {
+                       console.log('Estado cambiado exitosamente');
+                   } else {
+                       console.error('Error al cambiar el estado:', respuesta.error);
+                   }
+               }
+           };
 
+           // Envía la solicitud con los datos
+           xhr.send(datos);
+           console.log('Estado:', partidoIniciado);
+
+       }
+   }
 
     $(document).ready(function () {
         // Agregar el estilo btn-primary al hacer hover en nav-link que no está en active

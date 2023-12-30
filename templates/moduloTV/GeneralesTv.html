@@ -168,7 +168,7 @@
 
         </div>
         <!-- Datos de Encuentro -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <form id="enviarDatosEncuentro" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
                 enctype="multipart/form-data">
                 {% csrf_token %}
@@ -222,11 +222,8 @@
             </form>
         </div>
 
-
-
-
         <!-- Cronómetro -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
                     <h3>Cronómetro</h3>
@@ -235,25 +232,39 @@
                             {% csrf_token %}
                             <input type="text" class="form-control" id="tiempoCrono" name="tiempoCrono"
                                 pattern="[0-9]{2}:[0-9]{2}" placeholder="MM:SS" title="Formato válido: MM:SS" required>
-                            <button type="button" class="btn btn-success" id="btnlimpiarplay"
-                                onclick="enviarComando('play')">
-                                <i class="fas fa-play"></i>
+                                <button type="button" class="btn btn-success" id="btnlimpiarplay" onclick="togglePlayPause()">
+                                    <i id="playPauseIcon" class="fas fa-play"></i>
+                                </button>                                
+                        
+                            <button type="button" class="btn btn-primary" id="mostrarOcultarBtn" onclick="toggleMostrarOcultar()">
+                                <i id="mostrarOcultarIcon" class="fas fa-eye"></i>
                             </button>
-                            <button type="button" class="btn btn-warning" onclick="enviarComando('pausa')">
-                                <i class="fas fa-pause"></i>
-                            </button>
-                            &nbsp;
-                            <button type="button" class="btn btn-primary" onclick="enviarComando('mostrar')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger" onclick="enviarComando('ocultar')">
-                                <i class="fas fa-eye-slash"></i>
-                            </button>
+                        
                             <button type="button" class="btn btn-info" onclick="enviarComando('reset')">
                                 <i class="fas fa-undo"></i>
                             </button>
-                            <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn"
-                                onclick="iniciarFinalizarPartido()"><i class="fas fa-play"></i> Iniciar Partido</button>
+                            {% if  equipo_local.encuentro.estado_jugado == "E" %}
+                            <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn">
+                                <i class="fas fa-stop"></i> Finalizar Partido</button>
+                                <script>
+                                    var partidoIniciado = true;
+                                </script>
+                            {%elif  equipo_local.encuentro.estado_jugado == "F" %}
+                            <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn">
+                                <i class="fas fa-play"></i> Iniciar Partido</button>
+                                <script>
+                                    var partidoIniciado = false;
+                                </script>
+                            {%else %}
+                            <button type="button" class="btn btn-primary" id="iniciarFinalizarBtn">
+                                <i class="fas fa-play"></i> Iniciar Partido</button>
+                                <script>
+                                    var partidoIniciado = false;
+                                </script>
+                            {%endif%}
+         
+           
+
                         </form>
                     </div>
                 </div>
@@ -264,7 +275,7 @@
                         <input type="number" class="form-control" id="tExtra" name="tExtra" placeholder="T.Extra: MM"
                             title="Formato válido: MM" required>
 
-                        <button type="button" class="btn btn-info" onclick="enviarComando('tiempoExtra')">
+                        <button type="button" class="btn btn-primary" onclick="enviarComando('tiempoExtra')">
                             <i class="fas fa-eye">Mostrar</i>
                         </button>
                     </form>
@@ -274,7 +285,7 @@
         </div>
 
         <!-- Himnos -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <form id="enviarDatosHimno" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
                 enctype="multipart/form-data">
                 {% csrf_token %}
@@ -309,6 +320,71 @@
                 </div>
             </form>
         </div>
+      
+            <!--Marcador-->
+            <div class="col-md-3">
+
+                <form id="enviarDatosMarcadorCompleto" method="post"
+                    action="{% url 'mostrar_eventos_generales' idEncuentro %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Marcador completo</h3>
+                            <div class="input-group align-items-center">
+                                <div class="align-items-center">Duración (s):</div>
+                                &nbsp;
+    
+                                <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
+                                    max="36000">
+                                &nbsp;
+                                <button type="submit" id="generarBannerMarcador" class="btn btn-primary"><i
+                                        class="fas fa-eye"></i> Mostrar</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <!-- Primera columna -->
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" id="f1Checkbox" name="finalType"
+                                            value="1er. Tiempo">
+                                        <label class="form-check-label" for="f1Checkbox">Final 1° Tiempo</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" id="f2Checkbox" name="finalType"
+                                            value="2do. Tiempo">
+                                        <label class="form-check-label" for="f2Checkbox">Final 2° Tiempo</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" id="feCheckbox" name="finalType"
+                                            value="Tiempo extra">
+                                        <label class="form-check-label" for="feCheckbox">Final Tiempo Extra</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <!-- Segunda columna -->
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" id="fpCheckbox" name="finalType"
+                                            value="Penales">
+                                        <label class="form-check-label" for="fpCheckbox">Final + Penales</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="estadioMarcadorCompleto"
+                                            name="eCheckbox"
+                                            value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.sede_id }}{% endwith %}">
+                                        <label class="form-check-label" for="eCheckbox">Estadio</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="ieCheckbox" name="ieCheckbox">
+                                        <label class="form-check-label" for="ieCheckbox">Insignia de Equipo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+            </div>
+       
     </div>
 
     <!-- Alineación -->
@@ -499,70 +575,7 @@
         </div>
         </div>
     <!--  -->
-    <div class="row mt-4">
-        <!--Marcador-->
-        <div class="col-md-6">
-            <form id="enviarDatosMarcadorCompleto" method="post"
-                action="{% url 'mostrar_eventos_generales' idEncuentro %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Marcador completo</h3>
-                        <div class="input-group align-items-center">
-                            <div class="align-items-center">Duración (s):</div>
-                            &nbsp;
 
-                            <input type="number" class="form-control" id="tiempo" value="10" name="tiempo" min="1"
-                                max="36000">
-                            &nbsp;
-                            <button type="submit" id="generarBannerMarcador" class="btn btn-primary"><i
-                                    class="fas fa-eye"></i> Mostrar</button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <!-- Primera columna -->
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" id="f1Checkbox" name="finalType"
-                                        value="1er. Tiempo">
-                                    <label class="form-check-label" for="f1Checkbox">Final 1° Tiempo</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" id="f2Checkbox" name="finalType"
-                                        value="2do. Tiempo">
-                                    <label class="form-check-label" for="f2Checkbox">Final 2° Tiempo</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" id="feCheckbox" name="finalType"
-                                        value="Tiempo extra">
-                                    <label class="form-check-label" for="feCheckbox">Final Tiempo Extra</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <!-- Segunda columna -->
-                                <div class="form-check">
-                                    <input type="radio" class="form-check-input" id="fpCheckbox" name="finalType"
-                                        value="Penales">
-                                    <label class="form-check-label" for="fpCheckbox">Final + Penales</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="estadioMarcadorCompleto"
-                                        name="eCheckbox"
-                                        value="{% with equipo_local=equipo_local %}{{ equipo_local.encuentro.sede_id }}{% endwith %}">
-                                    <label class="form-check-label" for="eCheckbox">Estadio</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="ieCheckbox" name="ieCheckbox">
-                                    <label class="form-check-label" for="ieCheckbox">Insignia de Equipo</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-        </div>
-    </div>
 </div>
 
 

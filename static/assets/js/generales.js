@@ -61,31 +61,36 @@
             // Llamar a la función original con el comando correspondiente
             enviarComando(isPlaying ? 'play' : 'pausa');
         }
+        // Recuperar el estado de isVisible desde el almacenamiento local
+        var isVisible = localStorage.getItem('isVisible') === 'true' || false;
 
-    // Variable para controlar el estado de visibilidad
-    var isVisible = true;
-
-    // Función para cambiar entre mostrar y ocultar
-    function toggleMostrarOcultar() {
-        isVisible = !isVisible;
-        console.log('que fueeee', isVisible)
-        var mostrarOcultarIcon = document.getElementById('mostrarOcultarIcon');
-
-        // Cambiar el icono y el color del botón según el estado de visibilidad
-        if (!isVisible) {
-            mostrarOcultarIcon.className = 'fas fa-eye-slash';
-            document.getElementById('mostrarOcultarBtn').classList.remove('btn-primary');
-            document.getElementById('mostrarOcultarBtn').classList.add('btn-danger');
-        } else {
-            mostrarOcultarIcon.className = 'fas fa-eye';
-            document.getElementById('mostrarOcultarBtn').classList.remove('btn-danger');
-            document.getElementById('mostrarOcultarBtn').classList.add('btn-primary');
+        // Función para cambiar entre mostrar y ocultar
+        function toggleMostrarOcultar() {
+            isVisible = !isVisible;
+            actualizarBoton();
+            enviarComando(isVisible ? 'mostrar' : 'ocultar');
+            // Almacenar el estado actual en el almacenamiento local
+            localStorage.setItem('isVisible', isVisible);
         }
 
-        // Llamar a la función original con el comando correspondiente
-        enviarComando(isVisible ? 'ocultar': 'mostrar');
-    }
+        // Función para actualizar el estado del botón según isVisible
+        function actualizarBoton() {
+            var mostrarOcultarIcon = document.getElementById('mostrarOcultarIcon');
 
+            // Cambiar el icono y el color del botón según el estado de visibilidad
+            if (isVisible) {
+                mostrarOcultarIcon.className = 'fas fa-eye-slash';
+                document.getElementById('mostrarOcultarBtn').classList.remove('btn-primary');
+                document.getElementById('mostrarOcultarBtn').classList.add('btn-danger');
+            } else {
+                mostrarOcultarIcon.className = 'fas fa-eye';
+                document.getElementById('mostrarOcultarBtn').classList.remove('btn-danger');
+                document.getElementById('mostrarOcultarBtn').classList.add('btn-primary');
+            }
+        }
+
+        // Llamada inicial para configurar el botón según el estado almacenado
+        actualizarBoton();
     function generarHTMLHimno() {
         const radioLocal = document.getElementById('localHimno');
         const radioVisita = document.getElementById('visitaHimno');
@@ -361,7 +366,7 @@
         formulario.submit();
     }
 
-    //
+     //Alineacion visita
     function generarHTMLAlieacion(tipo, datos) {
         let html = '';
 
@@ -610,7 +615,7 @@
 
         if (checkbox1.checked) {
 
-            const textarea = document.getElementById('miTextarea');
+                const textarea = document.getElementById('miTextarea');
             let contenido = '';
             contenido += generarHTMLAlieacion(true, extraerDatosTabla('tablaLocal'));
             textarea.value = contenido;

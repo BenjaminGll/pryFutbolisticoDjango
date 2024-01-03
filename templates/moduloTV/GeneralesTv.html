@@ -410,7 +410,7 @@
                     <div class="card-body">
                         <div class="form-check" style="display: block;">
                             <input type="checkbox" class="form-check-input" id="mostrarAlineacionLocalCheckbox">
-                            <h5 class="form-check-label" for="alineacionLocalCheckbox">Mostrar alineacion</h5>
+                            <h5 class="form-check-label" for="mostrarAlineacionLocalCheckbox">Mostrar alineacion</h5>
                         </div>
                         <div id="contenedorTabla" style="display: flex; justify-content: center;">
 
@@ -468,7 +468,7 @@
                                 <label class="form-check-label" for="LtarjetasRojasCheckbox">Tarjetas rojas</label>
                             </div>
                             <div class="form-check">
-                                <input type="radio" name="finalType" class="form-check-input" id="LgolesTotalesCheckbox"vscode-file://vscode-app/c:/Users/Usuario/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html
+                                <input type="radio" name="finalType" class="form-check-input" id="LgolesTotalesCheckbox"
                                     value=3>
                                 <label class="form-check-label" for="LgolesTotalesCheckbox">Goles totales</label>
                             </div>
@@ -485,8 +485,8 @@
         </div>
 
         <div class="col-md-6">
-            <form id="enviarDatosAlineacionVisita" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}"
-                enctype="multipart/form-data">
+            <form id="enviarDatosAlineacionVisita" method="post" action="{% url 'mostrar_eventos_generales' idEncuentro %}" enctype="multipart/form-data">
+
                 {% csrf_token %}
                 <div class="card">
                     <div class="card-header">

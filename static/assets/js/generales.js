@@ -341,35 +341,39 @@
     });
 
 
+    // function escribirDatos(contenido, idBoton) {
+    //     // Agrega el valor del textarea como un nuevo campo al formulario antes de enviarlo
+    //     const formulario = document.getElementById(idBoton);
+    //     const nuevoCampo = document.createElement('input');
+    //     nuevoCampo.type = 'hidden';
+    //     nuevoCampo.name = 'miTextarea';
+    //     nuevoCampo.value = contenido;
+    //     formulario.appendChild(nuevoCampo);
+    //     escribirDatos(contenido, 'enviarDatosHimno')
+
+    // };
+
     function escribirDatos(contenido, idBoton) {
         // Agrega el valor del textarea como un nuevo campo al formulario antes de enviarlo
+        
         const formulario = document.getElementById(idBoton);
         const nuevoCampo = document.createElement('input');
         nuevoCampo.type = 'hidden';
         nuevoCampo.name = 'miTextarea';
         nuevoCampo.value = contenido;
-        formulario.appendChild(nuevoCampo);
-        escribirDatos(contenido, 'enviarDatosHimno')
-
-    };
-
-    function escribirDatos(contenido, idBoton) {
-        // Agrega el valor del textarea como un nuevo campo al formulario antes de enviarlo
-        const formulario = document.getElementById(idBoton);
-        const nuevoCampo = document.createElement('input');
-        nuevoCampo.type = 'hidden';
-        nuevoCampo.name = 'miTextarea';
-        nuevoCampo.value = contenido;
+        console.log('formulario:', formulario)
+        console.log('boton:', idBoton)
+        console.log('campo:', nuevoCampo)
         formulario.appendChild(nuevoCampo);
 
         // Envía el formulario
         formulario.submit();
     }
 
-     //Alineacion visita
+     //Alineacion local
     function generarHTMLAlieacion(tipo, datos) {
         let html = '';
-
+        console.log('weveo',datos)
         if (tipo) {
 
             //
@@ -615,25 +619,22 @@
 
         if (checkbox1.checked) {
 
-                const textarea = document.getElementById('miTextarea');
+            const textarea = document.getElementById('miTextarea');
             let contenido = '';
             contenido += generarHTMLAlieacion(true, extraerDatosTabla('tablaLocal'));
             textarea.value = contenido;
-            console.log(contenido);
+            console.log('contenido1local:',contenido);
             escribirDatos(contenido, 'enviarDatosAlineacionLocal')
 
 
         } else {
-
-
-            console.log("Dorsal: " + datos_local);
 
             const textarea = document.getElementById('miTextarea');
             let contenido = '';
             contenido += generarHTMLAlieacion(false, datos_local);
             textarea.value = contenido;
 
-            console.log(contenido);
+            console.log('contenido2:',contenido);
 
             escribirDatos(contenido, 'enviarDatosAlineacionLocal')
         }
@@ -652,21 +653,18 @@
             let contenido = '';
             contenido += generarHTMLAlieacionVisita(true, extraerDatosTabla('tablaVisita'));
             textarea.value = contenido;
-            console.log(contenido);
+            console.log('contenido1visita:',contenido);
             escribirDatos(contenido, 'enviarDatosAlineacionVisita')
 
 
         } else {
-
-
-            // console.log("Dorsal: " + datos_local);
 
             const textarea = document.getElementById('miTextarea');
             let contenido = '';
             contenido += generarHTMLAlieacionVisita(false, datos_visita);
             textarea.value = contenido;
 
-            console.log(contenido);
+            console.log('contenido2:',contenido);
 
             escribirDatos(contenido, 'enviarDatosAlineacionVisita')
         }
@@ -693,7 +691,6 @@
         alineacion_temporal += tipo_alineacion;
         alineacion_temporal += indice;
         console.log(alineacion_temporal);
-        // var radioSeleccionado = document.getElementById("alineacionLocal" + indice);
         var radioSeleccionado = document.getElementById(alineacion_temporal);
         console.log("Radio seleccionado:", radioSeleccionado);
 

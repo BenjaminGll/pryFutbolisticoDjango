@@ -1149,44 +1149,7 @@ def guardar_eventos_temporales(eventos,tiempo):
             banner = {
                 'html': f'<div class="banner-container" style="background-color: rgba(0, 0, 0, 0.7);"><img src="/static/images/{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo}" alt="" style="margin-top:0px; width: 6%"> <span style="padding-right: 20px;"> {evento.alineacion_id1} </span><img src="{static("img/entrenador.png")}" alt="" style="margin-top:0px; width: 6%"></div>','tiempo':tiempo
             };tiempo
-        elif evento.tipo_evento_id.descripcion == 'ALINEACION DE EQUIPO':
-             jugadores_ali = alineacion.objects.filter(descripcion_encuentro_id=evento.alineacion_id1.descripcion_encuentro_id.descripcion_encuentro_id)
-             jugadores_info = []
-
-             for jugador in jugadores_ali:
-                    jugadores_info.append({
-                        'alias': jugador.contrato_id.persona.alias,
-                        'posicion': jugador.posicion_jugador_id.descripcion,
-                        'dorsal': jugador.dorsal
-                    })
-             jugadores_html = ''
-             for jugador_info in jugadores_info:
-                    jugadores_html += f"{jugador_info['dorsal']}.  {jugador_info['alias']} ( {jugador_info['posicion']}) <br>"
-
-             banner = {
-
-                        'html': f'''
-                                <div class="banner-container"   style="display: flex;justify-content: center; align-items: center; height: 100vh; background-size: cover;>
-                                    <div class="banner" style="color: white;border-radius: 5px;font-family: 'Arial', sans-serif; display: flex;width: 45%;">
-                                        <div class="left-side" style="padding: 20px;display: flex;flex-direction: column; align-items: center;background: rgba(0, 0, 0, 0.8);">
-                                            <span class="team-name" style="font-size: 24px;font-weight: bold;background: rgba(0, 0, 0, 0.8);margin-bottom: 10px; width: 100%; text-align: center;">{evento.alineacion_id1.descripcion_encuentro_id.equipo.siglas}</span>
-                                                <img src="{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo.url}" alt="Team Logo" class="team-logo" style="width: 150px;height: auto;margin-bottom: 20px;">
-                                                    <div class="formation" style="font-size: 18px;font-weight: bold;background: rgba(0, 0, 0, 0.8);padding: 5px;border-radius: 5px;width: 100%;text-align: center;">{evento.alineacion_id1.descripcion_encuentro_id.formacion}</div>
-                                                <img src="{evento.alineacion_id1.descripcion_encuentro_id.equipo.logo.url}"
-                                                    alt="{evento.alineacion_id1.descripcion_encuentro_id.equipo.siglas}"
-                                                    style="max-width: 100%; height: auto;">
-                                                </div>
-                                        <div class="middle-side" style="display: flex;align-items: center;background: rgba(50, 50, 50, 0.8);padding: 0 2%;">
-                                            <span class="title" style="font-size: 100%;font-weight: bold;color: white;writing-mode: vertical-lr;transform: rotate(180deg);">TITULARES</span>
-                                        </div>
-                                        <div class="right-side" style="padding: 20px;display: flex;flex-direction: column;align-items: flex-start;">
-                                            <div class="player-list" style="display: flex;flex-direction: column;">
-                                            {jugadores_html}
-                                    </div>
-                                </div>
-                        '''
-                    
-                        }
+     
 
         else:    
             banner = {
@@ -1195,6 +1158,7 @@ def guardar_eventos_temporales(eventos,tiempo):
         banners.append(banner)
 
 
+    print('esto es',evento.tipo_evento_id.descripcion)
 
     
 
